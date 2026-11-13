@@ -65,7 +65,7 @@ const BaseDataQuery = graphql(`
   query BaseData {
     spexCategories(includeRetired: true) { id name firstYear description retired logo { ...ImageFields } }
     spexAll(includeRetired: true) { id slug year title revival retired published parent { id } category { id name } }
-    taskCategories(includeRetired: true) { id name actorPresent board retired }
+    taskCategories(includeRetired: true) { id name actorPresent board instruments retired }
     tasks(includeRetired: true) { id name retired category { id name } }
     figures { id slug name description }
   }

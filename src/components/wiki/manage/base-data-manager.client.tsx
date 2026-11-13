@@ -169,7 +169,7 @@ function SpexForm({ categories, done }: { categories: BaseData["spexCategories"]
 function TaskCategoryForm({ category, done }: { category?: BaseData["taskCategories"][number]; done: () => void }) {
   const t = useTranslations("BaseData");
   const { save, pending } = useSave();
-  const [values, setValues] = useState({ name: category?.name ?? "", actorPresent: category?.actorPresent ?? false, board: category?.board ?? false });
+  const [values, setValues] = useState({ name: category?.name ?? "", actorPresent: category?.actorPresent ?? false, board: category?.board ?? false, instruments: category?.instruments ?? false });
 
   return (
     <form className={box} onSubmit={async event => {
@@ -181,6 +181,7 @@ function TaskCategoryForm({ category, done }: { category?: BaseData["taskCategor
       <Label className="flex-col items-start">{t("name")}<Input required value={values.name} onChange={event => setValues({ ...values, name: event.target.value })} /></Label>
       <label className="flex items-center gap-2 text-sm"><Checkbox checked={values.actorPresent} onCheckedChange={checked => setValues({ ...values, actorPresent: !!checked })} /> {t("actorPresent")}</label>
       <label className="flex items-center gap-2 text-sm"><Checkbox checked={values.board} onCheckedChange={checked => setValues({ ...values, board: !!checked })} /> {t("board")}</label>
+      <label className="flex items-center gap-2 text-sm"><Checkbox checked={values.instruments} onCheckedChange={checked => setValues({ ...values, instruments: !!checked })} /> {t("instruments")}</label>
       <Buttons pending={pending} onCancel={done} />
     </form>
   );
@@ -264,7 +265,7 @@ export function BaseDataManager({ data, admin, highlight }: { data: BaseData; ad
       <BaseList id="task-categories" title={t("sections.task-categories")} kind="TASK_CATEGORY" admin={admin} highlight={highlight}
                 rows={data.taskCategories.map(c => ({
                   id: c.id, label: c.name, retired: c.retired,
-                  extra: <>{c.actorPresent && <Badge variant="secondary">{t("actorPresent")}</Badge>}{c.board && <Badge variant="secondary">{t("board")}</Badge>}</>,
+                  extra: <>{c.actorPresent && <Badge variant="secondary">{t("actorPresent")}</Badge>}{c.board && <Badge variant="secondary">{t("board")}</Badge>}{c.instruments && <Badge variant="secondary">{t("instruments")}</Badge>}</>,
                 }))}
                 form={(id, done) => <TaskCategoryForm category={data.taskCategories.find(c => c.id === id)} done={done} />}
                 newForm={done => <TaskCategoryForm done={done} />} />
