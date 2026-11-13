@@ -27,5 +27,5 @@ The sample users (`admin@fgv.nu`, `editor@fgv.nu`, `author@fgv.nu`, `user@fgv.nu
 
 ## Checks
 
-`npm run lint`, `npm run typecheck`, `npm run test`, `npm run build`. After a schema change in the server run
+`npm run lint`, `npm run typecheck`, `npm run test`, `npm run test:e2e` (Playwright; see AGENTS.md), `npm run build`. After a schema change in the server run
 `npm run gql-codegen` and commit `src/gql/`.

@@ -16,7 +16,8 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "format": "prettier --write .",
-    "gql-codegen": "graphql-codegen --config codegen.ts"
+    "gql-codegen": "graphql-codegen --config codegen.ts",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
@@ -51,6 +52,7 @@
     "@graphql-codegen/cli": "^7.4.6",
     "@graphql-codegen/client-preset": "^6.2.0",
     "@graphql-typed-document-node/core": "^3.2.0",
+    "@playwright/test": "^1.64.1",
     "@tailwindcss/postcss": "^4.3.4",
     "@testing-library/dom": "^10.4.2",
     "@testing-library/jest-dom": "^7.0.1",

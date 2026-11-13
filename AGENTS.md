@@ -20,7 +20,10 @@ without a token too, with what is public) and its `POST /api/images`; images com
 
 - `npm run dev` (port 3006) / `build` / `start`
 - `npm run lint`, `npm run typecheck` (covers `src/**` only)
-- `npm run test` (Vitest). Playwright tests (a visitor sees no sample spexare's name, page by page) are still to be written.
+- `npm run test` (Vitest); `npm run test:e2e` (Playwright, against `e2e/mock-backend.mjs`, which replays the local API's
+  answers in `e2e/recorded.json` and adds sample spexare as the server shows them). A visitor must see no sample
+  spexare's name on any public page, nor after a member viewed it. Record again with the API running locally on sample
+  data: `MOCK_RECORD_FROM=http://localhost:8088/api/graphql npm run test:e2e`.
 - `npm run gql-codegen` — regenerate `src/gql/` from the sibling `../fgv-spexipedia-server` checkout. Commit the result.
 
 **Don't run `npm run format`**: `.prettierrc` differs from the code base.
