@@ -1,0 +1,101 @@
+"use server";
+
+import { revalidatePath } from "next/cache";
+import { type ActionResult, toActionResult } from "@/lib/graphql.server";
+import {
+  articleCreate,
+  articleEditing,
+  articleRestore,
+  articleSetPublished,
+  articleTrash,
+  articleUpdate,
+  revisionSetHidden,
+} from "@/lib/wiki/edit.server";
+import { getArticle, markdownPreview } from "@/lib/wiki/wiki.server";
+import type { ArticleInput } from "@/gql/graphql";
+import { withPolicyAction } from "@/utils/route.server";
+import { Policies } from "@/utils/policy.server";
+import { ID } from "@/utils/ids";
+
+function requireId(...ids: (string | null | undefined)[]) {
+  if (ids.some(id => id != null && !ID.test(id))) {
+    throw new Error("Invalid id");
+  }
+}
+
+const member = <T, >(work: () => Promise<T>) => withPolicyAction(Policies.app.requireAccess, () => toActionResult(work));
+const author = <T, >(work: () => Promise<T>) => withPolicyAction(Policies.author.requireAuthor, () => toActionResult(work));
+
+/** The Markdown as the page will show it. */
+export async function previewAction(markdown: string): Promise<ActionResult<string>> {
+  return member(() => markdownPreview(markdown.slice(0, 200_000)));
+}
+
+/**
+ * Saves the article: a new one, or a new revision of one. A revision based on an older one than the latest is refused
+ * with CONFLICT, and the editor then gets the latest to merge with.
+ */
+export async function saveArticleAction(id: string | null, input: ArticleInput, baseRevisionId: string | null): Promise<ActionResult<{ slug: string }>> {
+  requireId(id, baseRevisionId, ...(input.categoryIds ?? []));
+  return member(async () => {
+    const saved = id ? await articleUpdate(id, input, baseRevisionId) : await articleCreate(input);
+
+    revalidatePath("/articles", "layout");
+    revalidatePath("/recent-changes");
+    return { slug: saved.slug };
+  });
+}
+
+/** The latest revision of the article, for merging after a conflict. */
+export async function latestArticleAction(id: string): Promise<ActionResult<{ body: string; revisionId: string | null }>> {
+  requireId(id);
+  return member(async () => {
+    const article = await getArticle(id);
+
+    return { body: article?.body ?? "", revisionId: article?.revision?.id ?? null };
+  });
+}
+
+/** Tells the server the user is editing the article, and who else is. */
+export async function editingAction(id: string): Promise<ActionResult<string[]>> {
+  requireId(id);
+  return member(() => articleEditing(id));
+}
+
+export async function restoreRevisionAction(id: string, revisionId: string): Promise<ActionResult<{ slug: string }>> {
+  requireId(id, revisionId);
+  return member(async () => {
+    const restored = await articleRestore(id, revisionId);
+
+    revalidatePath("/articles", "layout");
+    return { slug: restored.slug };
+  });
+}
+
+export async function setPublishedAction(id: string, published: boolean): Promise<ActionResult<null>> {
+  requireId(id);
+  return author(async () => {
+    await articleSetPublished(id, published);
+    revalidatePath("/articles", "layout");
+    return null;
+  });
+}
+
+export async function trashArticleAction(id: string): Promise<ActionResult<null>> {
+  requireId(id);
+  return author(async () => {
+    await articleTrash(id);
+    revalidatePath("/articles", "layout");
+    return null;
+  });
+}
+
+export async function setRevisionHiddenAction(id: string, hidden: boolean): Promise<ActionResult<null>> {
+  requireId(id);
+  return author(async () => {
+    await revisionSetHidden(id, hidden);
+    revalidatePath("/articles", "layout");
+    revalidatePath("/recent-changes");
+    return null;
+  });
+}

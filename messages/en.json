@@ -1,0 +1,772 @@
+{
+  "App": {
+    "name": "Spexipedia"
+  },
+  "Meta": {
+    "title": "Spexipedia",
+    "description": "The Chalmers spex encyclopedia: the spex, their characters, music and traditions"
+  },
+  "Common": {
+    "login": "Log in",
+    "logout": "Log out",
+    "loggedOut": "You are logged out",
+    "save": "Save",
+    "cancel": "Cancel",
+    "add": "Add",
+    "remove": "Remove",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "reload": "Reload",
+    "chooseFile": "Choose file…",
+    "noFileChosen": "No file chosen",
+    "confirm": "Confirm",
+    "loading": "Loading…",
+    "saved": "Saved",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "themeSystem": "System",
+    "myFgvAccount": "My FGV account",
+    "toggle": "Toggle",
+    "search": "Search",
+    "selected": "{count, plural, =1 {# selected} other {# selected}}",
+    "reset": "Reset",
+    "resetFilters": "Reset filters",
+    "noDataHeading": "No data found",
+    "noDataDescription": "Couldn't find any data at the moment. Please check back later.",
+    "noFilterMatchHeading": "No data found",
+    "noFilterMatchDescription": "Try adjusting your filters or search query to find what you're looking for.",
+    "rowsPerPage": "Rows per page",
+    "pageOf": "Page {page} of {pages}",
+    "firstPage": "First page",
+    "previousPage": "Previous page",
+    "nextPage": "Next page",
+    "lastPage": "Last page",
+    "clearSearch": "Clear search",
+    "datePlaceholder": "YYYY-MM-DD",
+    "pickDate": "Pick a date",
+    "noMatches": "Nothing matches",
+    "pages": "Pages",
+    "loadMore": "Load more"
+  },
+  "Header": {
+    "toggleLanguage": "Change language",
+    "toggleTheme": "Change theme",
+    "showMenu": "Show menu"
+  },
+  "Sidebar": {
+    "hideMenu": "Hide menu",
+    "showMenu": "Show menu"
+  },
+  "AppSwitcher": {
+    "heading": "Switch application",
+    "spexregister": "Spexregister",
+    "revival": "Nyuppsättning",
+    "spexflix": "Spexflix",
+    "spexify": "Spexify",
+    "spexgram": "Spexipedia",
+    "archive": "Spexarkiv"
+  },
+  "NoAccess": {
+    "title": "You do not have access",
+    "text": "Your FGV account ({email}) has no access to Spexipedia. Ask an administrator for access, or log out and log in with another account.",
+    "logout": "Log out",
+    "notice": "Your FGV account ({email}) has no access to Spexipedia, so you only see what is public. Ask an administrator for access."
+  },
+  "LoginError": {
+    "title": "Login failed",
+    "text": "Something went wrong while logging in. Please try again.",
+    "retry": "Try again"
+  },
+  "Forbidden": {
+    "title": "You do not have permission",
+    "text": "You do not have permission to see this page. Ask a admin if you need it.",
+    "home": "To the home page"
+  },
+  "NotFound": {
+    "title": "Page not found",
+    "text": "The page does not exist, or you do not have access to it.",
+    "home": "To the home page"
+  },
+  "Error": {
+    "title": "Something went wrong",
+    "text": "An unexpected error occurred.",
+    "retry": "Try again"
+  },
+  "Errors": {
+    "CONFLICT": "Someone else has changed this. Reload and try again.",
+    "FORBIDDEN": "You are not allowed to do that.",
+    "NOT_FOUND": "It does not exist, or you do not have access to it.",
+    "BAD_REQUEST": "The details are not valid.",
+    "SPEXREGISTER_UNAVAILABLE": "Spexregister is temporarily unavailable. Try again in a moment.",
+    "UNAUTHORIZED": "You are not logged in.",
+    "INTERNAL_ERROR": "Something went wrong. Please try again.",
+    "MAIL_UNAVAILABLE": "Email cannot be sent at the moment. Try again later.",
+    "DIRECTORY_UNAVAILABLE": "The FGV accounts cannot be reached right now. Try again in a moment.",
+    "IMMICH_UNAVAILABLE": "The photo store cannot be reached right now. Try again in a while."
+  },
+  "About": {
+    "title": "About",
+    "heading": "About Spexipedia",
+    "description": "Spexipedia is provided by FGV and is the Chalmers spex encyclopedia: the spex through the years, their characters, music, scenography and traditions. Photos of people come from Spexgram and names from Spexregister.",
+    "behindTheScenes": "Behind the scenes",
+    "feedback": "Feedback",
+    "feedbackDescription": "We value your opinion. Do you have suggestions for improvements or have you found a bug? Get in touch at {email}.",
+    "feedbackAction": "Send an email"
+  },
+  "Support": {
+    "title": "Support",
+    "heading": "How can we help?",
+    "description": "Have you found a technical fault, or trouble logging in or editing a page? We are happy to help.",
+    "contact": "Contact support",
+    "contactDescription": "Describe your problem as clearly as possible. Get in touch at {email}.",
+    "contactAction": "Send a support request"
+  },
+  "LoginPrompt": {
+    "login": "Log in",
+    "content": {
+      "title": "Log in to see this",
+      "text": "If it exists, it is for members only. Log in with your FGV account to see it.",
+      "noAccessTitle": "This cannot be shown",
+      "noAccessText": "It does not exist, or your FGV account has no access to it. Ask an administrator for access to Spexipedia."
+    },
+    "page": {
+      "title": "Members only",
+      "text": "This page is for members. Log in with your FGV account to continue.",
+      "noAccessTitle": "You have no access to Spexipedia",
+      "noAccessText": "This page is for members, and your FGV account has no access to Spexipedia. Ask an administrator for access."
+    }
+  },
+  "Audit": {
+    "title": "Change log",
+    "text": "Your own changes.",
+    "textAdmin": "Every change to pages, base data and settings.",
+    "when": "When",
+    "who": "Who",
+    "what": "What",
+    "event": "Event",
+    "filters": "Filter the change log",
+    "search": "Search the summaries…",
+    "typeLabel": "Kind",
+    "allTypes": "All kinds",
+    "actionLabel": "Event",
+    "allActions": "All events",
+    "everyone": "Everyone",
+    "from": "From",
+    "to": "To",
+    "reset": "Clear the filter",
+    "count": "{count, plural, =0 {No changes} one {# change} other {# changes}}",
+    "none": "No changes yet.",
+    "noneFiltered": "No changes match the filter.",
+    "oneRecord": "Showing the changes of one record.",
+    "allRecords": "Show all records",
+    "history": "History",
+    "historyOf": "History of {summary}",
+    "recordHistory": "Changes",
+    "allChanges": "All {count} changes",
+    "action": {
+      "CREATE": "Created",
+      "UPDATE": "Changed",
+      "VISIBILITY": "Visibility",
+      "UPLOAD": "Uploaded",
+      "REVIEW": "Reviewed",
+      "REPORT": "Report",
+      "TRASH": "Trashed",
+      "RESTORE": "Restored",
+      "DELETE": "Deleted",
+      "PUBLISH": "Published",
+      "UNPUBLISH": "Unpublished",
+      "HIDE": "Hidden",
+      "SHOW": "Shown",
+      "RETIRE": "Retired",
+      "MERGE": "Merged"
+    },
+    "type": {
+      "SPEX": "Spex",
+      "SPEX_PAGE": "Spex page",
+      "SPEX_CATEGORY": "Spex category",
+      "TASK": "Task",
+      "TASK_CATEGORY": "Task category",
+      "CHARACTER": "Character",
+      "SCENE": "Scene",
+      "NUMBER": "Number",
+      "FIGURE": "Figure",
+      "RECORDING": "Recording",
+      "ARTICLE": "Article",
+      "ARTICLE_CATEGORY": "Article category",
+      "REVISION": "Revision",
+      "IMAGE": "Image",
+      "REDIRECT": "Redirect",
+      "SYNC_CONSUMER": "Recipient",
+      "SETTINGS": "Settings",
+      "TRASH": "Trash"
+    },
+    "period": "Period",
+    "details": "Show details",
+    "openRecord": "Open record",
+    "noneText": "Changes show up here as they are made.",
+    "untilNow": "today",
+    "pickStart": "Pick the first day.",
+    "pickEnd": "Pick the last day, or close to see up to today."
+  },
+  "AdminSettings": {
+    "title": "Settings",
+    "startPage": "The start page",
+    "welcomeSv": "Text for members, in Swedish",
+    "welcomeEn": "Text for members, in English",
+    "publicWelcomeSv": "Text for visitors, in Swedish",
+    "publicWelcomeEn": "Text for visitors, in English",
+    "contactEmail": "Contact address shown to visitors",
+    "save": "Save",
+    "saved": "The settings have been saved"
+  },
+  "AdminMaintenance": {
+    "title": "Maintenance",
+    "text": "The jobs the server runs on a schedule, in Swedish time. You can also start one now.",
+    "schedule": "Schedule",
+    "notScheduled": "Not scheduled",
+    "lastRun": "Latest run",
+    "running": "Running",
+    "neverRun": "Not since the server started",
+    "succeeded": "Succeeded {at}",
+    "failed": "Failed, started {at}",
+    "startedAt": "Started {at}",
+    "runNow": "Run now",
+    "started": "{job} has started. It runs in the background.",
+    "alreadyRunning": "{job} is already running.",
+    "jobs": {
+      "IMAGE_VARIANTS": {
+        "title": "Image sizes",
+        "description": "Makes the sizes of images that are missing."
+      },
+      "LINK_CHECK": {
+        "title": "Link check",
+        "description": "Checks the links to the other services."
+      },
+      "SEARCH_REBUILD": {
+        "title": "Search index",
+        "description": "Rebuilds the search index."
+      },
+      "SYNC_NOTIFY": {
+        "title": "Notify recipients",
+        "description": "Sends notifications of changes that failed."
+      },
+      "UPLOAD_CLEANUP": {
+        "title": "Uploads",
+        "description": "Clears unfinished uploads."
+      },
+      "RETENTION": {
+        "title": "Retention",
+        "description": "Removes details of users who have not logged in for 36 months."
+      }
+    }
+  },
+  "YearBrowser": {
+    "decade": "{decade}s",
+    "yearsOf": "Years in the {decade}s"
+  },
+  "Nav": {
+    "home": "Home",
+    "spex": "The spex",
+    "figures": "Figures",
+    "recordings": "Recordings",
+    "articles": "Articles",
+    "search": "Search",
+    "recentChanges": "Recent changes",
+    "manage": "Edit",
+    "baseData": "Base data",
+    "manageRecordings": "Recordings",
+    "trash": "Trash",
+    "auditLog": "Change log",
+    "admin": "Administration",
+    "adminSettings": "Settings",
+    "adminRedirects": "Redirects",
+    "adminConsumers": "Change recipients",
+    "adminMaintenance": "Maintenance"
+  },
+  "Home": {
+    "kicker": "The Chalmers spex encyclopedia",
+    "intro": "Everything about the spex since 1948: the stories, characters, music, scenography and traditions. Log in with your FGV account to see who took part and to write articles.",
+    "spexOfTheYear": "Spex of the year",
+    "thisDay": "This day in history",
+    "decade": "The {decade}s",
+    "allSpex": "All spex",
+    "recentChanges": "Recently changed",
+    "allChanges": "All changes"
+  },
+  "Browse": {
+    "title": "The spex",
+    "description": "Every spex with a published page, decade by decade.",
+    "decades": "Decades",
+    "decade": "The {decade}s"
+  },
+  "Category": {
+    "since": "Since {year}"
+  },
+  "Spex": {
+    "revival": "Revival",
+    "unpublished": "Unpublished"
+  },
+  "SpexPage": {
+    "noPoster": "No poster",
+    "revivalOf": "Revival of",
+    "unpublished": "Unpublished",
+    "retired": "Retired",
+    "generation": "Spex generation",
+    "premiere": "Premiere",
+    "revivals": "Revivals",
+    "edit": "Edit",
+    "figure": "Figure: {name}",
+    "act": "Act {act}",
+    "interval": "Interval",
+    "melody": "tune: {title} ({artist})",
+    "sungBy": "Sung by {names}",
+    "showSolution": "Show the solution",
+    "wornBy": "Worn by",
+    "peopleUnavailable": "Spexregister cannot be reached right now, so who took part is not shown.",
+    "lastModified": "Last changed {date}",
+    "onThisPage": "On this page",
+    "originalYear": "The original, {year}",
+    "revivalYear": "The revival, {year}",
+    "sections": {
+      "overview": {
+        "title": "Overview",
+        "subtitle": "About the spex"
+      },
+      "group": {
+        "title": "The ensemble",
+        "subtitle": "The group photo"
+      },
+      "characters": {
+        "title": "Characters",
+        "subtitle": "Characters and who played them"
+      },
+      "scenography": {
+        "title": "Scenography",
+        "subtitle": "Backdrop, stage and props"
+      },
+      "manuscript": {
+        "title": "Script and programme",
+        "subtitle": "Synopsis and scenes"
+      },
+      "music": {
+        "title": "Music",
+        "subtitle": "Numbers, melodies and credits"
+      },
+      "recordings": {
+        "title": "Recordings",
+        "subtitle": "Records and releases"
+      },
+      "rebus": {
+        "title": "Programme rebus",
+        "subtitle": "Can you solve it?"
+      },
+      "vest": {
+        "title": "The vest",
+        "subtitle": "The vest and who wore it"
+      },
+      "board": {
+        "title": "The board",
+        "subtitle": "The spex's board"
+      },
+      "tasks": {
+        "title": "Crew and cast",
+        "subtitle": "Who did what"
+      },
+      "images": {
+        "title": "Other images",
+        "subtitle": "More images from the spex"
+      },
+      "links": {
+        "title": "More about the spex",
+        "subtitle": "In FGV's other services"
+      }
+    },
+    "scenography": {
+      "backdrop": "Backdrop",
+      "stage": "Stage",
+      "props": "Props"
+    },
+    "credits": {
+      "lyrics": "Lyrics",
+      "composers": "Music",
+      "arrangers": "Arr.",
+      "choreographers": "Choreography"
+    },
+    "imageKinds": {
+      "POSTER": "Poster",
+      "LOGO": "Logo",
+      "SKETCH": "Sketch",
+      "MAKEUP": "Make-up sketch",
+      "COSTUME": "Costume doll",
+      "SCENOGRAPHY": "Scenography",
+      "REBUS": "Rebus",
+      "VEST": "Vest",
+      "COVER": "Cover",
+      "ARTICLE": "Article image",
+      "OTHER": "Other"
+    },
+    "media": {
+      "LP": "LP",
+      "EP": "EP",
+      "CD": "CD",
+      "DIGITAL": "Digital",
+      "OTHER": "Other"
+    }
+  },
+  "Photos": {
+    "unavailable": "Spexgram cannot be reached right now.",
+    "open": "Show",
+    "hiddenMember": "{count, plural, one {# photo} other {# photos}} your account cannot open in Spexgram",
+    "hiddenVisitor": "{count, plural, one {# photo} other {# photos}} for members – log in",
+    "from": "Photos and films from Spexgram",
+    "openInSpexgram": "Open in Spexgram"
+  },
+  "AppLinks": {
+    "SPEXREGISTER": "Spexregister",
+    "SPEXIFY_ALBUM": "Listen in Spexify",
+    "SPEXIFY_TRACK": "Listen",
+    "SPEXFLIX_VIDEO": "Watch in Spexflix",
+    "ARCHIVE_MANUSCRIPT": "Script in Spexarkivet",
+    "ARCHIVE_ARRANGEMENT": "Arrangement",
+    "SPEXGRAM_ALBUM": "Album in Spexgram"
+  },
+  "Revisions": {
+    "fields": {
+      "INTRODUCTION": "introduction",
+      "DESCRIPTION": "description",
+      "SYNOPSIS": "synopsis"
+    },
+    "hidden": "text hidden",
+    "compare": "Compare",
+    "historyOf": "History of {title}",
+    "backToArticle": "Back to the article",
+    "hiddenText": "This revision's text is hidden.",
+    "removed": "removed",
+    "added": "added",
+    "restoreTitle": "Restore this revision?",
+    "restoreText": "It is saved as a new revision; the history stays.",
+    "restore": "Restore",
+    "restored": "The revision is restored",
+    "hide": "Hide the text",
+    "unhide": "Show the text",
+    "recentTitle": "Recent changes",
+    "recentDescription": "Every change to articles and spex pages you may see, newest first.",
+    "pages": "Pages",
+    "newer": "Newer",
+    "older": "Older"
+  },
+  "Figures": {
+    "title": "Figures",
+    "description": "Historical and invented figures who have appeared in several spex.",
+    "characters": "{count, plural, one {# character} other {# characters}}",
+    "figure": "Figure"
+  },
+  "Recordings": {
+    "title": "Recordings",
+    "description": "The spex's records and releases, by catalogue number.",
+    "unpublished": "Unpublished",
+    "spex": "Spex",
+    "released": "Released",
+    "recorded": "Recorded",
+    "conductor": "Conductor",
+    "edit": "Edit",
+    "tracks": "Tracks",
+    "side": "Side {side}"
+  },
+  "Articles": {
+    "title": "Articles",
+    "description": "Traditions, societies, tours, anecdotes and the spexikon.",
+    "new": "New article",
+    "categories": "Categories",
+    "empty": "No articles here yet.",
+    "members": "Members",
+    "unpublished": "Unpublished",
+    "trashed": "In the trash",
+    "editingBy": "Being edited by {names}",
+    "edit": "Edit",
+    "history": "History",
+    "textHidden": "The latest revision's text is hidden.",
+    "lastModified": "Last changed {at}",
+    "publish": "Publish",
+    "unpublish": "Unpublish",
+    "publishedToast": "The article is published",
+    "unpublishedToast": "The article is unpublished",
+    "trash": "Move to the trash",
+    "trashTitle": "Move the article to the trash?",
+    "trashText": "It is no longer shown; it can be restored from the trash.",
+    "trashedToast": "The article is in the trash"
+  },
+  "ArticleForm": {
+    "saved": "Saved",
+    "othersEditing": "{names} are also editing this article right now.",
+    "title": "Title",
+    "visibility": "Who may read it",
+    "visibilities": {
+      "PUBLIC": "Everyone",
+      "MEMBERS": "Members only"
+    },
+    "categories": "Categories",
+    "body": "Text",
+    "conflict": "Someone else saved a newer revision while you were writing. This is how your text differs from theirs:",
+    "theirs": "theirs",
+    "mine": "yours",
+    "takeTheirs": "Start again from theirs",
+    "keepMine": "Save mine over theirs",
+    "comment": "Comment for the history",
+    "commentPlaceholder": "What did you change?",
+    "save": "Save",
+    "cancel": "Cancel",
+    "newTitle": "New article",
+    "newDescription": "Every member can write. New articles are unpublished until an author publishes them. Anecdotes that name people should be for members.",
+    "editTitle": "Edit {title}"
+  },
+  "Editor": {
+    "write": "Write",
+    "preview": "Preview",
+    "previewFailed": "The preview failed.",
+    "help": "Markdown: **bold**, *italic*, # heading, - list, tables. [[Title]] links to an article."
+  },
+  "Search": {
+    "title": "Search",
+    "placeholder": "Search spex, characters, numbers, articles…",
+    "submit": "Search",
+    "noHits": "Nothing found for “{q}”.",
+    "writeArticle": "Write an article about “{q}”",
+    "kinds": {
+      "SPEX": "Spex",
+      "CHARACTER": "Characters",
+      "FIGURE": "Figures",
+      "NUMBER": "Numbers",
+      "RECORDING": "Recordings",
+      "ARTICLE": "Articles",
+      "SPEX_CATEGORY": "Categories"
+    }
+  },
+  "Manage": {
+    "saved": "Saved",
+    "failed": "It could not be saved.",
+    "tooLarge": "The image is larger than 50 MB.",
+    "uploadFailed": "The upload failed: {message}",
+    "replace": "Replace",
+    "upload": "Upload",
+    "remove": "Remove",
+    "addImages": "Add images",
+    "save": "Save",
+    "dropImages": "Drop images here, or choose them with the button.",
+    "kind": "Kind",
+    "caption": "Caption",
+    "moveUp": "Move up",
+    "moveDown": "Move down",
+    "noPeople": "Images here are public and must not show identifiable people. Photos of people belong in Spexgram.",
+    "hiddenSpexare": "(spexare)",
+    "creditSearch": "Search spexare…",
+    "addFreeText": "Add as free text, for people outside FGV",
+    "freeText": "Free text",
+    "searching": "Searching…",
+    "creditHelp": "Pick spexare from the register; free text only for people outside FGV.",
+    "chosenCount": "{count} chosen",
+    "pickFromSpexgram": "Pick from Spexgram",
+    "noAlbums": "The spex has no albums in Spexgram you can pick from.",
+    "membersOnly": "Members only",
+    "poster": "Poster",
+    "year": "Year",
+    "title": "Title",
+    "category": "Category",
+    "none": "None",
+    "newRevival": "New revival, year",
+    "createRevival": "Create revival",
+    "pagePublished": "The page is published and shown to everyone.",
+    "pageUnpublished": "The page is unpublished and shown only to authors and editors.",
+    "publish": "Publish",
+    "unpublish": "Unpublish",
+    "generation": "Spex generation",
+    "premiere": "Premiere",
+    "introduction": "Introduction",
+    "introductionHelp": "Short, for tiles and previews when the page is shared.",
+    "description": "Description",
+    "synopsis": "Synopsis",
+    "vestDescription": "The vest",
+    "vestWornBy": "The vest was worn by",
+    "saveTexts": "Save the texts",
+    "sections": {
+      "BACKDROP": "Backdrop",
+      "STAGE": "Stage",
+      "PROPS": "Props",
+      "VEST": "The vest",
+      "OTHER": "Other images"
+    },
+    "rebus": "Programme rebus",
+    "rebusSolution": "The rebus's solution",
+    "groupPhotos": "Group photo",
+    "boardPhotos": "The board",
+    "paste": "Paste a list",
+    "addLines": "Add the lines",
+    "cancel": "Cancel",
+    "addCharacter": "New character",
+    "pasteCharactersHelp": "One character per line: “Name” or “Name – description”.",
+    "retired": "Retired",
+    "fromParent": "From the original",
+    "edit": "Edit",
+    "imagesAndPhotos": "Images and actor photos",
+    "characterImages": "Sketches, make-up sketches and costume dolls",
+    "actorPhotos": "Photos of the actors, from Spexgram",
+    "name": "Name",
+    "figure": "Figure",
+    "delete": "Delete",
+    "deleteTitle": "Delete?",
+    "deleteText": "Only what nothing refers to can be deleted; otherwise retire it.",
+    "addScene": "New scene",
+    "pasteScenesHelp": "One scene per line: “Title” or “Title – place”. A line “--” is an interval after the scene before; “Akt 2” starts an act.",
+    "actShort": "A{act}",
+    "interval": "Interval",
+    "act": "Act",
+    "place": "Place",
+    "intervalAfter": "Interval after the scene",
+    "addNumber": "New number",
+    "pasteNumbersHelp": "One number per line: “Title” or “Title (Original song – artist)”; “Akt 2” starts an act.",
+    "originalTitle": "Original song",
+    "originalArtist": "Original artist",
+    "sungBy": "Sung by",
+    "revivalHelp": "Tick what the revival cuts from the original {title} ({year}). Characters, scenes and numbers only the revival has are added in the lists above.",
+    "revivalKinds": {
+      "CHARACTER": "Characters",
+      "SCENE": "Scenes",
+      "NUMBER": "Numbers"
+    },
+    "saveCuts": "Save the cuts",
+    "editSpex": "Edit {title}",
+    "showPage": "Show the page",
+    "onThisPage": "On this page",
+    "editSections": {
+      "base": "Base data",
+      "texts": "Texts",
+      "media": "Images and photos",
+      "characters": "Characters",
+      "scenes": "Scenes",
+      "numbers": "Numbers",
+      "revival": "The revival's changes",
+      "history": "History"
+    },
+    "noHistory": "No changes to the texts yet."
+  },
+  "BaseData": {
+    "title": "Base data",
+    "description": "Description",
+    "showRetired": "Show retired",
+    "add": "New",
+    "retired": "Retired",
+    "edit": "Edit",
+    "retire": "Retire",
+    "unretire": "Bring back",
+    "merge": "Merge",
+    "mergeTitle": "Merge {label} into…",
+    "mergeConfirm": "Merge for good?",
+    "mergeConfirmText": "The other services move their references to the one chosen. It cannot be undone.",
+    "save": "Save",
+    "cancel": "Cancel",
+    "logo": "Logo",
+    "name": "Name",
+    "firstYear": "First year",
+    "year": "Year",
+    "spexTitle": "Title",
+    "category": "Category",
+    "none": "None",
+    "spexHelp": "Revivals are created from the original's page.",
+    "actorPresent": "Has a character and a voice part",
+    "board": "Shown as the board",
+    "revival": "Revival",
+    "unpublished": "Unpublished",
+    "openEditor": "Open the spex's page for editing",
+    "since": "since {year}",
+    "sections": {
+      "spex": "Spex",
+      "spex-categories": "Spex categories",
+      "task-categories": "Task categories",
+      "tasks": "Tasks",
+      "figures": "Figures"
+    }
+  },
+  "ManageRecordings": {
+    "title": "Recordings",
+    "unpublished": "Unpublished",
+    "editTitle": "Edit recording",
+    "editDescription": "Covers, facts, tracks and the album in Spexify.",
+    "catalogueNumber": "Catalogue number",
+    "recordingTitle": "Title",
+    "medium": "Medium",
+    "spex": "Spex",
+    "compilation": "None (compilation)",
+    "create": "Create",
+    "published": "The recording is published.",
+    "unpublishedText": "The recording is unpublished.",
+    "publish": "Publish",
+    "unpublish": "Unpublish",
+    "deleteTitle": "Delete the recording?",
+    "deleteText": "It is deleted with its tracks.",
+    "delete": "Delete",
+    "front": "Front",
+    "back": "Back",
+    "released": "Released",
+    "recorded": "Recorded",
+    "conductor": "Conductor",
+    "description": "Description",
+    "spexifyAlbumId": "The album's id in Spexify",
+    "save": "Save",
+    "tracks": "Tracks",
+    "side": "Side",
+    "number": "Number",
+    "freeTitle": "Other title",
+    "trackTitle": "Title",
+    "removeTrack": "Remove the track",
+    "addTrack": "New track",
+    "saveTracks": "Save the tracks",
+    "pasteTracks": "Paste tracks",
+    "pasteTracksHelp": "One track per line: “A1 Title” or “Title”; “Sida B” starts a side. Titles are matched to the spex's numbers."
+  },
+  "AdminRedirects": {
+    "title": "Redirects",
+    "description": "Old MediaWiki titles and the pages that replaced them. Addresses without a redirect lead to a search.",
+    "filter": "Filter…",
+    "add": "New redirect",
+    "edit": "Edit",
+    "delete": "Delete",
+    "deleteTitle": "Remove the redirect for {title}?",
+    "oldTitle": "Old title",
+    "target": "Page, e.g. /spex/1984-lasse-maja",
+    "save": "Save"
+  },
+  "AdminConsumers": {
+    "title": "Change recipients",
+    "description": "The services that copy base data. Each reads the change feed itself; those with an address are also told after every change.",
+    "add": "New recipient",
+    "disabled": "Disabled",
+    "lag": "{count} unread changes",
+    "upToDate": "Up to date",
+    "edit": "Edit",
+    "delete": "Delete",
+    "deleteTitle": "Remove {name}?",
+    "notifyUrl": "Notified at",
+    "pullsOnly": "Pulls by itself",
+    "acknowledged": "Has read up to",
+    "lastNotified": "Last notified",
+    "lastError": "Last error",
+    "name": "Name",
+    "clientId": "Service account",
+    "enabled": "Enabled",
+    "save": "Save",
+    "cancel": "Cancel"
+  },
+  "Trash": {
+    "title": "Trash",
+    "description": "Articles and images in the trash are not shown. Restore them here; an admin empties the trash.",
+    "empty": "The trash is empty.",
+    "emptyTrash": "Empty the trash",
+    "emptyTitle": "Empty the trash?",
+    "emptyText": "Everything in it is deleted for good.",
+    "emptied": "The trash is empty",
+    "articles": "Articles",
+    "images": "Images",
+    "restore": "Restore"
+  }
+}
