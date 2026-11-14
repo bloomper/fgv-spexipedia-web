@@ -13,9 +13,9 @@ const appEnv: Record<string, string> = {
   SUPPORT_EMAIL: "support.spexipedia@example.org",
   FEEDBACK_EMAIL: "feedback.spexipedia@example.org",
   MEDIA_ORIGIN: `http://localhost:${MOCK_PORT}`,
+  SPEXGRAM_MEDIA_ORIGIN: `http://localhost:${MOCK_PORT}`,
   UMAMI_URL: "",
   UMAMI_WEBSITE_ID: "",
-  API_CLIENT_IP_SECRET: "",
   SUPPORTED_LOCALES: "sv,en",
   DEFAULT_LOCALE: "sv",
   SPEXREGISTER_WEB_URL: "",
@@ -49,7 +49,9 @@ export default defineConfig({
     trace: "on-first-retry",
   },
   projects: [
-    { name: "chromium", use: { ...devices["Desktop Chrome"] } },
+    { name: "chromium", use: { ...devices["Desktop Chrome"] }, testIgnore: /mobile\.spec\.ts/ },
+    // Phones: the layout checks, in Chromium with a phone's screen, touch and user agent
+    { name: "mobile", use: { ...devices["Pixel 7"] }, testMatch: /mobile\.spec\.ts/ },
   ],
   webServer: [
     {

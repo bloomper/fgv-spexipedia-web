@@ -7,7 +7,7 @@ import { getSpexPage, type SpexPageData } from "@/lib/wiki/wiki.server";
 import { getViewer } from "@/lib/wiki/viewer.server";
 import { privateMetadata, publicMetadata } from "@/lib/wiki/metadata.server";
 import { SpexSection } from "@/components/wiki/spex-section";
-import { SectionRail } from "@/components/wiki/section-rail.client";
+import { SectionBar, SectionRail } from "@/components/wiki/section-rail.client";
 import { HtmlContent } from "@/components/wiki/html-content";
 import { WikiImage } from "@/components/wiki/wiki-image";
 import { ImageGallery } from "@/components/wiki/image-gallery.client";
@@ -76,7 +76,7 @@ export default async function SpexPage({ params }: Props) {
       )}
       <article className="min-w-0 flex-1 space-y-10">
         {/* Head */}
-        <header id="overview" data-section className="scroll-mt-20 grid gap-6 md:grid-cols-[minmax(0,16rem)_1fr] md:gap-8">
+        <header id="overview" data-section className="scroll-mt-28 xl:scroll-mt-20 grid gap-6 md:grid-cols-[minmax(0,16rem)_1fr] md:gap-8">
           <div className="mx-auto w-48 md:w-full">
             {spex.poster ? (
               <WikiImage image={spex.poster} eager sizes="(min-width: 768px) 16rem, 12rem"
@@ -136,6 +136,7 @@ export default async function SpexPage({ params }: Props) {
             </div>
           </div>
         </header>
+        <SectionBar sections={sections} label={t("onThisPage")} />
 
         {has("group") && page && (
           <SpexSection id="group" title={t("sections.group.title")} subtitle={subtitle("group")}>
@@ -147,7 +148,7 @@ export default async function SpexPage({ params }: Props) {
           <SpexSection id="characters" title={t("sections.characters.title")} subtitle={subtitle("characters")}>
             <div className="space-y-8">
               {spex.characters.map(character => (
-                <div key={character.id} id={`character-${character.id}`} className="scroll-mt-20 space-y-3 rounded-lg border border-border bg-card p-4 md:p-6">
+                <div key={character.id} id={`character-${character.id}`} className="scroll-mt-28 xl:scroll-mt-20 space-y-3 rounded-lg border border-border bg-card p-4 md:p-6">
                   <div className="flex flex-wrap items-baseline justify-between gap-2">
                     <h3 className="wiki-heading text-2xl font-semibold">{character.name}</h3>
                     {character.figure && (
@@ -223,7 +224,7 @@ export default async function SpexPage({ params }: Props) {
                       .filter(([, list]) => list.some(credit => creditLabel(credit)));
 
                     return (
-                      <li key={number.id} id={`number-${number.id}`} className="scroll-mt-20 space-y-1 p-3 text-sm">
+                      <li key={number.id} id={`number-${number.id}`} className="scroll-mt-28 xl:scroll-mt-20 space-y-1 p-3 text-sm">
                         <div className="flex flex-wrap items-baseline justify-between gap-2">
                           <p><span className="text-muted-foreground">{number.position}.</span> <span className="font-semibold">{number.title}</span>
                             {number.originalTitle && <span className="text-muted-foreground"> — {t("melody", { title: number.originalTitle, artist: number.originalArtist ?? "" })}</span>}

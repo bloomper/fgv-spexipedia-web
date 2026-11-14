@@ -171,6 +171,12 @@
 
 /* Print views (staffing): only the page's own content, without the app's sidebar (header and tabs carry print:hidden).
    Unlayered, so it wins over the sidebar's Tailwind utilities. */
+/* The header's buttons are 32px; on touch screens they answer taps 44px tall without changing the layout */
+@media (pointer: coarse) {
+    [data-site-header] :is(button, a[href]) { position: relative; }
+    [data-site-header] :is(button, a[href])::after { content: ""; position: absolute; inset: -6px 0; }
+}
+
 @media print {
     [data-slot="sidebar-gap"],
     [data-slot="sidebar-container"] {
@@ -226,6 +232,8 @@
 /* Rendered Markdown (descriptions, synopses, articles): the server escapes HTML and makes the links safe */
 .prose-wiki {
     line-height: 1.7;
+    /* Long words and addresses wrap instead of widening the page on phones */
+    overflow-wrap: anywhere;
     & > * + * { margin-top: 0.9em; }
     & h1, & h2, & h3, & h4 { font-family: var(--font-display), Georgia, serif; font-weight: 600; line-height: 1.25; margin-top: 1.4em; }
     & h1 { font-size: 1.75rem; }
@@ -236,7 +244,9 @@
     & ul { list-style: disc; padding-left: 1.5em; }
     & ol { list-style: decimal; padding-left: 1.5em; }
     & blockquote { border-left: 3px solid var(--primary); padding-left: 1em; color: var(--muted-foreground); font-style: italic; }
-    & table { width: 100%; border-collapse: collapse; font-size: 0.9em; }
+    /* A wide table scrolls sideways by itself rather than the page */
+    & table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; font-size: 0.9em; }
+    & th, & td { overflow-wrap: normal; }
     & th, & td { border: 1px solid var(--border); padding: 0.35em 0.6em; text-align: left; }
     & th { background: var(--muted); }
     & code { font-family: monospace; font-size: 0.9em; background: var(--muted); padding: 0.1em 0.3em; border-radius: 4px; }

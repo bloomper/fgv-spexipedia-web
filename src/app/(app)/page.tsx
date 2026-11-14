@@ -73,7 +73,7 @@ export default async function HomePage() {
       {start && start.decades.map(decade => (
         <HomeSection key={decade.decade} id={`decade-${decade.decade}`} title={t("decade", { decade: decade.decade })}
                      more={{ href: `/spex#decade-${decade.decade}`, label: t("allSpex") }}>
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6">
+          <div className="grid grid-cols-3 gap-2 sm:gap-4 md:grid-cols-4 xl:grid-cols-6">
             {decade.spex.map(spex => <SpexCard key={spex.id} spex={spex} />)}
           </div>
         </HomeSection>

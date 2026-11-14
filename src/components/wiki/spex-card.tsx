@@ -26,16 +26,17 @@ export function SpexCard({ spex, introduction }: { spex: SpexCardData; introduct
           className="group flex flex-col overflow-hidden rounded-lg border border-border bg-card transition-colors hover:border-primary/60">
       <div className="relative aspect-[3/4] bg-muted">
         {spex.poster
-          ? <WikiImage image={spex.poster} sizes="(min-width: 1024px) 20vw, 50vw" className="size-full object-cover" />
+          ? <WikiImage image={spex.poster} sizes="(min-width: 1024px) 20vw, (min-width: 640px) 33vw, 50vw" className="size-full object-cover" />
           : <div className="flex size-full items-center justify-center"><Drama className="size-12 text-muted-foreground/30" aria-hidden /></div>}
-        <div className="absolute top-2 left-2 flex gap-1">
-          {spex.revival && <Badge variant="secondary">{t("revival")}</Badge>}
-          {!spex.published && <Badge variant="outline" className="bg-background/80">{t("unpublished")}</Badge>}
+        {/* Wraps and truncates within the tile, which is narrow on phones */}
+        <div className="absolute inset-x-1.5 top-1.5 flex flex-wrap items-start gap-1 sm:inset-x-2 sm:top-2">
+          {spex.revival && <Badge variant="secondary" className="max-w-full"><span className="min-w-0 truncate">{t("revival")}</span></Badge>}
+          {!spex.published && <Badge variant="outline" className="max-w-full bg-background/80"><span className="min-w-0 truncate">{t("unpublished")}</span></Badge>}
         </div>
       </div>
-      <div className="space-y-1 p-3">
-        <p className="text-xs tracking-[0.18em] text-primary">{spex.year}</p>
-        <p className="wiki-heading text-lg leading-tight font-semibold group-hover:text-primary">{spex.title}</p>
+      <div className="space-y-1 p-2 sm:p-3">
+        <p className="text-xs tracking-[0.12em] text-primary sm:tracking-[0.18em]">{spex.year}</p>
+        <p className="wiki-heading text-base leading-tight font-semibold [overflow-wrap:anywhere] group-hover:text-primary sm:text-lg">{spex.title}</p>
         {introduction && <p className="line-clamp-2 text-xs text-muted-foreground">{introduction}</p>}
       </div>
     </Link>
