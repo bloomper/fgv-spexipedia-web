@@ -62,20 +62,14 @@ describe("the GraphQL client", () => {
     expect(auth.didAuthError(new CombinedError({ graphQLErrors: [new GraphQLError("no", { extensions: { code: "NOT_FOUND" } })] }))).toBe(false);
   });
 
-  it("sends the language, and the visitor's address only together with the shared secret", async () => {
+  it("sends the language", async () => {
     const { getClient } = await import("@/lib/urql.server");
     const options = getClient() as unknown as Options;
 
     await options.fetch("http://api/graphql", { headers: { "content-type": "application/json" } });
-    let headers = new Headers((fetchMock.mock.calls.at(-1) as unknown as [string, RequestInit])[1].headers);
+    const headers = new Headers((fetchMock.mock.calls.at(-1) as unknown as [string, RequestInit])[1].headers);
     expect(headers.get("accept-language")).toBe("sv");
     expect(headers.get("x-client-ip")).toBeNull();
-
-    vi.stubEnv("API_CLIENT_IP_SECRET", "s");
-    await options.fetch("http://api/graphql");
-    headers = new Headers((fetchMock.mock.calls.at(-1) as unknown as [string, RequestInit])[1].headers);
-    expect(headers.get("x-client-ip")).toBe("192.0.2.7");
-    expect(headers.get("x-client-ip-secret")).toBe("s");
   });
 });
 

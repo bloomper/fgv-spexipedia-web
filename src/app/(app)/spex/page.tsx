@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { PageHeader } from "@/components/page-header";
 import { SpexCard } from "@/components/wiki/spex-card";
+import { getViewer } from "@/lib/wiki/viewer.server";
 import { getSpexBrowse } from "@/lib/wiki/wiki.server";
 import { publicMetadata } from "@/lib/wiki/metadata.server";
 import { groupBy } from "@/utils/wiki";
@@ -17,8 +18,10 @@ export async function generateMetadata(): Promise<Metadata> {
  * Every spex with a published page (and, for authors, the others), by decade, with the categories to browse by.
  */
 export default async function BrowsePage() {
-  const [t, data] = await Promise.all([getTranslations("Browse"), getSpexBrowse()]);
-  const spex = [...(data?.spexAll ?? [])].filter(s => !s.retired).sort((a, b) => a.year.localeCompare(b.year));
+  const [t, data, viewer] = await Promise.all([getTranslations("Browse"), getSpexBrowse(), getViewer()]);
+  // The server lists every spex, as base data; the pages of unpublished ones are for authors only
+  const spex = [...(data?.spexAll ?? [])].filter(s => !s.retired && (s.published || viewer.author))
+    .sort((a, b) => a.year.localeCompare(b.year));
   const decades = groupBy(spex, s => `${s.year.slice(0, 3)}0`);
 
   return (
@@ -35,7 +38,7 @@ export default async function BrowsePage() {
       {decades.map(([decade, list]) => (
         <section key={decade} id={`decade-${decade}`} className="scroll-mt-20 space-y-3">
           <h2 className="wiki-heading text-2xl font-semibold">{t("decade", { decade })}</h2>
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6">
+          <div className="grid grid-cols-3 gap-2 sm:gap-4 md:grid-cols-4 xl:grid-cols-6">
             {list.map(s => <SpexCard key={s.id} spex={s} />)}
           </div>
         </section>

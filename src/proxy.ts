@@ -8,7 +8,7 @@ const ACCOUNT_COOKIE = "account_data";
 
 /**
  * Sends old MediaWiki addresses on, refreshes the account cookie, and gives every page its Content Security Policy,
- * which names the media hostname.
+ * which names Spexipedia's and Spexgram's media hostnames.
  */
 export async function proxy(request: NextRequest) {
   const title = request.method === "GET" ? oldWikiTitle(request.nextUrl.pathname, request.nextUrl.searchParams) : null;
@@ -40,7 +40,7 @@ export async function proxy(request: NextRequest) {
 
   if (!request.nextUrl.pathname.startsWith("/api/")) {
     result.headers.set("Content-Security-Policy",
-      contentSecurityPolicy(process.env.MEDIA_ORIGIN, process.env.NODE_ENV === "development"));
+      contentSecurityPolicy([process.env.MEDIA_ORIGIN, process.env.SPEXGRAM_MEDIA_ORIGIN], process.env.NODE_ENV === "development"));
   }
   return result;
 }

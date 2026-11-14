@@ -5,8 +5,6 @@ import { registerUrql } from "@urql/next/rsc";
 import { getAccessToken } from "@/utils/auth.server";
 import { authExchange } from "@urql/exchange-auth";
 import { getLocale } from "next-intl/server";
-import { headers as requestHeaders } from "next/headers";
-import { clientIp } from "@/lib/http/client-ip";
 
 const makeClient = () => {
   return createClient({
@@ -49,16 +47,8 @@ const makeClient = () => {
     async fetch(input, init) {
       const locale = await getLocale();
       const headers = new Headers(init?.headers);
-      const client = clientIp(await requestHeaders());
 
       headers.set("Accept-Language", locale);
-      // The visitor's address, which the server uses only to limit visitors' reports. The API is public, so it
-      // trusts the address only together with the secret it shares with the web
-      const secret = process.env.API_CLIENT_IP_SECRET;
-      if (client && secret) {
-        headers.set("X-Client-IP", client);
-        headers.set("X-Client-IP-Secret", secret);
-      }
 
       return fetch(input, {
         ...init,

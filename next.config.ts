@@ -28,7 +28,7 @@ const nextConfig: NextConfig = {
     instantInsights: {
       validationLevel: "manual-warning",
     },
-    // tus chunks of at most 50 MB pass through /api/uploads
+    // Image uploads of at most 50 MB pass through /api/images
     proxyClientMaxBodySize: "55mb",
   },
 };

@@ -12,6 +12,12 @@ const OWN = new Set([
 ]);
 
 /**
+ * Addresses that scanners try (files, dot folders, WordPress), which were never wiki titles: they get no lookup in the
+ * server. Titles with dots ("H.C. Andersen") still are titles; only these endings are left out.
+ */
+const PROBE = /(^|\/)(\.|wp-)|\.(php\d?|aspx?|jsp|cgi|env|ini|conf|sql|bak|old|zip|t?gz|rar|xml|json|js|css|map|txt|ico|png|jpe?g|gif|svg|webp|ya?ml|log|git)$/i;
+
+/**
  * The old title an address asks for, or null when the address is one of Spexipedia's own.
  */
 export function oldWikiTitle(pathname: string, search: URLSearchParams): string | null {
@@ -25,6 +31,9 @@ export function oldWikiTitle(pathname: string, search: URLSearchParams): string 
   try {
     raw = segments[0] === "index.php" ? search.get("title") ?? "" : segments.map(decodeURIComponent).join("/");
   } catch {
+    return null;
+  }
+  if (segments[0] !== "index.php" && PROBE.test(raw)) {
     return null;
   }
   const title = raw.replace(/_/g, " ").trim();

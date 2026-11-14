@@ -17,6 +17,7 @@ codegen, Better Auth with Keycloak, Tailwind and shadcn. See `AGENTS.md` for how
    API_GRAPHQL_ENDPOINT=http://localhost:8088/api/graphql
    API_ENDPOINT=http://localhost:8088
    MEDIA_ORIGIN=http://localhost:8089
+   SPEXGRAM_MEDIA_ORIGIN=https://media.spexgram.fgv.local.nu:8443
    KEYCLOAK_ISSUER=https://auth.fgv.local.nu:8443/auth/realms/fgv
    SPEXREGISTER_WEB_URL=http://localhost:3000
    ```

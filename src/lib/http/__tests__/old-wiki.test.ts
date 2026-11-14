@@ -19,6 +19,17 @@ describe("old MediaWiki addresses", () => {
     expect(oldWikiTitle("/%E0%A4%A", none)).toBeNull();
   });
 
+  it("leave out what scanners try, but not titles with dots", () => {
+    const none = new URLSearchParams();
+
+    expect(oldWikiTitle("/wp-login.php", none)).toBeNull();
+    expect(oldWikiTitle("/.env", none)).toBeNull();
+    expect(oldWikiTitle("/.git/config", none)).toBeNull();
+    expect(oldWikiTitle("/backup.sql", none)).toBeNull();
+    expect(oldWikiTitle("/H.C._Andersen", none)).toBe("H.C. Andersen");
+    expect(oldWikiTitle("/index.php", new URLSearchParams("title=Fil:Affisch.jpg"))).toBe("Fil:Affisch.jpg");
+  });
+
   it("are looked up as a visitor, accepting only paths in this site", async () => {
     const fetch = vi.fn().mockResolvedValue({ json: async () => ({ data: { redirect: "/spex/1984-lasse-maja" } }) });
 

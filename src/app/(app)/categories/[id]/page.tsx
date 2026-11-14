@@ -5,6 +5,7 @@ import { SpexCard } from "@/components/wiki/spex-card";
 import { WikiImage } from "@/components/wiki/wiki-image";
 import { HtmlContent } from "@/components/wiki/html-content";
 import { getCategory } from "@/lib/wiki/wiki.server";
+import { getViewer } from "@/lib/wiki/viewer.server";
 import { privateMetadata, publicMetadata } from "@/lib/wiki/metadata.server";
 
 type Props = { params: Promise<{ id: string }> };
@@ -19,7 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
  * A spex category: its logo and description, and its spex, originals by year and then revivals.
  */
 export default async function CategoryPage({ params }: Props) {
-  const [category, t] = await Promise.all([getCategory((await params).id), getTranslations("Category")]);
+  const [category, t, viewer] = await Promise.all([getCategory((await params).id), getTranslations("Category"), getViewer()]);
 
   if (!category) {
     notFound();
@@ -35,7 +36,7 @@ export default async function CategoryPage({ params }: Props) {
       </header>
       <HtmlContent html={category.descriptionHtml} className="max-w-3xl" />
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6">
-        {category.spex.map(spex => <SpexCard key={spex.id} spex={spex} introduction={spex.page?.introduction} />)}
+        {category.spex.filter(spex => spex.published || viewer.author).map(spex => <SpexCard key={spex.id} spex={spex} introduction={spex.page?.introduction} />)}
       </div>
     </div>
   );
