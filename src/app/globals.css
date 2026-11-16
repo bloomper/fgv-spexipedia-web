@@ -54,8 +54,8 @@
     --card-foreground: oklch(0.147 0.004 49.25);
     --popover: oklch(1 0 0);
     --popover-foreground: oklch(0.147 0.004 49.25);
-    --primary: #8a6a2c;
-    --primary-foreground: #fffaf0;
+    --primary: oklch(0.488 0.243 264.376);
+    --primary-foreground: oklch(0.97 0.014 254.604);
     --secondary: oklch(0.967 0.001 286.375);
     --secondary-foreground: oklch(0.21 0.006 285.885);
     --muted: oklch(0.97 0.001 106.424);
@@ -74,8 +74,8 @@
     --radius: 0.625rem;
     --sidebar: oklch(0.985 0.001 106.423);
     --sidebar-foreground: oklch(0.147 0.004 49.25);
-    --sidebar-primary: #8a6a2c;
-    --sidebar-primary-foreground: #fffaf0;
+    --sidebar-primary: oklch(0.546 0.245 262.881);
+    --sidebar-primary-foreground: oklch(0.97 0.014 254.604);
     --sidebar-accent: oklch(0.97 0.001 106.424);
     --sidebar-accent-foreground: oklch(0.216 0.006 56.043);
     --sidebar-border: oklch(0.923 0.003 48.717);
@@ -83,38 +83,37 @@
 }
 
 .dark {
-    /* Spexipedia's warm dark, after the pages it replaces: #14110f ground, #1e1a17 panels, gold #c9a55c */
-    --background: #14110f;
-    --foreground: #ede6dc;
-    --card: #1e1a17;
-    --card-foreground: #ede6dc;
-    --popover: #1e1a17;
-    --popover-foreground: #ede6dc;
-    --primary: #c9a55c;
-    --primary-foreground: #14110f;
-    --secondary: #2a2420;
-    --secondary-foreground: #ede6dc;
-    --muted: #26201c;
-    --muted-foreground: #a89c8c;
-    --accent: #2c251f;
-    --accent-foreground: #f3ead9;
+    --background: oklch(0.147 0.004 49.25);
+    --foreground: oklch(0.985 0.001 106.423);
+    --card: oklch(0.216 0.006 56.043);
+    --card-foreground: oklch(0.985 0.001 106.423);
+    --popover: oklch(0.216 0.006 56.043);
+    --popover-foreground: oklch(0.985 0.001 106.423);
+    --primary: oklch(0.42 0.18 266);
+    --primary-foreground: oklch(0.97 0.014 254.604);
+    --secondary: oklch(0.274 0.006 286.033);
+    --secondary-foreground: oklch(0.985 0 0);
+    --muted: oklch(0.268 0.007 34.298);
+    --muted-foreground: oklch(0.709 0.01 56.259);
+    --accent: oklch(0.268 0.007 34.298);
+    --accent-foreground: oklch(0.985 0.001 106.423);
     --destructive: oklch(0.704 0.191 22.216);
-    --border: #3a322b;
-    --input: #3f362e;
-    --ring: #c9a55c;
-    --chart-1: #c9a55c;
-    --chart-2: #8f6f3e;
-    --chart-3: #d9c08a;
-    --chart-4: #6e5a3a;
-    --chart-5: #b38a4a;
-    --sidebar: #1a1613;
-    --sidebar-foreground: #ede6dc;
-    --sidebar-primary: #c9a55c;
-    --sidebar-primary-foreground: #14110f;
-    --sidebar-accent: #2c251f;
-    --sidebar-accent-foreground: #f3ead9;
-    --sidebar-border: #3a322b;
-    --sidebar-ring: #c9a55c;
+    --border: oklch(1 0 0 / 10%);
+    --input: oklch(1 0 0 / 15%);
+    --ring: oklch(0.553 0.013 58.071);
+    --chart-1: oklch(0.809 0.105 251.813);
+    --chart-2: oklch(0.623 0.214 259.815);
+    --chart-3: oklch(0.546 0.245 262.881);
+    --chart-4: oklch(0.488 0.243 264.376);
+    --chart-5: oklch(0.424 0.199 265.638);
+    --sidebar: oklch(0.216 0.006 56.043);
+    --sidebar-foreground: oklch(0.985 0.001 106.423);
+    --sidebar-primary: oklch(0.623 0.214 259.815);
+    --sidebar-primary-foreground: oklch(0.97 0.014 254.604);
+    --sidebar-accent: oklch(0.268 0.007 34.298);
+    --sidebar-accent-foreground: oklch(0.985 0.001 106.423);
+    --sidebar-border: oklch(1 0 0 / 10%);
+    --sidebar-ring: oklch(0.553 0.013 58.071);
 }
 
 @layer base {

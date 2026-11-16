@@ -78,9 +78,10 @@ without a token too, with what is public) and its `POST /api/images`; images com
 
 ## Look
 
-FGV's shell (sidebar, header, application switcher) as in the other webs, with Spexipedia's palette in
-`src/app/globals.css`, after the Apps Script pages it replaces: a warm dark ground (`#14110f`, panels `#1e1a17`), gold
-accent (`#c9a55c`) and Cormorant Garamond for content headings (`.wiki-heading`, `.prose-wiki`).
+FGV's shell (sidebar, header, application switcher) and colours as in the other webs: the palette in
+`src/app/globals.css` and the manifest colours are Spexgram's, so keep them in step with the other FGV webs. The page
+layouts follow the Apps Script pages Spexipedia replaces (poster beside the title, sections with subtitles, a right rail
+with scroll-spy), with Cormorant Garamond for content headings (`.wiki-heading`, `.prose-wiki`).
 
 ## Consent and visitor statistics
 
