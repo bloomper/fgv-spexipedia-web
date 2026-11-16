@@ -1,0 +1,774 @@
+{
+  "App": {
+    "name": "Spexipedia"
+  },
+  "Meta": {
+    "title": "Spexipedia",
+    "description": "Chalmersspexets uppslagsverk: spexen, rollerna, musiken och traditionerna"
+  },
+  "Common": {
+    "login": "Logga in",
+    "logout": "Logga ut",
+    "loggedOut": "Du är utloggad",
+    "save": "Spara",
+    "cancel": "Avbryt",
+    "add": "Lägg till",
+    "remove": "Ta bort",
+    "delete": "Radera",
+    "edit": "Redigera",
+    "close": "Stäng",
+    "reload": "Ladda om",
+    "chooseFile": "Välj fil…",
+    "noFileChosen": "Ingen fil vald",
+    "confirm": "Bekräfta",
+    "loading": "Laddar…",
+    "saved": "Sparat",
+    "themeLight": "Ljust",
+    "themeDark": "Mörkt",
+    "themeSystem": "System",
+    "myFgvAccount": "Mitt FGV-konto",
+    "toggle": "Växla",
+    "search": "Sök",
+    "selected": "{count, plural, =1 {# vald} other {# valda}}",
+    "reset": "Återställ",
+    "resetFilters": "Återställ filter",
+    "noDataHeading": "Ingen data hittades",
+    "noDataDescription": "Kunde inte hitta någon data för tillfället. Vänligen kolla senare.",
+    "noFilterMatchHeading": "Ingen data hittades",
+    "noFilterMatchDescription": "Prova att ändra din filtrering eller sökord för att hitta det du letar efter.",
+    "rowsPerPage": "Rader per sida",
+    "pageOf": "Sida {page} av {pages}",
+    "firstPage": "Första sidan",
+    "previousPage": "Föregående sida",
+    "nextPage": "Nästa sida",
+    "lastPage": "Sista sidan",
+    "clearSearch": "Rensa sökningen",
+    "datePlaceholder": "ÅÅÅÅ-MM-DD",
+    "pickDate": "Välj datum",
+    "noMatches": "Inget matchar",
+    "pages": "Sidor",
+    "loadMore": "Visa fler"
+  },
+  "Header": {
+    "toggleLanguage": "Byt språk",
+    "toggleTheme": "Byt tema",
+    "showMenu": "Visa menyn"
+  },
+  "Sidebar": {
+    "hideMenu": "Dölj menyn",
+    "showMenu": "Visa menyn"
+  },
+  "AppSwitcher": {
+    "heading": "Byt applikation",
+    "spexregister": "Spexregister",
+    "revival": "Nyuppsättning",
+    "spexflix": "Spexflix",
+    "spexify": "Spexify",
+    "spexgram": "Spexgram",
+    "spexipedia": "Spexipedia",
+    "archive": "Spexarkiv"
+  },
+  "NoAccess": {
+    "title": "Du har inte åtkomst",
+    "text": "Ditt FGV-konto ({email}) har inte åtkomst till Spexipedia. Be en administratör om åtkomst, eller logga ut och logga in med ett annat konto.",
+    "logout": "Logga ut",
+    "notice": "Ditt FGV-konto ({email}) har inte åtkomst till Spexipedia, så du ser bara det som är publikt. Be en administratör om åtkomst."
+  },
+  "LoginError": {
+    "title": "Inloggningen misslyckades",
+    "text": "Något gick fel vid inloggningen. Försök igen.",
+    "retry": "Försök igen"
+  },
+  "Forbidden": {
+    "title": "Du har inte behörighet",
+    "text": "Du har inte behörighet till den här sidan. Be en administratör om du behöver den.",
+    "home": "Till startsidan"
+  },
+  "NotFound": {
+    "title": "Sidan finns inte",
+    "text": "Sidan finns inte, eller så har du inte tillgång till den.",
+    "home": "Till startsidan"
+  },
+  "Error": {
+    "title": "Något gick fel",
+    "text": "Ett oväntat fel inträffade.",
+    "retry": "Försök igen"
+  },
+  "Errors": {
+    "CONFLICT": "Någon annan har ändrat detta. Ladda om och försök igen.",
+    "FORBIDDEN": "Du har inte behörighet att göra det.",
+    "NOT_FOUND": "Det finns inte, eller så har du inte tillgång till det.",
+    "BAD_REQUEST": "Uppgifterna är inte giltiga.",
+    "SPEXREGISTER_UNAVAILABLE": "Spexregistret är tillfälligt otillgängligt. Försök igen om en stund.",
+    "UNAUTHORIZED": "Du är inte inloggad.",
+    "INTERNAL_ERROR": "Något gick fel. Försök igen.",
+    "MAIL_UNAVAILABLE": "E-post kan inte skickas just nu. Försök igen senare.",
+    "DIRECTORY_UNAVAILABLE": "FGV-kontona går inte att nå just nu. Försök igen om en stund.",
+    "IMMICH_UNAVAILABLE": "Bildlagret går inte att nå just nu. Försök igen om en stund."
+  },
+  "About": {
+    "title": "Om",
+    "heading": "Om Spexipedia",
+    "description": "Spexipedia tillhandahålls av FGV och är Chalmersspexets uppslagsverk: spexen genom åren, rollerna, musiken, scenografin och traditionerna. Bilder på personer kommer från Spexgram och namn från Spexregistret.",
+    "behindTheScenes": "Bakom kulisserna",
+    "feedback": "Tyck till",
+    "feedbackDescription": "Vi värdesätter dina åsikter. Har du förslag på förbättringar eller har du hittat en bugg? Hör gärna av dig på {email}.",
+    "feedbackAction": "Skicka ett e-postmeddelande"
+  },
+  "Support": {
+    "title": "Support",
+    "heading": "Hur kan vi hjälpa till?",
+    "description": "Har du hittat ett tekniskt fel, har problem med att logga in eller med att redigera en sida? Vi hjälper dig gärna.",
+    "contact": "Kontakta supporten",
+    "contactDescription": "Beskriv ditt problem så tydligt som möjligt. Hör av dig till oss på {email}.",
+    "contactAction": "Skicka ett supportärende"
+  },
+  "LoginPrompt": {
+    "login": "Logga in",
+    "content": {
+      "title": "Logga in för att se det här",
+      "text": "Om det finns är det bara för medlemmar. Logga in med ditt FGV-konto för att se det.",
+      "noAccessTitle": "Det här kan inte visas",
+      "noAccessText": "Det finns inte, eller så har ditt FGV-konto inte åtkomst till det. Be en administratör om åtkomst till Spexipedia."
+    },
+    "page": {
+      "title": "Bara för medlemmar",
+      "text": "Den här sidan är för medlemmar. Logga in med ditt FGV-konto för att fortsätta.",
+      "noAccessTitle": "Du har inte åtkomst till Spexipedia",
+      "noAccessText": "Den här sidan är för medlemmar, och ditt FGV-konto har inte åtkomst till Spexipedia. Be en administratör om åtkomst."
+    }
+  },
+  "Audit": {
+    "title": "Ändringslogg",
+    "text": "Dina egna ändringar.",
+    "textAdmin": "Alla ändringar av sidor, basdata och inställningar.",
+    "when": "När",
+    "who": "Vem",
+    "what": "Vad",
+    "event": "Händelse",
+    "filters": "Filtrera ändringsloggen",
+    "search": "Sök i beskrivningen…",
+    "typeLabel": "Sort",
+    "allTypes": "Alla sorter",
+    "actionLabel": "Händelse",
+    "allActions": "Alla händelser",
+    "everyone": "Alla",
+    "from": "Från och med",
+    "to": "Till och med",
+    "reset": "Rensa filtret",
+    "count": "{count, plural, =0 {Inga ändringar} one {# ändring} other {# ändringar}}",
+    "none": "Inga ändringar ännu.",
+    "noneFiltered": "Inga ändringar matchar filtret.",
+    "oneRecord": "Visar ändringarna av en post.",
+    "allRecords": "Visa alla poster",
+    "history": "Historik",
+    "historyOf": "Historik för {summary}",
+    "recordHistory": "Ändringar",
+    "allChanges": "Alla {count} ändringar",
+    "action": {
+      "CREATE": "Skapad",
+      "UPDATE": "Ändrad",
+      "VISIBILITY": "Synlighet",
+      "UPLOAD": "Uppladdad",
+      "REVIEW": "Granskad",
+      "REPORT": "Anmälan",
+      "TRASH": "I papperskorgen",
+      "RESTORE": "Återställd",
+      "DELETE": "Raderad",
+      "PUBLISH": "Publicerad",
+      "UNPUBLISH": "Avpublicerad",
+      "HIDE": "Dold",
+      "SHOW": "Visad",
+      "RETIRE": "Utgången",
+      "MERGE": "Ihopslagen"
+    },
+    "type": {
+      "SPEX": "Spex",
+      "SPEX_PAGE": "Spexsida",
+      "SPEX_CATEGORY": "Spexkategori",
+      "TASK": "Uppgift",
+      "TASK_CATEGORY": "Uppgiftskategori",
+      "CHARACTER": "Roll",
+      "SCENE": "Scen",
+      "NUMBER": "Nummer",
+      "FIGURE": "Gestalt",
+      "RECORDING": "Inspelning",
+      "ARTICLE": "Artikel",
+      "ARTICLE_CATEGORY": "Artikelkategori",
+      "REVISION": "Version",
+      "IMAGE": "Bild",
+      "REDIRECT": "Omdirigering",
+      "SYNC_CONSUMER": "Mottagare",
+      "SETTINGS": "Inställningar",
+      "TRASH": "Papperskorgen"
+    },
+    "period": "Period",
+    "details": "Visa detaljer",
+    "openRecord": "Öppna posten",
+    "noneText": "Ändringar syns här när de görs.",
+    "untilNow": "i dag",
+    "pickStart": "Välj första dagen.",
+    "pickEnd": "Välj sista dagen, eller stäng för att se fram till i dag."
+  },
+  "AdminSettings": {
+    "title": "Inställningar",
+    "startPage": "Startsidan",
+    "welcomeSv": "Text för medlemmar, på svenska",
+    "welcomeEn": "Text för medlemmar, på engelska",
+    "publicWelcomeSv": "Text för besökare, på svenska",
+    "publicWelcomeEn": "Text för besökare, på engelska",
+    "contactEmail": "Kontaktadress som visas för besökare",
+    "save": "Spara",
+    "saved": "Inställningarna är sparade"
+  },
+  "AdminMaintenance": {
+    "title": "Underhåll",
+    "text": "Jobben som servern kör enligt schema, i svensk tid. Du kan också starta ett nu.",
+    "schedule": "Schema",
+    "notScheduled": "Inte schemalagt",
+    "lastRun": "Senaste körning",
+    "running": "Körs",
+    "neverRun": "Inte sedan servern startade",
+    "succeeded": "Lyckades {at}",
+    "failed": "Misslyckades, startade {at}",
+    "startedAt": "Startade {at}",
+    "runNow": "Kör nu",
+    "started": "{job} har startat. Det körs i bakgrunden.",
+    "alreadyRunning": "{job} körs redan.",
+    "jobs": {
+      "IMAGE_VARIANTS": {
+        "title": "Bildstorlekar",
+        "description": "Gör de storlekar av bilderna som saknas."
+      },
+      "LINK_CHECK": {
+        "title": "Länkkontroll",
+        "description": "Kontrollerar länkarna till de andra tjänsterna."
+      },
+      "SEARCH_REBUILD": {
+        "title": "Sökindex",
+        "description": "Bygger om sökindexet."
+      },
+      "SYNC_NOTIFY": {
+        "title": "Meddela mottagare",
+        "description": "Skickar meddelanden om ändringar som misslyckades."
+      },
+      "UPLOAD_CLEANUP": {
+        "title": "Uppladdningar",
+        "description": "Rensar ofärdiga uppladdningar."
+      },
+      "RETENTION": {
+        "title": "Gallring",
+        "description": "Tar bort uppgifter om användare som inte loggat in på 36 månader."
+      }
+    }
+  },
+  "YearBrowser": {
+    "decade": "{decade}-talet",
+    "yearsOf": "År på {decade}-talet"
+  },
+  "Nav": {
+    "home": "Hem",
+    "spex": "Spexen",
+    "figures": "Gestalter",
+    "recordings": "Inspelningar",
+    "articles": "Artiklar",
+    "search": "Sök",
+    "recentChanges": "Senaste ändringar",
+    "manage": "Redigera",
+    "baseData": "Basdata",
+    "manageRecordings": "Inspelningar",
+    "trash": "Papperskorgen",
+    "auditLog": "Ändringslogg",
+    "admin": "Administration",
+    "adminSettings": "Inställningar",
+    "adminRedirects": "Omdirigeringar",
+    "adminConsumers": "Mottagare av ändringar",
+    "adminMaintenance": "Underhåll"
+  },
+  "Home": {
+    "kicker": "Chalmersspexets uppslagsverk",
+    "intro": "Allt om spexen sedan 1948: handlingen, rollerna, musiken, scenografin och traditionerna. Logga in med ditt FGV-konto för att se vilka som medverkade och för att skriva artiklar.",
+    "spexOfTheYear": "Årets spex",
+    "thisDay": "Den här dagen i historien",
+    "decade": "{decade}-talet",
+    "allSpex": "Alla spex",
+    "recentChanges": "Senast ändrat",
+    "allChanges": "Alla ändringar"
+  },
+  "Browse": {
+    "title": "Spexen",
+    "description": "Alla spex med en publicerad sida, decennium för decennium.",
+    "decades": "Decennier",
+    "decade": "{decade}-talet"
+  },
+  "Category": {
+    "since": "Sedan {year}"
+  },
+  "Spex": {
+    "revival": "Nyuppsättning",
+    "unpublished": "Opublicerad"
+  },
+  "SpexPage": {
+    "noPoster": "Ingen affisch",
+    "revivalOf": "Nyuppsättning av",
+    "unpublished": "Opublicerad",
+    "retired": "Utgången",
+    "generation": "Spexgeneration",
+    "premiere": "Premiär",
+    "revivals": "Nyuppsättningar",
+    "edit": "Redigera",
+    "figure": "Gestalt: {name}",
+    "act": "Akt {act}",
+    "interval": "Paus",
+    "melody": "mel. {title} ({artist})",
+    "sungBy": "Sjungs av {names}",
+    "showSolution": "Visa lösningen",
+    "wornBy": "Bars av",
+    "peopleUnavailable": "Spexregistret kan inte nås just nu, så vilka som medverkade visas inte.",
+    "lastModified": "Senast ändrad {date}",
+    "onThisPage": "På sidan",
+    "originalYear": "Uruppsättningen {year}",
+    "revivalYear": "Nyuppsättningen {year}",
+    "sections": {
+      "overview": {
+        "title": "Översikt",
+        "subtitle": "Om spexet"
+      },
+      "group": {
+        "title": "Ensemblen",
+        "subtitle": "Gruppbilden"
+      },
+      "characters": {
+        "title": "Roller",
+        "subtitle": "Rollfigurer och de som spelade dem"
+      },
+      "scenography": {
+        "title": "Scenografi",
+        "subtitle": "Fond, scen och rekvisita"
+      },
+      "manuscript": {
+        "title": "Manus och program",
+        "subtitle": "Handling och scener"
+      },
+      "music": {
+        "title": "Musik",
+        "subtitle": "Nummer, melodier och upphovspersoner"
+      },
+      "recordings": {
+        "title": "Inspelningar",
+        "subtitle": "Skivor och utgåvor"
+      },
+      "rebus": {
+        "title": "Programrebus",
+        "subtitle": "Kan du lösa den?"
+      },
+      "vest": {
+        "title": "Spexvästen",
+        "subtitle": "Västen och vem som bar den"
+      },
+      "board": {
+        "title": "Styrelsen",
+        "subtitle": "Spexets styrelse"
+      },
+      "tasks": {
+        "title": "Medverkande",
+        "subtitle": "Vem gjorde vad"
+      },
+      "images": {
+        "title": "Övriga bilder",
+        "subtitle": "Fler bilder från spexet"
+      },
+      "links": {
+        "title": "Mer om spexet",
+        "subtitle": "I FGV:s andra tjänster"
+      }
+    },
+    "scenography": {
+      "backdrop": "Fond",
+      "stage": "Scen",
+      "props": "Rekvisita"
+    },
+    "credits": {
+      "lyrics": "Text",
+      "composers": "Musik",
+      "arrangers": "Arr.",
+      "choreographers": "Koreografi"
+    },
+    "imageKinds": {
+      "POSTER": "Affisch",
+      "LOGO": "Logotyp",
+      "SKETCH": "Skiss",
+      "MAKEUP": "Maskskiss",
+      "COSTUME": "Kostymdocka",
+      "SCENOGRAPHY": "Scenografi",
+      "REBUS": "Rebus",
+      "VEST": "Väst",
+      "COVER": "Omslag",
+      "ARTICLE": "Artikelbild",
+      "OTHER": "Övrigt"
+    },
+    "media": {
+      "LP": "LP",
+      "EP": "EP",
+      "CD": "CD",
+      "DIGITAL": "Digital",
+      "OTHER": "Annat"
+    }
+  },
+  "Photos": {
+    "unavailable": "Spexgram kan inte nås just nu.",
+    "open": "Visa",
+    "hiddenMember": "{count, plural, one {# bild} other {# bilder}} som ditt konto inte når i Spexgram",
+    "hiddenVisitor": "{count, plural, one {# bild} other {# bilder}} för medlemmar – logga in",
+    "from": "Bilder och filmer från Spexgram",
+    "openInSpexgram": "Öppna i Spexgram"
+  },
+  "AppLinks": {
+    "SPEXREGISTER": "Spexregistret",
+    "SPEXIFY_ALBUM": "Lyssna i Spexify",
+    "SPEXIFY_TRACK": "Lyssna",
+    "SPEXFLIX_VIDEO": "Se i Spexflix",
+    "ARCHIVE_MANUSCRIPT": "Manus i Spexarkivet",
+    "ARCHIVE_ARRANGEMENT": "Arrangemang",
+    "SPEXGRAM_ALBUM": "Album i Spexgram"
+  },
+  "Revisions": {
+    "fields": {
+      "INTRODUCTION": "ingress",
+      "DESCRIPTION": "beskrivning",
+      "SYNOPSIS": "handling"
+    },
+    "hidden": "texten dold",
+    "compare": "Jämför",
+    "historyOf": "Historik för {title}",
+    "backToArticle": "Tillbaka till artikeln",
+    "hiddenText": "Den här versionens text är dold.",
+    "removed": "borttaget",
+    "added": "tillagt",
+    "restoreTitle": "Återställ den här versionen?",
+    "restoreText": "Den sparas som en ny version; historiken finns kvar.",
+    "restore": "Återställ",
+    "restored": "Versionen är återställd",
+    "hide": "Dölj texten",
+    "unhide": "Visa texten",
+    "recentTitle": "Senaste ändringar",
+    "recentDescription": "Alla ändringar i artiklar och spexsidor som du får se, de senaste först.",
+    "pages": "Sidor",
+    "newer": "Nyare",
+    "older": "Äldre"
+  },
+  "Figures": {
+    "title": "Gestalter",
+    "description": "Historiska och påhittade gestalter som dykt upp i flera spex.",
+    "characters": "{count, plural, one {# roll} other {# roller}}",
+    "figure": "Gestalt"
+  },
+  "Recordings": {
+    "title": "Inspelningar",
+    "description": "Spexens skivor och utgåvor, efter katalognummer.",
+    "unpublished": "Opublicerad",
+    "spex": "Spex",
+    "released": "Utgiven",
+    "recorded": "Inspelad",
+    "conductor": "Dirigent",
+    "edit": "Redigera",
+    "tracks": "Spår",
+    "side": "Sida {side}"
+  },
+  "Articles": {
+    "title": "Artiklar",
+    "description": "Traditioner, föreningar, turnéer, anekdoter och spexikon.",
+    "new": "Ny artikel",
+    "categories": "Kategorier",
+    "empty": "Inga artiklar här ännu.",
+    "members": "Medlemmar",
+    "unpublished": "Opublicerad",
+    "trashed": "I papperskorgen",
+    "editingBy": "Redigeras av {names}",
+    "edit": "Redigera",
+    "history": "Historik",
+    "textHidden": "Den senaste versionens text är dold.",
+    "lastModified": "Senast ändrad {at}",
+    "publish": "Publicera",
+    "unpublish": "Avpublicera",
+    "publishedToast": "Artikeln är publicerad",
+    "unpublishedToast": "Artikeln är avpublicerad",
+    "trash": "Lägg i papperskorgen",
+    "trashTitle": "Lägga artikeln i papperskorgen?",
+    "trashText": "Den syns inte längre; den kan återställas från papperskorgen.",
+    "trashedToast": "Artikeln ligger i papperskorgen"
+  },
+  "ArticleForm": {
+    "saved": "Sparad",
+    "othersEditing": "{names} redigerar också den här artikeln just nu.",
+    "title": "Titel",
+    "visibility": "Vem får läsa den",
+    "visibilities": {
+      "PUBLIC": "Alla",
+      "MEMBERS": "Bara medlemmar"
+    },
+    "categories": "Kategorier",
+    "body": "Text",
+    "conflict": "Någon annan har sparat en nyare version medan du skrev. Så här skiljer sig din text från deras:",
+    "theirs": "deras",
+    "mine": "din",
+    "takeTheirs": "Börja om från deras",
+    "keepMine": "Spara min över deras",
+    "comment": "Kommentar till historiken",
+    "commentPlaceholder": "Vad ändrade du?",
+    "save": "Spara",
+    "cancel": "Avbryt",
+    "newTitle": "Ny artikel",
+    "newDescription": "Alla medlemmar kan skriva. Nya artiklar är opublicerade tills en författare publicerar dem. Anekdoter som nämner personer ska vara för medlemmar.",
+    "editTitle": "Redigera {title}"
+  },
+  "Editor": {
+    "write": "Skriv",
+    "preview": "Förhandsvisa",
+    "previewFailed": "Förhandsvisningen misslyckades.",
+    "help": "Markdown: **fet**, *kursiv*, # rubrik, - lista, tabeller. [[Titel]] länkar till en artikel."
+  },
+  "Search": {
+    "title": "Sök",
+    "placeholder": "Sök spex, roller, nummer, artiklar…",
+    "submit": "Sök",
+    "noHits": "Inget hittades för ”{q}”.",
+    "writeArticle": "Skriv en artikel om ”{q}”",
+    "kinds": {
+      "SPEX": "Spex",
+      "CHARACTER": "Roller",
+      "FIGURE": "Gestalter",
+      "NUMBER": "Nummer",
+      "RECORDING": "Inspelningar",
+      "ARTICLE": "Artiklar",
+      "SPEX_CATEGORY": "Kategorier"
+    }
+  },
+  "Manage": {
+    "saved": "Sparat",
+    "failed": "Det gick inte att spara.",
+    "tooLarge": "Bilden är större än 50 MB.",
+    "uploadFailed": "Uppladdningen misslyckades: {message}",
+    "replace": "Byt",
+    "upload": "Ladda upp",
+    "remove": "Ta bort",
+    "addImages": "Lägg till bilder",
+    "save": "Spara",
+    "dropImages": "Släpp bilder här, eller välj dem med knappen.",
+    "kind": "Sort",
+    "caption": "Bildtext",
+    "moveUp": "Flytta upp",
+    "moveDown": "Flytta ner",
+    "noPeople": "Bilder här är publika och får inte visa igenkännbara personer. Bilder på personer hör hemma i Spexgram.",
+    "hiddenSpexare": "(spexare)",
+    "creditSearch": "Sök spexare…",
+    "addFreeText": "Lägg till som fritext, för personer utanför FGV",
+    "freeText": "Fritext",
+    "searching": "Söker…",
+    "creditHelp": "Välj spexare ur registret; fritext bara för personer utanför FGV.",
+    "chosenCount": "{count} valda",
+    "pickFromSpexgram": "Välj ur Spexgram",
+    "noAlbums": "Spexet har inga album i Spexgram som du kan välja ur.",
+    "membersOnly": "Bara för medlemmar",
+    "poster": "Affisch",
+    "year": "År",
+    "title": "Titel",
+    "category": "Kategori",
+    "none": "Ingen",
+    "newRevival": "Ny nyuppsättning, år",
+    "createRevival": "Skapa nyuppsättning",
+    "pagePublished": "Sidan är publicerad och syns för alla.",
+    "pageUnpublished": "Sidan är opublicerad och syns bara för författare och redaktörer.",
+    "publish": "Publicera",
+    "unpublish": "Avpublicera",
+    "generation": "Spexgeneration",
+    "premiere": "Premiär",
+    "introduction": "Ingress",
+    "introductionHelp": "Kort, för spexkort och förhandsvisningar när sidan delas.",
+    "description": "Beskrivning",
+    "synopsis": "Handling",
+    "vestDescription": "Spexvästen",
+    "vestWornBy": "Västen bars av",
+    "saveTexts": "Spara texterna",
+    "sections": {
+      "BACKDROP": "Fond",
+      "STAGE": "Scen",
+      "PROPS": "Rekvisita",
+      "VEST": "Spexvästen",
+      "OTHER": "Övriga bilder"
+    },
+    "rebus": "Programrebus",
+    "rebusSolution": "Rebusens lösning",
+    "groupPhotos": "Gruppbild",
+    "boardPhotos": "Styrelsen",
+    "paste": "Klistra in en lista",
+    "addLines": "Lägg till raderna",
+    "cancel": "Avbryt",
+    "addCharacter": "Ny roll",
+    "pasteCharactersHelp": "En roll per rad: ”Namn” eller ”Namn – beskrivning”.",
+    "retired": "Utgången",
+    "fromParent": "Från uruppsättningen",
+    "edit": "Redigera",
+    "imagesAndPhotos": "Bilder och skådespelarbilder",
+    "characterImages": "Skisser, maskskisser och kostymdockor",
+    "actorPhotos": "Bilder på skådespelarna, från Spexgram",
+    "name": "Namn",
+    "figure": "Gestalt",
+    "delete": "Radera",
+    "deleteTitle": "Radera?",
+    "deleteText": "Bara det som inget hänvisar till kan raderas; annars får det gå ut.",
+    "addScene": "Ny scen",
+    "pasteScenesHelp": "En scen per rad: ”Titel” eller ”Titel – plats”. En rad ”--” är paus efter scenen före; ”Akt 2” börjar en akt.",
+    "actShort": "A{act}",
+    "interval": "Paus",
+    "act": "Akt",
+    "place": "Plats",
+    "intervalAfter": "Paus efter scenen",
+    "addNumber": "Nytt nummer",
+    "pasteNumbersHelp": "Ett nummer per rad: ”Titel” eller ”Titel (Originallåt – artist)”; ”Akt 2” börjar en akt.",
+    "originalTitle": "Originallåt",
+    "originalArtist": "Originalartist",
+    "sungBy": "Sjungs av",
+    "revivalHelp": "Kryssa i det ur uruppsättningen {title} ({year}) som nyuppsättningen stryker. Roller, scener och nummer som bara finns i nyuppsättningen läggs till i listorna ovan.",
+    "revivalKinds": {
+      "CHARACTER": "Roller",
+      "SCENE": "Scener",
+      "NUMBER": "Nummer"
+    },
+    "saveCuts": "Spara strykningarna",
+    "editSpex": "Redigera {title}",
+    "showPage": "Visa sidan",
+    "onThisPage": "På sidan",
+    "editSections": {
+      "base": "Basdata",
+      "texts": "Texter",
+      "media": "Bilder och foton",
+      "characters": "Roller",
+      "scenes": "Scener",
+      "numbers": "Nummer",
+      "revival": "Nyuppsättningens ändringar",
+      "history": "Historik"
+    },
+    "noHistory": "Inga ändringar av texterna ännu."
+  },
+  "BaseData": {
+    "title": "Basdata",
+    "description": "Beskrivning",
+    "showRetired": "Visa utgångna",
+    "add": "Ny",
+    "retired": "Utgången",
+    "edit": "Redigera",
+    "retire": "Låt gå ut",
+    "unretire": "Ta tillbaka",
+    "merge": "Slå ihop",
+    "mergeTitle": "Slå ihop {label} med…",
+    "mergeConfirm": "Slå ihop för gott?",
+    "mergeConfirmText": "De andra tjänsterna flyttar sina hänvisningar till den valda. Det kan inte ångras.",
+    "save": "Spara",
+    "cancel": "Avbryt",
+    "logo": "Logotyp",
+    "name": "Namn",
+    "firstYear": "Första år",
+    "year": "År",
+    "spexTitle": "Titel",
+    "category": "Kategori",
+    "none": "Ingen",
+    "spexHelp": "Nyuppsättningar skapas från uruppsättningens sida.",
+    "actorPresent": "Har roll och stämma",
+    "board": "Visas som styrelsen",
+    "instruments": "Instrument i Spexarkivet",
+    "revival": "Nyuppsättning",
+    "unpublished": "Opublicerad",
+    "openEditor": "Öppna spexets sida för redigering",
+    "since": "sedan {year}",
+    "sections": {
+      "spex": "Spex",
+      "spex-categories": "Spexkategorier",
+      "task-categories": "Uppgiftskategorier",
+      "tasks": "Uppgifter",
+      "figures": "Gestalter"
+    }
+  },
+  "ManageRecordings": {
+    "title": "Inspelningar",
+    "unpublished": "Opublicerad",
+    "editTitle": "Redigera inspelning",
+    "editDescription": "Omslag, fakta, spår och albumet i Spexify.",
+    "catalogueNumber": "Katalognummer",
+    "recordingTitle": "Titel",
+    "medium": "Format",
+    "spex": "Spex",
+    "compilation": "Inget (samling)",
+    "create": "Skapa",
+    "published": "Inspelningen är publicerad.",
+    "unpublishedText": "Inspelningen är opublicerad.",
+    "publish": "Publicera",
+    "unpublish": "Avpublicera",
+    "deleteTitle": "Radera inspelningen?",
+    "deleteText": "Den raderas med sina spår.",
+    "delete": "Radera",
+    "front": "Framsida",
+    "back": "Baksida",
+    "released": "Utgiven",
+    "recorded": "Inspelad",
+    "conductor": "Dirigent",
+    "description": "Beskrivning",
+    "spexifyAlbumId": "Albumets id i Spexify",
+    "save": "Spara",
+    "tracks": "Spår",
+    "side": "Sida",
+    "number": "Nummer",
+    "freeTitle": "Annan titel",
+    "trackTitle": "Titel",
+    "removeTrack": "Ta bort spåret",
+    "addTrack": "Nytt spår",
+    "saveTracks": "Spara spåren",
+    "pasteTracks": "Klistra in spår",
+    "pasteTracksHelp": "Ett spår per rad: ”A1 Titel” eller ”Titel”; ”Sida B” börjar en sida. Titlar matchas mot spexets nummer."
+  },
+  "AdminRedirects": {
+    "title": "Omdirigeringar",
+    "description": "Gamla MediaWiki-titlar och sidorna som ersatt dem. Adresser utan omdirigering leder till en sökning.",
+    "filter": "Filtrera…",
+    "add": "Ny omdirigering",
+    "edit": "Ändra",
+    "delete": "Ta bort",
+    "deleteTitle": "Ta bort omdirigeringen för {title}?",
+    "oldTitle": "Gammal titel",
+    "target": "Sida, t.ex. /spex/1984-lasse-maja",
+    "save": "Spara"
+  },
+  "AdminConsumers": {
+    "title": "Mottagare av ändringar",
+    "description": "Tjänsterna som kopierar basdata. Var och en läser ändringsflödet själv; de med en adress meddelas också efter varje ändring.",
+    "add": "Ny mottagare",
+    "disabled": "Avstängd",
+    "lag": "{count} olästa ändringar",
+    "upToDate": "I fas",
+    "edit": "Ändra",
+    "delete": "Ta bort",
+    "deleteTitle": "Ta bort {name}?",
+    "notifyUrl": "Meddelas på",
+    "pullsOnly": "Hämtar själv",
+    "acknowledged": "Har läst till",
+    "lastNotified": "Senast meddelad",
+    "lastError": "Senaste fel",
+    "name": "Namn",
+    "clientId": "Tjänstekonto",
+    "enabled": "Påslagen",
+    "save": "Spara",
+    "cancel": "Avbryt"
+  },
+  "Trash": {
+    "title": "Papperskorgen",
+    "description": "Artiklar och bilder i papperskorgen syns inte. Återställ dem här; en administratör tömmer papperskorgen.",
+    "empty": "Papperskorgen är tom.",
+    "emptyTrash": "Töm papperskorgen",
+    "emptyTitle": "Töm papperskorgen?",
+    "emptyText": "Allt i den raderas för gott.",
+    "emptied": "Papperskorgen är tömd",
+    "articles": "Artiklar",
+    "images": "Bilder",
+    "restore": "Återställ"
+  }
+}
