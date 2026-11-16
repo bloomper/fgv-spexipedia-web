@@ -14,7 +14,7 @@ import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 type Documents = {
-    "\n    query AuditLog($page: Int, $size: Int, $filter: AuditFilter) {\n        auditLog(page: $page, size: $size, filter: $filter) {\n            totalCount page size\n            entries { id at actorId actorName action entityType entityId summary }\n        }\n    }\n": typeof types.AuditLogDocument,
+    "\n    query AuditLog($page: Int!, $size: Int!, $filter: AuditFilter) {\n        auditLog(page: $page, size: $size, filter: $filter) {\n            totalCount page size\n            entries { id at actorId actorName action entityType entityId summary }\n        }\n    }\n": typeof types.AuditLogDocument,
     "\n    query AuditActors { auditActors { id name } }\n": typeof types.AuditActorsDocument,
     "\n    query Settings {\n        settings {\n            welcomeSv welcomeEn publicWelcomeSv publicWelcomeEn contactEmail lastModifiedAt\n        }\n    }\n": typeof types.SettingsDocument,
     "\n    mutation SettingsUpdate($input: SettingsInput!) { settingsUpdate(input: $input) { lastModifiedAt } }\n": typeof types.SettingsUpdateDocument,
@@ -110,7 +110,7 @@ type Documents = {
     "\n  query Article($id: ID!) {\n    article(id: $id) {\n      id slug title body html visibility published trashedAt createdAt lastModifiedAt editingBy\n      categories { id slug name }\n      revision { ...RevisionFields }\n    }\n  }\n": typeof types.ArticleDocument,
     "\n  query ArticleHistory($id: ID!) {\n    article(id: $id) { id slug title history { ...RevisionFields body } }\n  }\n": typeof types.ArticleHistoryDocument,
     "\n  query Revision($id: ID!) { revision(id: $id) { ...RevisionFields body } }\n": typeof types.RevisionDocument,
-    "\n  query RecentChanges($page: Int, $size: Int) {\n    recentChanges(page: $page, size: $size) { totalCount page size entries { ...RevisionFields } }\n  }\n": typeof types.RecentChangesDocument,
+    "\n  query RecentChanges($page: Int!, $size: Int!) {\n    recentChanges(page: $page, size: $size) { totalCount page size entries { ...RevisionFields } }\n  }\n": typeof types.RecentChangesDocument,
     "\n  query Search($q: String!) { search(q: $q) { kind id title context path } }\n": typeof types.SearchDocument,
     "\n  query Sitemap { sitemap { path lastModifiedAt } }\n": typeof types.SitemapDocument,
     "\n  query RedirectLookup($title: String!) { redirect(title: $title) }\n": typeof types.RedirectLookupDocument,
@@ -118,7 +118,7 @@ type Documents = {
     "\n  query SpexareSearch($q: String!) { spexareSearch(q: $q) { ...PersonFields } }\n": typeof types.SpexareSearchDocument,
 };
 const documents: Documents = {
-    "\n    query AuditLog($page: Int, $size: Int, $filter: AuditFilter) {\n        auditLog(page: $page, size: $size, filter: $filter) {\n            totalCount page size\n            entries { id at actorId actorName action entityType entityId summary }\n        }\n    }\n": types.AuditLogDocument,
+    "\n    query AuditLog($page: Int!, $size: Int!, $filter: AuditFilter) {\n        auditLog(page: $page, size: $size, filter: $filter) {\n            totalCount page size\n            entries { id at actorId actorName action entityType entityId summary }\n        }\n    }\n": types.AuditLogDocument,
     "\n    query AuditActors { auditActors { id name } }\n": types.AuditActorsDocument,
     "\n    query Settings {\n        settings {\n            welcomeSv welcomeEn publicWelcomeSv publicWelcomeEn contactEmail lastModifiedAt\n        }\n    }\n": types.SettingsDocument,
     "\n    mutation SettingsUpdate($input: SettingsInput!) { settingsUpdate(input: $input) { lastModifiedAt } }\n": types.SettingsUpdateDocument,
@@ -214,7 +214,7 @@ const documents: Documents = {
     "\n  query Article($id: ID!) {\n    article(id: $id) {\n      id slug title body html visibility published trashedAt createdAt lastModifiedAt editingBy\n      categories { id slug name }\n      revision { ...RevisionFields }\n    }\n  }\n": types.ArticleDocument,
     "\n  query ArticleHistory($id: ID!) {\n    article(id: $id) { id slug title history { ...RevisionFields body } }\n  }\n": types.ArticleHistoryDocument,
     "\n  query Revision($id: ID!) { revision(id: $id) { ...RevisionFields body } }\n": types.RevisionDocument,
-    "\n  query RecentChanges($page: Int, $size: Int) {\n    recentChanges(page: $page, size: $size) { totalCount page size entries { ...RevisionFields } }\n  }\n": types.RecentChangesDocument,
+    "\n  query RecentChanges($page: Int!, $size: Int!) {\n    recentChanges(page: $page, size: $size) { totalCount page size entries { ...RevisionFields } }\n  }\n": types.RecentChangesDocument,
     "\n  query Search($q: String!) { search(q: $q) { kind id title context path } }\n": types.SearchDocument,
     "\n  query Sitemap { sitemap { path lastModifiedAt } }\n": types.SitemapDocument,
     "\n  query RedirectLookup($title: String!) { redirect(title: $title) }\n": types.RedirectLookupDocument,
@@ -239,7 +239,7 @@ export function graphql(source: string): unknown;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    query AuditLog($page: Int, $size: Int, $filter: AuditFilter) {\n        auditLog(page: $page, size: $size, filter: $filter) {\n            totalCount page size\n            entries { id at actorId actorName action entityType entityId summary }\n        }\n    }\n"): (typeof documents)["\n    query AuditLog($page: Int, $size: Int, $filter: AuditFilter) {\n        auditLog(page: $page, size: $size, filter: $filter) {\n            totalCount page size\n            entries { id at actorId actorName action entityType entityId summary }\n        }\n    }\n"];
+export function graphql(source: "\n    query AuditLog($page: Int!, $size: Int!, $filter: AuditFilter) {\n        auditLog(page: $page, size: $size, filter: $filter) {\n            totalCount page size\n            entries { id at actorId actorName action entityType entityId summary }\n        }\n    }\n"): (typeof documents)["\n    query AuditLog($page: Int!, $size: Int!, $filter: AuditFilter) {\n        auditLog(page: $page, size: $size, filter: $filter) {\n            totalCount page size\n            entries { id at actorId actorName action entityType entityId summary }\n        }\n    }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -623,7 +623,7 @@ export function graphql(source: "\n  query Revision($id: ID!) { revision(id: $id
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query RecentChanges($page: Int, $size: Int) {\n    recentChanges(page: $page, size: $size) { totalCount page size entries { ...RevisionFields } }\n  }\n"): (typeof documents)["\n  query RecentChanges($page: Int, $size: Int) {\n    recentChanges(page: $page, size: $size) { totalCount page size entries { ...RevisionFields } }\n  }\n"];
+export function graphql(source: "\n  query RecentChanges($page: Int!, $size: Int!) {\n    recentChanges(page: $page, size: $size) { totalCount page size entries { ...RevisionFields } }\n  }\n"): (typeof documents)["\n  query RecentChanges($page: Int!, $size: Int!) {\n    recentChanges(page: $page, size: $size) { totalCount page size entries { ...RevisionFields } }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

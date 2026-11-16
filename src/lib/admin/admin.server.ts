@@ -5,7 +5,7 @@ import { runMutation, runQuery } from "@/lib/graphql.server";
 import type { AuditFilter, MaintenanceJob, SettingsInput, SyncConsumerInput, RedirectInput } from "@/gql/graphql";
 
 const AuditLogQuery = graphql(`
-    query AuditLog($page: Int, $size: Int, $filter: AuditFilter) {
+    query AuditLog($page: Int!, $size: Int!, $filter: AuditFilter) {
         auditLog(page: $page, size: $size, filter: $filter) {
             totalCount page size
             entries { id at actorId actorName action entityType entityId summary }

@@ -193,7 +193,7 @@ const RevisionQuery = graphql(`
 `);
 
 const RecentChangesQuery = graphql(`
-  query RecentChanges($page: Int, $size: Int) {
+  query RecentChanges($page: Int!, $size: Int!) {
     recentChanges(page: $page, size: $size) { totalCount page size entries { ...RevisionFields } }
   }
 `);
