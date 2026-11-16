@@ -134,7 +134,7 @@ function ConsumerForm({ consumer, onDone }: { consumer?: Consumer; onDone: () =>
     }}>
       <div className="grid gap-3 sm:grid-cols-3">
         <Label className="flex-col items-start">{t("name")}<Input required value={values.name} onChange={event => setValues({ ...values, name: event.target.value })} /></Label>
-        <Label className="flex-col items-start">{t("clientId")}<Input required value={values.clientId} onChange={event => setValues({ ...values, clientId: event.target.value })} placeholder="spexregister-service" /></Label>
+        <Label className="flex-col items-start">{t("clientId")}<Input required value={values.clientId} onChange={event => setValues({ ...values, clientId: event.target.value })} placeholder="fgv-spexregister-service" /></Label>
         <Label className="flex-col items-start">{t("notifyUrl")}<Input type="url" value={values.notifyUrl} onChange={event => setValues({ ...values, notifyUrl: event.target.value })} placeholder="http://spexregister-api:8080/api/sync/notify" /></Label>
       </div>
       <label className="flex items-center gap-2 text-sm"><Checkbox checked={values.enabled} onCheckedChange={checked => setValues({ ...values, enabled: !!checked })} /> {t("enabled")}</label>
