@@ -90,7 +90,11 @@ export function AppSidebar({ roles, accountUrl, user, ...props }: AppSidebarProp
       const items: NavItem[] = [];
 
       if (isEditor(roles)) {
-        items.push({ title: t("Nav.baseData"), url: "/manage/base-data" }, { title: t("Nav.manageRecordings"), url: "/manage/recordings" });
+        items.push(
+          { title: t("Nav.baseData"), url: "/manage/base-data" },
+          { title: t("Nav.manageRecordings"), url: "/manage/recordings" },
+          { title: t("Nav.unresolvedCredits"), url: "/manage/credits" },
+        );
       }
       items.push({ title: t("Nav.trash"), url: "/manage/trash" }, { title: t("Nav.auditLog"), url: "/manage/audit" });
       mainItems.push({
@@ -110,6 +114,7 @@ export function AppSidebar({ roles, accountUrl, user, ...props }: AppSidebarProp
         isActive: pathname.startsWith("/admin/"),
         items: [
           { title: t("Nav.adminSettings"), url: "/admin/settings" },
+          { title: t("Nav.adminKinds"), url: "/admin/kinds" },
           { title: t("Nav.adminRedirects"), url: "/admin/redirects" },
           { title: t("Nav.adminConsumers"), url: "/admin/consumers" },
           { title: t("Nav.adminMaintenance"), url: "/admin/maintenance" },

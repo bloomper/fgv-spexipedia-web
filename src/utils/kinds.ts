@@ -1,4 +1,4 @@
-import type { KindType, KindUse } from "@/gql/graphql";
+import type { FactValueType, KindType, KindUse } from "@/gql/graphql";
 
 /*
  * Kinds are data that admins keep (spec 4.6): the web never lists them, it reads them from the server. Only the types
@@ -56,3 +56,8 @@ export function imagesByKind<I extends { kind?: { id: string } | null }, K exten
 
   return [...groups.filter(group => all || group.images.length > 0), ...(rest.length > 0 ? [{ kind: null, images: rest }] : [])];
 }
+
+/** What a fact's value is, from the schema's enum; TEXT is the default. */
+const VALUE_TYPES: Record<FactValueType, true> = { TEXT: true, DATE: true };
+
+export const factValueTypes = () => Object.keys(VALUE_TYPES) as FactValueType[];

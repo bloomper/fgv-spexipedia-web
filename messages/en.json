@@ -283,7 +283,9 @@
     "adminSettings": "Settings",
     "adminRedirects": "Redirects",
     "adminConsumers": "Change recipients",
-    "adminMaintenance": "Maintenance"
+    "adminMaintenance": "Maintenance",
+    "unresolvedCredits": "Unresolved credits",
+    "adminKinds": "Kinds"
   },
   "Home": {
     "kicker": "The Chalmers spex encyclopedia",
@@ -756,5 +758,63 @@
     "articles": "Articles",
     "images": "Images",
     "restore": "Restore"
+  },
+  "AdminKinds": {
+    "title": "Kinds",
+    "description": "The kinds the spex pages and the import use: names in Swedish and English, the spellings the import recognises, their order (the first in use is the default) and whether they are in use.",
+    "types": {
+      "label": "Types of kinds",
+      "NUMBER": "Numbers",
+      "CREDIT": "Credits",
+      "MEDIUM": "Recording media",
+      "IMAGE": "Images",
+      "FACT": "Facts"
+    },
+    "typeHelp": {
+      "NUMBER": "What a number is, e.g. song, overture or finale. A number may have none.",
+      "CREDIT": "What someone did for a number, e.g. lyrics, music or arrangement. Spexify, Spexarkivet and Spexflix read them from the feed.",
+      "MEDIUM": "The media of recordings; a new recording gets the first.",
+      "IMAGE": "Image kinds per use: for characters, for scenography and for the page’s other images. The uses are fixed; the kinds within them are data.",
+      "FACT": "Short facts about a production, as text or as a date. A new kind of fact shows at once when spex pages are edited."
+    },
+    "uses": {
+      "CHARACTER": "Characters",
+      "SCENOGRAPHY": "Scenography",
+      "PAGE": "Other images"
+    },
+    "valueTypes": {
+      "TEXT": "Text",
+      "DATE": "Date"
+    },
+    "valueType": "Value",
+    "add": "New kind",
+    "none": "No kinds yet.",
+    "nameSv": "Name in Swedish",
+    "nameEn": "Name in English",
+    "aliases": "Aliases",
+    "aliasesHelp": "One per line: other spellings the import recognises, e.g. “Låt” for Song.",
+    "aliasesShort": "also: {aliases}",
+    "retired": "Retired",
+    "retire": "Retire",
+    "reinstate": "Bring back into use",
+    "retiredToast": "The kind is retired",
+    "reinstated": "The kind is in use again",
+    "merge": "Merge",
+    "mergeTitle": "Merge {name} into …",
+    "mergeConfirm": "Merge {name} into {into}?",
+    "mergeText": "Everything of this kind gets the other, and its names become aliases there. The kind is deleted; this cannot be undone.",
+    "merged": "The kinds are merged",
+    "moveUp": "Move up",
+    "moveDown": "Move down",
+    "edit": "Edit",
+    "save": "Save",
+    "cancel": "Cancel"
+  },
+  "UnresolvedCredits": {
+    "title": "Unresolved credits",
+    "description": "{count, plural, =0 {No imported names are waiting.} one {# imported name is waiting for someone to say who it is.} other {# imported names are waiting for someone to say who they are.}} Only editors see them until they are resolved.",
+    "empty": "Every credit is resolved.",
+    "showing": "Showing {shown} of {total}; resolve these to see more.",
+    "resolved": "Resolved"
   }
 }
