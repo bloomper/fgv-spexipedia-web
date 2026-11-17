@@ -69,6 +69,12 @@ without a token too, with what is public) and its `POST /api/images`; images com
 - **Articles** (`/articles`): Markdown with `[[Title]]` links, revisions, history with line diffs (`src/utils/diff.ts`),
   restore, hide (authors). `ArticleForm` tells the server who is editing every minute and, on CONFLICT, shows the
   differences to the newer revision to take or overwrite. The preview is rendered by the server (`markdownPreview`).
+  Articles form a tree (`src/components/wiki/article-tree.tsx`: breadcrumbs, the tree around an article, its table of
+  contents; authors move and reorder them) and categories nest; *What links here*, wanted and orphaned articles come
+  from the server. Links to missing articles point at `/articles/new?title=` and are shown red by that address.
+- **Kinds** (number, credit, medium, image per use, fact) are data: pages read them from `kinds(type, use)`, editors
+  are offered those in use (`src/utils/kinds.ts`), admins keep them at `/admin/kinds`. Only the schema's enums (types,
+  uses, value types) appear in code. Imported credits nobody resolved are shown to editors only (`/manage/credits`).
 - **Old MediaWiki addresses**: `src/proxy.ts` (`src/lib/http/old-wiki.ts`) answers with HTTP redirects: `/<Title>` and `/index.php?title=` by the
   server's redirect table, else to a search.
 - **Editing** (`/manage/spex/[id]`, `/manage/base-data`, `/manage/recordings`): `useSave()` runs an action, toasts and

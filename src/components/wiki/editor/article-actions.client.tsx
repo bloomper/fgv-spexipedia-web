@@ -10,9 +10,10 @@ import { useDialogs } from "@/components/dialogs.client";
 import { setPublishedAction, trashArticleAction } from "@/app/(app)/articles/actions.server";
 
 /**
- * An author's buttons on an article: publish or unpublish, and move it to the trash.
+ * An author's buttons on an article: publish or unpublish, and move it to the trash (with its children, if it has any,
+ * which the author is told).
  */
-export function ArticleActions({ id, published }: { id: string; published: boolean }) {
+export function ArticleActions({ id, published, childCount = 0 }: { id: string; published: boolean; childCount?: number }) {
   const t = useTranslations("Articles");
   const router = useRouter();
   const { confirm } = useDialogs();
@@ -33,11 +34,13 @@ export function ArticleActions({ id, published }: { id: string; published: boole
         {published ? <EyeOff aria-hidden /> : <Eye aria-hidden />} {published ? t("unpublish") : t("publish")}
       </Button>
       <Button variant="ghost" size="sm" disabled={pending} onClick={async () => {
-        if (!await confirm({ title: t("trashTitle"), description: t("trashText"), confirmLabel: t("trash"), destructive: true })) {
+        const description = childCount > 0 ? `${t("trashText")} ${t("trashChildren", { count: childCount })}` : t("trashText");
+
+        if (!await confirm({ title: t("trashTitle"), description, confirmLabel: t("trash"), destructive: true })) {
           return;
         }
         startTransition(async () => {
-          const result = await trashArticleAction(id);
+          const result = await trashArticleAction(id, childCount > 0);
 
           if (result.ok) {
             toast.success(t("trashedToast"));
