@@ -383,37 +383,7 @@
         "subtitle": "I FGV:s andra tjänster"
       }
     },
-    "scenography": {
-      "backdrop": "Fond",
-      "stage": "Scen",
-      "props": "Rekvisita"
-    },
-    "credits": {
-      "lyrics": "Text",
-      "composers": "Musik",
-      "arrangers": "Arr.",
-      "choreographers": "Koreografi"
-    },
-    "imageKinds": {
-      "POSTER": "Affisch",
-      "LOGO": "Logotyp",
-      "SKETCH": "Skiss",
-      "MAKEUP": "Maskskiss",
-      "COSTUME": "Kostymdocka",
-      "SCENOGRAPHY": "Scenografi",
-      "REBUS": "Rebus",
-      "VEST": "Väst",
-      "COVER": "Omslag",
-      "ARTICLE": "Artikelbild",
-      "OTHER": "Övrigt"
-    },
-    "media": {
-      "LP": "LP",
-      "EP": "EP",
-      "CD": "CD",
-      "DIGITAL": "Digital",
-      "OTHER": "Annat"
-    }
+    "fromWork": "ur {work}"
   },
   "Photos": {
     "unavailable": "Spexgram kan inte nås just nu.",
@@ -591,11 +561,9 @@
     "vestWornBy": "Västen bars av",
     "saveTexts": "Spara texterna",
     "sections": {
-      "BACKDROP": "Fond",
-      "STAGE": "Scen",
-      "PROPS": "Rekvisita",
       "VEST": "Spexvästen",
-      "OTHER": "Övriga bilder"
+      "OTHER": "Övriga bilder",
+      "SCENOGRAPHY": "Scenografi"
     },
     "rebus": "Programrebus",
     "rebusSolution": "Rebusens lösning",
@@ -647,9 +615,27 @@
       "scenes": "Scener",
       "numbers": "Nummer",
       "revival": "Nyuppsättningens ändringar",
-      "history": "Historik"
+      "history": "Historik",
+      "facts": "Fakta"
     },
-    "noHistory": "Inga ändringar av texterna ännu."
+    "noHistory": "Inga ändringar av texterna ännu.",
+    "unresolved": "olöst",
+    "unresolvedHelp": "Ett importerat namn som ingen har löst än. Det visas bara för redaktörer; lös det i listan över numret.",
+    "unresolvedCount": "{count, plural, one {# olöst medverkande} other {# olösta medverkande}}",
+    "resolve": "Lös",
+    "resolveSearch": "Sök spexaren som ”{name}” avser",
+    "outsideFgv": "”{name}” är någon utanför FGV",
+    "resolved": "Löst",
+    "numberKind": "Sort",
+    "fromWork": "Ur",
+    "fromWorkPlaceholder": "t.ex. en musikal eller film",
+    "firstLine": "Första raden",
+    "shortDescription": "Kort beskrivning",
+    "shortDescriptionHelp": "En mening eller två, för listor och sidans huvud.",
+    "noFactKinds": "Det finns inga sorters fakta än; en administratör lägger till dem.",
+    "factsRevivalHelp": "En nyuppsättning utan egna fakta visar uruppsättningens; sparade fakta här blir nyuppsättningens egna.",
+    "factDateHelp": "År, år och månad, eller datum: 1984, 1984-05 eller 1984-05-12.",
+    "saveFacts": "Spara fakta"
   },
   "BaseData": {
     "title": "Basdata",

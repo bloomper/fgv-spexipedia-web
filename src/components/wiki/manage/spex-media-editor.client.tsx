@@ -6,31 +6,36 @@ import { ImageSlot } from "@/components/wiki/editor/image-slot.client";
 import { PhotoPicker } from "@/components/wiki/editor/photo-picker.client";
 import { useSave } from "@/components/wiki/editor/use-save.client";
 import { setPageImagesAction, setPagePhotosAction, setRebusAction } from "@/app/(app)/manage/actions.server";
-import type { SpexEditData } from "@/lib/wiki/edit.server";
+import type { EditKind, EditKinds, SpexEditData } from "@/lib/wiki/edit.server";
+import type { ImageSection } from "@/gql/graphql";
+import { imagesByKind } from "@/utils/kinds";
 
-const SECTIONS = [
-  ["BACKDROP", "backdrop", "SCENOGRAPHY"],
-  ["STAGE", "stage", "SCENOGRAPHY"],
-  ["PROPS", "props", "SCENOGRAPHY"],
-  ["VEST", "vest", "VEST"],
-  ["OTHER", "other", "OTHER"],
-] as const;
+type PageImage = NonNullable<SpexEditData["page"]>["vest"][number];
 
 /**
- * The page's own images by section, the rebus and its solution, and the photos from Spexgram, for authors.
+ * The page's own images, the rebus and its solution, and the photos from Spexgram, for authors. Scenography and other
+ * images are kept per image kind of their use (spec 4.6): one list per kind in use, and per retired kind that still
+ * has images.
  */
-export function SpexMediaEditor({ spex }: { spex: SpexEditData }) {
+export function SpexMediaEditor({ spex, kinds }: { spex: SpexEditData; kinds: Pick<EditKinds, "scenographyImageKinds" | "pageImageKinds"> }) {
   const t = useTranslations("Manage");
   const { save } = useSave();
   const page = spex.page;
+  const perKind = (section: ImageSection, images: PageImage[], sectionKinds: EditKind[]) =>
+    imagesByKind(images, sectionKinds.filter(kind => !kind.retired || images.some(image => image.kind?.id === kind.id)), true)
+      .filter(group => group.kind)
+      .map(group => (
+        <ImageListEditor key={`${section}-${group.kind!.id}`} title={`${t(`sections.${section}`)}: ${group.kind!.name}`}
+                         uploadKind={section === "SCENOGRAPHY" ? "SCENOGRAPHY" : "OTHER"} images={group.images}
+                         onSave={images => save(() => setPageImagesAction(spex.id, section, group.kind!.id, images))} />
+      ));
 
   return (
     <div className="space-y-8">
-      {SECTIONS.map(([section, field, kind]) => (
-        <ImageListEditor key={section} title={t(`sections.${section}`)} uploadKind={kind}
-                         images={page?.[field] ?? []}
-                         onSave={images => save(() => setPageImagesAction(spex.id, section, images))} />
-      ))}
+      {perKind("SCENOGRAPHY", page?.scenography ?? [], kinds.scenographyImageKinds)}
+      <ImageListEditor title={t("sections.VEST")} uploadKind="VEST" images={page?.vest ?? []}
+                       onSave={images => save(() => setPageImagesAction(spex.id, "VEST", null, images))} />
+      {perKind("OTHER", page?.other ?? [], kinds.pageImageKinds)}
       <div className="grid gap-6 sm:grid-cols-2 lg:max-w-xl">
         <ImageSlot label={t("rebus")} kind="REBUS" image={page?.rebus}
                    onChange={imageId => save(() => setRebusAction(spex.id, imageId, page?.rebusSolution?.id ?? null))} />

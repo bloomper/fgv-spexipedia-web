@@ -7,6 +7,8 @@ import type {
   ArticleInput,
   BaseDataKind,
   CharacterInput,
+  CreditInput,
+  FactInput,
   FigureInput,
   ImageInput,
   ImageRefInput,
@@ -41,7 +43,9 @@ const ArticleUpdate = graphql(`
 const ArticleEditing = graphql(`mutation ArticleEditing($id: ID!) { articleEditing(id: $id) { id editingBy } }`);
 const ArticleRestore = graphql(`mutation ArticleRestore($id: ID!, $revisionId: ID!) { articleRestore(id: $id, revisionId: $revisionId) { id slug } }`);
 const ArticleSetPublished = graphql(`mutation ArticleSetPublished($id: ID!, $published: Boolean!) { articleSetPublished(id: $id, published: $published) { id } }`);
-const ArticleTrash = graphql(`mutation ArticleTrash($id: ID!) { articleTrash(id: $id) }`);
+const ArticleTrash = graphql(`mutation ArticleTrash($id: ID!, $withChildren: Boolean!) { articleTrash(id: $id, withChildren: $withChildren) }`);
+const ArticleMove = graphql(`mutation ArticleMove($id: ID!, $parentId: ID, $position: Int) { articleMove(id: $id, parentId: $parentId, position: $position) { id } }`);
+const ArticleReorderChildren = graphql(`mutation ArticleReorderChildren($parentId: ID, $ids: [ID!]!) { articleReorderChildren(parentId: $parentId, ids: $ids) { id } }`);
 const ArticleRestoreFromTrash = graphql(`mutation ArticleRestoreFromTrash($id: ID!) { articleRestoreFromTrash(id: $id) { id } }`);
 const RevisionSetHidden = graphql(`mutation RevisionSetHidden($id: ID!, $hidden: Boolean!) { revisionSetHidden(id: $id, hidden: $hidden) { id } }`);
 const ArticleCategoryCreate = graphql(`mutation ArticleCategoryCreate($input: ArticleCategoryInput!) { articleCategoryCreate(input: $input) { id } }`);
@@ -53,7 +57,9 @@ export const articleUpdate = async (id: string, input: ArticleInput, baseRevisio
 export const articleEditing = async (id: string) => (await runMutation(ArticleEditing, { id }))?.articleEditing.editingBy ?? [];
 export const articleRestore = async (id: string, revisionId: string) => (await runMutation(ArticleRestore, { id, revisionId }))!.articleRestore;
 export const articleSetPublished = (id: string, published: boolean) => runMutation(ArticleSetPublished, { id, published });
-export const articleTrash = (id: string) => runMutation(ArticleTrash, { id });
+export const articleTrash = (id: string, withChildren = false) => runMutation(ArticleTrash, { id, withChildren });
+export const articleMove = (id: string, parentId: string | null, position: number | null = null) => runMutation(ArticleMove, { id, parentId, position });
+export const articleReorderChildren = (parentId: string | null, ids: string[]) => runMutation(ArticleReorderChildren, { parentId, ids });
 export const articleRestoreFromTrash = (id: string) => runMutation(ArticleRestoreFromTrash, { id });
 export const revisionSetHidden = (id: string, hidden: boolean) => runMutation(RevisionSetHidden, { id, hidden });
 export const articleCategoryCreate = (input: ArticleCategoryInput) => runMutation(ArticleCategoryCreate, { input });
@@ -109,7 +115,27 @@ export const figureDelete = (id: string) => runMutation(FigureDelete, { id });
 // Spex pages ----------------------------------------------------------------------------------------------------------
 
 graphql(`
-  fragment EditCredit on Credit { name person { id nickname name } }
+  fragment EditCredit on Credit { name unresolved person { id nickname name } }
+`);
+
+graphql(`
+  fragment EditKind on Kind { id name retired valueType }
+`);
+
+/** The kinds editors choose from (spec 4.6), retired ones included so that records keep showing theirs. */
+const EditKindsQuery = graphql(`
+  query EditKinds {
+    numberKinds: kinds(type: NUMBER, includeRetired: true) { ...EditKind }
+    creditKinds: kinds(type: CREDIT, includeRetired: true) { ...EditKind }
+    factKinds: kinds(type: FACT, includeRetired: true) { ...EditKind }
+    characterImageKinds: kinds(type: IMAGE, use: CHARACTER, includeRetired: true) { ...EditKind }
+    scenographyImageKinds: kinds(type: IMAGE, use: SCENOGRAPHY, includeRetired: true) { ...EditKind }
+    pageImageKinds: kinds(type: IMAGE, use: PAGE, includeRetired: true) { ...EditKind }
+  }
+`);
+
+const MediaQuery = graphql(`
+  query RecordingMedia { kinds(type: MEDIUM, includeRetired: true) { ...EditKind } }
 `);
 
 const SpexEditQuery = graphql(`
@@ -121,14 +147,13 @@ const SpexEditQuery = graphql(`
       poster { ...ImageFields }
       revivalChanges { kind recordId cut act position }
       page {
-        generation premiere introduction description synopsis vestDescription published
+        generation premiere introduction shortDescription description synopsis vestDescription published
         revisionIds { introduction description synopsis }
+        facts { kind { id } value }
         vestWornBy { ...EditCredit }
         rebus { ...ImageFields }
         rebusSolution { ...ImageFields }
-        backdrop: images(section: BACKDROP) { ...PageImageFields }
-        stage: images(section: STAGE) { ...PageImageFields }
-        props: images(section: PROPS) { ...PageImageFields }
+        scenography: images(section: SCENOGRAPHY) { ...PageImageFields }
         vest: images(section: VEST) { ...PageImageFields }
         other: images(section: OTHER) { ...PageImageFields }
         groupPhotos: photos(section: GROUP) { ...PhotoSetFields }
@@ -138,8 +163,9 @@ const SpexEditQuery = graphql(`
       characters { id name description position retired figure { id name } images { ...PageImageFields } photos { ...PhotoSetFields } spex { id } }
       scenes { id act position title place intervalAfter spex { id } }
       numbers {
-        id act position title originalTitle originalArtist retired spex { id }
-        lyrics { ...EditCredit } composers { ...EditCredit } arrangers { ...EditCredit } choreographers { ...EditCredit }
+        id act position title originalTitle originalArtist fromWork firstLine retired spex { id }
+        kind { id }
+        credits { kind { id } position credit { ...EditCredit } }
         characters { id }
       }
     }
@@ -154,7 +180,8 @@ const SpexgramAlbumsQuery = graphql(`
 `);
 
 const SpexPageUpdate = graphql(`mutation SpexPageUpdate($spexId: ID!, $input: SpexPageInput!) { spexPageUpdate(spexId: $spexId, input: $input) { published } }`);
-const SpexPageSetImages = graphql(`mutation SpexPageSetImages($spexId: ID!, $section: ImageSection!, $images: [ImageRefInput!]!) { spexPageSetImages(spexId: $spexId, section: $section, images: $images) { published } }`);
+const SpexPageSetImages = graphql(`mutation SpexPageSetImages($spexId: ID!, $section: ImageSection!, $kindId: ID, $images: [ImageRefInput!]!) { spexPageSetImages(spexId: $spexId, section: $section, kindId: $kindId, images: $images) { published } }`);
+const SpexPageSetFacts = graphql(`mutation SpexPageSetFacts($spexId: ID!, $facts: [FactInput!]!) { spexPageSetFacts(spexId: $spexId, facts: $facts) { published } }`);
 const SpexPageSetPhotos = graphql(`mutation SpexPageSetPhotos($spexId: ID!, $section: PhotoSection!, $characterId: ID, $itemIds: [ID!]!) { spexPageSetPhotos(spexId: $spexId, section: $section, characterId: $characterId, itemIds: $itemIds) { published } }`);
 const SpexPageSetRebus = graphql(`mutation SpexPageSetRebus($spexId: ID!, $rebusImageId: ID, $solutionImageId: ID) { spexPageSetRebus(spexId: $spexId, rebusImageId: $rebusImageId, solutionImageId: $solutionImageId) { published } }`);
 const SpexPageSetPublished = graphql(`mutation SpexPageSetPublished($spexId: ID!, $published: Boolean!) { spexPageSetPublished(spexId: $spexId, published: $published) { published } }`);
@@ -171,15 +198,28 @@ const ScenesPaste = graphql(`mutation ScenesPaste($spexId: ID!, $text: String!) 
 const ScenesReorder = graphql(`mutation ScenesReorder($spexId: ID!, $items: [OrderInput!]!) { scenesReorder(spexId: $spexId, items: $items) { id } }`);
 const NumberCreate = graphql(`mutation NumberCreate($spexId: ID!, $input: NumberInput!) { numberCreate(spexId: $spexId, input: $input) { id } }`);
 const NumberUpdate = graphql(`mutation NumberUpdate($id: ID!, $input: NumberInput!) { numberUpdate(id: $id, input: $input) { id } }`);
+const CreditResolve = graphql(`mutation CreditResolve($numberId: ID!, $kindId: ID!, $position: Int!, $credit: CreditInput!) { creditResolve(numberId: $numberId, kindId: $kindId, position: $position, credit: $credit) { id } }`);
+const UnresolvedCreditsQuery = graphql(`
+  query UnresolvedCredits($limit: Int!) {
+    unresolvedCredits(limit: $limit) {
+      total
+      credits { position name kind { id name } number { id title act spex { id slug title year } } }
+    }
+  }
+`);
 const NumberDelete = graphql(`mutation NumberDelete($id: ID!) { numberDelete(id: $id) }`);
 const NumbersPaste = graphql(`mutation NumbersPaste($spexId: ID!, $text: String!) { numbersPaste(spexId: $spexId, text: $text) { id } }`);
 const NumbersReorder = graphql(`mutation NumbersReorder($spexId: ID!, $items: [OrderInput!]!) { numbersReorder(spexId: $spexId, items: $items) { id } }`);
 const RevivalSetChanges = graphql(`mutation RevivalSetChanges($revivalId: ID!, $kind: RevivalChangeKind!, $changes: [RevivalChangeInput!]!) { revivalSetChanges(revivalId: $revivalId, kind: $kind, changes: $changes) { id } }`);
 
 export const getSpexEdit = async (id: string) => runQuery(SpexEditQuery, { id });
+export const getEditKinds = async () => runQuery(EditKindsQuery, {});
+export const getMedia = async () => (await runQuery(MediaQuery, {}))?.kinds ?? [];
 export const getSpexgramAlbums = async (spexId: string) => (await runQuery(SpexgramAlbumsQuery, { spexId }))?.spexgramAlbums ?? [];
 export const spexPageUpdate = (spexId: string, input: SpexPageInput) => runMutation(SpexPageUpdate, { spexId, input });
-export const spexPageSetImages = (spexId: string, section: ImageSection, images: ImageRefInput[]) => runMutation(SpexPageSetImages, { spexId, section, images });
+export const spexPageSetImages = (spexId: string, section: ImageSection, kindId: string | null, images: ImageRefInput[]) =>
+  runMutation(SpexPageSetImages, { spexId, section, kindId, images });
+export const spexPageSetFacts = (spexId: string, facts: FactInput[]) => runMutation(SpexPageSetFacts, { spexId, facts });
 export const spexPageSetPhotos = (spexId: string, section: PhotoSection, characterId: string | null, itemIds: string[]) =>
   runMutation(SpexPageSetPhotos, { spexId, section, characterId, itemIds });
 export const spexPageSetRebus = (spexId: string, rebusImageId: string | null, solutionImageId: string | null) =>
@@ -199,6 +239,9 @@ export const scenesReorder = (spexId: string, items: OrderInput[]) => runMutatio
 export const numberCreate = (spexId: string, input: NumberInput) => runMutation(NumberCreate, { spexId, input });
 export const numberUpdate = (id: string, input: NumberInput) => runMutation(NumberUpdate, { id, input });
 export const numberDelete = (id: string) => runMutation(NumberDelete, { id });
+export const creditResolve = (numberId: string, kindId: string, position: number, credit: CreditInput) =>
+  runMutation(CreditResolve, { numberId, kindId, position, credit });
+export const getUnresolvedCredits = async (limit = 200) => (await runQuery(UnresolvedCreditsQuery, { limit }))?.unresolvedCredits;
 export const numbersPaste = (spexId: string, text: string) => runMutation(NumbersPaste, { spexId, text });
 export const numbersReorder = (spexId: string, items: OrderInput[]) => runMutation(NumbersReorder, { spexId, items });
 export const revivalSetChanges = (revivalId: string, kind: RevivalChangeKind, changes: RevivalChangeInput[]) =>
@@ -209,7 +252,7 @@ export const revivalSetChanges = (revivalId: string, kind: RevivalChangeKind, ch
 const RecordingEditQuery = graphql(`
   query RecordingEdit($id: ID!) {
     recording(id: $id) {
-      id slug catalogueNumber title medium released recorded description published spexifyAlbumId
+      id slug catalogueNumber title medium { id } released recorded description published spexifyAlbumId
       spex { id title year numbers { id act position title } }
       conductor { ...EditCredit }
       tracks { id side position title number { id } }
@@ -257,3 +300,6 @@ export const getTrash = async () => (await runQuery(TrashQuery, {}))?.trash;
 export type SpexEditData = NonNullable<NonNullable<Awaited<ReturnType<typeof getSpexEdit>>>["spex"]>;
 export type BaseData = NonNullable<Awaited<ReturnType<typeof getBaseData>>>;
 export type RecordingEditData = NonNullable<Awaited<ReturnType<typeof getRecordingEdit>>>;
+export type EditKinds = NonNullable<Awaited<ReturnType<typeof getEditKinds>>>;
+export type EditKind = EditKinds["numberKinds"][number];
+export type UnresolvedCreditsData = NonNullable<Awaited<ReturnType<typeof getUnresolvedCredits>>>;

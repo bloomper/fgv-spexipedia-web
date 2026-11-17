@@ -5,7 +5,7 @@ import { getTranslations } from "next-intl/server";
 import { ExternalLink } from "lucide-react";
 import { withPolicyPage } from "@/utils/route.server";
 import { Policies } from "@/utils/policy.server";
-import { getBaseData, getSpexEdit } from "@/lib/wiki/edit.server";
+import { getBaseData, getEditKinds, getSpexEdit } from "@/lib/wiki/edit.server";
 import { getViewer } from "@/lib/wiki/viewer.server";
 import { privateMetadata } from "@/lib/wiki/metadata.server";
 import { PageHeader } from "@/components/page-header";
@@ -13,7 +13,7 @@ import { SpexSection } from "@/components/wiki/spex-section";
 import { SectionRail } from "@/components/wiki/section-rail.client";
 import { RevisionList } from "@/components/wiki/revision-list";
 import { buttonVariants } from "@/components/ui/button";
-import { SpexBaseDataEditor, SpexTextsEditor } from "@/components/wiki/manage/spex-head-editor.client";
+import { FactsEditor, SpexBaseDataEditor, SpexTextsEditor } from "@/components/wiki/manage/spex-head-editor.client";
 import { SpexMediaEditor } from "@/components/wiki/manage/spex-media-editor.client";
 import { CharactersEditor, NumbersEditor, RevivalChangesEditor, ScenesEditor } from "@/components/wiki/manage/spex-lists-editor.client";
 
@@ -32,14 +32,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ManageSpexPage({ params }: Props) {
   return withPolicyPage(Policies.author.requireAuthor, async () => {
     const { id } = await params;
-    const [t, data, base, viewer] = await Promise.all([getTranslations("Manage"), getSpexEdit(id), getBaseData(), getViewer()]);
+    const [t, data, base, viewer, kinds] = await Promise.all([getTranslations("Manage"), getSpexEdit(id), getBaseData(), getViewer(), getEditKinds()]);
     const spex = data?.spex;
 
     if (!spex) {
       notFound();
     }
     const sections = [
-      "base", "texts", "media",
+      "base", "texts", "facts", "media",
       ...(viewer.editor ? ["characters", "scenes", "numbers"] : []),
       ...(viewer.editor && spex.revival ? ["revival"] : []),
       "history",
@@ -56,19 +56,22 @@ export default async function ManageSpexPage({ params }: Props) {
           <SpexSection id="edit-texts" title={t("editSections.texts")}>
             <SpexTextsEditor spex={spex} />
           </SpexSection>
+          <SpexSection id="edit-facts" title={t("editSections.facts")}>
+            <FactsEditor spex={spex} factKinds={kinds?.factKinds ?? []} />
+          </SpexSection>
           <SpexSection id="edit-media" title={t("editSections.media")}>
-            <SpexMediaEditor spex={spex} />
+            <SpexMediaEditor spex={spex} kinds={{ scenographyImageKinds: kinds?.scenographyImageKinds ?? [], pageImageKinds: kinds?.pageImageKinds ?? [] }} />
           </SpexSection>
           {viewer.editor && (
             <>
               <SpexSection id="edit-characters" title={t("editSections.characters")}>
-                <CharactersEditor spex={spex} figures={data.figures} editor={viewer.editor} />
+                <CharactersEditor spex={spex} figures={data.figures} editor={viewer.editor} imageKinds={kinds?.characterImageKinds ?? []} />
               </SpexSection>
               <SpexSection id="edit-scenes" title={t("editSections.scenes")}>
                 <ScenesEditor spex={spex} />
               </SpexSection>
               <SpexSection id="edit-numbers" title={t("editSections.numbers")}>
-                <NumbersEditor spex={spex} />
+                <NumbersEditor spex={spex} numberKinds={kinds?.numberKinds ?? []} creditKinds={kinds?.creditKinds ?? []} />
               </SpexSection>
               {spex.revival && (
                 <SpexSection id="edit-revival" title={t("editSections.revival")}>

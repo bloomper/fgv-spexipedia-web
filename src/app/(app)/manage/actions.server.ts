@@ -8,6 +8,8 @@ import { spexareSearch } from "@/lib/wiki/wiki.server";
 import type {
   BaseDataKind,
   CharacterInput,
+  CreditInput,
+  FactInput,
   FigureInput,
   ImageInput,
   ImageRefInput,
@@ -153,9 +155,15 @@ export async function savePageAction(spexId: string, input: SpexPageInput) {
   return author(async () => (await edit.spexPageUpdate(spexId, input), null));
 }
 
-export async function setPageImagesAction(spexId: string, section: ImageSection, images: ImageRefInput[]) {
-  requireIds(spexId, ...images.map(image => image.imageId));
-  return author(async () => (await edit.spexPageSetImages(spexId, section, images), null));
+export async function setPageImagesAction(spexId: string, section: ImageSection, kindId: string | null, images: ImageRefInput[]) {
+  requireIds(spexId, kindId, ...images.map(image => image.imageId));
+  return author(async () => (await edit.spexPageSetImages(spexId, section, kindId, images), null));
+}
+
+/** The facts of the spex (spec 4.2), at most one per fact kind; empty values are left out. */
+export async function setFactsAction(spexId: string, facts: FactInput[]) {
+  requireIds(spexId, ...facts.map(fact => fact.kindId));
+  return author(async () => (await edit.spexPageSetFacts(spexId, facts.map(fact => ({ kindId: fact.kindId, value: fact.value?.trim().slice(0, 1000) || null }))), null));
 }
 
 export async function setPagePhotosAction(spexId: string, section: PhotoSection, characterId: string | null, itemIds: string[]) {
@@ -219,8 +227,17 @@ export async function reorderScenesAction(spexId: string, items: OrderInput[]) {
 }
 
 export async function saveNumberAction(spexId: string, id: string | null, input: NumberInput) {
-  requireIds(spexId, id, ...(input.characterIds ?? []));
+  requireIds(spexId, id, input.kindId, ...(input.characterIds ?? []), ...(input.credits ?? []).flatMap(credit => [credit.kindId, credit.spexareId]));
   return editor(async () => (await (id ? edit.numberUpdate(id, input) : edit.numberCreate(spexId, input)), null));
+}
+
+/** Resolves an imported credit nobody has resolved (spec 5.3): the spexare it means, or the name as someone outside FGV. */
+export async function resolveCreditAction(numberId: string, kindId: string, position: number, credit: CreditInput) {
+  requireIds(numberId, kindId, credit.spexareId);
+  if (!Number.isInteger(position) || position < 0 || (!credit.spexareId && !credit.name?.trim())) {
+    throw new Error("Invalid credit");
+  }
+  return editor(async () => (await edit.creditResolve(numberId, kindId, position, credit.spexareId ? { spexareId: credit.spexareId } : { name: credit.name!.trim() }), null));
 }
 
 export async function deleteNumberAction(id: string) {
@@ -246,7 +263,7 @@ export async function setRevivalChangesAction(revivalId: string, kind: RevivalCh
 // Recordings ------------------------------------------------------------------------------------------------------------
 
 export async function saveRecordingAction(id: string | null, input: RecordingInput) {
-  requireIds(id, input.spexId, input.frontImageId, input.backImageId, input.spexifyAlbumId);
+  requireIds(id, input.mediumId, input.spexId, input.frontImageId, input.backImageId, input.spexifyAlbumId);
   return editor(async () => id ? (await edit.recordingUpdate(id, input), { id }) : await edit.recordingCreate(input));
 }
 

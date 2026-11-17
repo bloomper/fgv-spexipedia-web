@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { type ChangeEvent, useState } from "react";
 import { useTranslations } from "next-intl";
 import { ArrowDown, ArrowUp, ClipboardPaste, Pencil, Plus, Save, Trash2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -12,7 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
 import { ImageListEditor } from "@/components/wiki/editor/image-list-editor.client";
 import { PhotoPicker } from "@/components/wiki/editor/photo-picker.client";
-import { CreditPicker, toCreditInput, toCreditValue, type CreditValue } from "@/components/wiki/editor/credit-picker.client";
+import { CreditPicker, CreditResolver, toCreditInput, toCreditValue, type CreditValue } from "@/components/wiki/editor/credit-picker.client";
 import { useSave } from "@/components/wiki/editor/use-save.client";
 import { useDialogs } from "@/components/dialogs.client";
 import {
@@ -25,6 +25,7 @@ import {
   reorderCharactersAction,
   reorderNumbersAction,
   reorderScenesAction,
+  resolveCreditAction,
   saveCharacterAction,
   saveNumberAction,
   saveSceneAction,
@@ -32,13 +33,14 @@ import {
   setPagePhotosAction,
   setRevivalChangesAction,
 } from "@/app/(app)/manage/actions.server";
-import type { SpexEditData } from "@/lib/wiki/edit.server";
+import type { EditKind, SpexEditData } from "@/lib/wiki/edit.server";
+import type { NumberCreditInput } from "@/gql/graphql";
+import { offeredKinds } from "@/utils/kinds";
+import { groupBy } from "@/utils/wiki";
 
 type Character = SpexEditData["characters"][number];
 type Scene = SpexEditData["scenes"][number];
 type SpexNumber = SpexEditData["numbers"][number];
-
-const CHARACTER_IMAGE_KINDS = ["SKETCH", "MAKEUP", "COSTUME", "OTHER"];
 
 /**
  * Pastes a list as text, one per line, added after the existing ones.
@@ -93,7 +95,13 @@ function moved<T>(list: T[], from: number, to: number): T[] {
  * The spex's characters: name, figure and description for editors; images and actor photos for authors. A revival
  * edits only the characters it added; its parent's are cut or kept in the revival's changes.
  */
-export function CharactersEditor({ spex, figures, editor }: { spex: SpexEditData; figures: { id: string; name: string }[]; editor: boolean }) {
+export function CharactersEditor({ spex, figures, editor, imageKinds }: {
+  spex: SpexEditData;
+  figures: { id: string; name: string }[];
+  editor: boolean;
+  /** Image kinds for characters (spec 4.6). */
+  imageKinds: EditKind[];
+}) {
   const t = useTranslations("Manage");
   const { save, pending } = useSave();
   const own = spex.characters.filter(character => character.spex.id === spex.id);
@@ -132,7 +140,7 @@ export function CharactersEditor({ spex, figures, editor }: { spex: SpexEditData
               <details>
                 <summary className="cursor-pointer text-sm text-primary">{t("imagesAndPhotos")}</summary>
                 <div className="mt-3 space-y-4">
-                  <ImageListEditor title={t("characterImages")} uploadKind="SKETCH" kinds={CHARACTER_IMAGE_KINDS}
+                  <ImageListEditor title={t("characterImages")} uploadKind="SKETCH" kinds={imageKinds}
                                    images={character.images}
                                    onSave={images => save(() => setCharacterImagesAction(character.id, images))} />
                   <PhotoPicker title={t("actorPhotos")} spexId={spex.id} chosen={character.photos.itemIds}
@@ -287,14 +295,16 @@ function SceneForm({ spexId, scene, act, onDone }: { spexId: string; scene?: Sce
 // Numbers ---------------------------------------------------------------------------------------------------------------
 
 /**
- * The numbers by act: title, original song, credits (picked from Spexregister, or free text for people outside FGV)
- * and the characters who sing them.
+ * The numbers by act: title, kind, original song and where it is from, first line, credits per credit kind (picked
+ * from Spexregister, or free text for people outside FGV) and the characters who sing them. Imported credits nobody has
+ * resolved (spec 5.3) are listed under their number to resolve.
  */
-export function NumbersEditor({ spex }: { spex: SpexEditData }) {
+export function NumbersEditor({ spex, numberKinds, creditKinds }: { spex: SpexEditData; numberKinds: EditKind[]; creditKinds: EditKind[] }) {
   const t = useTranslations("Manage");
   const { save, pending } = useSave();
   const own = spex.numbers.filter(number => number.spex.id === spex.id);
   const [editing, setEditing] = useState<string | null>(null);
+  const kindName = (id: string | null | undefined) => [...numberKinds, ...creditKinds].find(kind => kind.id === id)?.name;
 
   return (
     <div className="space-y-4">
@@ -302,20 +312,23 @@ export function NumbersEditor({ spex }: { spex: SpexEditData }) {
         <Button type="button" size="sm" variant="outline" onClick={() => setEditing("new")}><Plus aria-hidden /> {t("addNumber")}</Button>
         <PasteBox help={t("pasteNumbersHelp")} onPaste={text => save(() => pasteNumbersAction(spex.id, text))} />
       </div>
-      {editing === "new" && <NumberForm spex={spex} act={own.at(-1)?.act ?? 1} onDone={() => setEditing(null)} />}
+      {editing === "new" && <NumberForm spex={spex} numberKinds={numberKinds} creditKinds={creditKinds} act={own.at(-1)?.act ?? 1} onDone={() => setEditing(null)} />}
       <ol className="divide-y divide-border rounded-lg border border-border bg-card">
         {spex.numbers.map(number => {
           const mine = number.spex.id === spex.id;
           const index = own.indexOf(number);
+          const unresolved = number.credits.filter(credit => credit.credit.unresolved);
 
           return (
-            <li key={number.id} className="space-y-2 px-3 py-2 text-sm">
+            <li key={number.id} id={`number-${number.id}`} className="scroll-mt-24 space-y-2 px-3 py-2 text-sm">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="w-14 text-muted-foreground">{t("actShort", { act: number.act })}</span>
                 <span className="font-medium">{number.title}</span>
+                {number.kind && <Badge variant="secondary">{kindName(number.kind.id)}</Badge>}
                 {number.originalTitle && <span className="text-muted-foreground">({number.originalTitle}{number.originalArtist && ` – ${number.originalArtist}`})</span>}
                 {number.retired && <Badge variant="outline">{t("retired")}</Badge>}
                 {!mine && <Badge variant="outline">{t("fromParent")}</Badge>}
+                {unresolved.length > 0 && <Badge variant="outline" className="border-amber-500/70 text-amber-600 dark:text-amber-400">{t("unresolvedCount", { count: unresolved.length })}</Badge>}
                 {mine && (
                   <span className="ml-auto inline-flex">
                     <MoveButtons index={index} count={own.length} onMove={to => save(() => reorderNumbersAction(spex.id, moved(own, index, to).map(n => ({ id: n.id, act: n.act }))), { success: false })} />
@@ -324,7 +337,19 @@ export function NumbersEditor({ spex }: { spex: SpexEditData }) {
                   </span>
                 )}
               </div>
-              {editing === number.id && <NumberForm spex={spex} number={number} act={number.act} onDone={() => setEditing(null)} />}
+              {unresolved.length > 0 && (
+                <ul className="space-y-2 rounded-md border border-dashed border-amber-500/50 p-2">
+                  {unresolved.map(credit => (
+                    <li key={`${credit.kind.id}-${credit.position}`} className="flex flex-wrap items-center gap-2">
+                      <span className="text-muted-foreground">{kindName(credit.kind.id)}:</span>
+                      <span className="font-medium">{credit.credit.name}</span>
+                      <CreditResolver name={credit.credit.name ?? ""} disabled={pending}
+                                      onResolve={value => save(() => resolveCreditAction(number.id, credit.kind.id, credit.position, value), { success: t("resolved") })} />
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {editing === number.id && <NumberForm spex={spex} numberKinds={numberKinds} creditKinds={creditKinds} number={number} act={number.act} onDone={() => setEditing(null)} />}
             </li>
           );
         })}
@@ -333,23 +358,41 @@ export function NumbersEditor({ spex }: { spex: SpexEditData }) {
   );
 }
 
-type CreditKind = "lyrics" | "composers" | "arrangers" | "choreographers";
-const CREDIT_KINDS: CreditKind[] = ["lyrics", "composers", "arrangers", "choreographers"];
+/** A number's credits per credit kind, in the server's order (kind, then position). */
+function creditsByKind(number: SpexNumber | undefined): Record<string, CreditValue[]> {
+  return Object.fromEntries(groupBy(number?.credits ?? [], credit => credit.kind.id)
+    .map(([kindId, credits]) => [kindId, [...credits].sort((a, b) => a.position - b.position).map(credit => toCreditValue(credit.credit))]));
+}
 
-function NumberForm({ spex, number, act, onDone }: { spex: SpexEditData; number?: SpexNumber; act: number; onDone: () => void }) {
+function NumberForm({ spex, number, act, numberKinds, creditKinds, onDone }: {
+  spex: SpexEditData;
+  number?: SpexNumber;
+  act: number;
+  numberKinds: EditKind[];
+  creditKinds: EditKind[];
+  onDone: () => void;
+}) {
   const t = useTranslations("Manage");
-  const tc = useTranslations("SpexPage.credits");
   const { save, pending } = useSave();
   const id = number?.id ?? "new";
   const [values, setValues] = useState({
     act: number?.act ?? act,
     title: number?.title ?? "",
+    kindId: number?.kind?.id ?? "",
     originalTitle: number?.originalTitle ?? "",
     originalArtist: number?.originalArtist ?? "",
+    fromWork: number?.fromWork ?? "",
+    firstLine: number?.firstLine ?? "",
   });
-  const [credits, setCredits] = useState<Record<CreditKind, CreditValue[]>>(() => Object.fromEntries(
-    CREDIT_KINDS.map(kind => [kind, (number?.[kind] ?? []).map(toCreditValue)])) as Record<CreditKind, CreditValue[]>);
+  const [credits, setCredits] = useState<Record<string, CreditValue[]>>(() => creditsByKind(number));
   const [characterIds, setCharacterIds] = useState<string[]>(number?.characters.map(c => c.id) ?? []);
+  // Credit kinds in use, and retired ones the number still has credits of
+  const shownCreditKinds = creditKinds.filter(kind => !kind.retired || (credits[kind.id] ?? []).length > 0);
+  const text = (field: keyof typeof values) => ({
+    id: `n${field}-${id}`,
+    value: values[field],
+    onChange: (event: ChangeEvent<HTMLInputElement>) => setValues({ ...values, [field]: event.target.value }),
+  });
 
   return (
     <form className="space-y-3 rounded-md border border-border p-3" onSubmit={async event => {
@@ -357,26 +400,43 @@ function NumberForm({ spex, number, act, onDone }: { spex: SpexEditData; number?
       const input = {
         act: values.act,
         title: values.title.trim(),
+        kindId: values.kindId || null,
         originalTitle: values.originalTitle.trim() || null,
         originalArtist: values.originalArtist.trim() || null,
+        fromWork: values.fromWork.trim() || null,
+        firstLine: values.firstLine.trim() || null,
         characterIds,
-        ...Object.fromEntries(CREDIT_KINDS.map(kind => [kind, credits[kind].map(toCreditInput)])),
+        credits: shownCreditKinds.flatMap(kind => (credits[kind.id] ?? []).map((credit): NumberCreditInput => credit.unresolved
+          ? { kindId: kind.id, name: credit.name ?? "", unresolved: true }
+          : { kindId: kind.id, ...toCreditInput(credit) })),
       };
 
       if (await save(() => saveNumberAction(spex.id, number?.id ?? null, input))) {
         onDone();
       }
     }}>
-      <div className="grid gap-3 sm:grid-cols-[5rem_1fr]">
+      <div className="grid gap-3 sm:grid-cols-[5rem_1fr_12rem]">
         <div className="space-y-1.5"><Label htmlFor={`nact-${id}`}>{t("act")}</Label><Input id={`nact-${id}`} type="number" min={1} max={9} value={values.act} onChange={event => setValues({ ...values, act: Number(event.target.value) })} /></div>
-        <div className="space-y-1.5"><Label htmlFor={`ntitle-${id}`}>{t("title")}</Label><Input id={`ntitle-${id}`} required value={values.title} onChange={event => setValues({ ...values, title: event.target.value })} /></div>
+        <div className="space-y-1.5"><Label htmlFor={`ntitle-${id}`}>{t("title")}</Label><Input required {...text("title")} /></div>
+        <div className="space-y-1.5">
+          <Label htmlFor={`nkind-${id}`}>{t("numberKind")}</Label>
+          <NativeSelect id={`nkind-${id}`} value={values.kindId} onChange={event => setValues({ ...values, kindId: event.target.value })}>
+            <NativeSelectOption value="">{t("none")}</NativeSelectOption>
+            {offeredKinds(numberKinds, number?.kind?.id).map(kind => <NativeSelectOption key={kind.id} value={kind.id}>{kind.name}</NativeSelectOption>)}
+          </NativeSelect>
+        </div>
       </div>
-      <div className="grid gap-3 sm:grid-cols-2">
-        <div className="space-y-1.5"><Label htmlFor={`orig-${id}`}>{t("originalTitle")}</Label><Input id={`orig-${id}`} value={values.originalTitle} onChange={event => setValues({ ...values, originalTitle: event.target.value })} /></div>
-        <div className="space-y-1.5"><Label htmlFor={`artist-${id}`}>{t("originalArtist")}</Label><Input id={`artist-${id}`} value={values.originalArtist} onChange={event => setValues({ ...values, originalArtist: event.target.value })} /></div>
+      <div className="grid gap-3 sm:grid-cols-3">
+        <div className="space-y-1.5"><Label htmlFor={`noriginalTitle-${id}`}>{t("originalTitle")}</Label><Input {...text("originalTitle")} /></div>
+        <div className="space-y-1.5"><Label htmlFor={`noriginalArtist-${id}`}>{t("originalArtist")}</Label><Input {...text("originalArtist")} /></div>
+        <div className="space-y-1.5"><Label htmlFor={`nfromWork-${id}`}>{t("fromWork")}</Label><Input placeholder={t("fromWorkPlaceholder")} {...text("fromWork")} /></div>
       </div>
+      <div className="space-y-1.5"><Label htmlFor={`nfirstLine-${id}`}>{t("firstLine")}</Label><Input maxLength={500} {...text("firstLine")} /></div>
       <div className="grid gap-3 sm:grid-cols-2">
-        {CREDIT_KINDS.map(kind => <CreditPicker key={kind} label={tc(kind)} value={credits[kind]} onChange={value => setCredits({ ...credits, [kind]: value })} />)}
+        {shownCreditKinds.map(kind => (
+          <CreditPicker key={kind.id} label={kind.retired ? `${kind.name} (${t("retired")})` : kind.name} value={credits[kind.id] ?? []}
+                        onChange={value => setCredits({ ...credits, [kind.id]: value })} />
+        ))}
       </div>
       {spex.characters.length > 0 && (
         <fieldset className="space-y-1.5">

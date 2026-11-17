@@ -383,37 +383,7 @@
         "subtitle": "In FGV's other services"
       }
     },
-    "scenography": {
-      "backdrop": "Backdrop",
-      "stage": "Stage",
-      "props": "Props"
-    },
-    "credits": {
-      "lyrics": "Lyrics",
-      "composers": "Music",
-      "arrangers": "Arr.",
-      "choreographers": "Choreography"
-    },
-    "imageKinds": {
-      "POSTER": "Poster",
-      "LOGO": "Logo",
-      "SKETCH": "Sketch",
-      "MAKEUP": "Make-up sketch",
-      "COSTUME": "Costume doll",
-      "SCENOGRAPHY": "Scenography",
-      "REBUS": "Rebus",
-      "VEST": "Vest",
-      "COVER": "Cover",
-      "ARTICLE": "Article image",
-      "OTHER": "Other"
-    },
-    "media": {
-      "LP": "LP",
-      "EP": "EP",
-      "CD": "CD",
-      "DIGITAL": "Digital",
-      "OTHER": "Other"
-    }
+    "fromWork": "from {work}"
   },
   "Photos": {
     "unavailable": "Spexgram cannot be reached right now.",
@@ -591,11 +561,9 @@
     "vestWornBy": "The vest was worn by",
     "saveTexts": "Save the texts",
     "sections": {
-      "BACKDROP": "Backdrop",
-      "STAGE": "Stage",
-      "PROPS": "Props",
       "VEST": "The vest",
-      "OTHER": "Other images"
+      "OTHER": "Other images",
+      "SCENOGRAPHY": "Scenography"
     },
     "rebus": "Programme rebus",
     "rebusSolution": "The rebus's solution",
@@ -647,9 +615,27 @@
       "scenes": "Scenes",
       "numbers": "Numbers",
       "revival": "The revival's changes",
-      "history": "History"
+      "history": "History",
+      "facts": "Facts"
     },
-    "noHistory": "No changes to the texts yet."
+    "noHistory": "No changes to the texts yet.",
+    "unresolved": "unresolved",
+    "unresolvedHelp": "An imported name nobody has resolved yet. Only editors see it; resolve it in the list above the form.",
+    "unresolvedCount": "{count, plural, one {# unresolved credit} other {# unresolved credits}}",
+    "resolve": "Resolve",
+    "resolveSearch": "Search for the spexare “{name}” means",
+    "outsideFgv": "“{name}” is someone outside FGV",
+    "resolved": "Resolved",
+    "numberKind": "Kind",
+    "fromWork": "From",
+    "fromWorkPlaceholder": "e.g. a musical or a film",
+    "firstLine": "First line",
+    "shortDescription": "Short description",
+    "shortDescriptionHelp": "A sentence or two, for lists and the head of the page.",
+    "noFactKinds": "There are no kinds of facts yet; an admin adds them.",
+    "factsRevivalHelp": "A revival without facts of its own shows its original’s; facts saved here become the revival’s own.",
+    "factDateHelp": "A year, a month or a day: 1984, 1984-05 or 1984-05-12.",
+    "saveFacts": "Save facts"
   },
   "BaseData": {
     "title": "Base data",

@@ -39,7 +39,11 @@ graphql(`
 `);
 
 graphql(`
-  fragment PageImageFields on PageImage { kind caption image { ...ImageFields } }
+  fragment KindName on Kind { id name }
+`);
+
+graphql(`
+  fragment PageImageFields on PageImage { kind { ...KindName } caption image { ...ImageFields } }
 `);
 
 graphql(`
@@ -71,13 +75,12 @@ const SpexPageQuery = graphql(`
       previous { id slug title year }
       next { id slug title year }
       page {
-        generation premiere introduction descriptionHtml synopsisHtml vestDescriptionHtml published lastModifiedAt
+        generation premiere introduction shortDescription descriptionHtml synopsisHtml vestDescriptionHtml published lastModifiedAt
+        facts { kind { id name valueType } value }
         vestWornBy { ...CreditFields }
         rebus { ...ImageFields }
         rebusSolution { ...ImageFields }
-        backdrop: images(section: BACKDROP) { ...PageImageFields }
-        stage: images(section: STAGE) { ...PageImageFields }
-        props: images(section: PROPS) { ...PageImageFields }
+        scenography: images(section: SCENOGRAPHY) { ...PageImageFields }
         vest: images(section: VEST) { ...PageImageFields }
         other: images(section: OTHER) { ...PageImageFields }
         groupPhotos: photos(section: GROUP) { ...PhotoSetFields }
@@ -91,15 +94,13 @@ const SpexPageQuery = graphql(`
       }
       scenes { id act position title place intervalAfter }
       numbers {
-        id act position title originalTitle originalArtist retired
-        lyrics { ...CreditFields }
-        composers { ...CreditFields }
-        arrangers { ...CreditFields }
-        choreographers { ...CreditFields }
+        id act position title originalTitle originalArtist fromWork firstLine retired
+        kind { ...KindName }
+        credits { kind { ...KindName } position credit { ...CreditFields unresolved } }
         characters { id name }
         links { kind title url }
       }
-      recordings { id slug title catalogueNumber medium released front { ...ImageFields } }
+      recordings { id slug title catalogueNumber medium { ...KindName } released front { ...ImageFields } }
       people {
         available
         board { spex { id year revival } task { id name } people { ...PersonFields } }
@@ -143,14 +144,14 @@ const FigureQuery = graphql(`
 
 const RecordingsQuery = graphql(`
   query Recordings {
-    recordings { id slug catalogueNumber title medium released published spex { id slug title year } front { ...ImageFields } }
+    recordings { id slug catalogueNumber title medium { ...KindName } released published spex { id slug title year } front { ...ImageFields } }
   }
 `);
 
 const RecordingQuery = graphql(`
   query Recording($id: ID!) {
     recording(id: $id) {
-      id slug catalogueNumber title medium released recorded descriptionHtml published spexifyAlbumId
+      id slug catalogueNumber title medium { ...KindName } released recorded descriptionHtml published spexifyAlbumId
       spex { id slug title year }
       conductor { ...CreditFields }
       tracks { id side position title number { id title spex { id slug } } }
@@ -161,15 +162,47 @@ const RecordingQuery = graphql(`
   }
 `);
 
+graphql(`
+  fragment ArticleLink on Article { id slug title visibility published }
+`);
+
 const ArticlesQuery = graphql(`
-  query Articles($categoryId: ID) {
-    articles(categoryId: $categoryId) { id slug title visibility published lastModifiedAt categories { id slug name } }
-    articleCategories { id slug name description articleCount }
+  query Articles($categoryId: ID, $includeSubcategories: Boolean! = false) {
+    articles(categoryId: $categoryId, includeSubcategories: $includeSubcategories) {
+      ...ArticleLink lastModifiedAt
+      categories { id slug name }
+      parent { id }
+    }
+    articleCategories { id slug name description articleCount parents { id } }
   }
 `);
 
 const ArticleCategoryQuery = graphql(`
-  query ArticleCategory($id: ID!) { articleCategory(id: $id) { id slug name description articleCount } }
+  query ArticleCategory($id: ID!) {
+    articleCategory(id: $id) {
+      id slug name description articleCount
+      parents { id slug name }
+      subcategories { id slug name articleCount }
+    }
+  }
+`);
+
+/** The top of the tree of articles, four levels down; deeper ones are shown beside their own parents. */
+const ArticleTreeQuery = graphql(`
+  query ArticleTree {
+    articleRoots {
+      ...ArticleLink
+      children { ...ArticleLink children { ...ArticleLink children { ...ArticleLink children { id } } } }
+    }
+  }
+`);
+
+const WantedArticlesQuery = graphql(`
+  query WantedArticles { wantedArticles(limit: 500) { title links } }
+`);
+
+const OrphanArticlesQuery = graphql(`
+  query OrphanArticles { orphanArticles { ...ArticleLink categories { id slug name } } }
 `);
 
 const ArticleQuery = graphql(`
@@ -178,6 +211,12 @@ const ArticleQuery = graphql(`
       id slug title body html visibility published trashedAt createdAt lastModifiedAt editingBy
       categories { id slug name }
       revision { ...RevisionFields }
+      parent { id slug title }
+      ancestors { id slug title }
+      children { ...ArticleLink }
+      siblings { ...ArticleLink }
+      backlinks { ...ArticleLink }
+      toc { level anchor text }
     }
   }
 `);
@@ -227,7 +266,11 @@ export const getFigures = async () => (await runQuery(FiguresQuery, {}))?.figure
 export const getFigure = cache(async (id: string) => (await runQuery(FigureQuery, { id }))?.figure ?? null);
 export const getRecordings = async () => (await runQuery(RecordingsQuery, {}))?.recordings ?? [];
 export const getRecording = cache(async (id: string) => (await runQuery(RecordingQuery, { id }))?.recording ?? null);
-export const getArticles = async (categoryId?: string | null) => runQuery(ArticlesQuery, { categoryId: categoryId ?? null });
+export const getArticles = async (categoryId?: string | null, includeSubcategories = false) =>
+  runQuery(ArticlesQuery, { categoryId: categoryId ?? null, includeSubcategories });
+export const getArticleTree = async () => (await runQuery(ArticleTreeQuery, {}))?.articleRoots ?? [];
+export const getWantedArticles = async () => (await runQuery(WantedArticlesQuery, {}))?.wantedArticles ?? [];
+export const getOrphanArticles = async () => (await runQuery(OrphanArticlesQuery, {}))?.orphanArticles ?? [];
 export const getArticleCategory = cache(async (id: string) => (await runQuery(ArticleCategoryQuery, { id }))?.articleCategory ?? null);
 export const getArticle = cache(async (id: string) => (await runQuery(ArticleQuery, { id }))?.article ?? null);
 export const getArticleHistory = async (id: string) => (await runQuery(ArticleHistoryQuery, { id }))?.article ?? null;
@@ -240,3 +283,5 @@ export const markdownPreview = async (markdown: string) => (await runQuery(Markd
 export const spexareSearch = async (q: string) => (await runQuery(SpexareSearchQuery, { q }))?.spexareSearch ?? [];
 
 export type SpexPageData = NonNullable<Awaited<ReturnType<typeof getSpexPage>>>;
+export type ArticleData = NonNullable<Awaited<ReturnType<typeof getArticle>>>;
+export type ArticleTreeData = Awaited<ReturnType<typeof getArticleTree>>;

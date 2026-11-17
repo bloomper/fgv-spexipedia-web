@@ -13,8 +13,9 @@ import { ImageSlot } from "@/components/wiki/editor/image-slot.client";
 import { MarkdownEditor } from "@/components/wiki/editor/markdown-editor.client";
 import { CreditPicker, toCreditInput, toCreditValue, type CreditValue } from "@/components/wiki/editor/credit-picker.client";
 import { useSave } from "@/components/wiki/editor/use-save.client";
-import { createRevivalAction, saveSpexAction, savePageAction, setPagePublishedAction } from "@/app/(app)/manage/actions.server";
-import type { SpexEditData } from "@/lib/wiki/edit.server";
+import { createRevivalAction, saveSpexAction, savePageAction, setFactsAction, setPagePublishedAction } from "@/app/(app)/manage/actions.server";
+import type { EditKind, SpexEditData } from "@/lib/wiki/edit.server";
+import { useServerState } from "@/hooks/use-server-state.client";
 
 /**
  * The spex's base data, for editors: year, title and category (a revival takes its parent's), the poster, and new
@@ -95,6 +96,7 @@ export function SpexTextsEditor({ spex }: { spex: SpexEditData }) {
     generation: page.generation ?? "",
     premiere: page.premiere ?? "",
     introduction: page.introduction ?? "",
+    shortDescription: page.shortDescription ?? "",
     description: page.description ?? "",
     synopsis: page.synopsis ?? "",
     vestDescription: page.vestDescription ?? "",
@@ -109,6 +111,7 @@ export function SpexTextsEditor({ spex }: { spex: SpexEditData }) {
         generation: values.generation.trim() || null,
         premiere: values.premiere || null,
         introduction: values.introduction.trim() || null,
+        shortDescription: values.shortDescription.trim() || null,
         description: values.description.trim() || null,
         synopsis: values.synopsis.trim() || null,
         vestDescription: values.vestDescription.trim() || null,
@@ -142,11 +145,58 @@ export function SpexTextsEditor({ spex }: { spex: SpexEditData }) {
         <Textarea id="introduction" rows={3} maxLength={1000} value={values.introduction} onChange={event => set("introduction")(event.target.value)} />
         <p className="text-xs text-muted-foreground">{t("introductionHelp")}</p>
       </div>
+      <div className="space-y-1.5">
+        <Label htmlFor="shortDescription">{t("shortDescription")}</Label>
+        <Textarea id="shortDescription" rows={2} maxLength={1000} value={values.shortDescription} onChange={event => set("shortDescription")(event.target.value)} />
+        <p className="text-xs text-muted-foreground">{t("shortDescriptionHelp")}</p>
+      </div>
       <MarkdownEditor id="description" label={t("description")} value={values.description} onChange={set("description")} rows={10} />
       <MarkdownEditor id="synopsis" label={t("synopsis")} value={values.synopsis} onChange={set("synopsis")} rows={10} />
       <MarkdownEditor id="vestDescription" label={t("vestDescription")} value={values.vestDescription} onChange={set("vestDescription")} rows={5} />
       <CreditPicker label={t("vestWornBy")} value={wornBy} onChange={setWornBy} single />
       <Button type="submit" disabled={pending}><Save aria-hidden /> {t("saveTexts")}</Button>
+    </form>
+  );
+}
+
+/** What a date fact accepts: as precise as known. */
+const DATE = "\\d{4}(-\\d{2}(-\\d{2})?)?";
+
+/**
+ * The facts of the spex (spec 4.2), one per fact kind in the kinds' order: text, or a date for kinds marked as dates.
+ * A new kind of fact is a kind an admin adds, not a change here. Empty values are left out when saved.
+ */
+export function FactsEditor({ spex, factKinds }: { spex: SpexEditData; factKinds: EditKind[] }) {
+  const t = useTranslations("Manage");
+  const { save, pending } = useSave();
+  const facts = spex.page?.facts ?? [];
+  const [values, setValues] = useServerState<Record<string, string>>(
+    Object.fromEntries(facts.map(fact => [fact.kind.id, fact.value])),
+    value => JSON.stringify(value));
+  const kinds = factKinds.filter(kind => !kind.retired || values[kind.id]);
+
+  if (kinds.length === 0) {
+    return <p className="text-sm text-muted-foreground">{t("noFactKinds")}</p>;
+  }
+  return (
+    <form className="space-y-4" onSubmit={event => {
+      event.preventDefault();
+      void save(() => setFactsAction(spex.id, kinds.map(kind => ({ kindId: kind.id, value: values[kind.id]?.trim() || null }))
+        .filter(fact => fact.value)));
+    }}>
+      {spex.revival && <p className="text-xs text-muted-foreground">{t("factsRevivalHelp")}</p>}
+      <div className="grid gap-4 sm:grid-cols-2">
+        {kinds.map(kind => (
+          <div key={kind.id} className="space-y-1.5">
+            <Label htmlFor={`fact-${kind.id}`}>{kind.name}{kind.retired && ` (${t("retired")})`}</Label>
+            <Input id={`fact-${kind.id}`} maxLength={1000} value={values[kind.id] ?? ""}
+                   {...(kind.valueType === "DATE" ? { pattern: DATE, placeholder: "1984-05-12" } : {})}
+                   onChange={event => setValues({ ...values, [kind.id]: event.target.value })} />
+            {kind.valueType === "DATE" && <p className="text-xs text-muted-foreground">{t("factDateHelp")}</p>}
+          </div>
+        ))}
+      </div>
+      <Button type="submit" disabled={pending}><Save aria-hidden /> {t("saveFacts")}</Button>
     </form>
   );
 }

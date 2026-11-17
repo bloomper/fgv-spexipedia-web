@@ -23,10 +23,19 @@ const character = (id: string, name: string, spex = own) => ({
   id, name, spex, retired: false, description: null, figure: null, images: [], photos: { itemIds: [] },
 });
 const scene = (id: string, title: string, act = 1, spex = own) => ({ id, title, act, place: "Torget", intervalAfter: act === 1, spex });
+const kind = (id: string, name: string, retired = false) => ({ id, name, retired, valueType: null });
+const numberKinds = [kind("nk1", "Sång"), kind("nk2", "Final"), kind("nk3", "Gammal", true)];
+const creditKinds = [kind("ck1", "Text"), kind("ck2", "Musik"), kind("ck3", "Koreografi", true)];
+const imageKinds = [kind("ik1", "Skiss")];
 const number = (id: string, title: string, act = 1, spex = own) => ({
-  id, title, act, spex, retired: false, originalTitle: "Dancing Queen", originalArtist: "ABBA",
-  lyrics: [{ name: null, person: { id: "p-1", name: "Anna", nickname: null } }], composers: [{ name: "Benny", person: null }],
-  arrangers: [], choreographers: [], characters: [{ id: "c1" }],
+  id, title, act, spex, retired: false, originalTitle: "Dancing Queen", originalArtist: "ABBA", fromWork: null, firstLine: null,
+  kind: { id: "nk1" },
+  credits: [
+    { kind: { id: "ck1" }, position: 0, credit: { name: null, unresolved: false, person: { id: "p-1", name: "Anna", nickname: null } } },
+    { kind: { id: "ck1" }, position: 1, credit: { name: "Kalle K", unresolved: true, person: null } },
+    { kind: { id: "ck2" }, position: 0, credit: { name: "Benny", unresolved: false, person: null } },
+  ],
+  characters: [{ id: "c1" }],
 });
 
 const spex = (extra: Partial<SpexEditData> = {}) => ({
@@ -46,7 +55,7 @@ describe("The spex list editors", () => {
   });
 
   it("add a character with a figure, and edit one", async () => {
-    show(<CharactersEditor spex={spex()} figures={[{ id: "f1", name: "Bellman" }]} editor />);
+    show(<CharactersEditor spex={spex()} imageKinds={imageKinds} figures={[{ id: "f1", name: "Bellman" }]} editor />);
 
     await userEvent.click(screen.getByRole("button", { name: "addCharacter" }));
     await userEvent.type(screen.getByLabelText("name"), "Drottningen");
@@ -65,7 +74,7 @@ describe("The spex list editors", () => {
   });
 
   it("move, paste and delete the spex's own characters, not the parent's", async () => {
-    show(<CharactersEditor spex={spex()} figures={[]} editor />);
+    show(<CharactersEditor spex={spex()} imageKinds={imageKinds} figures={[]} editor />);
 
     expect(screen.getByText("fromParent")).toBeInTheDocument();
     expect(screen.getAllByRole("button", { name: "moveDown" })).toHaveLength(2);
@@ -84,7 +93,7 @@ describe("The spex list editors", () => {
 
   it("show the server's message when it refuses", async () => {
     actions.deleteCharacterAction = vi.fn(() => Promise.resolve({ ok: false, code: "BAD_REQUEST", message: "Karaktären används." }));
-    show(<CharactersEditor spex={spex()} figures={[]} editor />);
+    show(<CharactersEditor spex={spex()} imageKinds={imageKinds} figures={[]} editor />);
 
     await userEvent.click(screen.getAllByRole("button", { name: "delete" })[0]);
     await userEvent.click(within(await screen.findByRole("dialog")).getByRole("button", { name: "delete" }));
@@ -93,7 +102,7 @@ describe("The spex list editors", () => {
   });
 
   it("let authors who are not editors change only images", () => {
-    show(<CharactersEditor spex={spex()} figures={[]} editor={false} />);
+    show(<CharactersEditor spex={spex()} imageKinds={imageKinds} figures={[]} editor={false} />);
 
     expect(screen.queryByRole("button", { name: "addCharacter" })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "edit" })).not.toBeInTheDocument();
@@ -121,18 +130,23 @@ describe("The spex list editors", () => {
   });
 
   it("save a number with its credits and singers", async () => {
-    show(<NumbersEditor spex={spex()} />);
+    show(<NumbersEditor spex={spex()} numberKinds={numberKinds} creditKinds={creditKinds} />);
 
     expect(screen.getAllByText("(Dancing Queen – ABBA)")).toHaveLength(2);
     await userEvent.click(screen.getAllByRole("button", { name: "edit" })[0]);
     await userEvent.clear(screen.getByLabelText("title"));
     await userEvent.type(screen.getByLabelText("title"), "Entrén");
+    expect(screen.queryByRole("option", { name: "Gammal" })).not.toBeInTheDocument();
+    expect(screen.queryByText("Koreografi")).not.toBeInTheDocument();
+    await userEvent.selectOptions(screen.getByLabelText("numberKind"), "nk2");
+    await userEvent.type(screen.getByLabelText("fromWork"), "Mamma Mia");
     await userEvent.click(screen.getByRole("checkbox", { name: "Kungen" }));
     await userEvent.click(screen.getByRole("button", { name: "save" }));
 
     await waitFor(() => expect(actions.saveNumberAction).toHaveBeenCalledWith("s1", "n1", expect.objectContaining({
-      act: 1, title: "Entrén", originalTitle: "Dancing Queen", originalArtist: "ABBA", characterIds: ["c1", "c2"],
-      lyrics: [{ spexareId: "p-1" }], composers: [{ name: "Benny" }], arrangers: [], choreographers: [],
+      act: 1, title: "Entrén", kindId: "nk2", originalTitle: "Dancing Queen", originalArtist: "ABBA", fromWork: "Mamma Mia",
+      firstLine: null, characterIds: ["c1", "c2"],
+      credits: [{ kindId: "ck1", spexareId: "p-1" }, { kindId: "ck1", name: "Kalle K", unresolved: true }, { kindId: "ck2", name: "Benny" }],
     })));
 
     await userEvent.click(screen.getAllByRole("button", { name: "delete" })[1]);
@@ -140,8 +154,24 @@ describe("The spex list editors", () => {
     await waitFor(() => expect(actions.deleteNumberAction).toHaveBeenCalledWith("n2"));
   });
 
+  it("resolve an imported credit as a spexare or as someone outside FGV", async () => {
+    actions.searchSpexareAction = vi.fn(() => Promise.resolve({ ok: true, data: [{ id: "p-7", label: "Karl Karlsson" }] }));
+    show(<NumbersEditor spex={spex()} numberKinds={numberKinds} creditKinds={creditKinds} />);
+
+    expect(screen.getAllByText("unresolvedCount:{\"count\":1}")).toHaveLength(2);
+    await userEvent.click(screen.getAllByRole("button", { name: "resolve" })[0]);
+    await waitFor(() => expect(actions.searchSpexareAction).toHaveBeenCalledWith("Kalle K"));
+    await userEvent.click(await screen.findByRole("button", { name: "Karl Karlsson" }));
+    await waitFor(() => expect(actions.resolveCreditAction).toHaveBeenCalledWith("n1", "ck1", 1, { spexareId: "p-7" }));
+    expect(toast.success).toHaveBeenCalledWith("resolved");
+
+    await userEvent.click(screen.getAllByRole("button", { name: "resolve" })[0]);
+    await userEvent.click(screen.getByRole("button", { name: "outsideFgv:{\"name\":\"Kalle K\"}" }));
+    await waitFor(() => expect(actions.resolveCreditAction).toHaveBeenCalledWith("n1", "ck1", 1, { name: "Kalle K" }));
+  });
+
   it("add numbers and reorder them", async () => {
-    show(<NumbersEditor spex={spex()} />);
+    show(<NumbersEditor spex={spex()} numberKinds={numberKinds} creditKinds={creditKinds} />);
 
     await userEvent.click(screen.getByRole("button", { name: "addNumber" }));
     await userEvent.type(screen.getByLabelText("title"), "Ny visa");

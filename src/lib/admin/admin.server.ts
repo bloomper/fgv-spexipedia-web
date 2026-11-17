@@ -2,7 +2,7 @@ import "server-only";
 
 import { graphql } from "@/gql";
 import { runMutation, runQuery } from "@/lib/graphql.server";
-import type { AuditFilter, MaintenanceJob, SettingsInput, SyncConsumerInput, RedirectInput } from "@/gql/graphql";
+import type { AuditFilter, KindInput, KindType, KindUse, MaintenanceJob, SettingsInput, SyncConsumerInput, RedirectInput } from "@/gql/graphql";
 
 const AuditLogQuery = graphql(`
     query AuditLog($page: Int!, $size: Int!, $filter: AuditFilter) {
@@ -66,3 +66,32 @@ export const syncConsumerDelete = (id: string) => runMutation(SyncConsumerDelete
 export const getRedirects = async () => (await runQuery(RedirectsQuery, {}))?.redirects ?? [];
 export const redirectSave = (input: RedirectInput) => runMutation(RedirectSaveMutation, { input });
 export const redirectDelete = (id: string) => runMutation(RedirectDeleteMutation, { id });
+
+// Kinds (spec 4.6) ---------------------------------------------------------------------------------------------------------
+
+const KindsQuery = graphql(`
+    query AdminKinds($type: KindType!, $use: KindUse) {
+        kinds(type: $type, use: $use, includeRetired: true) { id type use valueType name nameSv nameEn aliases position retired }
+    }
+`);
+const KindSaveMutation = graphql(`
+    mutation KindSave($id: ID, $input: KindInput!) { kindSave(id: $id, input: $input) { id } }
+`);
+const KindsReorderMutation = graphql(`
+    mutation KindsReorder($type: KindType!, $use: KindUse, $ids: [ID!]!) { kindsReorder(type: $type, use: $use, ids: $ids) { id } }
+`);
+const KindRetireMutation = graphql(`
+    mutation KindRetire($id: ID!, $retired: Boolean!) { kindRetire(id: $id, retired: $retired) { id } }
+`);
+const KindMergeMutation = graphql(`
+    mutation KindMerge($id: ID!, $intoId: ID!) { kindMerge(id: $id, intoId: $intoId) { id } }
+`);
+
+/** Every kind of a type (and, for image kinds, a use), retired ones included, in order. */
+export const getKinds = async (type: KindType, use: KindUse | null = null) => (await runQuery(KindsQuery, { type, use }))?.kinds ?? [];
+export const kindSave = (id: string | null, input: KindInput) => runMutation(KindSaveMutation, { id, input });
+export const kindsReorder = (type: KindType, use: KindUse | null, ids: string[]) => runMutation(KindsReorderMutation, { type, use, ids });
+export const kindRetire = (id: string, retired: boolean) => runMutation(KindRetireMutation, { id, retired });
+export const kindMerge = (id: string, intoId: string) => runMutation(KindMergeMutation, { id, intoId });
+
+export type AdminKind = Awaited<ReturnType<typeof getKinds>>[number];

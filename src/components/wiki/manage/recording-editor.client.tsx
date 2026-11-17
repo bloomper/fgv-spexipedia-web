@@ -20,10 +20,8 @@ import {
   setRecordingPublishedAction,
   setTracksAction,
 } from "@/app/(app)/manage/actions.server";
-import type { RecordingEditData } from "@/lib/wiki/edit.server";
-import type { Medium } from "@/gql/graphql";
-
-const MEDIA: Medium[] = ["LP", "EP", "CD", "DIGITAL", "OTHER"];
+import type { EditKind, RecordingEditData } from "@/lib/wiki/edit.server";
+import { defaultKindId, offeredKinds } from "@/utils/kinds";
 const DATE = "\\d{4}(-\\d{2}(-\\d{2})?)?";
 
 type SpexOption = { id: string; label: string };
@@ -31,12 +29,11 @@ type SpexOption = { id: string; label: string };
 /**
  * A new recording: catalogue number, title, medium and spex; the rest is edited on its own page.
  */
-export function NewRecordingForm({ spex }: { spex: SpexOption[] }) {
+export function NewRecordingForm({ spex, media }: { spex: SpexOption[]; media: EditKind[] }) {
   const t = useTranslations("ManageRecordings");
-  const tm = useTranslations("SpexPage.media");
   const router = useRouter();
   const { save, pending } = useSave();
-  const [values, setValues] = useState({ catalogueNumber: "", title: "", medium: "LP" as Medium, spexId: "" });
+  const [values, setValues] = useState({ catalogueNumber: "", title: "", mediumId: defaultKindId(media) ?? "", spexId: "" });
 
   return (
     <form className="flex flex-wrap items-end gap-3 rounded-lg border border-border p-3" onSubmit={event => {
@@ -46,8 +43,8 @@ export function NewRecordingForm({ spex }: { spex: SpexOption[] }) {
       <Label className="flex-col items-start">{t("catalogueNumber")}<Input required className="w-32" value={values.catalogueNumber} onChange={event => setValues({ ...values, catalogueNumber: event.target.value })} /></Label>
       <Label className="flex-1 flex-col items-start">{t("recordingTitle")}<Input required value={values.title} onChange={event => setValues({ ...values, title: event.target.value })} /></Label>
       <Label className="flex-col items-start">{t("medium")}
-        <NativeSelect value={values.medium} onChange={event => setValues({ ...values, medium: event.target.value as Medium })}>
-          {MEDIA.map(medium => <NativeSelectOption key={medium} value={medium}>{tm(medium)}</NativeSelectOption>)}
+        <NativeSelect required value={values.mediumId} onChange={event => setValues({ ...values, mediumId: event.target.value })}>
+          {offeredKinds(media).map(medium => <NativeSelectOption key={medium.id} value={medium.id}>{medium.name}</NativeSelectOption>)}
         </NativeSelect>
       </Label>
       <Label className="flex-col items-start">{t("spex")}
@@ -63,16 +60,15 @@ export function NewRecordingForm({ spex }: { spex: SpexOption[] }) {
 
 type TrackRow = { side: string; numberId: string; title: string };
 
-export function RecordingEditor({ recording, spex }: { recording: RecordingEditData; spex: SpexOption[] }) {
+export function RecordingEditor({ recording, spex, media }: { recording: RecordingEditData; spex: SpexOption[]; media: EditKind[] }) {
   const t = useTranslations("ManageRecordings");
-  const tm = useTranslations("SpexPage.media");
   const router = useRouter();
   const { confirm } = useDialogs();
   const { save, pending } = useSave();
   const [values, setValues] = useState({
     catalogueNumber: recording.catalogueNumber,
     title: recording.title,
-    medium: recording.medium,
+    mediumId: recording.medium.id,
     spexId: recording.spex?.id ?? "",
     released: recording.released ?? "",
     recorded: recording.recorded ?? "",
@@ -87,7 +83,7 @@ export function RecordingEditor({ recording, spex }: { recording: RecordingEditD
   const input = (front: string | null | undefined, back: string | null | undefined) => ({
     catalogueNumber: values.catalogueNumber.trim(),
     title: values.title.trim(),
-    medium: values.medium,
+    mediumId: values.mediumId,
     spexId: values.spexId || null,
     released: values.released || null,
     recorded: values.recorded || null,
@@ -128,8 +124,8 @@ export function RecordingEditor({ recording, spex }: { recording: RecordingEditD
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
             <Label className="flex-col items-start">{t("medium")}
-              <NativeSelect value={values.medium} onChange={event => setValues({ ...values, medium: event.target.value as Medium })}>
-                {MEDIA.map(medium => <NativeSelectOption key={medium} value={medium}>{tm(medium)}</NativeSelectOption>)}
+              <NativeSelect value={values.mediumId} onChange={event => setValues({ ...values, mediumId: event.target.value })}>
+                {offeredKinds(media, recording.medium.id).map(medium => <NativeSelectOption key={medium.id} value={medium.id}>{medium.name}</NativeSelectOption>)}
               </NativeSelect>
             </Label>
             <Label className="flex-col items-start">{t("spex")}
