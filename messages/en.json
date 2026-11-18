@@ -697,7 +697,42 @@
     "revivals": "Revivals",
     "editingRevival": "You are editing the {year} revival. What it does not change is shown from the {originalYear} original: leave texts and facts empty to take the original’s, and cut under The revival’s changes what was left out.",
     "retireRevival": "Retire the revival",
-    "unretireRevival": "Restore the revival"
+    "unretireRevival": "Restore the revival",
+    "completeness": {
+      "title": "Filled in",
+      "total": "{percent}% of the page is filled in",
+      "help": "How much of the page is filled in. Open a section to see what is missing.",
+      "revivalHelp": "What the revival has of its own; the rest comes from the original.",
+      "missing": "Missing:",
+      "partly": "{item} ({percent}%)",
+      "goTo": "Go to {section}",
+      "items": {
+        "poster": "poster",
+        "premiere": "premiere",
+        "introduction": "introduction",
+        "shortDescription": "short description",
+        "description": "description",
+        "synopsis": "synopsis",
+        "vestDescription": "spex vest",
+        "vestWornBy": "who wore the vest",
+        "facts": "facts",
+        "scenography": "scenography images",
+        "vest": "images of the vest",
+        "rebus": "programme rebus",
+        "rebusSolution": "rebus solution",
+        "groupPhotos": "group photo",
+        "boardPhotos": "photo of the board",
+        "characters": "characters",
+        "characterDescriptions": "character descriptions",
+        "characterImages": "character images",
+        "scenes": "scenes",
+        "scenePlaces": "scene places",
+        "numbers": "numbers",
+        "numberOriginals": "original songs",
+        "numberCredits": "credits of the numbers",
+        "numberCharacters": "characters in the numbers"
+      }
+    }
   },
   "BaseData": {
     "title": "Base data",

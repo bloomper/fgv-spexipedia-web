@@ -697,7 +697,42 @@
     "revivals": "Nyuppsättningar",
     "editingRevival": "Du redigerar nyuppsättningen {year}. Det den inte ändrar visas från uruppsättningen {originalYear}: lämna texter och fakta tomma för att ta uruppsättningens, och stryk under Nyuppsättningens ändringar det som inte var med.",
     "retireRevival": "Deaktivera nyuppsättningen",
-    "unretireRevival": "Aktivera nyuppsättningen"
+    "unretireRevival": "Aktivera nyuppsättningen",
+    "completeness": {
+      "title": "Ifyllt",
+      "total": "{percent} % av sidan är ifyllt",
+      "help": "Hur mycket av sidan som är ifyllt. Öppna ett avsnitt för att se vad som saknas.",
+      "revivalHelp": "Det nyuppsättningen själv har; resten tas från originalet.",
+      "missing": "Saknas:",
+      "partly": "{item} ({percent} %)",
+      "goTo": "Till {section}",
+      "items": {
+        "poster": "affisch",
+        "premiere": "premiär",
+        "introduction": "ingress",
+        "shortDescription": "kort beskrivning",
+        "description": "beskrivning",
+        "synopsis": "handling",
+        "vestDescription": "spexvästen",
+        "vestWornBy": "vem som bar västen",
+        "facts": "fakta",
+        "scenography": "scenografibilder",
+        "vest": "bilder på västen",
+        "rebus": "programrebus",
+        "rebusSolution": "rebusens lösning",
+        "groupPhotos": "gruppbild",
+        "boardPhotos": "bild på direktionen",
+        "characters": "roller",
+        "characterDescriptions": "rollbeskrivningar",
+        "characterImages": "rollbilder",
+        "scenes": "scener",
+        "scenePlaces": "scenernas platser",
+        "numbers": "nummer",
+        "numberOriginals": "originallåtar",
+        "numberCredits": "medverkande i numren",
+        "numberCharacters": "roller i numren"
+      }
+    }
   },
   "BaseData": {
     "title": "Basdata",
