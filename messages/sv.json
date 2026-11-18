@@ -272,7 +272,6 @@
     "recordings": "Inspelningar",
     "articles": "Artiklar",
     "search": "Sök",
-    "recentChanges": "Senaste ändringar",
     "manage": "Redigera",
     "baseData": "Basdata",
     "manageRecordings": "Inspelningar",
@@ -285,7 +284,7 @@
     "adminMaintenance": "Underhåll",
     "unresolvedCredits": "Olösta medverkande",
     "adminKinds": "Sorter",
-    "packages": "Spexpaket",
+    "packages": "Importera",
     "books": "Böcker",
     "manageBooks": "Böcker"
   },
@@ -296,8 +295,7 @@
     "thisDay": "Den här dagen i historien",
     "decade": "{decade}-talet",
     "allSpex": "Alla spex",
-    "recentChanges": "Senast ändrat",
-    "allChanges": "Alla ändringar"
+    "recentChanges": "Senast ändrat"
   },
   "Browse": {
     "title": "Spex",
@@ -437,12 +435,7 @@
     "restore": "Återställ",
     "restored": "Versionen är återställd",
     "hide": "Dölj texten",
-    "unhide": "Visa texten",
-    "recentTitle": "Senaste ändringar",
-    "recentDescription": "Alla ändringar i artiklar och spexsidor som du får se, de senaste först.",
-    "pages": "Sidor",
-    "newer": "Nyare",
-    "older": "Äldre"
+    "unhide": "Visa texten"
   },
   "Recordings": {
     "title": "Inspelningar",
@@ -924,16 +917,16 @@
     "resolved": "Löst"
   },
   "Packages": {
-    "title": "Spexpaket",
+    "title": "Importera",
     "description": "Ett nytt spex i alla FGV:s applikationer ur ett kalkylark och en zip: förhandsgranska vad som händer i varje applikation, och tillämpa sedan.",
     "template": "Ladda ner mallen",
-    "new": "Nytt spexpaket",
+    "new": "Ny import",
     "newDescription": "Fyll i mallen och lägg filerna (affischer, bilder, manus, inspelningar, foton) i en zip. Zippen kan vara upp till 20 GB; laddas den inte upp helt kan du fortsätta senare.",
-    "empty": "Inga spexpaket än.",
-    "back": "Alla spexpaket",
+    "empty": "Inga importer än.",
+    "back": "Alla importer",
     "appliedAt": "tillämpat {at}",
     "spexLink": "Spexet: {title} ({year})",
-    "previewFirst": "Förhandsgranska paketet för att se vad som händer i varje applikation innan det tillämpas.",
+    "previewFirst": "Förhandsgranska importen för att se vad som händer i varje applikation innan det tillämpas.",
     "results": "Resultat",
     "previewHeading": "Förhandsgranskning",
     "states": {
@@ -982,7 +975,7 @@
     "stop": "Avbryt",
     "uploaded": "Uppladdat",
     "uploadFailed": "Uppladdningen misslyckades: {message}",
-    "zipFailed": "Zippen kom inte fram helt ({message}); fortsätt på paketets sida.",
+    "zipFailed": "Zippen kom inte fram helt ({message}); fortsätt på importens sida.",
     "zipIncomplete": "Zippen {name} har inte kommit fram helt.",
     "pickSameZip": "Välj samma zip igen så fortsätter uppladdningen där den slutade.",
     "notTheSameZip": "Det är inte samma zip: väntade {name} på {size}.",
@@ -990,12 +983,12 @@
     "previewStarted": "Förhandsgranskningen har börjat",
     "apply": "Tillämpa",
     "applyAgain": "Tillämpa igen",
-    "applyTitle": "Tillämpa spexpaketet?",
+    "applyTitle": "Tillämpa importen?",
     "applyText": "Spexipedia först, sedan de andra applikationerna. Det går att tillämpa igen; det som redan finns ändras inte två gånger.",
     "applyStarted": "Tillämpningen har börjat",
     "delete": "Radera",
-    "deleteTitle": "Radera spexpaketet?",
-    "deleteText": "Paketet och dess filer tas bort. Det som det har skapat finns kvar.",
-    "deleted": "Spexpaketet är raderat"
+    "deleteTitle": "Radera importen?",
+    "deleteText": "Importen och dess filer tas bort. Det som den har skapat finns kvar.",
+    "deleted": "Importen är raderad"
   }
 }

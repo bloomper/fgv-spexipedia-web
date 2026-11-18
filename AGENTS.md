@@ -51,7 +51,7 @@ without a token too, with what is public) and its `POST /api/images`; images com
   only; the server never sends them names. `getViewer()` (`src/lib/wiki/viewer.server.ts`) says `loggedIn`, `member`,
   `author`, `editor`, `admin`; it only decides what to show.
 - **Members** (`USER`) also see names (with links to Spexregister), members' articles and photos from Spexgram, write
-  articles and follow *Senaste ändringar*.
+  articles and see the latest changes on the start page.
 - **Authors** write spex page texts, images and photos and publish articles; **editors** keep base data and the
   structured parts; **admins** retire and merge base data, keep redirects, notify recipients, settings and maintenance.
 - Not found and not allowed look the same: an article a visitor may not see shows `LoginPrompt`.
@@ -79,7 +79,7 @@ without a token too, with what is public) and its `POST /api/images`; images com
 - **Kinds** (number, credit, medium, image per use, fact) are data: pages read them from `kinds(type, use)`, editors
   are offered those in use (`src/utils/kinds.ts`), admins keep them at `/admin/kinds`. Only the schema's enums (types,
   uses, value types) appear in code. Imported credits nobody resolved are shown to editors only (`/manage/credits`).
-- **Spex packages** (`/manage/packages`, editors): a spreadsheet and an optional zip of up to 20 GB become a spex in
+- **Importera** (spex packages in code; `/manage/packages`, editors): a spreadsheet and an optional zip of up to 20 GB become a spex in
   every application. The files go through `/api/packages` (`src/lib/http/packages.server.ts`), streamed to the server
   with the user's token; the zip in 32 MB parts at the server's `Upload-Offset`, resumable
   (`src/components/wiki/packages/package-upload.client.ts`). The zip parts skip `src/proxy.ts` (its matcher), which

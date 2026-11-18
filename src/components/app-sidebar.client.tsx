@@ -5,7 +5,6 @@ import { useMemo } from "react";
 import {
   BookOpen,
   BookText,
-  Clock,
   Disc3,
   Drama,
   House,
@@ -35,7 +34,7 @@ import {
 import { Logo } from "@/components/logo";
 import { LogoText } from "@/components/logo-text";
 import { Role } from "@/types/auth";
-import { hasAccess, isAdmin, isAuthor, isEditor } from "@/utils/auth";
+import { isAdmin, isAuthor, isEditor } from "@/utils/auth";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useIsClient } from "@/hooks/use-is-client.client";
@@ -80,11 +79,6 @@ export function AppSidebar({ roles, accountUrl, user, ...props }: AppSidebarProp
       { title: t("Nav.books"), url: "/books", icon: BookText, isActive: pathname.startsWith("/books") },
       { title: t("Nav.articles"), url: "/articles", icon: BookOpen, isActive: pathname.startsWith("/articles") },
     ];
-
-    // Members follow what is written
-    if (hasAccess(roles)) {
-      mainItems.push({ title: t("Nav.recentChanges"), url: "/recent-changes", icon: Clock, isActive: pathname.startsWith("/recent-changes") });
-    }
 
     if (isAuthor(roles)) {
       const items: NavItem[] = [];

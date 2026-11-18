@@ -79,7 +79,7 @@ export default async function HomePage() {
       ))}
 
       {start && start.recentChanges.length > 0 && (
-        <HomeSection id="recent" title={t("recentChanges")} more={{ href: "/recent-changes", label: t("allChanges") }}>
+        <HomeSection id="recent" title={t("recentChanges")}>
           <RevisionList revisions={start.recentChanges.slice(0, 10)} />
         </HomeSection>
       )}

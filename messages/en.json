@@ -272,7 +272,6 @@
     "recordings": "Recordings",
     "articles": "Articles",
     "search": "Search",
-    "recentChanges": "Recent changes",
     "manage": "Edit",
     "baseData": "Base data",
     "manageRecordings": "Recordings",
@@ -285,7 +284,7 @@
     "adminMaintenance": "Maintenance",
     "unresolvedCredits": "Unresolved credits",
     "adminKinds": "Kinds",
-    "packages": "Spex packages",
+    "packages": "Import",
     "books": "Books",
     "manageBooks": "Books"
   },
@@ -296,8 +295,7 @@
     "thisDay": "This day in history",
     "decade": "The {decade}s",
     "allSpex": "All spex",
-    "recentChanges": "Recently changed",
-    "allChanges": "All changes"
+    "recentChanges": "Recently changed"
   },
   "Browse": {
     "title": "Spex",
@@ -437,12 +435,7 @@
     "restore": "Restore",
     "restored": "The revision is restored",
     "hide": "Hide the text",
-    "unhide": "Show the text",
-    "recentTitle": "Recent changes",
-    "recentDescription": "Every change to articles and spex pages you may see, newest first.",
-    "pages": "Pages",
-    "newer": "Newer",
-    "older": "Older"
+    "unhide": "Show the text"
   },
   "Recordings": {
     "title": "Recordings",
@@ -924,16 +917,16 @@
     "resolved": "Resolved"
   },
   "Packages": {
-    "title": "Spex packages",
+    "title": "Import",
     "description": "A new spex in every FGV application from a spreadsheet and a zip: preview what happens in each application, then apply it.",
     "template": "Download the template",
-    "new": "New spex package",
+    "new": "New import",
     "newDescription": "Fill in the template and put the files (posters, images, manuscripts, recordings, photos) in a zip. The zip may be up to 20 GB; if it does not all upload, you can continue later.",
-    "empty": "No spex packages yet.",
-    "back": "All spex packages",
+    "empty": "No imports yet.",
+    "back": "All imports",
     "appliedAt": "applied {at}",
     "spexLink": "The spex: {title} ({year})",
-    "previewFirst": "Preview the package to see what happens in each application before it is applied.",
+    "previewFirst": "Preview the import to see what happens in each application before it is applied.",
     "results": "Results",
     "previewHeading": "Preview",
     "states": {
@@ -982,7 +975,7 @@
     "stop": "Stop",
     "uploaded": "Uploaded",
     "uploadFailed": "The upload failed: {message}",
-    "zipFailed": "The zip did not all arrive ({message}); continue on the package’s page.",
+    "zipFailed": "The zip did not all arrive ({message}); continue on the import’s page.",
     "zipIncomplete": "The zip {name} has not all arrived.",
     "pickSameZip": "Pick the same zip again and the upload continues where it stopped.",
     "notTheSameZip": "That is not the same zip: expected {name} of {size}.",
@@ -990,12 +983,12 @@
     "previewStarted": "The preview has started",
     "apply": "Apply",
     "applyAgain": "Apply again",
-    "applyTitle": "Apply the spex package?",
+    "applyTitle": "Apply the import?",
     "applyText": "Spexipedia first, then the other applications. It can be applied again; what is already there is not changed twice.",
     "applyStarted": "Applying has started",
     "delete": "Delete",
-    "deleteTitle": "Delete the spex package?",
-    "deleteText": "The package and its files are deleted. What it created stays.",
-    "deleted": "The spex package is deleted"
+    "deleteTitle": "Delete the import?",
+    "deleteText": "The import and its files are deleted. What it created stays.",
+    "deleted": "The import is deleted"
   }
 }

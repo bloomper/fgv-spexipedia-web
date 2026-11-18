@@ -234,12 +234,6 @@ const RevisionQuery = graphql(`
   query Revision($id: ID!) { revision(id: $id) { ...RevisionFields body } }
 `);
 
-const RecentChangesQuery = graphql(`
-  query RecentChanges($page: Int!, $size: Int!) {
-    recentChanges(page: $page, size: $size) { totalCount page size entries { ...RevisionFields } }
-  }
-`);
-
 const SearchQuery = graphql(`
   query Search($q: String!) { search(q: $q) { kind id title context path } }
 `);
@@ -278,7 +272,6 @@ export const getArticleCategory = cache(async (id: string) => (await runQuery(Ar
 export const getArticle = cache(async (id: string) => (await runQuery(ArticleQuery, { id }))?.article ?? null);
 export const getArticleHistory = async (id: string) => (await runQuery(ArticleHistoryQuery, { id }))?.article ?? null;
 export const getRevision = async (id: string) => (await runQuery(RevisionQuery, { id }))?.revision ?? null;
-export const getRecentChanges = async (page: number, size = 50) => (await runQuery(RecentChangesQuery, { page, size }))?.recentChanges;
 export const search = async (q: string) => (await runQuery(SearchQuery, { q }))?.search ?? [];
 export const getSitemap = async () => (await runQuery(SitemapQuery, {}))?.sitemap ?? [];
 export const getRedirect = async (title: string) => (await runQuery(RedirectQuery, { title }))?.redirect ?? null;

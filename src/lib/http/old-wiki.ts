@@ -6,7 +6,7 @@
 
 /** The first path segments that are Spexipedia's own, which are never old titles. */
 const OWN = new Set([
-  "", "spex", "books", "categories", "recordings", "articles", "search", "recent-changes", "manage", "admin", "about",
+  "", "spex", "books", "categories", "recordings", "articles", "search", "manage", "admin", "about",
   "support", "api", "stats", "login-error", "no-access", "sitemap.xml", "robots.txt", "manifest.webmanifest",
   "favicon.ico", "icon.svg", "_next",
 ]);

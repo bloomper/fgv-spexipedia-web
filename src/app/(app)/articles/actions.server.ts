@@ -43,7 +43,7 @@ export async function saveArticleAction(id: string | null, input: ArticleInput, 
     const saved = id ? await articleUpdate(id, input, baseRevisionId) : await articleCreate(input);
 
     revalidatePath("/articles", "layout");
-    revalidatePath("/recent-changes");
+    revalidatePath("/");
     return { slug: saved.slug };
   });
 }
@@ -98,7 +98,7 @@ export async function setRevisionHiddenAction(id: string, hidden: boolean): Prom
   return author(async () => {
     await revisionSetHidden(id, hidden);
     revalidatePath("/articles", "layout");
-    revalidatePath("/recent-changes");
+    revalidatePath("/");
     return null;
   });
 }
