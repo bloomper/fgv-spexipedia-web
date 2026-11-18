@@ -23,7 +23,8 @@ without a token too, with what is public) and its `POST /api/images`; images com
 - `npm run test` (Vitest); `npm run test:e2e` (Playwright, against `e2e/mock-backend.mjs`, which replays the local API's
   answers in `e2e/recorded.json` and adds sample spexare as the server shows them). A visitor must see no sample
   spexare's name on any public page, nor after a member viewed it. Record again with the API running locally on sample
-  data: `MOCK_RECORD_FROM=http://localhost:8088/api/graphql npm run test:e2e`.
+  data and `API_MEDIA_BASE_URL=http://localhost:8089/media` (CI must be refused the images at once, or pages never finish
+  loading): `MOCK_RECORD_FROM=http://localhost:8088/api/graphql npm run test:e2e`.
   The `mobile` project (Pixel 7) runs `e2e/mobile.spec.ts`: no page wider than the screen down to 320 pixels, and the
   spex page's section bar.
 - `npm run gql-codegen` — regenerate `src/gql/` from the sibling `../fgv-spexipedia-server` checkout. Commit the result.

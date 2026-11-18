@@ -30,7 +30,9 @@ const appEnv: Record<string, string> = {
 /**
  * The tests run against a stand-in for Spexipedia Server and Keycloak (e2e/mock-backend.mjs), which answers with what
  * the real server answered visitors for the sample data (e2e/recorded.json). To record again, run the API locally with
- * sample data and `MOCK_RECORD_FROM=http://localhost:8088/api/graphql npm run test:e2e`.
+ * sample data and
+ * `API_MEDIA_BASE_URL=http://localhost:8089/media` (an address CI refuses at once, so pages finish loading), then
+ * `MOCK_RECORD_FROM=http://localhost:8088/api/graphql npm run test:e2e`.
  */
 export default defineConfig({
   testDir: "./e2e",
