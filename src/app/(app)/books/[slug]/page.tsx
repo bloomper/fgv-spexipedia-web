@@ -42,7 +42,7 @@ export default async function BookPage({ params }: Props) {
         {book.cover ? <ImageGallery images={[{ image: book.cover, caption: null }]} columns={2} className="md:grid-cols-1" /> : <div className="max-md:hidden" />}
         <div className="space-y-3">
           <p className="text-sm tracking-[0.25em] text-primary">{book.kind.name}{book.publishedYear && ` · ${book.publishedYear}`}</p>
-          <h1 className="wiki-heading text-3xl font-semibold">{book.title}</h1>
+          <h1 className="wiki-heading text-3xl font-semibold md:text-4xl">{book.title}</h1>
           {!book.published && <Badge variant="outline">{t("unpublished")}</Badge>}
           <HtmlContent html={book.descriptionHtml} />
           {viewer.editor && (

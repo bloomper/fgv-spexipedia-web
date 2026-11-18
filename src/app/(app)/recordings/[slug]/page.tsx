@@ -47,7 +47,7 @@ export default async function RecordingPage({ params }: Props) {
         <ImageGallery images={covers.map(image => ({ image, caption: null }))} columns={2} className="md:grid-cols-1" />
         <div className="space-y-3">
           <p className="text-sm tracking-[0.25em] text-primary">{recording.catalogueNumber} · {recording.medium.name}</p>
-          <h1 className="wiki-heading text-3xl font-semibold">{recording.title}</h1>
+          <h1 className="wiki-heading text-3xl font-semibold md:text-4xl">{recording.title}</h1>
           <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-sm">
             {recording.spex && <><dt className="text-muted-foreground">{t("spex")}</dt><dd><Link href={`/spex/${recording.spex.slug}`} className="text-primary hover:text-primary/80">{recording.spex.title} ({recording.spex.year})</Link></dd></>}
             {recording.released && <><dt className="text-muted-foreground">{t("released")}</dt><dd>{recording.released}</dd></>}

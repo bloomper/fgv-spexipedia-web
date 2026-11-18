@@ -33,7 +33,7 @@ export function TrashView({ articles, images, admin }: {
       )}
       {articles.length > 0 && (
         <section className="space-y-2">
-          <h2 className="text-lg font-semibold">{t("articles")}</h2>
+          <h2 className="wiki-heading text-xl font-semibold">{t("articles")}</h2>
           <ul className="divide-y divide-border rounded-lg border border-border bg-card text-sm">
             {articles.map(article => (
               <li key={article.id} className="flex items-center gap-3 px-3 py-2">
@@ -47,7 +47,7 @@ export function TrashView({ articles, images, admin }: {
       )}
       {images.length > 0 && (
         <section className="space-y-2">
-          <h2 className="text-lg font-semibold">{t("images")}</h2>
+          <h2 className="wiki-heading text-xl font-semibold">{t("images")}</h2>
           <ul className="grid gap-3 sm:grid-cols-3 lg:grid-cols-4">
             {images.map(image => (
               <li key={image.id} className="space-y-1 rounded-lg border border-border bg-card p-2 text-xs">
