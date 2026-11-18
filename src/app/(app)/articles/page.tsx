@@ -72,7 +72,7 @@ export default async function ArticlesPage({ searchParams }: Props) {
         )}
       </div>
       {tree
-        ? roots.length > 0 ? <div className="rounded-lg border border-border bg-card p-4"><ArticleTree nodes={roots} /></div> : <DataEmpty title={t("empty")} />
+        ? roots.length > 0 ? <ArticleTree nodes={roots} /> : <DataEmpty title={t("empty")} />
         : <ArticleList articles={articles} ordered changed={sort.field === "changed"} />}
     </div>
   );

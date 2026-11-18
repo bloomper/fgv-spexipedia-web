@@ -487,6 +487,8 @@
     "tree": "Artiklar här omkring",
     "thisArticle": "Den här artikeln",
     "moreBelow": "{count, plural, one {# artikel till under} other {# artiklar till under}}",
+    "toggleBranch": "Visa eller dölj artiklarna under {title}",
+    "subArticles": "{count, plural, one {# underartikel} other {# underartiklar}}",
     "move": "Flytta",
     "moveTitle": "Flytta artikeln under …",
     "moveToTop": "Överst i trädet",

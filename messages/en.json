@@ -487,6 +487,8 @@
     "tree": "Articles around this one",
     "thisArticle": "This article",
     "moreBelow": "{count, plural, one {# more article below} other {# more articles below}}",
+    "toggleBranch": "Show or hide the articles under {title}",
+    "subArticles": "{count, plural, one {# subarticle} other {# subarticles}}",
     "move": "Move",
     "moveTitle": "Move the article under …",
     "moveToTop": "To the top of the tree",
