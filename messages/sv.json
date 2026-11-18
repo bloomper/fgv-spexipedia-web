@@ -285,7 +285,8 @@
     "adminConsumers": "Mottagare av ändringar",
     "adminMaintenance": "Underhåll",
     "unresolvedCredits": "Olösta medverkande",
-    "adminKinds": "Sorter"
+    "adminKinds": "Sorter",
+    "packages": "Spexpaket"
   },
   "Home": {
     "kicker": "Chalmersspexets uppslagsverk",
@@ -848,5 +849,80 @@
     "empty": "Alla medverkande är lösta.",
     "showing": "Visar {shown} av {total}; lös dem för att se fler.",
     "resolved": "Löst"
+  },
+  "Packages": {
+    "title": "Spexpaket",
+    "description": "Ett nytt spex i alla FGV:s applikationer ur ett kalkylark och en zip: förhandsgranska vad som händer i varje applikation, och tillämpa sedan.",
+    "template": "Ladda ner mallen",
+    "new": "Nytt spexpaket",
+    "newDescription": "Fyll i mallen och lägg filerna (affischer, bilder, manus, inspelningar, foton) i en zip. Zippen kan vara upp till 20 GB; laddas den inte upp helt kan du fortsätta senare.",
+    "empty": "Inga spexpaket än.",
+    "back": "Alla spexpaket",
+    "appliedAt": "tillämpat {at}",
+    "spexLink": "Spexet: {title} ({year})",
+    "previewFirst": "Förhandsgranska paketet för att se vad som händer i varje applikation innan det tillämpas.",
+    "results": "Resultat",
+    "previewHeading": "Förhandsgranskning",
+    "states": {
+      "UPLOADED": "Uppladdat",
+      "PREVIEWING": "Förhandsgranskas",
+      "PREVIEWED": "Förhandsgranskat",
+      "APPLYING": "Tillämpas",
+      "APPLIED": "Tillämpat",
+      "FAILED": "Misslyckades"
+    },
+    "statuses": {
+      "CHECKED": "Kontrollerad",
+      "APPLIED": "Tillämpad",
+      "DEFERRED": "Kontrolleras vid tillämpning",
+      "UNAVAILABLE": "Inte nåbar",
+      "FAILED": "Misslyckades"
+    },
+    "outcomes": {
+      "CREATED": "ny",
+      "UPDATED": "ändrad",
+      "UNCHANGED": "oförändrad",
+      "KEPT": "behållen",
+      "FAILED": "misslyckades"
+    },
+    "counts": {
+      "created": "Nya",
+      "updated": "Ändrade",
+      "unchanged": "Oförändrade",
+      "kept": "Behållna",
+      "failed": "Misslyckade"
+    },
+    "recordsAndFiles": "{records, plural, one {# post} other {# poster}}, {files, plural, one {# fil} other {# filer}}",
+    "itemsWithMessages": "{count, plural, one {# post med meddelande} other {# poster med meddelanden}}",
+    "unmatched": "{count, plural, one {# fil eller rad hamnar ingenstans} other {# filer och rader hamnar ingenstans}}",
+    "warnings": "{count, plural, one {# varning} other {# varningar}}",
+    "open": "Öppna",
+    "spreadsheet": "Kalkylark (.xlsx)",
+    "spreadsheetHelp": "Den ifyllda mallen.",
+    "zip": "Zip med filer (valfri)",
+    "zipHelp": "Upp till 20 GB. Filnamnen i zippen ska stå i kalkylarket.",
+    "zipChosen": "{size} att ladda upp.",
+    "zipProgress": "Uppladdning av zippen",
+    "received": "{received} av {size}",
+    "upload": "Ladda upp",
+    "uploading": "Laddar upp…",
+    "stop": "Avbryt",
+    "uploaded": "Uppladdat",
+    "uploadFailed": "Uppladdningen misslyckades: {message}",
+    "zipFailed": "Zippen kom inte fram helt ({message}); fortsätt på paketets sida.",
+    "zipIncomplete": "Zippen {name} har inte kommit fram helt.",
+    "pickSameZip": "Välj samma zip igen så fortsätter uppladdningen där den slutade.",
+    "notTheSameZip": "Det är inte samma zip: väntade {name} på {size}.",
+    "preview": "Förhandsgranska",
+    "previewStarted": "Förhandsgranskningen har börjat",
+    "apply": "Tillämpa",
+    "applyAgain": "Tillämpa igen",
+    "applyTitle": "Tillämpa spexpaketet?",
+    "applyText": "Spexipedia först, sedan de andra applikationerna. Det går att tillämpa igen; det som redan finns ändras inte två gånger.",
+    "applyStarted": "Tillämpningen har börjat",
+    "delete": "Radera",
+    "deleteTitle": "Radera spexpaketet?",
+    "deleteText": "Paketet och dess filer tas bort. Det som det har skapat finns kvar.",
+    "deleted": "Spexpaketet är raderat"
   }
 }

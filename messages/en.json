@@ -285,7 +285,8 @@
     "adminConsumers": "Change recipients",
     "adminMaintenance": "Maintenance",
     "unresolvedCredits": "Unresolved credits",
-    "adminKinds": "Kinds"
+    "adminKinds": "Kinds",
+    "packages": "Spex packages"
   },
   "Home": {
     "kicker": "The Chalmers spex encyclopedia",
@@ -848,5 +849,80 @@
     "empty": "Every credit is resolved.",
     "showing": "Showing {shown} of {total}; resolve these to see more.",
     "resolved": "Resolved"
+  },
+  "Packages": {
+    "title": "Spex packages",
+    "description": "A new spex in every FGV application from a spreadsheet and a zip: preview what happens in each application, then apply it.",
+    "template": "Download the template",
+    "new": "New spex package",
+    "newDescription": "Fill in the template and put the files (posters, images, manuscripts, recordings, photos) in a zip. The zip may be up to 20 GB; if it does not all upload, you can continue later.",
+    "empty": "No spex packages yet.",
+    "back": "All spex packages",
+    "appliedAt": "applied {at}",
+    "spexLink": "The spex: {title} ({year})",
+    "previewFirst": "Preview the package to see what happens in each application before it is applied.",
+    "results": "Results",
+    "previewHeading": "Preview",
+    "states": {
+      "UPLOADED": "Uploaded",
+      "PREVIEWING": "Previewing",
+      "PREVIEWED": "Previewed",
+      "APPLYING": "Applying",
+      "APPLIED": "Applied",
+      "FAILED": "Failed"
+    },
+    "statuses": {
+      "CHECKED": "Checked",
+      "APPLIED": "Applied",
+      "DEFERRED": "Checked when applied",
+      "UNAVAILABLE": "Unavailable",
+      "FAILED": "Failed"
+    },
+    "outcomes": {
+      "CREATED": "created",
+      "UPDATED": "updated",
+      "UNCHANGED": "unchanged",
+      "KEPT": "kept",
+      "FAILED": "failed"
+    },
+    "counts": {
+      "created": "Created",
+      "updated": "Updated",
+      "unchanged": "Unchanged",
+      "kept": "Kept",
+      "failed": "Failed"
+    },
+    "recordsAndFiles": "{records, plural, one {# record} other {# records}}, {files, plural, one {# file} other {# files}}",
+    "itemsWithMessages": "{count, plural, one {# record with a message} other {# records with messages}}",
+    "unmatched": "{count, plural, one {# file or row goes nowhere} other {# files and rows go nowhere}}",
+    "warnings": "{count, plural, one {# warning} other {# warnings}}",
+    "open": "Open",
+    "spreadsheet": "Spreadsheet (.xlsx)",
+    "spreadsheetHelp": "The filled-in template.",
+    "zip": "Zip with files (optional)",
+    "zipHelp": "Up to 20 GB. The file names in the zip are given in the spreadsheet.",
+    "zipChosen": "{size} to upload.",
+    "zipProgress": "Upload of the zip",
+    "received": "{received} of {size}",
+    "upload": "Upload",
+    "uploading": "Uploading…",
+    "stop": "Stop",
+    "uploaded": "Uploaded",
+    "uploadFailed": "The upload failed: {message}",
+    "zipFailed": "The zip did not all arrive ({message}); continue on the package’s page.",
+    "zipIncomplete": "The zip {name} has not all arrived.",
+    "pickSameZip": "Pick the same zip again and the upload continues where it stopped.",
+    "notTheSameZip": "That is not the same zip: expected {name} of {size}.",
+    "preview": "Preview",
+    "previewStarted": "The preview has started",
+    "apply": "Apply",
+    "applyAgain": "Apply again",
+    "applyTitle": "Apply the spex package?",
+    "applyText": "Spexipedia first, then the other applications. It can be applied again; what is already there is not changed twice.",
+    "applyStarted": "Applying has started",
+    "delete": "Delete",
+    "deleteTitle": "Delete the spex package?",
+    "deleteText": "The package and its files are deleted. What it created stays.",
+    "deleted": "The spex package is deleted"
   }
 }

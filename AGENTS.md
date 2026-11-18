@@ -75,6 +75,12 @@ without a token too, with what is public) and its `POST /api/images`; images com
 - **Kinds** (number, credit, medium, image per use, fact) are data: pages read them from `kinds(type, use)`, editors
   are offered those in use (`src/utils/kinds.ts`), admins keep them at `/admin/kinds`. Only the schema's enums (types,
   uses, value types) appear in code. Imported credits nobody resolved are shown to editors only (`/manage/credits`).
+- **Spex packages** (`/manage/packages`, editors): a spreadsheet and an optional zip of up to 20 GB become a spex in
+  every application. The files go through `/api/packages` (`src/lib/http/packages.server.ts`), streamed to the server
+  with the user's token; the zip in 32 MB parts at the server's `Upload-Offset`, resumable
+  (`src/components/wiki/packages/package-upload.client.ts`). The zip parts skip `src/proxy.ts` (its matcher), which
+  would copy each body into memory. Preview and apply run on the server; the page polls while they run and shows the
+  report per application the server sends.
 - **Old MediaWiki addresses**: `src/proxy.ts` (`src/lib/http/old-wiki.ts`) answers with HTTP redirects: `/<Title>` and `/index.php?title=` by the
   server's redirect table, else to a search.
 - **Editing** (`/manage/spex/[id]`, `/manage/base-data`, `/manage/recordings`): `useSave()` runs an action, toasts and

@@ -31,6 +31,13 @@ type Documents = {
     "\n    mutation KindsReorder($type: KindType!, $use: KindUse, $ids: [ID!]!) { kindsReorder(type: $type, use: $use, ids: $ids) { id } }\n": typeof types.KindsReorderDocument,
     "\n    mutation KindRetire($id: ID!, $retired: Boolean!) { kindRetire(id: $id, retired: $retired) { id } }\n": typeof types.KindRetireDocument,
     "\n    mutation KindMerge($id: ID!, $intoId: ID!) { kindMerge(id: $id, intoId: $intoId) { id } }\n": typeof types.KindMergeDocument,
+    "\n  fragment SpexPackageReportFields on SpexPackageReport {\n    unmatched warnings\n    apps {\n      app status records files created updated unchanged kept failed message webUrl\n      items { kind sourceKey id outcome message warnings }\n    }\n  }\n": typeof types.SpexPackageReportFieldsFragmentDoc,
+    "\n  fragment SpexPackageRow on SpexPackage {\n    id state fileName zipFileName zipSize zipReceived progress message uploadedByName createdAt appliedAt\n    spex { id slug title year }\n  }\n": typeof types.SpexPackageRowFragmentDoc,
+    "\n  query SpexPackages { spexPackages { ...SpexPackageRow } }\n": typeof types.SpexPackagesDocument,
+    "\n  query SpexPackage($id: ID!) {\n    spexPackage(id: $id) {\n      ...SpexPackageRow\n      preview { ...SpexPackageReportFields }\n      results { ...SpexPackageReportFields }\n    }\n  }\n": typeof types.SpexPackageDocument,
+    "mutation SpexPackagePreview($id: ID!) { spexPackagePreview(id: $id) { id state } }": typeof types.SpexPackagePreviewDocument,
+    "mutation SpexPackageApply($id: ID!) { spexPackageApply(id: $id) { id state } }": typeof types.SpexPackageApplyDocument,
+    "mutation SpexPackageDelete($id: ID!) { spexPackageDelete(id: $id) }": typeof types.SpexPackageDeleteDocument,
     "mutation ArticleCreate($input: ArticleInput!) { articleCreate(input: $input) { id slug } }": typeof types.ArticleCreateDocument,
     "\n  mutation ArticleUpdate($id: ID!, $input: ArticleInput!, $baseRevisionId: ID) {\n    articleUpdate(id: $id, input: $input, baseRevisionId: $baseRevisionId) { id slug }\n  }\n": typeof types.ArticleUpdateDocument,
     "mutation ArticleEditing($id: ID!) { articleEditing(id: $id) { id editingBy } }": typeof types.ArticleEditingDocument,
@@ -153,6 +160,13 @@ const documents: Documents = {
     "\n    mutation KindsReorder($type: KindType!, $use: KindUse, $ids: [ID!]!) { kindsReorder(type: $type, use: $use, ids: $ids) { id } }\n": types.KindsReorderDocument,
     "\n    mutation KindRetire($id: ID!, $retired: Boolean!) { kindRetire(id: $id, retired: $retired) { id } }\n": types.KindRetireDocument,
     "\n    mutation KindMerge($id: ID!, $intoId: ID!) { kindMerge(id: $id, intoId: $intoId) { id } }\n": types.KindMergeDocument,
+    "\n  fragment SpexPackageReportFields on SpexPackageReport {\n    unmatched warnings\n    apps {\n      app status records files created updated unchanged kept failed message webUrl\n      items { kind sourceKey id outcome message warnings }\n    }\n  }\n": types.SpexPackageReportFieldsFragmentDoc,
+    "\n  fragment SpexPackageRow on SpexPackage {\n    id state fileName zipFileName zipSize zipReceived progress message uploadedByName createdAt appliedAt\n    spex { id slug title year }\n  }\n": types.SpexPackageRowFragmentDoc,
+    "\n  query SpexPackages { spexPackages { ...SpexPackageRow } }\n": types.SpexPackagesDocument,
+    "\n  query SpexPackage($id: ID!) {\n    spexPackage(id: $id) {\n      ...SpexPackageRow\n      preview { ...SpexPackageReportFields }\n      results { ...SpexPackageReportFields }\n    }\n  }\n": types.SpexPackageDocument,
+    "mutation SpexPackagePreview($id: ID!) { spexPackagePreview(id: $id) { id state } }": types.SpexPackagePreviewDocument,
+    "mutation SpexPackageApply($id: ID!) { spexPackageApply(id: $id) { id state } }": types.SpexPackageApplyDocument,
+    "mutation SpexPackageDelete($id: ID!) { spexPackageDelete(id: $id) }": types.SpexPackageDeleteDocument,
     "mutation ArticleCreate($input: ArticleInput!) { articleCreate(input: $input) { id slug } }": types.ArticleCreateDocument,
     "\n  mutation ArticleUpdate($id: ID!, $input: ArticleInput!, $baseRevisionId: ID) {\n    articleUpdate(id: $id, input: $input, baseRevisionId: $baseRevisionId) { id slug }\n  }\n": types.ArticleUpdateDocument,
     "mutation ArticleEditing($id: ID!) { articleEditing(id: $id) { id editingBy } }": types.ArticleEditingDocument,
@@ -340,6 +354,34 @@ export function graphql(source: "\n    mutation KindRetire($id: ID!, $retired: B
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n    mutation KindMerge($id: ID!, $intoId: ID!) { kindMerge(id: $id, intoId: $intoId) { id } }\n"): (typeof documents)["\n    mutation KindMerge($id: ID!, $intoId: ID!) { kindMerge(id: $id, intoId: $intoId) { id } }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  fragment SpexPackageReportFields on SpexPackageReport {\n    unmatched warnings\n    apps {\n      app status records files created updated unchanged kept failed message webUrl\n      items { kind sourceKey id outcome message warnings }\n    }\n  }\n"): (typeof documents)["\n  fragment SpexPackageReportFields on SpexPackageReport {\n    unmatched warnings\n    apps {\n      app status records files created updated unchanged kept failed message webUrl\n      items { kind sourceKey id outcome message warnings }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  fragment SpexPackageRow on SpexPackage {\n    id state fileName zipFileName zipSize zipReceived progress message uploadedByName createdAt appliedAt\n    spex { id slug title year }\n  }\n"): (typeof documents)["\n  fragment SpexPackageRow on SpexPackage {\n    id state fileName zipFileName zipSize zipReceived progress message uploadedByName createdAt appliedAt\n    spex { id slug title year }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query SpexPackages { spexPackages { ...SpexPackageRow } }\n"): (typeof documents)["\n  query SpexPackages { spexPackages { ...SpexPackageRow } }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query SpexPackage($id: ID!) {\n    spexPackage(id: $id) {\n      ...SpexPackageRow\n      preview { ...SpexPackageReportFields }\n      results { ...SpexPackageReportFields }\n    }\n  }\n"): (typeof documents)["\n  query SpexPackage($id: ID!) {\n    spexPackage(id: $id) {\n      ...SpexPackageRow\n      preview { ...SpexPackageReportFields }\n      results { ...SpexPackageReportFields }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "mutation SpexPackagePreview($id: ID!) { spexPackagePreview(id: $id) { id state } }"): (typeof documents)["mutation SpexPackagePreview($id: ID!) { spexPackagePreview(id: $id) { id state } }"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "mutation SpexPackageApply($id: ID!) { spexPackageApply(id: $id) { id state } }"): (typeof documents)["mutation SpexPackageApply($id: ID!) { spexPackageApply(id: $id) { id state } }"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "mutation SpexPackageDelete($id: ID!) { spexPackageDelete(id: $id) }"): (typeof documents)["mutation SpexPackageDelete($id: ID!) { spexPackageDelete(id: $id) }"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

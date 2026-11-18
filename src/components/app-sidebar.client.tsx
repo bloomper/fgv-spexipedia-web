@@ -94,6 +94,7 @@ export function AppSidebar({ roles, accountUrl, user, ...props }: AppSidebarProp
           { title: t("Nav.baseData"), url: "/manage/base-data" },
           { title: t("Nav.manageRecordings"), url: "/manage/recordings" },
           { title: t("Nav.unresolvedCredits"), url: "/manage/credits" },
+          { title: t("Nav.packages"), url: "/manage/packages" },
         );
       }
       items.push({ title: t("Nav.trash"), url: "/manage/trash" }, { title: t("Nav.auditLog"), url: "/manage/audit" });
