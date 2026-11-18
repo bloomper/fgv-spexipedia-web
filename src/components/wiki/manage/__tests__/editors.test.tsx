@@ -15,7 +15,7 @@ vi.mock("@/app/(app)/admin/actions.server", async () => (await import("@/test/ma
 vi.mock("@/app/(app)/articles/actions.server", async () => (await import("@/test/manage-mocks")).actionsMock(actions));
 
 import { NewRecordingForm, RecordingEditor } from "@/components/wiki/manage/recording-editor.client";
-import { FactsEditor, SpexBaseDataEditor, SpexTextsEditor } from "@/components/wiki/manage/spex-head-editor.client";
+import { FactsEditor, SpexBaseDataEditor, SpexProductions, SpexTextsEditor } from "@/components/wiki/manage/spex-head-editor.client";
 import { ConsumersEditor, RedirectsEditor } from "@/components/wiki/manage/admin-lists.client";
 import { DialogsProvider } from "@/components/dialogs.client";
 import { router } from "@/test/manage-mocks";
@@ -108,8 +108,8 @@ describe("The recording editors", () => {
 const spex = (revival = false) => ({
   id: "s1", slug: "1984-lasse-maja", year: revival ? "2010" : "1984", title: "Lasse-Maja", revival, poster: null,
   category: { id: "k1", name: "Chalmersspexet" },
-  revivals: revival ? [] : [{ id: "s3", year: "2015" }],
-  parent: revival ? { id: "s0", year: "1984", revivals: [{ id: "s1", year: "2010" }, { id: "s3", year: "2015" }] } : null,
+  revivals: revival ? [] : [{ id: "s3", year: "2015", retired: false }],
+  parent: revival ? { id: "s0", year: "1984", revivals: [{ id: "s1", year: "2010", retired: false }, { id: "s3", year: "2015", retired: true }] } : null,
   page: {
     premiere: "1984-02-14", introduction: "Ett spex", description: "Lång", synopsis: null,
     vestDescription: null, vestWornBy: null, published: false,
@@ -133,9 +133,8 @@ describe("The spex head editors", () => {
     vi.clearAllMocks();
   });
 
-  it("save an original's year, title and category, and create a revival", async () => {
+  it("save an original's year, title and category", async () => {
     actions.saveSpexAction = vi.fn(() => Promise.resolve({ ok: true, data: { slug: "1985-lasse-maja" } }));
-    actions.createRevivalAction = vi.fn(() => Promise.resolve({ ok: true, data: { id: "s2" } }));
     show(<SpexBaseDataEditor spex={spex()} categories={categories} allSpex={allSpex} editor />);
 
     expect(screen.queryByRole("option", { name: "Gammal" })).not.toBeInTheDocument();
@@ -149,13 +148,42 @@ describe("The spex head editors", () => {
     await userEvent.click(screen.getByRole("button", { name: "save" }));
     await waitFor(() => expect(actions.saveSpexAction).toHaveBeenCalledWith("s1", { year: "1985", title: "Lasse-Maja", categoryId: "k1" }));
     await waitFor(() => expect(router.refresh).toHaveBeenCalled());
+    expect(screen.queryByLabelText("newRevival")).not.toBeInTheDocument();
+  });
 
+  it("show an original's productions and create a revival", async () => {
+    actions.createRevivalAction = vi.fn(() => Promise.resolve({ ok: true, data: { id: "s2" } }));
+    show(<SpexProductions spex={spex()} editor admin={false} />);
+
+    expect(screen.getByRole("link", { name: /^originalProduction/ })).toHaveAttribute("aria-current", "page");
+    expect(screen.getByRole("link", { name: "2015" })).toHaveAttribute("href", "/manage/spex/s3");
+    expect(screen.queryByText(/^editingRevival/)).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: "createRevival" })).toBeDisabled();
     expect(within(screen.getByLabelText("newRevival")).queryByRole("option", { name: "2015" })).not.toBeInTheDocument();
     expect(within(screen.getByLabelText("newRevival")).queryByRole("option", { name: "1984" })).not.toBeInTheDocument();
     await userEvent.selectOptions(screen.getByLabelText("newRevival"), "2026");
     await userEvent.click(screen.getByRole("button", { name: "createRevival" }));
+    await waitFor(() => expect(actions.createRevivalAction).toHaveBeenCalledWith("s1", "2026"));
     await waitFor(() => expect(router.push).toHaveBeenCalledWith("/manage/spex/s2"));
+  });
+
+  it("mark the revival being edited among its original's, and let admins retire it", async () => {
+    actions.retireAction = vi.fn(() => Promise.resolve({ ok: true, data: null }));
+    const { unmount } = show(<SpexProductions spex={spex(true)} editor admin />);
+
+    expect(screen.getByRole("link", { name: /^originalProduction/ })).toHaveAttribute("href", "/manage/spex/s0");
+    expect(screen.getByRole("link", { name: "2010" })).toHaveAttribute("aria-current", "page");
+    expect(screen.getByRole("link", { name: "2015" })).toHaveClass("line-through");
+    expect(screen.getByText(/^editingRevival/)).toBeInTheDocument();
+    await userEvent.selectOptions(screen.getByLabelText("newRevival"), "2026");
+    await userEvent.click(screen.getByRole("button", { name: "createRevival" }));
+    await waitFor(() => expect(actions.createRevivalAction).toHaveBeenCalledWith("s0", "2026"));
+    await userEvent.click(screen.getByRole("button", { name: "retireRevival" }));
+    await waitFor(() => expect(actions.retireAction).toHaveBeenCalledWith("SPEX", "s1", true));
+    unmount();
+    show(<SpexProductions spex={spex(true)} editor={false} admin={false} />);
+    expect(screen.queryByLabelText("newRevival")).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "retireRevival" })).not.toBeInTheDocument();
   });
 
   it("let a revival change only its year, and authors nothing", () => {

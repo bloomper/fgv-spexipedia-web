@@ -689,7 +689,13 @@
     "noFactKinds": "There are no kinds of facts yet; an admin adds them.",
     "factsRevivalHelp": "A revival without facts of its own shows its original’s; facts saved here become the revival’s own.",
     "factDateHelp": "A year, a month or a day: 1984, 1984-05 or 1984-05-12.",
-    "saveFacts": "Save facts"
+    "saveFacts": "Save facts",
+    "productions": "Productions",
+    "originalProduction": "Original {year}",
+    "revivals": "Revivals",
+    "editingRevival": "You are editing the {year} revival. What it does not change is shown from the {originalYear} original: leave texts and facts empty to take the original’s, and cut under The revival’s changes what was left out.",
+    "retireRevival": "Retire the revival",
+    "unretireRevival": "Restore the revival"
   },
   "BaseData": {
     "title": "Base data",
@@ -713,13 +719,14 @@
     "spexTitle": "Title",
     "category": "Category",
     "chooseCategory": "Choose a category",
+    "allCategories": "All categories",
+    "filterCategory": "Filter by category",
     "chooseYear": "Choose a year",
     "noFreeYear": "No free years",
-    "spexHelp": "Revivals are created from the original's page.",
+    "spexHelp": "Revivals are created and edited on the original’s page.",
     "actorPresent": "Has a character and a voice part",
-    "board": "Shown as the board",
+    "board": "On the board",
     "instruments": "Instruments in Spexarkivet",
-    "revival": "Revival",
     "unpublished": "Unpublished",
     "since": "since {year}",
     "sections": {
@@ -727,7 +734,8 @@
       "spex-categories": "Spex categories",
       "task-categories": "Task categories",
       "tasks": "Tasks"
-    }
+    },
+    "revivals": "{count, plural, one {# revival} other {# revivals}}"
   },
   "ManageRecordings": {
     "title": "Recordings",

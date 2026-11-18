@@ -72,8 +72,8 @@ const BaseDataQuery = graphql(`
   query BaseData {
     spexCategories(includeRetired: true) { id name firstYear description retired logo { ...ImageFields } }
     spexAll(includeRetired: true) { id slug year title revival retired published parent { id } category { id name } }
-    taskCategories(includeRetired: true) { id name actorPresent board instruments retired }
-    tasks(includeRetired: true) { id name retired category { id name } }
+    taskCategories(includeRetired: true) { id name actorPresent instruments retired }
+    tasks(includeRetired: true) { id name board retired category { id name } }
   }
 `);
 
@@ -141,8 +141,8 @@ const SpexEditQuery = graphql(`
     spex(id: $id) {
       id slug year title revival retired published
       category { id }
-      revivals { id year }
-      parent { id slug title year revivals { id year } characters { id name } scenes { id act position title } numbers { id act position title } }
+      revivals { id year retired }
+      parent { id slug title year revivals { id year retired } characters { id name } scenes { id act position title } numbers { id act position title } }
       poster { ...ImageFields }
       revivalChanges { kind recordId cut act position }
       page {

@@ -25,10 +25,11 @@ const data = {
     { id: "s1", slug: "1984-lasse-maja", year: "1984", title: "Lasse-Maja", revival: false, retired: false, published: true, parent: null, category: { id: "k1", name: "Chalmersspexet" } },
     { id: "s2", slug: "2010-lasse-maja", year: "2010", title: "Lasse-Maja", revival: true, retired: false, published: false, parent: { id: "s1" }, category: null },
   ],
-  taskCategories: [{ id: "t1", name: "Ensemble", actorPresent: true, board: false, instruments: false, retired: false },
-    { id: "t2", name: "Orkester", actorPresent: false, board: false, instruments: true, retired: false }],
-  tasks: [{ id: "u1", name: "Regissör", retired: false, category: { id: "t1", name: "Ensemble" } },
-    { id: "u2", name: "Sufflör", retired: false, category: { id: "t1", name: "Ensemble" } }],
+  taskCategories: [{ id: "t1", name: "Ensemble", actorPresent: true, instruments: false, retired: false },
+    { id: "t2", name: "Orkester", actorPresent: false, instruments: true, retired: false }],
+  tasks: [{ id: "u1", name: "Regissör", board: true, retired: false, category: { id: "t1", name: "Ensemble" } },
+    { id: "u2", name: "Sufflör", board: false, retired: false, category: { id: "t1", name: "Ensemble" } },
+    { id: "u3", name: "Fiol", board: false, retired: false, category: { id: "t2", name: "Orkester" } }],
 } as unknown as BaseData;
 
 const show = (admin = true, highlight: string | null = null) =>
@@ -41,15 +42,23 @@ describe("BaseDataManager", () => {
     vi.clearAllMocks();
   });
 
-  it("lists spex newest first and links each to its editor", async () => {
+  it("lists only originals, each with its revivals' years, and links them to their editors", async () => {
     show();
 
     const rows = within(section("spex")).getAllByRole("listitem");
 
-    expect(rows[0]).toHaveTextContent("2010 Lasse-Maja");
-    expect(rows[0]).toHaveTextContent("revival");
-    expect(rows[0]).toHaveTextContent("unpublished");
-    expect(within(rows[1]).getByRole("link", { name: "edit" })).toHaveAttribute("href", "/manage/spex/s1");
+    expect(rows).toHaveLength(1);
+    expect(rows[0]).toHaveTextContent("1984 Lasse-Maja");
+    expect(rows[0]).toHaveTextContent("revivals");
+    expect(rows[0]).not.toHaveTextContent("unpublished");
+    expect(within(rows[0]).getByRole("link", { name: "edit" })).toHaveAttribute("href", "/manage/spex/s1");
+    expect(within(rows[0]).getByRole("link", { name: "2010" })).toHaveAttribute("href", "/manage/spex/s2");
+  });
+
+  it("highlights a revival's original", async () => {
+    show(true, "s2");
+
+    expect(within(section("spex")).getByRole("listitem")).toHaveClass("bg-primary/10");
   });
 
   it("creates a spex in a category", async () => {
@@ -98,17 +107,35 @@ describe("BaseDataManager", () => {
     show();
 
     await userEvent.click(within(section("task-categories")).getByRole("button", { name: "add" }));
-    await userEvent.type(within(section("task-categories")).getByLabelText("name"), "Direktion");
-    await userEvent.click(within(section("task-categories")).getByRole("checkbox", { name: "board" }));
+    await userEvent.type(within(section("task-categories")).getByLabelText("name"), "Kommitté");
+    await userEvent.click(within(section("task-categories")).getByRole("checkbox", { name: "actorPresent" }));
     await userEvent.click(within(section("task-categories")).getByRole("button", { name: "save" }));
     await waitFor(() => expect(actions.saveTaskCategoryAction).toHaveBeenCalledWith(null,
-      { name: "Direktion", actorPresent: false, board: true, instruments: false }));
+      { name: "Kommitté", actorPresent: true, instruments: false }));
 
     await userEvent.click(within(section("tasks")).getByRole("button", { name: "add" }));
     await userEvent.type(within(section("tasks")).getByLabelText("name"), "Kostymör");
     await userEvent.selectOptions(within(section("tasks")).getByLabelText("category"), "t2");
+    await userEvent.click(within(section("tasks")).getByRole("checkbox", { name: "board" }));
     await userEvent.click(within(section("tasks")).getByRole("button", { name: "save" }));
-    await waitFor(() => expect(actions.saveTaskAction).toHaveBeenCalledWith(null, { name: "Kostymör", categoryId: "t2" }));
+    await waitFor(() => expect(actions.saveTaskAction).toHaveBeenCalledWith(null, { name: "Kostymör", categoryId: "t2", board: true }));
+  });
+
+  it("marks the board's tasks and narrows tasks and spex to a category", async () => {
+    show();
+
+    const tasks = section("tasks");
+
+    expect(within(tasks).getAllByRole("listitem")[0]).toHaveTextContent("board");
+    expect(within(tasks).getAllByRole("listitem")).toHaveLength(3);
+    await userEvent.selectOptions(within(tasks).getByRole("combobox", { name: "filterCategory" }), "t2");
+    expect(within(section("tasks")).getAllByRole("listitem").map(row => row.textContent)).toEqual([expect.stringContaining("Fiol")]);
+
+    const spex = within(section("spex")).getByRole("combobox", { name: "filterCategory" });
+
+    expect(within(spex).queryByRole("option", { name: "Gamla spexet" })).not.toBeInTheDocument();
+    await userEvent.selectOptions(spex, "k1");
+    expect(within(section("spex")).getAllByRole("listitem")).toHaveLength(1);
   });
 
   it("offers retiring and merging to admins only, and opens a highlighted record", () => {

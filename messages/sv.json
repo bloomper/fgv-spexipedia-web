@@ -186,8 +186,8 @@
       "SPEX": "Spex",
       "SPEX_PAGE": "Spexsida",
       "SPEX_CATEGORY": "Spexkategori",
-      "TASK": "Uppgift",
-      "TASK_CATEGORY": "Uppgiftskategori",
+      "TASK": "Funktion",
+      "TASK_CATEGORY": "Funktionskategori",
       "CHARACTER": "Roll",
       "SCENE": "Scen",
       "NUMBER": "Nummer",
@@ -382,8 +382,8 @@
         "subtitle": "Västen och vem som bar den"
       },
       "board": {
-        "title": "Styrelsen",
-        "subtitle": "Spexets styrelse"
+        "title": "Direktionen",
+        "subtitle": "Spexets direktion"
       },
       "tasks": {
         "title": "Medverkande",
@@ -623,7 +623,7 @@
     "rebus": "Programrebus",
     "rebusSolution": "Rebusens lösning",
     "groupPhotos": "Gruppbild",
-    "boardPhotos": "Styrelsen",
+    "boardPhotos": "Direktionen",
     "paste": "Klistra in en lista",
     "addLines": "Lägg till raderna",
     "cancel": "Avbryt",
@@ -689,7 +689,13 @@
     "noFactKinds": "Det finns inga sorters fakta än; en administratör lägger till dem.",
     "factsRevivalHelp": "En nyuppsättning utan egna fakta visar uruppsättningens; sparade fakta här blir nyuppsättningens egna.",
     "factDateHelp": "År, år och månad, eller datum: 1984, 1984-05 eller 1984-05-12.",
-    "saveFacts": "Spara fakta"
+    "saveFacts": "Spara fakta",
+    "productions": "Uppsättningar",
+    "originalProduction": "Uruppsättningen {year}",
+    "revivals": "Nyuppsättningar",
+    "editingRevival": "Du redigerar nyuppsättningen {year}. Det den inte ändrar visas från uruppsättningen {originalYear}: lämna texter och fakta tomma för att ta uruppsättningens, och stryk under Nyuppsättningens ändringar det som inte var med.",
+    "retireRevival": "Deaktivera nyuppsättningen",
+    "unretireRevival": "Aktivera nyuppsättningen"
   },
   "BaseData": {
     "title": "Basdata",
@@ -713,21 +719,23 @@
     "spexTitle": "Titel",
     "category": "Kategori",
     "chooseCategory": "Välj kategori",
+    "allCategories": "Alla kategorier",
+    "filterCategory": "Filtrera på kategori",
     "chooseYear": "Välj år",
     "noFreeYear": "Inga lediga år",
-    "spexHelp": "Nyuppsättningar skapas från uruppsättningens sida.",
+    "spexHelp": "Nyuppsättningar skapas och redigeras på uruppsättningens sida.",
     "actorPresent": "Har roll och stämma",
-    "board": "Visas som styrelsen",
+    "board": "Ingår i direktionen",
     "instruments": "Instrument i Spexarkivet",
-    "revival": "Nyuppsättning",
     "unpublished": "Opublicerad",
     "since": "sedan {year}",
     "sections": {
       "spex": "Spex",
       "spex-categories": "Spexkategorier",
-      "task-categories": "Uppgiftskategorier",
-      "tasks": "Uppgifter"
-    }
+      "task-categories": "Funktionskategorier",
+      "tasks": "Funktioner"
+    },
+    "revivals": "{count, plural, one {# nyuppsättning} other {# nyuppsättningar}}"
   },
   "ManageRecordings": {
     "title": "Inspelningar",

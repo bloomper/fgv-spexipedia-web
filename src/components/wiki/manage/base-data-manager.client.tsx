@@ -27,13 +27,14 @@ import type { BaseDataKind } from "@/gql/graphql";
 import { cn } from "@/utils/utils";
 import { categoryYears } from "@/utils/spex-years";
 
-type Row = { id: string; label: string; retired?: boolean; extra?: ReactNode };
+type Row = { id: string; label: string; retired?: boolean; categoryId?: string; extra?: ReactNode };
 
 /**
  * One kind of base data as a list: each row can be edited in place; admins retire a record (it stays readable by id
- * but is not offered for new use) or merge it into another (the other applications move their references).
+ * but is not offered for new use) or merge it into another (the other applications move their references). Given
+ * categories, the list can be narrowed to one of them.
  */
-function BaseList({ id, title, kind, rows, admin, highlight, form, editHref, newForm }: {
+function BaseList({ id, title, kind, rows, admin, highlight, form, editHref, newForm, categories }: {
   id: string;
   title: string;
   kind: BaseDataKind | null;
@@ -44,19 +45,28 @@ function BaseList({ id, title, kind, rows, admin, highlight, form, editHref, new
   form?: (rowId: string, done: () => void) => ReactNode;
   editHref?: (rowId: string) => string;
   newForm: (done: () => void) => ReactNode;
+  categories?: { id: string; name: string; retired?: boolean }[];
 }) {
   const t = useTranslations("BaseData");
   const { save, pending } = useSave();
   const { choose, confirm } = useDialogs();
   const [editing, setEditing] = useState<string | null>(rows.some(row => row.id === highlight) ? highlight : null);
   const [showRetired, setShowRetired] = useState(false);
-  const shown = rows.filter(row => showRetired || !row.retired || row.id === highlight);
+  const [category, setCategory] = useState("");
+  const shown = rows.filter(row => row.id === highlight || ((showRetired || !row.retired) && (!category || row.categoryId === category)));
 
   return (
     <section id={id} className="scroll-mt-20 space-y-3" aria-labelledby={`${id}-heading`}>
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 id={`${id}-heading`} className="wiki-heading text-xl font-semibold">{title} <span className="text-sm text-muted-foreground">({rows.length})</span></h2>
-        <div className="flex items-center gap-3">
+        <h2 id={`${id}-heading`} className="wiki-heading text-xl font-semibold">{title} <span className="text-sm text-muted-foreground">({category ? rows.filter(row => row.categoryId === category).length : rows.length})</span></h2>
+        <div className="flex flex-wrap items-center gap-3">
+          {categories && (
+            <NativeSelect size="sm" aria-label={t("filterCategory")} value={category} onChange={event => setCategory(event.target.value)}>
+              <NativeSelectOption value="">{t("allCategories")}</NativeSelectOption>
+              {categories.filter(c => !c.retired || c.id === category || rows.some(row => row.categoryId === c.id))
+                .map(c => <NativeSelectOption key={c.id} value={c.id}>{c.name}</NativeSelectOption>)}
+            </NativeSelect>
+          )}
           {rows.some(row => row.retired) && (
             <label className="flex items-center gap-2 text-sm"><Checkbox checked={showRetired} onCheckedChange={checked => setShowRetired(!!checked)} /> {t("showRetired")}</label>
           )}
@@ -119,25 +129,32 @@ function SpexCategoryForm({ category, done }: { category?: BaseData["spexCategor
   const { save, pending } = useSave();
   const [values, setValues] = useState({ name: category?.name ?? "", firstYear: category?.firstYear ?? "", description: category?.description ?? "" });
 
+  const form = (
+    <form className={box} onSubmit={async event => {
+      event.preventDefault();
+      if (await save(() => saveSpexCategoryAction(category?.id ?? null, { ...values, description: values.description.trim() || null }, undefined))) {
+        done();
+      }
+    }}>
+      <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_8rem]">
+        <Label className="flex-col items-start">{t("name")}<Input required value={values.name} onChange={event => setValues({ ...values, name: event.target.value })} /></Label>
+        <Label className="flex-col items-start">{t("firstYear")}<Input required type="number" min={1000} max={9999} step={1} value={values.firstYear} onChange={event => setValues({ ...values, firstYear: event.target.value })} /></Label>
+      </div>
+      <Label className="flex-col items-start">{t("description")}<Textarea rows={3} value={values.description} onChange={event => setValues({ ...values, description: event.target.value })} /></Label>
+      <Buttons pending={pending} onCancel={done} />
+    </form>
+  );
+
+  // A new category has no id to hang a logo on yet; the logo is added when editing it
+  if (!category) {
+    return form;
+  }
+
   return (
-    <div className="grid gap-4 sm:grid-cols-[10rem_1fr]">
-      {category ? (
-        <ImageSlot label={t("logo")} kind="LOGO" image={category.logo}
-                   onChange={logoId => save(() => saveSpexCategoryAction(category.id, { name: category.name, firstYear: category.firstYear, description: category.description ?? null }, logoId))} />
-      ) : <div />}
-      <form className={box} onSubmit={async event => {
-        event.preventDefault();
-        if (await save(() => saveSpexCategoryAction(category?.id ?? null, { ...values, description: values.description.trim() || null }, undefined))) {
-          done();
-        }
-      }}>
-        <div className="grid gap-3 sm:grid-cols-[1fr_8rem]">
-          <div className="space-y-1.5"><Label>{t("name")}<Input required value={values.name} onChange={event => setValues({ ...values, name: event.target.value })} /></Label></div>
-          <div className="space-y-1.5"><Label>{t("firstYear")}<Input required pattern="\d{4}" value={values.firstYear} onChange={event => setValues({ ...values, firstYear: event.target.value })} /></Label></div>
-        </div>
-        <Label className="flex-col items-start">{t("description")}<Textarea rows={3} value={values.description} onChange={event => setValues({ ...values, description: event.target.value })} /></Label>
-        <Buttons pending={pending} onCancel={done} />
-      </form>
+    <div className="grid gap-4 sm:grid-cols-[10rem_minmax(0,1fr)]">
+      <ImageSlot label={t("logo")} kind="LOGO" image={category.logo}
+                 onChange={logoId => save(() => saveSpexCategoryAction(category.id, { name: category.name, firstYear: category.firstYear, description: category.description ?? null }, logoId))} />
+      {form}
     </div>
   );
 }
@@ -181,7 +198,7 @@ function SpexForm({ categories, spex, done }: { categories: BaseData["spexCatego
 function TaskCategoryForm({ category, done }: { category?: BaseData["taskCategories"][number]; done: () => void }) {
   const t = useTranslations("BaseData");
   const { save, pending } = useSave();
-  const [values, setValues] = useState({ name: category?.name ?? "", actorPresent: category?.actorPresent ?? false, board: category?.board ?? false, instruments: category?.instruments ?? false });
+  const [values, setValues] = useState({ name: category?.name ?? "", actorPresent: category?.actorPresent ?? false, instruments: category?.instruments ?? false });
 
   return (
     <form className={box} onSubmit={async event => {
@@ -192,7 +209,6 @@ function TaskCategoryForm({ category, done }: { category?: BaseData["taskCategor
     }}>
       <Label className="flex-col items-start">{t("name")}<Input required value={values.name} onChange={event => setValues({ ...values, name: event.target.value })} /></Label>
       <label className="flex items-center gap-2 text-sm"><Checkbox checked={values.actorPresent} onCheckedChange={checked => setValues({ ...values, actorPresent: !!checked })} /> {t("actorPresent")}</label>
-      <label className="flex items-center gap-2 text-sm"><Checkbox checked={values.board} onCheckedChange={checked => setValues({ ...values, board: !!checked })} /> {t("board")}</label>
       <label className="flex items-center gap-2 text-sm"><Checkbox checked={values.instruments} onCheckedChange={checked => setValues({ ...values, instruments: !!checked })} /> {t("instruments")}</label>
       <Buttons pending={pending} onCancel={done} />
     </form>
@@ -202,12 +218,12 @@ function TaskCategoryForm({ category, done }: { category?: BaseData["taskCategor
 function TaskForm({ task, categories, done }: { task?: BaseData["tasks"][number]; categories: BaseData["taskCategories"]; done: () => void }) {
   const t = useTranslations("BaseData");
   const { save, pending } = useSave();
-  const [values, setValues] = useState({ name: task?.name ?? "", categoryId: task?.category?.id ?? categories[0]?.id ?? "" });
+  const [values, setValues] = useState({ name: task?.name ?? "", categoryId: task?.category?.id ?? categories[0]?.id ?? "", board: task?.board ?? false });
 
   return (
     <form className={box} onSubmit={async event => {
       event.preventDefault();
-      if (await save(() => saveTaskAction(task?.id ?? null, { name: values.name.trim(), categoryId: values.categoryId }))) {
+      if (await save(() => saveTaskAction(task?.id ?? null, { ...values, name: values.name.trim() }))) {
         done();
       }
     }}>
@@ -219,6 +235,7 @@ function TaskForm({ task, categories, done }: { task?: BaseData["tasks"][number]
           </NativeSelect>
         </Label>
       </div>
+      <label className="flex items-center gap-2 text-sm"><Checkbox checked={values.board} onCheckedChange={checked => setValues({ ...values, board: !!checked })} /> {t("board")}</label>
       <Buttons pending={pending} onCancel={done} />
     </form>
   );
@@ -226,7 +243,10 @@ function TaskForm({ task, categories, done }: { task?: BaseData["tasks"][number]
 
 export function BaseDataManager({ data, admin, highlight }: { data: BaseData; admin: boolean; highlight: string | null }) {
   const t = useTranslations("BaseData");
-  const spex = [...data.spexAll].sort((a, b) => b.year.localeCompare(a.year));
+  // Only originals are listed; their revivals are edited on the original's page, and named here by year
+  const originals = data.spexAll.filter(s => !s.parent).sort((a, b) => b.year.localeCompare(a.year));
+  const revivalsOf = (id: string) => data.spexAll.filter(s => s.parent?.id === id).sort((a, b) => a.year.localeCompare(b.year));
+  const highlighted = data.spexAll.find(s => s.id === highlight)?.parent?.id ?? highlight;
 
   return (
     <div className="space-y-10">
@@ -235,15 +255,28 @@ export function BaseDataManager({ data, admin, highlight }: { data: BaseData; ad
           <a key={id} href={`#${id}`} className="rounded-full border border-border px-3 py-1 hover:border-primary hover:text-primary">{t(`sections.${id}`)}</a>
         ))}
       </nav>
-      <BaseList id="spex" title={t("sections.spex")} kind="SPEX" admin={admin} highlight={highlight}
-                rows={spex.map(s => ({
-                  id: s.id, label: `${s.year} ${s.title}`, retired: s.retired,
-                  extra: <>
-                    {s.revival && <Badge variant="secondary">{t("revival")}</Badge>}
-                    {!s.published && <Badge variant="outline">{t("unpublished")}</Badge>}
-                    {s.category && <span className="text-xs text-muted-foreground">{s.category.name}</span>}
-                  </>,
-                }))}
+      <BaseList id="spex" title={t("sections.spex")} kind="SPEX" admin={admin} highlight={highlighted}
+                rows={originals.map(s => {
+                  const revivals = revivalsOf(s.id);
+
+                  return {
+                    id: s.id, label: `${s.year} ${s.title}`, retired: s.retired, categoryId: s.category?.id,
+                    extra: <>
+                      {!s.published && <Badge variant="outline">{t("unpublished")}</Badge>}
+                      {s.category && <span className="text-xs text-muted-foreground">{s.category.name}</span>}
+                      {revivals.length > 0 && (
+                        <span className="inline-flex flex-wrap items-center gap-1.5 text-xs">
+                          <Badge variant="secondary">{t("revivals", { count: revivals.length })}</Badge>
+                          {revivals.map(revival => (
+                            <Link key={revival.id} href={`/manage/spex/${revival.id}`}
+                                  className={cn("text-primary hover:text-primary/80", revival.retired && "text-muted-foreground line-through")}>{revival.year}</Link>
+                          ))}
+                        </span>
+                      )}
+                    </>,
+                  };
+                })}
+                categories={data.spexCategories}
                 editHref={id => `/manage/spex/${id}`}
                 newForm={done => <SpexForm categories={data.spexCategories} spex={data.spexAll} done={done} />} />
       <BaseList id="spex-categories" title={t("sections.spex-categories")} kind="SPEX_CATEGORY" admin={admin} highlight={highlight}
@@ -253,12 +286,16 @@ export function BaseDataManager({ data, admin, highlight }: { data: BaseData; ad
       <BaseList id="task-categories" title={t("sections.task-categories")} kind="TASK_CATEGORY" admin={admin} highlight={highlight}
                 rows={data.taskCategories.map(c => ({
                   id: c.id, label: c.name, retired: c.retired,
-                  extra: <>{c.actorPresent && <Badge variant="secondary">{t("actorPresent")}</Badge>}{c.board && <Badge variant="secondary">{t("board")}</Badge>}{c.instruments && <Badge variant="secondary">{t("instruments")}</Badge>}</>,
+                  extra: <>{c.actorPresent && <Badge variant="secondary">{t("actorPresent")}</Badge>}{c.instruments && <Badge variant="secondary">{t("instruments")}</Badge>}</>,
                 }))}
                 form={(id, done) => <TaskCategoryForm category={data.taskCategories.find(c => c.id === id)} done={done} />}
                 newForm={done => <TaskCategoryForm done={done} />} />
       <BaseList id="tasks" title={t("sections.tasks")} kind="TASK" admin={admin} highlight={highlight}
-                rows={data.tasks.map(task => ({ id: task.id, label: task.name, retired: task.retired, extra: <span className="text-xs text-muted-foreground">{task.category?.name}</span> }))}
+                rows={data.tasks.map(task => ({
+                  id: task.id, label: task.name, retired: task.retired, categoryId: task.category?.id,
+                  extra: <><span className="text-xs text-muted-foreground">{task.category?.name}</span>{task.board && <Badge variant="secondary">{t("board")}</Badge>}</>,
+                }))}
+                categories={data.taskCategories}
                 form={(id, done) => <TaskForm task={data.tasks.find(task => task.id === id)} categories={data.taskCategories} done={done} />}
                 newForm={done => <TaskForm categories={data.taskCategories} done={done} />} />
     </div>
