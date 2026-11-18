@@ -439,7 +439,7 @@
   },
   "Recordings": {
     "title": "Inspelningar",
-    "description": "Spexens inspelningar och utgåvor, efter katalognummer.",
+    "description": "Spexens inspelningar och utgåvor.",
     "unpublished": "Opublicerad",
     "spex": "Spex",
     "released": "Utgiven",
@@ -504,7 +504,7 @@
     "onlyHere": "Bara här",
     "withSubcategories": "Med underkategorier",
     "view": "Visa som",
-    "alphabetical": "A–Ö",
+    "alphabetical": "Lista",
     "treeView": "Träd",
     "lists": "Listor",
     "wanted": "Önskade artiklar",
@@ -990,5 +990,18 @@
     "deleteTitle": "Radera importen?",
     "deleteText": "Importen och dess filer tas bort. Det som den har skapat finns kvar.",
     "deleted": "Importen är raderad"
+  },
+  "Sort": {
+    "by": "Sortera efter",
+    "asc": "Stigande",
+    "desc": "Fallande",
+    "switchToAsc": "Sortera stigande",
+    "switchToDesc": "Sortera fallande",
+    "year": "År",
+    "title": "Titel",
+    "catalogueNumber": "Katalognummer",
+    "released": "Utgivning",
+    "volume": "Volym",
+    "changed": "Senast ändrad"
   }
 }

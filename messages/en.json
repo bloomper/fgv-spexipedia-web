@@ -439,7 +439,7 @@
   },
   "Recordings": {
     "title": "Recordings",
-    "description": "The spex's records and releases, by catalogue number.",
+    "description": "The spex's records and releases.",
     "unpublished": "Unpublished",
     "spex": "Spex",
     "released": "Released",
@@ -504,7 +504,7 @@
     "onlyHere": "Only here",
     "withSubcategories": "With subcategories",
     "view": "Show as",
-    "alphabetical": "A–Z",
+    "alphabetical": "List",
     "treeView": "Tree",
     "lists": "Lists",
     "wanted": "Wanted articles",
@@ -990,5 +990,18 @@
     "deleteTitle": "Delete the import?",
     "deleteText": "The import and its files are deleted. What it created stays.",
     "deleted": "The import is deleted"
+  },
+  "Sort": {
+    "by": "Sort by",
+    "asc": "Ascending",
+    "desc": "Descending",
+    "switchToAsc": "Sort ascending",
+    "switchToDesc": "Sort descending",
+    "year": "Year",
+    "title": "Title",
+    "catalogueNumber": "Catalogue number",
+    "released": "Release",
+    "volume": "Volume",
+    "changed": "Last changed"
   }
 }
