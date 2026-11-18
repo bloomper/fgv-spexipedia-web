@@ -514,7 +514,14 @@
     "noWanted": "Every link leads to an article.",
     "linkCount": "{count, plural, one {# link} other {# links}}",
     "orphans": "Orphaned articles",
-    "orphansDescription": "Articles nothing links to, without a parent, children or a category."
+    "orphansDescription": "Articles nothing links to, without a parent, children or a category.",
+    "newCategory": "New category",
+    "newSubcategory": "New subcategory",
+    "editCategory": "Edit category",
+    "parentCategories": "Belongs to",
+    "filterCategories": "Find a category",
+    "noCategories": "No categories to choose.",
+    "parentCategoriesHint": "A category may belong to several others; none at all puts it among the top categories."
   },
   "ArticleForm": {
     "saved": "Saved",

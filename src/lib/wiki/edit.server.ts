@@ -49,8 +49,8 @@ const ArticleMove = graphql(`mutation ArticleMove($id: ID!, $parentId: ID, $posi
 const ArticleReorderChildren = graphql(`mutation ArticleReorderChildren($parentId: ID, $ids: [ID!]!) { articleReorderChildren(parentId: $parentId, ids: $ids) { id } }`);
 const ArticleRestoreFromTrash = graphql(`mutation ArticleRestoreFromTrash($id: ID!) { articleRestoreFromTrash(id: $id) { id } }`);
 const RevisionSetHidden = graphql(`mutation RevisionSetHidden($id: ID!, $hidden: Boolean!) { revisionSetHidden(id: $id, hidden: $hidden) { id } }`);
-const ArticleCategoryCreate = graphql(`mutation ArticleCategoryCreate($input: ArticleCategoryInput!) { articleCategoryCreate(input: $input) { id } }`);
-const ArticleCategoryUpdate = graphql(`mutation ArticleCategoryUpdate($id: ID!, $input: ArticleCategoryInput!) { articleCategoryUpdate(id: $id, input: $input) { id } }`);
+const ArticleCategoryCreate = graphql(`mutation ArticleCategoryCreate($input: ArticleCategoryInput!) { articleCategoryCreate(input: $input) { id slug } }`);
+const ArticleCategoryUpdate = graphql(`mutation ArticleCategoryUpdate($id: ID!, $input: ArticleCategoryInput!) { articleCategoryUpdate(id: $id, input: $input) { id slug } }`);
 
 export const articleCreate = async (input: ArticleInput) => (await runMutation(ArticleCreate, { input }))!.articleCreate;
 export const articleUpdate = async (id: string, input: ArticleInput, baseRevisionId: string | null) =>
@@ -63,8 +63,9 @@ export const articleMove = (id: string, parentId: string | null, position: numbe
 export const articleReorderChildren = (parentId: string | null, ids: string[]) => runMutation(ArticleReorderChildren, { parentId, ids });
 export const articleRestoreFromTrash = (id: string) => runMutation(ArticleRestoreFromTrash, { id });
 export const revisionSetHidden = (id: string, hidden: boolean) => runMutation(RevisionSetHidden, { id, hidden });
-export const articleCategoryCreate = (input: ArticleCategoryInput) => runMutation(ArticleCategoryCreate, { input });
-export const articleCategoryUpdate = (id: string, input: ArticleCategoryInput) => runMutation(ArticleCategoryUpdate, { id, input });
+export const articleCategoryCreate = async (input: ArticleCategoryInput) => (await runMutation(ArticleCategoryCreate, { input }))!.articleCategoryCreate;
+export const articleCategoryUpdate = async (id: string, input: ArticleCategoryInput) =>
+  (await runMutation(ArticleCategoryUpdate, { id, input }))!.articleCategoryUpdate;
 
 // Base data -----------------------------------------------------------------------------------------------------------
 

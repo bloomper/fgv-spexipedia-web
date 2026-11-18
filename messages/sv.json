@@ -514,7 +514,14 @@
     "noWanted": "Alla länkar leder till artiklar.",
     "linkCount": "{count, plural, one {# länk} other {# länkar}}",
     "orphans": "Föräldralösa artiklar",
-    "orphansDescription": "Artiklar som inget länkar till och som saknar förälder, underartiklar och kategori."
+    "orphansDescription": "Artiklar som inget länkar till och som saknar förälder, underartiklar och kategori.",
+    "newCategory": "Ny kategori",
+    "newSubcategory": "Ny underkategori",
+    "editCategory": "Redigera kategori",
+    "parentCategories": "Ingår i",
+    "filterCategories": "Sök kategori",
+    "noCategories": "Inga kategorier att välja.",
+    "parentCategoriesHint": "En kategori kan ingå i flera andra; ingen alls gör den till en toppkategori."
   },
   "ArticleForm": {
     "saved": "Sparad",

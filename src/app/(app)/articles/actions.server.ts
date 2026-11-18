@@ -3,6 +3,8 @@
 import { revalidatePath } from "next/cache";
 import { type ActionResult, toActionResult } from "@/lib/graphql.server";
 import {
+  articleCategoryCreate,
+  articleCategoryUpdate,
   articleCreate,
   articleEditing,
   articleMove,
@@ -14,7 +16,7 @@ import {
   revisionSetHidden,
 } from "@/lib/wiki/edit.server";
 import { getArticle, markdownPreview } from "@/lib/wiki/wiki.server";
-import type { ArticleInput } from "@/gql/graphql";
+import type { ArticleCategoryInput, ArticleInput } from "@/gql/graphql";
 import { withPolicyAction } from "@/utils/route.server";
 import { Policies } from "@/utils/policy.server";
 import { ID } from "@/utils/ids";
@@ -46,6 +48,22 @@ export async function saveArticleAction(id: string | null, input: ArticleInput, 
     revalidatePath("/");
     return { slug: saved.slug };
   });
+}
+
+/**
+ * Saves an article category: any member creates one, an author changes one. The parents replace the old ones; the
+ * server refuses a category under itself or under one of its own subcategories.
+ */
+export async function saveArticleCategoryAction(id: string | null, input: ArticleCategoryInput): Promise<ActionResult<{ slug: string }>> {
+  requireId(id, ...(input.parentIds ?? []));
+  const work = async () => {
+    const saved = id ? await articleCategoryUpdate(id, input) : await articleCategoryCreate(input);
+
+    revalidatePath("/articles", "layout");
+    return { slug: saved.slug };
+  };
+
+  return id ? author(work) : member(work);
 }
 
 /** The latest revision of the article, for merging after a conflict. */

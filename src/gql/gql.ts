@@ -48,8 +48,8 @@ type Documents = {
     "mutation ArticleReorderChildren($parentId: ID, $ids: [ID!]!) { articleReorderChildren(parentId: $parentId, ids: $ids) { id } }": typeof types.ArticleReorderChildrenDocument,
     "mutation ArticleRestoreFromTrash($id: ID!) { articleRestoreFromTrash(id: $id) { id } }": typeof types.ArticleRestoreFromTrashDocument,
     "mutation RevisionSetHidden($id: ID!, $hidden: Boolean!) { revisionSetHidden(id: $id, hidden: $hidden) { id } }": typeof types.RevisionSetHiddenDocument,
-    "mutation ArticleCategoryCreate($input: ArticleCategoryInput!) { articleCategoryCreate(input: $input) { id } }": typeof types.ArticleCategoryCreateDocument,
-    "mutation ArticleCategoryUpdate($id: ID!, $input: ArticleCategoryInput!) { articleCategoryUpdate(id: $id, input: $input) { id } }": typeof types.ArticleCategoryUpdateDocument,
+    "mutation ArticleCategoryCreate($input: ArticleCategoryInput!) { articleCategoryCreate(input: $input) { id slug } }": typeof types.ArticleCategoryCreateDocument,
+    "mutation ArticleCategoryUpdate($id: ID!, $input: ArticleCategoryInput!) { articleCategoryUpdate(id: $id, input: $input) { id slug } }": typeof types.ArticleCategoryUpdateDocument,
     "\n  query BaseData {\n    spexCategories(includeRetired: true) { id name firstYear description retired logo { ...ImageFields } }\n    spexAll(includeRetired: true) { id slug year title revival retired published parent { id } category { id name } }\n    taskCategories(includeRetired: true) { id name actorPresent instruments retired }\n    tasks(includeRetired: true) { id name board retired category { id name } }\n  }\n": typeof types.BaseDataDocument,
     "mutation SpexCategoryCreate($input: SpexCategoryInput!) { spexCategoryCreate(input: $input) { id } }": typeof types.SpexCategoryCreateDocument,
     "mutation SpexCategoryUpdate($id: ID!, $input: SpexCategoryInput!) { spexCategoryUpdate(id: $id, input: $input) { id } }": typeof types.SpexCategoryUpdateDocument,
@@ -181,8 +181,8 @@ const documents: Documents = {
     "mutation ArticleReorderChildren($parentId: ID, $ids: [ID!]!) { articleReorderChildren(parentId: $parentId, ids: $ids) { id } }": types.ArticleReorderChildrenDocument,
     "mutation ArticleRestoreFromTrash($id: ID!) { articleRestoreFromTrash(id: $id) { id } }": types.ArticleRestoreFromTrashDocument,
     "mutation RevisionSetHidden($id: ID!, $hidden: Boolean!) { revisionSetHidden(id: $id, hidden: $hidden) { id } }": types.RevisionSetHiddenDocument,
-    "mutation ArticleCategoryCreate($input: ArticleCategoryInput!) { articleCategoryCreate(input: $input) { id } }": types.ArticleCategoryCreateDocument,
-    "mutation ArticleCategoryUpdate($id: ID!, $input: ArticleCategoryInput!) { articleCategoryUpdate(id: $id, input: $input) { id } }": types.ArticleCategoryUpdateDocument,
+    "mutation ArticleCategoryCreate($input: ArticleCategoryInput!) { articleCategoryCreate(input: $input) { id slug } }": types.ArticleCategoryCreateDocument,
+    "mutation ArticleCategoryUpdate($id: ID!, $input: ArticleCategoryInput!) { articleCategoryUpdate(id: $id, input: $input) { id slug } }": types.ArticleCategoryUpdateDocument,
     "\n  query BaseData {\n    spexCategories(includeRetired: true) { id name firstYear description retired logo { ...ImageFields } }\n    spexAll(includeRetired: true) { id slug year title revival retired published parent { id } category { id name } }\n    taskCategories(includeRetired: true) { id name actorPresent instruments retired }\n    tasks(includeRetired: true) { id name board retired category { id name } }\n  }\n": types.BaseDataDocument,
     "mutation SpexCategoryCreate($input: SpexCategoryInput!) { spexCategoryCreate(input: $input) { id } }": types.SpexCategoryCreateDocument,
     "mutation SpexCategoryUpdate($id: ID!, $input: SpexCategoryInput!) { spexCategoryUpdate(id: $id, input: $input) { id } }": types.SpexCategoryUpdateDocument,
@@ -433,11 +433,11 @@ export function graphql(source: "mutation RevisionSetHidden($id: ID!, $hidden: B
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "mutation ArticleCategoryCreate($input: ArticleCategoryInput!) { articleCategoryCreate(input: $input) { id } }"): (typeof documents)["mutation ArticleCategoryCreate($input: ArticleCategoryInput!) { articleCategoryCreate(input: $input) { id } }"];
+export function graphql(source: "mutation ArticleCategoryCreate($input: ArticleCategoryInput!) { articleCategoryCreate(input: $input) { id slug } }"): (typeof documents)["mutation ArticleCategoryCreate($input: ArticleCategoryInput!) { articleCategoryCreate(input: $input) { id slug } }"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "mutation ArticleCategoryUpdate($id: ID!, $input: ArticleCategoryInput!) { articleCategoryUpdate(id: $id, input: $input) { id } }"): (typeof documents)["mutation ArticleCategoryUpdate($id: ID!, $input: ArticleCategoryInput!) { articleCategoryUpdate(id: $id, input: $input) { id } }"];
+export function graphql(source: "mutation ArticleCategoryUpdate($id: ID!, $input: ArticleCategoryInput!) { articleCategoryUpdate(id: $id, input: $input) { id slug } }"): (typeof documents)["mutation ArticleCategoryUpdate($id: ID!, $input: ArticleCategoryInput!) { articleCategoryUpdate(id: $id, input: $input) { id slug } }"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -12,6 +12,7 @@ import { ArticleTree } from "@/components/wiki/article-tree";
 import { LinkSegments } from "@/components/link-tabs";
 import { DataEmpty } from "@/components/data-empty";
 import { SortControl } from "@/components/sort-control";
+import { ArticleCategoryDialog } from "@/components/wiki/editor/article-category-dialog.client";
 import { parseSort, type SortChoice, sortItems } from "@/utils/sorting";
 
 type Props = { searchParams: Promise<Record<string, string | string[] | undefined>> };
@@ -27,7 +28,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 /**
  * Every article the viewer may see, by title or last change as the visitor picks, or as the tree (spec 4.5), with the
- * top categories to browse by. Members write new ones and find the wanted and orphaned articles.
+ * top categories to browse by. Members write new ones, add categories and find the wanted and orphaned articles.
  */
 export default async function ArticlesPage({ searchParams }: Props) {
   const params = await searchParams;
@@ -45,7 +46,12 @@ export default async function ArticlesPage({ searchParams }: Props) {
   return (
     <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 px-4 py-6 md:px-8">
       <PageHeader title={t("title")} description={t("description")}
-                  actions={viewer.member && <Link href="/articles/new" className={buttonVariants()}><Plus aria-hidden /> {t("new")}</Link>} />
+                  actions={viewer.member && (
+                    <>
+                      <ArticleCategoryDialog categories={data?.articleCategories ?? []} label={t("newCategory")} />
+                      <Link href="/articles/new" className={buttonVariants()}><Plus aria-hidden /> {t("new")}</Link>
+                    </>
+                  )} />
       {categories.length > 0 && (
         <nav aria-label={t("categories")} className="flex flex-wrap gap-2">
           {categories.map(category => (
