@@ -23,7 +23,8 @@ without a token too, with what is public) and its `POST /api/images`; images com
 - `npm run test` (Vitest); `npm run test:e2e` (Playwright, against `e2e/mock-backend.mjs`, which replays the local API's
   answers in `e2e/recorded.json` and adds sample spexare as the server shows them). A visitor must see no sample
   spexare's name on any public page, nor after a member viewed it. Record again with the API running locally on sample
-  data: `MOCK_RECORD_FROM=http://localhost:8088/api/graphql npm run test:e2e`.
+  data and `API_MEDIA_BASE_URL=http://localhost:8089/media` (CI must be refused the images at once, or pages never finish
+  loading): `MOCK_RECORD_FROM=http://localhost:8088/api/graphql npm run test:e2e`.
   The `mobile` project (Pixel 7) runs `e2e/mobile.spec.ts`: no page wider than the screen down to 320 pixels, and the
   spex page's section bar.
 - `npm run gql-codegen` — regenerate `src/gql/` from the sibling `../fgv-spexipedia-server` checkout. Commit the result.
@@ -69,6 +70,18 @@ without a token too, with what is public) and its `POST /api/images`; images com
 - **Articles** (`/articles`): Markdown with `[[Title]]` links, revisions, history with line diffs (`src/utils/diff.ts`),
   restore, hide (authors). `ArticleForm` tells the server who is editing every minute and, on CONFLICT, shows the
   differences to the newer revision to take or overwrite. The preview is rendered by the server (`markdownPreview`).
+  Articles form a tree (`src/components/wiki/article-tree.tsx`: breadcrumbs, the tree around an article, its table of
+  contents; authors move and reorder them) and categories nest; *What links here*, wanted and orphaned articles come
+  from the server. Links to missing articles point at `/articles/new?title=` and are shown red by that address.
+- **Kinds** (number, credit, medium, image per use, fact) are data: pages read them from `kinds(type, use)`, editors
+  are offered those in use (`src/utils/kinds.ts`), admins keep them at `/admin/kinds`. Only the schema's enums (types,
+  uses, value types) appear in code. Imported credits nobody resolved are shown to editors only (`/manage/credits`).
+- **Spex packages** (`/manage/packages`, editors): a spreadsheet and an optional zip of up to 20 GB become a spex in
+  every application. The files go through `/api/packages` (`src/lib/http/packages.server.ts`), streamed to the server
+  with the user's token; the zip in 32 MB parts at the server's `Upload-Offset`, resumable
+  (`src/components/wiki/packages/package-upload.client.ts`). The zip parts skip `src/proxy.ts` (its matcher), which
+  would copy each body into memory. Preview and apply run on the server; the page polls while they run and shows the
+  report per application the server sends.
 - **Old MediaWiki addresses**: `src/proxy.ts` (`src/lib/http/old-wiki.ts`) answers with HTTP redirects: `/<Title>` and `/index.php?title=` by the
   server's redirect table, else to a search.
 - **Editing** (`/manage/spex/[id]`, `/manage/base-data`, `/manage/recordings`): `useSave()` runs an action, toasts and

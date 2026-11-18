@@ -3,7 +3,7 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { withPolicyPage } from "@/utils/route.server";
 import { Policies } from "@/utils/policy.server";
-import { getBaseData } from "@/lib/wiki/edit.server";
+import { getBaseData, getMedia } from "@/lib/wiki/edit.server";
 import { getRecordings } from "@/lib/wiki/wiki.server";
 import { privateMetadata } from "@/lib/wiki/metadata.server";
 import { PageHeader } from "@/components/page-header";
@@ -19,12 +19,12 @@ export async function generateMetadata(): Promise<Metadata> {
  */
 export default async function ManageRecordingsPage() {
   return withPolicyPage(Policies.editor.requireEditor, async () => {
-    const [t, recordings, base] = await Promise.all([getTranslations("ManageRecordings"), getRecordings(), getBaseData()]);
+    const [t, recordings, base, media] = await Promise.all([getTranslations("ManageRecordings"), getRecordings(), getBaseData(), getMedia()]);
 
     return (
       <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-4 py-6 md:px-8">
         <PageHeader title={t("title")} />
-        <NewRecordingForm spex={(base?.spexAll ?? []).filter(s => !s.retired).map(s => ({ id: s.id, label: `${s.year} ${s.title}` }))} />
+        <NewRecordingForm media={media} spex={(base?.spexAll ?? []).filter(s => !s.retired).map(s => ({ id: s.id, label: `${s.year} ${s.title}` }))} />
         <ul className="divide-y divide-border rounded-lg border border-border bg-card text-sm">
           {recordings.map(recording => (
             <li key={recording.id} className="link-row flex flex-wrap items-center gap-2 px-3 py-2">

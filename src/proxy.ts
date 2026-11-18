@@ -114,6 +114,8 @@ function applySetCookie(request: NextRequest, setCookie: string) {
   }
 }
 
+// The parts of a spex package's zip skip the proxy, which would otherwise copy each request body into memory
+// (proxyClientMaxBodySize); their route handler streams them on with the user's token.
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|static/|stats/).*)"],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|static/|stats/|api/packages/[^/]+/zip).*)"],
 };

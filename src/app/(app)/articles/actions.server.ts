@@ -5,6 +5,8 @@ import { type ActionResult, toActionResult } from "@/lib/graphql.server";
 import {
   articleCreate,
   articleEditing,
+  articleMove,
+  articleReorderChildren,
   articleRestore,
   articleSetPublished,
   articleTrash,
@@ -36,7 +38,7 @@ export async function previewAction(markdown: string): Promise<ActionResult<stri
  * with CONFLICT, and the editor then gets the latest to merge with.
  */
 export async function saveArticleAction(id: string | null, input: ArticleInput, baseRevisionId: string | null): Promise<ActionResult<{ slug: string }>> {
-  requireId(id, baseRevisionId, ...(input.categoryIds ?? []));
+  requireId(id, baseRevisionId, input.parentId, ...(input.categoryIds ?? []));
   return member(async () => {
     const saved = id ? await articleUpdate(id, input, baseRevisionId) : await articleCreate(input);
 
@@ -81,10 +83,11 @@ export async function setPublishedAction(id: string, published: boolean): Promis
   });
 }
 
-export async function trashArticleAction(id: string): Promise<ActionResult<null>> {
+/** Moves the article to the trash; one with children only `withChildren`, which trashes them too. */
+export async function trashArticleAction(id: string, withChildren = false): Promise<ActionResult<null>> {
   requireId(id);
   return author(async () => {
-    await articleTrash(id);
+    await articleTrash(id, withChildren);
     revalidatePath("/articles", "layout");
     return null;
   });
@@ -96,6 +99,29 @@ export async function setRevisionHiddenAction(id: string, hidden: boolean): Prom
     await revisionSetHidden(id, hidden);
     revalidatePath("/articles", "layout");
     revalidatePath("/recent-changes");
+    return null;
+  });
+}
+
+/**
+ * Moves an article under another (null for the top of the tree), last among its new siblings; its children move with
+ * it. The server refuses a move into the article's own subtree. Addresses do not change.
+ */
+export async function moveArticleAction(id: string, parentId: string | null): Promise<ActionResult<null>> {
+  requireId(id, parentId);
+  return author(async () => {
+    await articleMove(id, parentId);
+    revalidatePath("/articles", "layout");
+    return null;
+  });
+}
+
+/** The children of an article (null for the top of the tree) in a new order; all of them. */
+export async function reorderChildrenAction(parentId: string | null, ids: string[]): Promise<ActionResult<null>> {
+  requireId(parentId, ...ids);
+  return author(async () => {
+    await articleReorderChildren(parentId, ids);
+    revalidatePath("/articles", "layout");
     return null;
   });
 }

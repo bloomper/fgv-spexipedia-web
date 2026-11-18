@@ -283,7 +283,10 @@
     "adminSettings": "Inställningar",
     "adminRedirects": "Omdirigeringar",
     "adminConsumers": "Mottagare av ändringar",
-    "adminMaintenance": "Underhåll"
+    "adminMaintenance": "Underhåll",
+    "unresolvedCredits": "Olösta medverkande",
+    "adminKinds": "Sorter",
+    "packages": "Spexpaket"
   },
   "Home": {
     "kicker": "Chalmersspexets uppslagsverk",
@@ -383,37 +386,7 @@
         "subtitle": "I FGV:s andra tjänster"
       }
     },
-    "scenography": {
-      "backdrop": "Fond",
-      "stage": "Scen",
-      "props": "Rekvisita"
-    },
-    "credits": {
-      "lyrics": "Text",
-      "composers": "Musik",
-      "arrangers": "Arr.",
-      "choreographers": "Koreografi"
-    },
-    "imageKinds": {
-      "POSTER": "Affisch",
-      "LOGO": "Logotyp",
-      "SKETCH": "Skiss",
-      "MAKEUP": "Maskskiss",
-      "COSTUME": "Kostymdocka",
-      "SCENOGRAPHY": "Scenografi",
-      "REBUS": "Rebus",
-      "VEST": "Väst",
-      "COVER": "Omslag",
-      "ARTICLE": "Artikelbild",
-      "OTHER": "Övrigt"
-    },
-    "media": {
-      "LP": "LP",
-      "EP": "EP",
-      "CD": "CD",
-      "DIGITAL": "Digital",
-      "OTHER": "Annat"
-    }
+    "fromWork": "ur {work}"
   },
   "Photos": {
     "unavailable": "Spexgram kan inte nås just nu.",
@@ -496,7 +469,38 @@
     "trash": "Lägg i papperskorgen",
     "trashTitle": "Lägga artikeln i papperskorgen?",
     "trashText": "Den syns inte längre; den kan återställas från papperskorgen.",
-    "trashedToast": "Artikeln ligger i papperskorgen"
+    "trashedToast": "Artikeln ligger i papperskorgen",
+    "breadcrumbs": "Sökväg",
+    "contents": "Innehåll",
+    "tree": "Artiklar här omkring",
+    "thisArticle": "Den här artikeln",
+    "moreBelow": "{count, plural, one {# artikel till under} other {# artiklar till under}}",
+    "move": "Flytta",
+    "moveTitle": "Flytta artikeln under …",
+    "moveToTop": "Överst i trädet",
+    "moved": "Artikeln är flyttad",
+    "moveUp": "Flytta upp {title}",
+    "moveDown": "Flytta ner {title}",
+    "newChild": "Ny underartikel",
+    "children": "Underartiklar",
+    "backlinks": "Länkar hit",
+    "noBacklinks": "Inga artiklar länkar hit.",
+    "trashChildren": "{count, plural, one {Dess underartikel läggs också i papperskorgen.} other {Dess # underartiklar läggs också i papperskorgen.}}",
+    "inCategories": "Ingår i:",
+    "subcategories": "Underkategorier",
+    "whichArticles": "Vilka artiklar",
+    "onlyHere": "Bara här",
+    "withSubcategories": "Med underkategorier",
+    "view": "Visa som",
+    "alphabetical": "A–Ö",
+    "treeView": "Träd",
+    "lists": "Listor",
+    "wanted": "Önskade artiklar",
+    "wantedDescription": "Titlar som artiklar länkar till men som ingen artikel har än, mest länkade först. Skriv en genom att följa länken.",
+    "noWanted": "Alla länkar leder till artiklar.",
+    "linkCount": "{count, plural, one {# länk} other {# länkar}}",
+    "orphans": "Föräldralösa artiklar",
+    "orphansDescription": "Artiklar som inget länkar till och som saknar förälder, underartiklar och kategori."
   },
   "ArticleForm": {
     "saved": "Sparad",
@@ -520,7 +524,8 @@
     "cancel": "Avbryt",
     "newTitle": "Ny artikel",
     "newDescription": "Alla medlemmar kan skriva. Nya artiklar är opublicerade tills en författare publicerar dem. Anekdoter som nämner personer ska vara för medlemmar.",
-    "editTitle": "Redigera {title}"
+    "editTitle": "Redigera {title}",
+    "newChildDescription": "Artikeln hamnar under ”{parent}” och är opublicerad tills en författare publicerar den."
   },
   "Editor": {
     "write": "Skriv",
@@ -591,11 +596,9 @@
     "vestWornBy": "Västen bars av",
     "saveTexts": "Spara texterna",
     "sections": {
-      "BACKDROP": "Fond",
-      "STAGE": "Scen",
-      "PROPS": "Rekvisita",
       "VEST": "Spexvästen",
-      "OTHER": "Övriga bilder"
+      "OTHER": "Övriga bilder",
+      "SCENOGRAPHY": "Scenografi"
     },
     "rebus": "Programrebus",
     "rebusSolution": "Rebusens lösning",
@@ -647,9 +650,27 @@
       "scenes": "Scener",
       "numbers": "Nummer",
       "revival": "Nyuppsättningens ändringar",
-      "history": "Historik"
+      "history": "Historik",
+      "facts": "Fakta"
     },
-    "noHistory": "Inga ändringar av texterna ännu."
+    "noHistory": "Inga ändringar av texterna ännu.",
+    "unresolved": "olöst",
+    "unresolvedHelp": "Ett importerat namn som ingen har löst än. Det visas bara för redaktörer; lös det i listan över numret.",
+    "unresolvedCount": "{count, plural, one {# olöst medverkande} other {# olösta medverkande}}",
+    "resolve": "Lös",
+    "resolveSearch": "Sök spexaren som ”{name}” avser",
+    "outsideFgv": "”{name}” är någon utanför FGV",
+    "resolved": "Löst",
+    "numberKind": "Sort",
+    "fromWork": "Ur",
+    "fromWorkPlaceholder": "t.ex. en musikal eller film",
+    "firstLine": "Första raden",
+    "shortDescription": "Kort beskrivning",
+    "shortDescriptionHelp": "En mening eller två, för listor och sidans huvud.",
+    "noFactKinds": "Det finns inga sorters fakta än; en administratör lägger till dem.",
+    "factsRevivalHelp": "En nyuppsättning utan egna fakta visar uruppsättningens; sparade fakta här blir nyuppsättningens egna.",
+    "factDateHelp": "År, år och månad, eller datum: 1984, 1984-05 eller 1984-05-12.",
+    "saveFacts": "Spara fakta"
   },
   "BaseData": {
     "title": "Basdata",
@@ -770,5 +791,138 @@
     "articles": "Artiklar",
     "images": "Bilder",
     "restore": "Återställ"
+  },
+  "AdminKinds": {
+    "title": "Sorter",
+    "description": "Sorterna som spexsidorna och importen använder: namn på svenska och engelska, de stavningar importen känner igen, ordning (den första i bruk är standard) och om de är i bruk.",
+    "types": {
+      "label": "Typer av sorter",
+      "NUMBER": "Nummer",
+      "CREDIT": "Medverkande",
+      "MEDIUM": "Skivformat",
+      "IMAGE": "Bilder",
+      "FACT": "Fakta"
+    },
+    "typeHelp": {
+      "NUMBER": "Vad ett nummer är, t.ex. sång, ouvertyr eller final. Ett nummer kan sakna sort.",
+      "CREDIT": "Vad någon gjorde för ett nummer, t.ex. text, musik eller arrangemang. Spexify, Spexarkivet och Spexflix läser dem i flödet.",
+      "MEDIUM": "Inspelningarnas format; en ny inspelning får det första.",
+      "IMAGE": "Bildsorter per användning: för roller, för scenografi och för sidans övriga bilder. Användningarna är givna; sorterna inom dem är data.",
+      "FACT": "Korta fakta om en uppsättning, som text eller som datum. En ny sorts fakta visas genast i redigeringen av spexsidorna."
+    },
+    "uses": {
+      "CHARACTER": "Roller",
+      "SCENOGRAPHY": "Scenografi",
+      "PAGE": "Övriga bilder"
+    },
+    "valueTypes": {
+      "TEXT": "Text",
+      "DATE": "Datum"
+    },
+    "valueType": "Värde",
+    "add": "Ny sort",
+    "none": "Inga sorter än.",
+    "nameSv": "Namn på svenska",
+    "nameEn": "Namn på engelska",
+    "aliases": "Alias",
+    "aliasesHelp": "En per rad: andra stavningar som importen känner igen, t.ex. ”Låt” för Sång.",
+    "aliasesShort": "även: {aliases}",
+    "retired": "Ur bruk",
+    "retire": "Ta ur bruk",
+    "reinstate": "Ta i bruk igen",
+    "retiredToast": "Sorten är tagen ur bruk",
+    "reinstated": "Sorten är i bruk igen",
+    "merge": "Slå ihop",
+    "mergeTitle": "Slå ihop {name} med …",
+    "mergeConfirm": "Slå ihop {name} med {into}?",
+    "mergeText": "Allt som har sorten får den andra, och namnen blir alias där. Sorten tas bort; det går inte att ångra.",
+    "merged": "Sorterna är ihopslagna",
+    "moveUp": "Flytta upp",
+    "moveDown": "Flytta ner",
+    "edit": "Ändra",
+    "save": "Spara",
+    "cancel": "Avbryt"
+  },
+  "UnresolvedCredits": {
+    "title": "Olösta medverkande",
+    "description": "{count, plural, =0 {Inga namn från importen väntar.} one {# namn från importen väntar på att någon säger vem det är.} other {# namn från importen väntar på att någon säger vilka de är.}} De visas bara för redaktörer tills de är lösta.",
+    "empty": "Alla medverkande är lösta.",
+    "showing": "Visar {shown} av {total}; lös dem för att se fler.",
+    "resolved": "Löst"
+  },
+  "Packages": {
+    "title": "Spexpaket",
+    "description": "Ett nytt spex i alla FGV:s applikationer ur ett kalkylark och en zip: förhandsgranska vad som händer i varje applikation, och tillämpa sedan.",
+    "template": "Ladda ner mallen",
+    "new": "Nytt spexpaket",
+    "newDescription": "Fyll i mallen och lägg filerna (affischer, bilder, manus, inspelningar, foton) i en zip. Zippen kan vara upp till 20 GB; laddas den inte upp helt kan du fortsätta senare.",
+    "empty": "Inga spexpaket än.",
+    "back": "Alla spexpaket",
+    "appliedAt": "tillämpat {at}",
+    "spexLink": "Spexet: {title} ({year})",
+    "previewFirst": "Förhandsgranska paketet för att se vad som händer i varje applikation innan det tillämpas.",
+    "results": "Resultat",
+    "previewHeading": "Förhandsgranskning",
+    "states": {
+      "UPLOADED": "Uppladdat",
+      "PREVIEWING": "Förhandsgranskas",
+      "PREVIEWED": "Förhandsgranskat",
+      "APPLYING": "Tillämpas",
+      "APPLIED": "Tillämpat",
+      "FAILED": "Misslyckades"
+    },
+    "statuses": {
+      "CHECKED": "Kontrollerad",
+      "APPLIED": "Tillämpad",
+      "DEFERRED": "Kontrolleras vid tillämpning",
+      "UNAVAILABLE": "Inte nåbar",
+      "FAILED": "Misslyckades"
+    },
+    "outcomes": {
+      "CREATED": "ny",
+      "UPDATED": "ändrad",
+      "UNCHANGED": "oförändrad",
+      "KEPT": "behållen",
+      "FAILED": "misslyckades"
+    },
+    "counts": {
+      "created": "Nya",
+      "updated": "Ändrade",
+      "unchanged": "Oförändrade",
+      "kept": "Behållna",
+      "failed": "Misslyckade"
+    },
+    "recordsAndFiles": "{records, plural, one {# post} other {# poster}}, {files, plural, one {# fil} other {# filer}}",
+    "itemsWithMessages": "{count, plural, one {# post med meddelande} other {# poster med meddelanden}}",
+    "unmatched": "{count, plural, one {# fil eller rad hamnar ingenstans} other {# filer och rader hamnar ingenstans}}",
+    "warnings": "{count, plural, one {# varning} other {# varningar}}",
+    "open": "Öppna",
+    "spreadsheet": "Kalkylark (.xlsx)",
+    "spreadsheetHelp": "Den ifyllda mallen.",
+    "zip": "Zip med filer (valfri)",
+    "zipHelp": "Upp till 20 GB. Filnamnen i zippen ska stå i kalkylarket.",
+    "zipChosen": "{size} att ladda upp.",
+    "zipProgress": "Uppladdning av zippen",
+    "received": "{received} av {size}",
+    "upload": "Ladda upp",
+    "uploading": "Laddar upp…",
+    "stop": "Avbryt",
+    "uploaded": "Uppladdat",
+    "uploadFailed": "Uppladdningen misslyckades: {message}",
+    "zipFailed": "Zippen kom inte fram helt ({message}); fortsätt på paketets sida.",
+    "zipIncomplete": "Zippen {name} har inte kommit fram helt.",
+    "pickSameZip": "Välj samma zip igen så fortsätter uppladdningen där den slutade.",
+    "notTheSameZip": "Det är inte samma zip: väntade {name} på {size}.",
+    "preview": "Förhandsgranska",
+    "previewStarted": "Förhandsgranskningen har börjat",
+    "apply": "Tillämpa",
+    "applyAgain": "Tillämpa igen",
+    "applyTitle": "Tillämpa spexpaketet?",
+    "applyText": "Spexipedia först, sedan de andra applikationerna. Det går att tillämpa igen; det som redan finns ändras inte två gånger.",
+    "applyStarted": "Tillämpningen har börjat",
+    "delete": "Radera",
+    "deleteTitle": "Radera spexpaketet?",
+    "deleteText": "Paketet och dess filer tas bort. Det som det har skapat finns kvar.",
+    "deleted": "Spexpaketet är raderat"
   }
 }

@@ -15,7 +15,7 @@ vi.mock("@/app/(app)/admin/actions.server", async () => (await import("@/test/ma
 vi.mock("@/app/(app)/articles/actions.server", async () => (await import("@/test/manage-mocks")).actionsMock(actions));
 
 import { NewRecordingForm, RecordingEditor } from "@/components/wiki/manage/recording-editor.client";
-import { SpexBaseDataEditor, SpexTextsEditor } from "@/components/wiki/manage/spex-head-editor.client";
+import { FactsEditor, SpexBaseDataEditor, SpexTextsEditor } from "@/components/wiki/manage/spex-head-editor.client";
 import { ConsumersEditor, RedirectsEditor } from "@/components/wiki/manage/admin-lists.client";
 import { DialogsProvider } from "@/components/dialogs.client";
 import { router } from "@/test/manage-mocks";
@@ -23,9 +23,15 @@ import type { RecordingEditData, SpexEditData } from "@/lib/wiki/edit.server";
 
 const show = (node: React.ReactNode) => render(<DialogsProvider>{node}</DialogsProvider>);
 const spexOptions = [{ id: "s1", label: "1984 Lasse-Maja" }];
+const media = [
+  { id: "m1", name: "LP", retired: false, valueType: null },
+  { id: "m2", name: "EP", retired: false, valueType: null },
+  { id: "m3", name: "CD", retired: false, valueType: null },
+  { id: "m4", name: "Kassett", retired: true, valueType: null },
+];
 
 const recording = (published = false) => ({
-  id: "r1", catalogueNumber: "CEP 019", title: "Lasse-Maja", medium: "EP", published,
+  id: "r1", catalogueNumber: "CEP 019", title: "Lasse-Maja", medium: { id: "m2" }, published,
   spex: { id: "s1", numbers: [{ id: "n1", act: 1, position: 1, title: "Haralds entré" }] },
   released: "1984-12", recorded: null, description: null, spexifyAlbumId: null,
   conductor: { name: "Harald Hornblåsare", person: null }, front: null, back: null,
@@ -40,24 +46,27 @@ describe("The recording editors", () => {
 
   it("create a recording and open it", async () => {
     actions.saveRecordingAction = vi.fn(() => Promise.resolve({ ok: true, data: { id: "r9" } }));
-    show(<NewRecordingForm spex={spexOptions} />);
+    show(<NewRecordingForm spex={spexOptions} media={media} />);
+
+    expect(screen.getByLabelText("medium")).toHaveValue("m1");
+    expect(screen.queryByRole("option", { name: "Kassett" })).not.toBeInTheDocument();
 
     await userEvent.type(screen.getByLabelText("catalogueNumber"), "CLP 100");
     await userEvent.type(screen.getByLabelText("recordingTitle"), "Det bästa");
-    await userEvent.selectOptions(screen.getByLabelText("medium"), "CD");
+    await userEvent.selectOptions(screen.getByLabelText("medium"), "m3");
     await userEvent.click(screen.getByRole("button", { name: "create" }));
     await waitFor(() => expect(router.push).toHaveBeenCalledWith("/manage/recordings/r9"));
-    expect(actions.saveRecordingAction).toHaveBeenCalledWith(null, { catalogueNumber: "CLP 100", title: "Det bästa", medium: "CD", spexId: null });
+    expect(actions.saveRecordingAction).toHaveBeenCalledWith(null, { catalogueNumber: "CLP 100", title: "Det bästa", mediumId: "m3", spexId: null });
   });
 
   it("save a recording's fields with its conductor", async () => {
-    show(<RecordingEditor recording={recording()} spex={spexOptions} />);
+    show(<RecordingEditor recording={recording()} spex={spexOptions} media={media} />);
 
     expect(screen.getByText("unpublishedText")).toBeInTheDocument();
     await userEvent.type(screen.getByLabelText("description"), "En EP");
     await userEvent.click(screen.getByRole("button", { name: "save" }));
     await waitFor(() => expect(actions.saveRecordingAction).toHaveBeenCalledWith("r1", expect.objectContaining({
-      catalogueNumber: "CEP 019", medium: "EP", spexId: "s1", released: "1984-12", recorded: null,
+      catalogueNumber: "CEP 019", mediumId: "m2", spexId: "s1", released: "1984-12", recorded: null,
       description: "En EP", conductor: { name: "Harald Hornblåsare" }, frontImageId: null,
     })));
 
@@ -66,7 +75,7 @@ describe("The recording editors", () => {
   });
 
   it("edit, remove, add and paste tracks", async () => {
-    show(<RecordingEditor recording={recording(true)} spex={spexOptions} />);
+    show(<RecordingEditor recording={recording(true)} spex={spexOptions} media={media} />);
 
     expect(screen.getAllByRole("combobox", { name: "number" })[0]).toHaveValue("n1");
     await userEvent.type(screen.getAllByRole("textbox", { name: "trackTitle" })[0], "!");
@@ -86,7 +95,7 @@ describe("The recording editors", () => {
   });
 
   it("delete a recording after confirming and go back to the list", async () => {
-    show(<RecordingEditor recording={recording(true)} spex={spexOptions} />);
+    show(<RecordingEditor recording={recording(true)} spex={spexOptions} media={media} />);
 
     await userEvent.click(screen.getByRole("button", { name: "unpublish" }));
     await userEvent.click(screen.getByRole("button", { name: "delete" }));
@@ -146,14 +155,57 @@ describe("The spex head editors", () => {
 
     await userEvent.clear(screen.getByLabelText("generation"));
     await userEvent.type(screen.getByLabelText("introduction"), " om en tjuv");
+    await userEvent.type(screen.getByLabelText("shortDescription"), "Om Lasse-Maja.");
     await userEvent.click(screen.getByRole("button", { name: "saveTexts" }));
     await waitFor(() => expect(actions.savePageAction).toHaveBeenCalledWith("s1", {
-      generation: null, premiere: "1984-02-14", introduction: "Ett spex om en tjuv", description: "Lång", synopsis: null,
+      generation: null, premiere: "1984-02-14", introduction: "Ett spex om en tjuv", shortDescription: "Om Lasse-Maja.", description: "Lång", synopsis: null,
       vestDescription: null, vestWornBy: null, baseRevisionIds: { introduction: "r1", description: "r2", synopsis: null },
     }));
 
     await userEvent.click(screen.getByRole("button", { name: "publish" }));
     await waitFor(() => expect(actions.setPagePublishedAction).toHaveBeenCalledWith("s1", true));
+  });
+});
+
+describe("The facts editor", () => {
+  beforeEach(() => {
+    Object.keys(actions).forEach(key => delete actions[key]);
+    vi.clearAllMocks();
+  });
+
+  const factKinds = [
+    { id: "f1", name: "Spelplats", retired: false, valueType: "TEXT" as const },
+    { id: "f2", name: "Sista föreställningen", retired: false, valueType: "DATE" as const },
+    { id: "f3", name: "Gammal", retired: true, valueType: "TEXT" as const },
+    { id: "f4", name: "Utgången med värde", retired: true, valueType: "TEXT" as const },
+  ];
+  const withFacts = (revival = false) => ({
+    ...spex(revival), page: { facts: [{ kind: { id: "f1" }, value: "Chalmers" }, { kind: { id: "f4" }, value: "Kvar" }] },
+  }) as unknown as SpexEditData;
+
+  it("save a fact per kind, dates as dates, leaving out empty ones and retired kinds without a value", async () => {
+    show(<FactsEditor spex={withFacts()} factKinds={factKinds} />);
+
+    expect(screen.getByLabelText("Spelplats")).toHaveValue("Chalmers");
+    expect(screen.queryByLabelText("Gammal")).not.toBeInTheDocument();
+    expect(screen.getByLabelText("Utgången med värde (retired)")).toHaveValue("Kvar");
+    expect(screen.getByLabelText("Sista föreställningen")).toHaveAttribute("pattern");
+    expect(screen.queryByText("factsRevivalHelp")).not.toBeInTheDocument();
+    await userEvent.type(screen.getByLabelText("Sista föreställningen"), "1984-05");
+    await userEvent.clear(screen.getByLabelText("Utgången med värde (retired)"));
+    await userEvent.click(screen.getByRole("button", { name: "saveFacts" }));
+    await waitFor(() => expect(actions.setFactsAction).toHaveBeenCalledWith("s1", [
+      { kindId: "f1", value: "Chalmers" }, { kindId: "f2", value: "1984-05" },
+    ]));
+  });
+
+  it("say when there are no kinds of facts, and tell revivals whose facts they edit", () => {
+    const { unmount } = show(<FactsEditor spex={withFacts()} factKinds={[]} />);
+
+    expect(screen.getByText("noFactKinds")).toBeInTheDocument();
+    unmount();
+    show(<FactsEditor spex={withFacts(true)} factKinds={factKinds} />);
+    expect(screen.getByText("factsRevivalHelp")).toBeInTheDocument();
   });
 });
 

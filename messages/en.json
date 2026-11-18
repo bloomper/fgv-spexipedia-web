@@ -283,7 +283,10 @@
     "adminSettings": "Settings",
     "adminRedirects": "Redirects",
     "adminConsumers": "Change recipients",
-    "adminMaintenance": "Maintenance"
+    "adminMaintenance": "Maintenance",
+    "unresolvedCredits": "Unresolved credits",
+    "adminKinds": "Kinds",
+    "packages": "Spex packages"
   },
   "Home": {
     "kicker": "The Chalmers spex encyclopedia",
@@ -383,37 +386,7 @@
         "subtitle": "In FGV's other services"
       }
     },
-    "scenography": {
-      "backdrop": "Backdrop",
-      "stage": "Stage",
-      "props": "Props"
-    },
-    "credits": {
-      "lyrics": "Lyrics",
-      "composers": "Music",
-      "arrangers": "Arr.",
-      "choreographers": "Choreography"
-    },
-    "imageKinds": {
-      "POSTER": "Poster",
-      "LOGO": "Logo",
-      "SKETCH": "Sketch",
-      "MAKEUP": "Make-up sketch",
-      "COSTUME": "Costume doll",
-      "SCENOGRAPHY": "Scenography",
-      "REBUS": "Rebus",
-      "VEST": "Vest",
-      "COVER": "Cover",
-      "ARTICLE": "Article image",
-      "OTHER": "Other"
-    },
-    "media": {
-      "LP": "LP",
-      "EP": "EP",
-      "CD": "CD",
-      "DIGITAL": "Digital",
-      "OTHER": "Other"
-    }
+    "fromWork": "from {work}"
   },
   "Photos": {
     "unavailable": "Spexgram cannot be reached right now.",
@@ -496,7 +469,38 @@
     "trash": "Move to the trash",
     "trashTitle": "Move the article to the trash?",
     "trashText": "It is no longer shown; it can be restored from the trash.",
-    "trashedToast": "The article is in the trash"
+    "trashedToast": "The article is in the trash",
+    "breadcrumbs": "Breadcrumbs",
+    "contents": "Contents",
+    "tree": "Articles around this one",
+    "thisArticle": "This article",
+    "moreBelow": "{count, plural, one {# more article below} other {# more articles below}}",
+    "move": "Move",
+    "moveTitle": "Move the article under …",
+    "moveToTop": "To the top of the tree",
+    "moved": "The article is moved",
+    "moveUp": "Move {title} up",
+    "moveDown": "Move {title} down",
+    "newChild": "New child article",
+    "children": "Child articles",
+    "backlinks": "What links here",
+    "noBacklinks": "No articles link here.",
+    "trashChildren": "{count, plural, one {Its child article goes to the trash too.} other {Its # child articles go to the trash too.}}",
+    "inCategories": "In:",
+    "subcategories": "Subcategories",
+    "whichArticles": "Which articles",
+    "onlyHere": "Only here",
+    "withSubcategories": "With subcategories",
+    "view": "Show as",
+    "alphabetical": "A–Z",
+    "treeView": "Tree",
+    "lists": "Lists",
+    "wanted": "Wanted articles",
+    "wantedDescription": "Titles that articles link to but no article has yet, most linked first. Follow a link to write one.",
+    "noWanted": "Every link leads to an article.",
+    "linkCount": "{count, plural, one {# link} other {# links}}",
+    "orphans": "Orphaned articles",
+    "orphansDescription": "Articles nothing links to, without a parent, children or a category."
   },
   "ArticleForm": {
     "saved": "Saved",
@@ -520,7 +524,8 @@
     "cancel": "Cancel",
     "newTitle": "New article",
     "newDescription": "Every member can write. New articles are unpublished until an author publishes them. Anecdotes that name people should be for members.",
-    "editTitle": "Edit {title}"
+    "editTitle": "Edit {title}",
+    "newChildDescription": "The article goes under “{parent}” and stays unpublished until an author publishes it."
   },
   "Editor": {
     "write": "Write",
@@ -591,11 +596,9 @@
     "vestWornBy": "The vest was worn by",
     "saveTexts": "Save the texts",
     "sections": {
-      "BACKDROP": "Backdrop",
-      "STAGE": "Stage",
-      "PROPS": "Props",
       "VEST": "The vest",
-      "OTHER": "Other images"
+      "OTHER": "Other images",
+      "SCENOGRAPHY": "Scenography"
     },
     "rebus": "Programme rebus",
     "rebusSolution": "The rebus's solution",
@@ -647,9 +650,27 @@
       "scenes": "Scenes",
       "numbers": "Numbers",
       "revival": "The revival's changes",
-      "history": "History"
+      "history": "History",
+      "facts": "Facts"
     },
-    "noHistory": "No changes to the texts yet."
+    "noHistory": "No changes to the texts yet.",
+    "unresolved": "unresolved",
+    "unresolvedHelp": "An imported name nobody has resolved yet. Only editors see it; resolve it in the list above the form.",
+    "unresolvedCount": "{count, plural, one {# unresolved credit} other {# unresolved credits}}",
+    "resolve": "Resolve",
+    "resolveSearch": "Search for the spexare “{name}” means",
+    "outsideFgv": "“{name}” is someone outside FGV",
+    "resolved": "Resolved",
+    "numberKind": "Kind",
+    "fromWork": "From",
+    "fromWorkPlaceholder": "e.g. a musical or a film",
+    "firstLine": "First line",
+    "shortDescription": "Short description",
+    "shortDescriptionHelp": "A sentence or two, for lists and the head of the page.",
+    "noFactKinds": "There are no kinds of facts yet; an admin adds them.",
+    "factsRevivalHelp": "A revival without facts of its own shows its original’s; facts saved here become the revival’s own.",
+    "factDateHelp": "A year, a month or a day: 1984, 1984-05 or 1984-05-12.",
+    "saveFacts": "Save facts"
   },
   "BaseData": {
     "title": "Base data",
@@ -770,5 +791,138 @@
     "articles": "Articles",
     "images": "Images",
     "restore": "Restore"
+  },
+  "AdminKinds": {
+    "title": "Kinds",
+    "description": "The kinds the spex pages and the import use: names in Swedish and English, the spellings the import recognises, their order (the first in use is the default) and whether they are in use.",
+    "types": {
+      "label": "Types of kinds",
+      "NUMBER": "Numbers",
+      "CREDIT": "Credits",
+      "MEDIUM": "Recording media",
+      "IMAGE": "Images",
+      "FACT": "Facts"
+    },
+    "typeHelp": {
+      "NUMBER": "What a number is, e.g. song, overture or finale. A number may have none.",
+      "CREDIT": "What someone did for a number, e.g. lyrics, music or arrangement. Spexify, Spexarkivet and Spexflix read them from the feed.",
+      "MEDIUM": "The media of recordings; a new recording gets the first.",
+      "IMAGE": "Image kinds per use: for characters, for scenography and for the page’s other images. The uses are fixed; the kinds within them are data.",
+      "FACT": "Short facts about a production, as text or as a date. A new kind of fact shows at once when spex pages are edited."
+    },
+    "uses": {
+      "CHARACTER": "Characters",
+      "SCENOGRAPHY": "Scenography",
+      "PAGE": "Other images"
+    },
+    "valueTypes": {
+      "TEXT": "Text",
+      "DATE": "Date"
+    },
+    "valueType": "Value",
+    "add": "New kind",
+    "none": "No kinds yet.",
+    "nameSv": "Name in Swedish",
+    "nameEn": "Name in English",
+    "aliases": "Aliases",
+    "aliasesHelp": "One per line: other spellings the import recognises, e.g. “Låt” for Song.",
+    "aliasesShort": "also: {aliases}",
+    "retired": "Retired",
+    "retire": "Retire",
+    "reinstate": "Bring back into use",
+    "retiredToast": "The kind is retired",
+    "reinstated": "The kind is in use again",
+    "merge": "Merge",
+    "mergeTitle": "Merge {name} into …",
+    "mergeConfirm": "Merge {name} into {into}?",
+    "mergeText": "Everything of this kind gets the other, and its names become aliases there. The kind is deleted; this cannot be undone.",
+    "merged": "The kinds are merged",
+    "moveUp": "Move up",
+    "moveDown": "Move down",
+    "edit": "Edit",
+    "save": "Save",
+    "cancel": "Cancel"
+  },
+  "UnresolvedCredits": {
+    "title": "Unresolved credits",
+    "description": "{count, plural, =0 {No imported names are waiting.} one {# imported name is waiting for someone to say who it is.} other {# imported names are waiting for someone to say who they are.}} Only editors see them until they are resolved.",
+    "empty": "Every credit is resolved.",
+    "showing": "Showing {shown} of {total}; resolve these to see more.",
+    "resolved": "Resolved"
+  },
+  "Packages": {
+    "title": "Spex packages",
+    "description": "A new spex in every FGV application from a spreadsheet and a zip: preview what happens in each application, then apply it.",
+    "template": "Download the template",
+    "new": "New spex package",
+    "newDescription": "Fill in the template and put the files (posters, images, manuscripts, recordings, photos) in a zip. The zip may be up to 20 GB; if it does not all upload, you can continue later.",
+    "empty": "No spex packages yet.",
+    "back": "All spex packages",
+    "appliedAt": "applied {at}",
+    "spexLink": "The spex: {title} ({year})",
+    "previewFirst": "Preview the package to see what happens in each application before it is applied.",
+    "results": "Results",
+    "previewHeading": "Preview",
+    "states": {
+      "UPLOADED": "Uploaded",
+      "PREVIEWING": "Previewing",
+      "PREVIEWED": "Previewed",
+      "APPLYING": "Applying",
+      "APPLIED": "Applied",
+      "FAILED": "Failed"
+    },
+    "statuses": {
+      "CHECKED": "Checked",
+      "APPLIED": "Applied",
+      "DEFERRED": "Checked when applied",
+      "UNAVAILABLE": "Unavailable",
+      "FAILED": "Failed"
+    },
+    "outcomes": {
+      "CREATED": "created",
+      "UPDATED": "updated",
+      "UNCHANGED": "unchanged",
+      "KEPT": "kept",
+      "FAILED": "failed"
+    },
+    "counts": {
+      "created": "Created",
+      "updated": "Updated",
+      "unchanged": "Unchanged",
+      "kept": "Kept",
+      "failed": "Failed"
+    },
+    "recordsAndFiles": "{records, plural, one {# record} other {# records}}, {files, plural, one {# file} other {# files}}",
+    "itemsWithMessages": "{count, plural, one {# record with a message} other {# records with messages}}",
+    "unmatched": "{count, plural, one {# file or row goes nowhere} other {# files and rows go nowhere}}",
+    "warnings": "{count, plural, one {# warning} other {# warnings}}",
+    "open": "Open",
+    "spreadsheet": "Spreadsheet (.xlsx)",
+    "spreadsheetHelp": "The filled-in template.",
+    "zip": "Zip with files (optional)",
+    "zipHelp": "Up to 20 GB. The file names in the zip are given in the spreadsheet.",
+    "zipChosen": "{size} to upload.",
+    "zipProgress": "Upload of the zip",
+    "received": "{received} of {size}",
+    "upload": "Upload",
+    "uploading": "Uploading…",
+    "stop": "Stop",
+    "uploaded": "Uploaded",
+    "uploadFailed": "The upload failed: {message}",
+    "zipFailed": "The zip did not all arrive ({message}); continue on the package’s page.",
+    "zipIncomplete": "The zip {name} has not all arrived.",
+    "pickSameZip": "Pick the same zip again and the upload continues where it stopped.",
+    "notTheSameZip": "That is not the same zip: expected {name} of {size}.",
+    "preview": "Preview",
+    "previewStarted": "The preview has started",
+    "apply": "Apply",
+    "applyAgain": "Apply again",
+    "applyTitle": "Apply the spex package?",
+    "applyText": "Spexipedia first, then the other applications. It can be applied again; what is already there is not changed twice.",
+    "applyStarted": "Applying has started",
+    "delete": "Delete",
+    "deleteTitle": "Delete the spex package?",
+    "deleteText": "The package and its files are deleted. What it created stays.",
+    "deleted": "The spex package is deleted"
   }
 }

@@ -39,16 +39,18 @@ describe("ImageListEditor", () => {
   it("saves images in a new order with kinds and captions", async () => {
     const onSave = vi.fn(() => Promise.resolve(true));
 
-    show(<ImageListEditor title="Bilder" uploadKind="SKETCH" kinds={["SKETCH", "MAKEUP"]} onSave={onSave}
-                          images={[{ image: image("i1"), kind: "SKETCH", caption: "Skiss" }, { image: image("i2"), kind: "SKETCH", caption: null }]} />);
+    show(<ImageListEditor title="Bilder" uploadKind="SKETCH" kinds={[{ id: "k1", name: "Skiss" }, { id: "k2", name: "Sminkskiss" }, { id: "k3", name: "Gammal", retired: true }]} onSave={onSave}
+                          images={[{ image: image("i1"), kind: { id: "k1" }, caption: "Skiss" }, { image: image("i2"), kind: { id: "k1" }, caption: null }]} />);
+
+    expect(screen.queryByRole("option", { name: "Gammal" })).not.toBeInTheDocument();
 
     expect(screen.getByRole("button", { name: "save" })).toBeDisabled();
     await userEvent.click(screen.getAllByRole("button", { name: "moveDown" })[0]);
-    await userEvent.selectOptions(screen.getAllByRole("combobox", { name: "kind" })[1], "MAKEUP");
+    await userEvent.selectOptions(screen.getAllByRole("combobox", { name: "kind" })[1], "k2");
     await userEvent.type(screen.getAllByRole("textbox", { name: "caption" })[0], "Ny ");
     await userEvent.click(screen.getByRole("button", { name: "save" }));
 
-    expect(onSave).toHaveBeenCalledWith([{ imageId: "i2", kind: "SKETCH", caption: "Ny" }, { imageId: "i1", kind: "MAKEUP", caption: "Skiss" }]);
+    expect(onSave).toHaveBeenCalledWith([{ imageId: "i2", kindId: "k1", caption: "Ny" }, { imageId: "i1", kindId: "k2", caption: "Skiss" }]);
     await waitFor(() => expect(screen.getByRole("button", { name: "save" })).toBeDisabled());
   });
 
@@ -66,7 +68,7 @@ describe("ImageListEditor", () => {
 
     await userEvent.click(screen.getAllByRole("button", { name: "remove" })[0]);
     await userEvent.click(screen.getByRole("button", { name: "save" }));
-    expect(onSave).toHaveBeenCalledWith([{ imageId: "i3", kind: null, caption: null }]);
+    expect(onSave).toHaveBeenCalledWith([{ imageId: "i3", kindId: null, caption: null }]);
     expect(screen.getByRole("button", { name: "save" })).toBeEnabled();
   });
 

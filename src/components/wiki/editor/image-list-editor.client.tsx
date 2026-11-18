@@ -12,9 +12,10 @@ import { WikiImage, type WikiImageData } from "@/components/wiki/wiki-image";
 import { ACCEPTED_IMAGES, uploadImage } from "@/components/wiki/editor/upload.client";
 import { useServerState } from "@/hooks/use-server-state.client";
 import { cn } from "@/utils/utils";
-import type { ImageKind, ImageRefInput } from "@/gql/graphql";
+import type { ImageRefInput } from "@/gql/graphql";
+import { offeredKinds, type KindOption } from "@/utils/kinds";
 
-export type PlacedImage = { image: WikiImageData; kind?: string | null; caption?: string | null };
+export type PlacedImage = { image: WikiImageData; kind?: { id: string } | null; caption?: string | null };
 export type ImageRef = ImageRefInput;
 
 /**
@@ -26,14 +27,13 @@ export function ImageListEditor({ title, images, uploadKind, kinds, onSave, disa
   images: PlacedImage[];
   /** The kind uploads get, e.g. SCENOGRAPHY. */
   uploadKind: string;
-  /** Kinds to choose from per image, e.g. a character's sketch, make-up and costume. */
-  kinds?: string[];
+  /** Image kinds to choose from per image (spec 4.6), e.g. a character's sketches and costume dolls; retired ones only where already chosen. */
+  kinds?: KindOption[];
   onSave: (images: ImageRef[]) => Promise<boolean>;
   disabled?: boolean;
 }) {
   const t = useTranslations("Manage");
-  const tk = useTranslations("SpexPage.imageKinds");
-  const [list, setList] = useServerState(images, value => JSON.stringify(value.map(item => [item.image.id, item.kind, item.caption])));
+  const [list, setList] = useServerState(images, value => JSON.stringify(value.map(item => [item.image.id, item.kind?.id, item.caption])));
   const [dirty, setDirty] = useState(false);
   const [uploading, setUploading] = useState(0);
   const [dragged, setDragged] = useState<number | null>(null);
@@ -63,7 +63,7 @@ export function ImageListEditor({ title, images, uploadKind, kinds, onSave, disa
       try {
         const image = await uploadImage(file, uploadKind);
 
-        added.push({ image, kind: kinds?.[0] ?? null, caption: null });
+        added.push({ image, kind: kinds ? offeredKinds(kinds)[0] ?? null : null, caption: null });
       } catch (error) {
         toast.error(t("uploadFailed", { message: `${file.name}: ${(error as Error).message}` }));
       } finally {
@@ -92,7 +92,7 @@ export function ImageListEditor({ title, images, uploadKind, kinds, onSave, disa
             {uploading > 0 ? <Spinner /> : <ImagePlus aria-hidden />} {t("addImages")}
           </Button>
           <Button type="button" size="sm" disabled={disabled || !dirty || uploading > 0} onClick={async () => {
-            if (await onSave(list.map(item => ({ imageId: item.image.id, kind: (item.kind ?? null) as ImageKind | null, caption: item.caption?.trim() || null })))) {
+            if (await onSave(list.map(item => ({ imageId: item.image.id, kindId: kinds ? item.kind?.id ?? null : null, caption: item.caption?.trim() || null })))) {
               setDirty(false);
             }
           }}><Save aria-hidden /> {t("save")}</Button>
@@ -114,8 +114,8 @@ export function ImageListEditor({ title, images, uploadKind, kinds, onSave, disa
               className={cn("space-y-2 rounded-lg border border-border bg-card p-2", dragged === index && "opacity-50")}>
             <WikiImage image={item.image} sizes="20rem" className="aspect-[4/3] w-full cursor-grab rounded object-cover" />
             {kinds && (
-              <NativeSelect aria-label={t("kind")} value={item.kind ?? ""} onChange={event => change(list.map((other, i) => i === index ? { ...other, kind: event.target.value } : other))}>
-                {kinds.map(kind => <NativeSelectOption key={kind} value={kind}>{tk(kind)}</NativeSelectOption>)}
+              <NativeSelect aria-label={t("kind")} value={item.kind?.id ?? ""} onChange={event => change(list.map((other, i) => i === index ? { ...other, kind: { id: event.target.value } } : other))}>
+                {offeredKinds(kinds, item.kind?.id).map(kind => <NativeSelectOption key={kind.id} value={kind.id}>{kind.name}</NativeSelectOption>)}
               </NativeSelect>
             )}
             <Input aria-label={t("caption")} placeholder={t("caption")} value={item.caption ?? ""}

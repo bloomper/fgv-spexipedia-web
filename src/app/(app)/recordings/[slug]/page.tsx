@@ -28,8 +28,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
  */
 export default async function RecordingPage({ params }: Props) {
   const { slug } = await params;
-  const [recording, viewer, t, tm] = await Promise.all([
-    getRecording(decodeURIComponent(slug)), getViewer(), getTranslations("Recordings"), getTranslations("SpexPage.media"),
+  const [recording, viewer, t] = await Promise.all([
+    getRecording(decodeURIComponent(slug)), getViewer(), getTranslations("Recordings"),
   ]);
 
   if (!recording) {
@@ -45,7 +45,7 @@ export default async function RecordingPage({ params }: Props) {
       <header className="grid gap-6 md:grid-cols-[minmax(0,18rem)_1fr]">
         <ImageGallery images={covers.map(image => ({ image, caption: null }))} columns={2} className="md:grid-cols-1" />
         <div className="space-y-3">
-          <p className="text-sm tracking-[0.25em] text-primary">{recording.catalogueNumber} · {tm(recording.medium)}</p>
+          <p className="text-sm tracking-[0.25em] text-primary">{recording.catalogueNumber} · {recording.medium.name}</p>
           <h1 className="wiki-heading text-4xl font-semibold">{recording.title}</h1>
           <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-sm">
             {recording.spex && <><dt className="text-muted-foreground">{t("spex")}</dt><dd><Link href={`/spex/${recording.spex.slug}`} className="text-primary hover:underline">{recording.spex.title} ({recording.spex.year})</Link></dd></>}

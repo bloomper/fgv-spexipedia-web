@@ -18,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
  * Every published recording (all for editors), by catalogue number.
  */
 export default async function RecordingsPage() {
-  const [t, tm, recordings] = await Promise.all([getTranslations("Recordings"), getTranslations("SpexPage.media"), getRecordings()]);
+  const [t, recordings] = await Promise.all([getTranslations("Recordings"), getRecordings()]);
 
   return (
     <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 px-4 py-6 md:px-8">
@@ -33,7 +33,7 @@ export default async function RecordingsPage() {
               <div className="min-w-0 space-y-1 text-sm">
                 <p className="text-xs tracking-[0.15em] text-primary">{recording.catalogueNumber}</p>
                 <p className="wiki-heading text-lg leading-tight font-semibold">{recording.title}</p>
-                <p className="text-muted-foreground">{tm(recording.medium)}{recording.released && ` · ${recording.released}`}</p>
+                <p className="text-muted-foreground">{recording.medium.name}{recording.released && ` · ${recording.released}`}</p>
                 {recording.spex && <p className="text-xs text-muted-foreground">{recording.spex.title} ({recording.spex.year})</p>}
                 {!recording.published && <Badge variant="outline">{t("unpublished")}</Badge>}
               </div>

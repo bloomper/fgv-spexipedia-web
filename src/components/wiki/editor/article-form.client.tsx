@@ -28,8 +28,10 @@ export type ArticleFormValues = {
  * open it tells the server the user is editing and shows who else is. Saving over someone else's newer revision is
  * refused; the user then sees the differences and either keeps their text (saving over the newer one) or takes it.
  */
-export function ArticleForm({ id, initial, revisionId, categories }: {
+export function ArticleForm({ id, initial, revisionId, categories, parentId = null }: {
   id: string | null;
+  /** For a new article: its parent in the tree; existing ones are moved instead. */
+  parentId?: string | null;
   initial: ArticleFormValues;
   revisionId: string | null;
   categories: { id: string; name: string }[];
@@ -56,7 +58,7 @@ export function ArticleForm({ id, initial, revisionId, categories }: {
   }, [id]);
 
   const save = (baseRevisionId: string | null) => startTransition(async () => {
-    const result = await saveArticleAction(id, { ...values, comment: comment.trim() || null }, baseRevisionId);
+    const result = await saveArticleAction(id, { ...values, comment: comment.trim() || null, ...(id ? {} : { parentId }) }, baseRevisionId);
 
     if (result.ok) {
       toast.success(t("saved"));
