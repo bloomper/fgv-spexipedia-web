@@ -115,7 +115,7 @@ const SpexPageQuery = graphql(`
 const SpexBrowseQuery = graphql(`
   query SpexBrowse {
     spexCategories { id name firstYear descriptionHtml logo { ...ImageFields } }
-    spexAll { ...SpexTile }
+    spexAll { ...SpexTile completeness { share } }
   }
 `);
 

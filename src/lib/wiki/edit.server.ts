@@ -146,6 +146,7 @@ const SpexEditQuery = graphql(`
       parent { id slug title year revivals { id year retired } characters { id name } scenes { id act position title } numbers { id act position title } }
       poster { ...ImageFields }
       revivalChanges { kind recordId cut act position }
+      completeness { share sections { section share items { item filled } } }
       page {
         premiere introduction shortDescription description synopsis vestDescription published
         revisionIds { introduction description synopsis }
@@ -331,4 +332,5 @@ export type RecordingEditData = NonNullable<Awaited<ReturnType<typeof getRecordi
 export type BookEditData = NonNullable<Awaited<ReturnType<typeof getBookEdit>>>;
 export type EditKinds = NonNullable<Awaited<ReturnType<typeof getEditKinds>>>;
 export type EditKind = EditKinds["numberKinds"][number];
+export type Completeness = NonNullable<SpexEditData["completeness"]>;
 export type UnresolvedCreditsData = NonNullable<Awaited<ReturnType<typeof getUnresolvedCredits>>>;

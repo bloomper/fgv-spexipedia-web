@@ -16,7 +16,6 @@ import { buttonVariants } from "@/components/ui/button";
 import { FactsEditor, SpexBaseDataEditor, SpexProductions, SpexTextsEditor } from "@/components/wiki/manage/spex-head-editor.client";
 import { SpexMediaEditor } from "@/components/wiki/manage/spex-media-editor.client";
 import { SpexCompleteness } from "@/components/wiki/manage/spex-completeness";
-import { spexCompleteness } from "@/utils/completeness";
 import { CharactersEditor, NumbersEditor, RevivalChangesEditor, ScenesEditor } from "@/components/wiki/manage/spex-lists-editor.client";
 
 type Props = { params: Promise<{ id: string }> };
@@ -48,14 +47,14 @@ export default async function ManageSpexPage({ params }: Props) {
       "history",
     ];
     const sections = shown.map(section => ({ id: `edit-${section}`, title: t(`editSections.${section}`) }));
-    const completeness = spexCompleteness(spex, kinds?.factKinds ?? []);
+    const completeness = spex.completeness;
 
     return (
       <div className="mx-auto flex w-full max-w-7xl gap-10 px-4 py-6 md:px-8">
         <div className="min-w-0 flex-1 space-y-8">
           <PageHeader title={t("editSpex", { title: `${spex.title} (${spex.year})` })}
                       actions={<Link href={`/spex/${spex.slug}`} className={buttonVariants({ variant: "outline", size: "sm" })}><ExternalLink aria-hidden /> {t("showPage")}</Link>} />
-          <SpexCompleteness completeness={completeness} sections={shown} revival={spex.revival} folded className="xl:hidden" />
+          {completeness && <SpexCompleteness completeness={completeness} sections={shown} revival={spex.revival} folded className="xl:hidden" />}
           <SpexProductions spex={spex} editor={viewer.editor} admin={viewer.admin} />
           <SpexSection id="edit-base" title={t("editSections.base")}>
             <SpexBaseDataEditor spex={spex} categories={base?.spexCategories ?? []} allSpex={base?.spexAll ?? []} editor={viewer.editor} />
@@ -93,7 +92,7 @@ export default async function ManageSpexPage({ params }: Props) {
         </div>
         <aside className="w-60 shrink-0 max-xl:hidden">
           <div className="sticky top-20 max-h-[calc(100svh-6rem)] space-y-6 overflow-y-auto">
-            <SpexCompleteness completeness={completeness} sections={shown} revival={spex.revival} />
+            {completeness && <SpexCompleteness completeness={completeness} sections={shown} revival={spex.revival} />}
             <SectionRail sections={sections} label={t("onThisPage")} />
           </div>
         </aside>

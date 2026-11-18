@@ -1,12 +1,12 @@
 import { getTranslations } from "next-intl/server";
 import { ChevronDown } from "lucide-react";
-import type { Completeness } from "@/utils/completeness";
+import type { Completeness } from "@/lib/wiki/edit.server";
 import { cn } from "@/utils/utils";
 
-const percent = (share: number) => Math.round(share * 100);
+export const percent = (share: number) => Math.round(share * 100);
 
 /** The whole as a ring, the percentage in its middle. */
-function Ring({ share, label, className }: { share: number; label: string; className?: string }) {
+export function CompletenessRing({ share, label, className }: { share: number; label: string; className?: string }) {
   const radius = 26;
   const length = 2 * Math.PI * radius;
 
@@ -22,7 +22,7 @@ function Ring({ share, label, className }: { share: number; label: string; class
 }
 
 /**
- * How much of the spex's page is filled in (src/utils/completeness.ts): a ring for the whole and a bar per section of
+ * How much of the spex's page is filled in (the server's Spex.completeness): a ring for the whole and a bar per section of
  * the editing page; a section opens to what is missing and links to it when the viewer may edit it.
  */
 export async function SpexCompleteness({ completeness, sections, revival, folded = false, className }: {
@@ -38,7 +38,7 @@ export async function SpexCompleteness({ completeness, sections, revival, folded
   const total = percent(completeness.share);
   const head = (
     <div className="flex items-center gap-3">
-      <Ring share={completeness.share} label={t("completeness.total", { percent: total })} />
+      <CompletenessRing share={completeness.share} label={t("completeness.total", { percent: total })} />
       <div className="min-w-0 flex-1">
         <p className="text-sm font-medium">{t("completeness.title")}</p>
         <p className="text-xs text-muted-foreground">{revival ? t("completeness.revivalHelp") : t("completeness.help")}</p>
@@ -51,7 +51,8 @@ export async function SpexCompleteness({ completeness, sections, revival, folded
         {completeness.sections.map(section => {
           const missing = section.items.filter(item => item.filled < 1);
           const value = percent(section.share);
-          const title = t(`editSections.${section.section}`);
+          const name = section.section.toLowerCase();
+          const title = t(`editSections.${name}`);
           const bar = (
             <span className="flex items-center gap-2">
               <span className="min-w-0 flex-1 truncate text-sm">{title}</span>
@@ -60,7 +61,7 @@ export async function SpexCompleteness({ completeness, sections, revival, folded
           );
 
           return (
-            <li key={section.section}>
+            <li key={name}>
               <details className="group">
                 <summary className={cn("cursor-pointer list-none space-y-1 rounded-sm [&::-webkit-details-marker]:hidden", missing.length === 0 && "pointer-events-none")}>
                   {bar}
@@ -73,10 +74,10 @@ export async function SpexCompleteness({ completeness, sections, revival, folded
                     <p>
                       {t("completeness.missing")}{" "}
                       {missing.map(item => item.filled > 0
-                        ? t("completeness.partly", { item: t(`completeness.items.${item.key}`), percent: percent(item.filled) })
-                        : t(`completeness.items.${item.key}`)).join(", ")}
+                        ? t("completeness.partly", { item: t(`completeness.items.${item.item}`), percent: percent(item.filled) })
+                        : t(`completeness.items.${item.item}`)).join(", ")}
                     </p>
-                    {sections.includes(section.section) && <a href={`#edit-${section.section}`} className="text-primary hover:underline">{t("completeness.goTo", { section: title })}</a>}
+                    {sections.includes(name) && <a href={`#edit-${name}`} className="text-primary hover:underline">{t("completeness.goTo", { section: title })}</a>}
                   </div>
                 )}
               </details>
