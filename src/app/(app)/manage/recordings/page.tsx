@@ -22,7 +22,7 @@ export default async function ManageRecordingsPage() {
     const [t, recordings, base, media] = await Promise.all([getTranslations("ManageRecordings"), getRecordings(), getBaseData(), getMedia()]);
 
     return (
-      <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-4 py-6 md:px-8">
+      <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 px-4 py-6 md:px-8">
         <PageHeader title={t("title")} />
         <NewRecordingForm media={media} spex={(base?.spexAll ?? []).filter(s => !s.retired).map(s => ({ id: s.id, label: `${s.year} ${s.title}` }))} />
         <ul className="divide-y divide-border rounded-lg border border-border bg-card text-sm">

@@ -19,7 +19,7 @@ export default async function OrphanArticlesPage() {
     const [t, orphans] = await Promise.all([getTranslations("Articles"), getOrphanArticles()]);
 
     return (
-      <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-4 py-6 md:px-8">
+      <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 px-4 py-6 md:px-8">
         <PageHeader title={t("orphans")} description={t("orphansDescription")} />
         <ArticleList articles={orphans} />
       </div>

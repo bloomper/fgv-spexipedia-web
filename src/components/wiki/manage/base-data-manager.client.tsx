@@ -17,7 +17,6 @@ import { useDialogs } from "@/components/dialogs.client";
 import {
   mergeAction,
   retireAction,
-  saveFigureAction,
   saveSpexAction,
   saveSpexCategoryAction,
   saveTaskAction,
@@ -26,6 +25,7 @@ import {
 import type { BaseData } from "@/lib/wiki/edit.server";
 import type { BaseDataKind } from "@/gql/graphql";
 import { cn } from "@/utils/utils";
+import { categoryYears } from "@/utils/spex-years";
 
 type Row = { id: string; label: string; retired?: boolean; extra?: ReactNode };
 
@@ -33,14 +33,16 @@ type Row = { id: string; label: string; retired?: boolean; extra?: ReactNode };
  * One kind of base data as a list: each row can be edited in place; admins retire a record (it stays readable by id
  * but is not offered for new use) or merge it into another (the other applications move their references).
  */
-function BaseList({ id, title, kind, rows, admin, highlight, form, newForm }: {
+function BaseList({ id, title, kind, rows, admin, highlight, form, editHref, newForm }: {
   id: string;
   title: string;
   kind: BaseDataKind | null;
   rows: Row[];
   admin: boolean;
   highlight: string | null;
-  form: (rowId: string, done: () => void) => ReactNode;
+  /** A row is edited in place by its form, or on its own page at editHref. */
+  form?: (rowId: string, done: () => void) => ReactNode;
+  editHref?: (rowId: string) => string;
   newForm: (done: () => void) => ReactNode;
 }) {
   const t = useTranslations("BaseData");
@@ -53,7 +55,7 @@ function BaseList({ id, title, kind, rows, admin, highlight, form, newForm }: {
   return (
     <section id={id} className="scroll-mt-20 space-y-3" aria-labelledby={`${id}-heading`}>
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 id={`${id}-heading`} className="wiki-heading text-2xl font-semibold">{title} <span className="text-sm text-muted-foreground">({rows.length})</span></h2>
+        <h2 id={`${id}-heading`} className="wiki-heading text-xl font-semibold">{title} <span className="text-sm text-muted-foreground">({rows.length})</span></h2>
         <div className="flex items-center gap-3">
           {rows.some(row => row.retired) && (
             <label className="flex items-center gap-2 text-sm"><Checkbox checked={showRetired} onCheckedChange={checked => setShowRetired(!!checked)} /> {t("showRetired")}</label>
@@ -70,7 +72,9 @@ function BaseList({ id, title, kind, rows, admin, highlight, form, newForm }: {
               {row.retired && <Badge variant="outline">{t("retired")}</Badge>}
               {row.extra}
               <span className="ml-auto inline-flex">
-                <Button type="button" size="icon" variant="ghost" aria-label={t("edit")} onClick={() => setEditing(editing === row.id ? null : row.id)}><Pencil /></Button>
+                {editHref
+                  ? <Link href={editHref(row.id)} aria-label={t("edit")} title={t("edit")} className={buttonVariants({ size: "icon", variant: "ghost" })}><Pencil /></Link>
+                  : <Button type="button" size="icon" variant="ghost" aria-label={t("edit")} onClick={() => setEditing(editing === row.id ? null : row.id)}><Pencil /></Button>}
                 {admin && kind && (
                   <>
                     <Button type="button" size="icon" variant="ghost" aria-label={row.retired ? t("unretire") : t("retire")} title={row.retired ? t("unretire") : t("retire")} disabled={pending}
@@ -89,7 +93,7 @@ function BaseList({ id, title, kind, rows, admin, highlight, form, newForm }: {
                 )}
               </span>
             </div>
-            {editing === row.id && form(row.id, () => setEditing(null))}
+            {editing === row.id && form?.(row.id, () => setEditing(null))}
           </li>
         ))}
       </ul>
@@ -138,27 +142,35 @@ function SpexCategoryForm({ category, done }: { category?: BaseData["spexCategor
   );
 }
 
-function SpexForm({ categories, done }: { categories: BaseData["spexCategories"]; done: () => void }) {
+function SpexForm({ categories, spex, done }: { categories: BaseData["spexCategories"]; spex: BaseData["spexAll"]; done: () => void }) {
   const t = useTranslations("BaseData");
   const { save, pending } = useSave();
   const [values, setValues] = useState({ year: "", title: "", categoryId: "" });
+  const years = categoryYears(categories.find(c => c.id === values.categoryId), spex);
 
   return (
     <form className={box} onSubmit={async event => {
       event.preventDefault();
-      if (await save(() => saveSpexAction(null, { year: values.year, title: values.title.trim(), categoryId: values.categoryId || null }))) {
+      if (await save(() => saveSpexAction(null, { year: values.year, title: values.title.trim(), categoryId: values.categoryId }))) {
         done();
       }
     }}>
-      <div className="grid gap-3 sm:grid-cols-[8rem_1fr_1fr]">
-        <Label className="flex-col items-start">{t("year")}<Input required pattern="\d{4}" value={values.year} onChange={event => setValues({ ...values, year: event.target.value })} /></Label>
-        <Label className="flex-col items-start">{t("spexTitle")}<Input required value={values.title} onChange={event => setValues({ ...values, title: event.target.value })} /></Label>
+      <div className="grid gap-3 sm:grid-cols-[auto_auto_minmax(0,1fr)]">
         <Label className="flex-col items-start">{t("category")}
-          <NativeSelect value={values.categoryId} onChange={event => setValues({ ...values, categoryId: event.target.value })}>
-            <NativeSelectOption value="">{t("none")}</NativeSelectOption>
+          <NativeSelect required className="w-full" value={values.categoryId}
+                        onChange={event => setValues({ ...values, categoryId: event.target.value, year: "" })}>
+            <NativeSelectOption value="" disabled>{t("chooseCategory")}</NativeSelectOption>
             {categories.filter(c => !c.retired).map(c => <NativeSelectOption key={c.id} value={c.id}>{c.name}</NativeSelectOption>)}
           </NativeSelect>
         </Label>
+        <Label className="flex-col items-start">{t("year")}
+          <NativeSelect required className="w-full" value={values.year} disabled={!values.categoryId}
+                        onChange={event => setValues({ ...values, year: event.target.value })}>
+            <NativeSelectOption value="" disabled>{values.categoryId && years.length === 0 ? t("noFreeYear") : t("chooseYear")}</NativeSelectOption>
+            {years.map(year => <NativeSelectOption key={year} value={year}>{year}</NativeSelectOption>)}
+          </NativeSelect>
+        </Label>
+        <Label className="flex-col items-start">{t("spexTitle")}<Input required value={values.title} onChange={event => setValues({ ...values, title: event.target.value })} /></Label>
       </div>
       <p className="text-xs text-muted-foreground">{t("spexHelp")}</p>
       <Buttons pending={pending} onCancel={done} />
@@ -212,25 +224,6 @@ function TaskForm({ task, categories, done }: { task?: BaseData["tasks"][number]
   );
 }
 
-function FigureForm({ figure, done }: { figure?: BaseData["figures"][number]; done: () => void }) {
-  const t = useTranslations("BaseData");
-  const { save, pending } = useSave();
-  const [values, setValues] = useState({ name: figure?.name ?? "", description: figure?.description ?? "" });
-
-  return (
-    <form className={box} onSubmit={async event => {
-      event.preventDefault();
-      if (await save(() => saveFigureAction(figure?.id ?? null, { name: values.name.trim(), description: values.description.trim() || null }))) {
-        done();
-      }
-    }}>
-      <Label className="flex-col items-start">{t("name")}<Input required value={values.name} onChange={event => setValues({ ...values, name: event.target.value })} /></Label>
-      <Label className="flex-col items-start">{t("description")}<Textarea rows={4} value={values.description} onChange={event => setValues({ ...values, description: event.target.value })} /></Label>
-      <Buttons pending={pending} onCancel={done} />
-    </form>
-  );
-}
-
 export function BaseDataManager({ data, admin, highlight }: { data: BaseData; admin: boolean; highlight: string | null }) {
   const t = useTranslations("BaseData");
   const spex = [...data.spexAll].sort((a, b) => b.year.localeCompare(a.year));
@@ -238,7 +231,7 @@ export function BaseDataManager({ data, admin, highlight }: { data: BaseData; ad
   return (
     <div className="space-y-10">
       <nav className="flex flex-wrap gap-2 text-sm">
-        {["spex", "spex-categories", "task-categories", "tasks", "figures"].map(id => (
+        {["spex", "spex-categories", "task-categories", "tasks"].map(id => (
           <a key={id} href={`#${id}`} className="rounded-full border border-border px-3 py-1 hover:border-primary hover:text-primary">{t(`sections.${id}`)}</a>
         ))}
       </nav>
@@ -251,13 +244,8 @@ export function BaseDataManager({ data, admin, highlight }: { data: BaseData; ad
                     {s.category && <span className="text-xs text-muted-foreground">{s.category.name}</span>}
                   </>,
                 }))}
-                form={(id, done) => (
-                  <div className="flex gap-2">
-                    <Link href={`/manage/spex/${id}`} className={buttonVariants({ size: "sm" })}>{t("openEditor")}</Link>
-                    <Button type="button" size="sm" variant="ghost" onClick={done}>{t("cancel")}</Button>
-                  </div>
-                )}
-                newForm={done => <SpexForm categories={data.spexCategories} done={done} />} />
+                editHref={id => `/manage/spex/${id}`}
+                newForm={done => <SpexForm categories={data.spexCategories} spex={data.spexAll} done={done} />} />
       <BaseList id="spex-categories" title={t("sections.spex-categories")} kind="SPEX_CATEGORY" admin={admin} highlight={highlight}
                 rows={data.spexCategories.map(c => ({ id: c.id, label: c.name, retired: c.retired, extra: <span className="text-xs text-muted-foreground">{t("since", { year: c.firstYear })}</span> }))}
                 form={(id, done) => <SpexCategoryForm category={data.spexCategories.find(c => c.id === id)} done={done} />}
@@ -273,10 +261,6 @@ export function BaseDataManager({ data, admin, highlight }: { data: BaseData; ad
                 rows={data.tasks.map(task => ({ id: task.id, label: task.name, retired: task.retired, extra: <span className="text-xs text-muted-foreground">{task.category?.name}</span> }))}
                 form={(id, done) => <TaskForm task={data.tasks.find(task => task.id === id)} categories={data.taskCategories} done={done} />}
                 newForm={done => <TaskForm categories={data.taskCategories} done={done} />} />
-      <BaseList id="figures" title={t("sections.figures")} kind={null} admin={admin} highlight={highlight}
-                rows={data.figures.map(figure => ({ id: figure.id, label: figure.name }))}
-                form={(id, done) => <FigureForm figure={data.figures.find(figure => figure.id === id)} done={done} />}
-                newForm={done => <FigureForm done={done} />} />
     </div>
   );
 }

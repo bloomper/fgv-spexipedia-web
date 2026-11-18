@@ -16,14 +16,17 @@ import { useSave } from "@/components/wiki/editor/use-save.client";
 import { createRevivalAction, saveSpexAction, savePageAction, setFactsAction, setPagePublishedAction } from "@/app/(app)/manage/actions.server";
 import type { EditKind, SpexEditData } from "@/lib/wiki/edit.server";
 import { useServerState } from "@/hooks/use-server-state.client";
+import { categoryYears, revivalYears } from "@/utils/spex-years";
+import type { BaseData } from "@/lib/wiki/edit.server";
 
 /**
  * The spex's base data, for editors: year, title and category (a revival takes its parent's), the poster, and new
  * revivals.
  */
-export function SpexBaseDataEditor({ spex, categories, editor }: {
+export function SpexBaseDataEditor({ spex, categories, allSpex, editor }: {
   spex: SpexEditData;
-  categories: { id: string; name: string; retired: boolean }[];
+  categories: BaseData["spexCategories"];
+  allSpex: BaseData["spexAll"];
   editor: boolean;
 }) {
   const t = useTranslations("Manage");
@@ -33,6 +36,11 @@ export function SpexBaseDataEditor({ spex, categories, editor }: {
   const [title, setTitle] = useState(spex.title);
   const [categoryId, setCategoryId] = useState(spex.category?.id ?? "");
   const [revivalYear, setRevivalYear] = useState("");
+  // An original keeps before its revivals
+  const firstRevival = Math.min(...spex.revivals.map(revival => Number(revival.year)));
+  const ownYears = spex.parent ? revivalYears(spex.parent.year, spex.parent.revivals, spex.id)
+    : categoryYears(categories.find(c => c.id === categoryId), allSpex, spex.id).filter(y => Number(y) < firstRevival);
+  const newRevivalYears = revivalYears(spex.year, spex.revivals);
 
   return (
     <div className="grid gap-6 md:grid-cols-[12rem_1fr]">
@@ -40,14 +48,18 @@ export function SpexBaseDataEditor({ spex, categories, editor }: {
                  onChange={imageId => save(() => saveSpexAction(spex.id, { year: spex.year, title: spex.revival ? null : spex.title, categoryId: spex.category?.id ?? null }, imageId))} />
       <form className="space-y-4" onSubmit={event => {
         event.preventDefault();
-        void save(() => saveSpexAction(spex.id, { year, title: spex.revival ? null : title, categoryId: spex.revival ? null : categoryId || null }), {
+        void save(() => saveSpexAction(spex.id, { year, title: spex.revival ? null : title, categoryId: spex.revival ? null : categoryId }), {
           then: saved => saved.slug !== spex.slug && router.refresh(),
         });
       }}>
         <div className="grid gap-4 sm:grid-cols-[8rem_1fr]">
           <div className="space-y-1.5">
             <Label htmlFor="year">{t("year")}</Label>
-            <Input id="year" required pattern="\d{4}" value={year} disabled={!editor} onChange={event => setYear(event.target.value)} />
+            <NativeSelect id="year" required className="w-full" value={year} disabled={!editor} onChange={event => setYear(event.target.value)}>
+              <NativeSelectOption value="" disabled>{t("chooseYear")}</NativeSelectOption>
+              {year && !ownYears.includes(year) && <NativeSelectOption value={year}>{year}</NativeSelectOption>}
+              {ownYears.map(y => <NativeSelectOption key={y} value={y}>{y}</NativeSelectOption>)}
+            </NativeSelect>
           </div>
           {!spex.revival && (
             <div className="space-y-1.5">
@@ -59,8 +71,16 @@ export function SpexBaseDataEditor({ spex, categories, editor }: {
         {!spex.revival && (
           <div className="space-y-1.5">
             <Label htmlFor="category">{t("category")}</Label>
-            <NativeSelect id="category" value={categoryId} disabled={!editor} onChange={event => setCategoryId(event.target.value)}>
-              <NativeSelectOption value="">{t("none")}</NativeSelectOption>
+            <NativeSelect id="category" required value={categoryId} disabled={!editor} onChange={event => {
+              const next = event.target.value;
+
+              setCategoryId(next);
+              // A year the new category already has is not kept
+              if (!categoryYears(categories.find(c => c.id === next), allSpex, spex.id).includes(year)) {
+                setYear("");
+              }
+            }}>
+              <NativeSelectOption value="" disabled>{t("chooseCategory")}</NativeSelectOption>
               {categories.filter(c => !c.retired || c.id === categoryId).map(c => <NativeSelectOption key={c.id} value={c.id}>{c.name}</NativeSelectOption>)}
             </NativeSelect>
           </div>
@@ -70,9 +90,12 @@ export function SpexBaseDataEditor({ spex, categories, editor }: {
           <div className="flex flex-wrap items-end gap-2 border-t border-border pt-4">
             <div className="space-y-1.5">
               <Label htmlFor="revival-year">{t("newRevival")}</Label>
-              <Input id="revival-year" placeholder="2025" pattern="\d{4}" className="w-28" value={revivalYear} onChange={event => setRevivalYear(event.target.value)} />
+              <NativeSelect id="revival-year" className="w-28" value={revivalYear} onChange={event => setRevivalYear(event.target.value)}>
+                <NativeSelectOption value="" disabled>{t("chooseYear")}</NativeSelectOption>
+                {newRevivalYears.map(y => <NativeSelectOption key={y} value={y}>{y}</NativeSelectOption>)}
+              </NativeSelect>
             </div>
-            <Button type="button" variant="outline" disabled={pending || !/^\d{4}$/.test(revivalYear)} onClick={() => save(() => createRevivalAction(spex.id, revivalYear), {
+            <Button type="button" variant="outline" disabled={pending || !revivalYear} onClick={() => save(() => createRevivalAction(spex.id, revivalYear), {
               then: revival => router.push(`/manage/spex/${revival.id}`),
             })}><Plus aria-hidden /> {t("createRevival")}</Button>
           </div>
@@ -93,7 +116,6 @@ export function SpexTextsEditor({ spex }: { spex: SpexEditData }) {
   const { save, pending } = useSave();
   const page: Partial<Page> = spex.page ?? {};
   const [values, setValues] = useState({
-    generation: page.generation ?? "",
     premiere: page.premiere ?? "",
     introduction: page.introduction ?? "",
     shortDescription: page.shortDescription ?? "",
@@ -108,7 +130,6 @@ export function SpexTextsEditor({ spex }: { spex: SpexEditData }) {
     <form className="space-y-5" onSubmit={event => {
       event.preventDefault();
       void save(() => savePageAction(spex.id, {
-        generation: values.generation.trim() || null,
         premiere: values.premiere || null,
         introduction: values.introduction.trim() || null,
         shortDescription: values.shortDescription.trim() || null,
@@ -130,15 +151,9 @@ export function SpexTextsEditor({ spex }: { spex: SpexEditData }) {
           {page.published ? <EyeOff aria-hidden /> : <Eye aria-hidden />} {page.published ? t("unpublish") : t("publish")}
         </Button>
       </div>
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div className="space-y-1.5">
-          <Label htmlFor="generation">{t("generation")}</Label>
-          <Input id="generation" value={values.generation} onChange={event => set("generation")(event.target.value)} />
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="premiere">{t("premiere")}</Label>
-          <Input id="premiere" type="date" value={values.premiere} onChange={event => set("premiere")(event.target.value)} />
-        </div>
+      <div className="space-y-1.5">
+        <Label htmlFor="premiere">{t("premiere")}</Label>
+        <Input id="premiere" type="date" className="w-fit" value={values.premiere} onChange={event => set("premiere")(event.target.value)} />
       </div>
       <div className="space-y-1.5">
         <Label htmlFor="introduction">{t("introduction")}</Label>

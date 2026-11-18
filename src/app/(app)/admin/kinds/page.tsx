@@ -37,7 +37,7 @@ export default async function KindsPage({ searchParams }: Props) {
         <div className="max-w-4xl space-y-8">
           {groups.map(({ use, kinds }) => (
             <section key={use ?? "all"} className="space-y-3" aria-label={use ? t(`uses.${use}`) : t(`types.${type}`)}>
-              {use && <h2 className="wiki-heading text-2xl font-semibold">{t(`uses.${use}`)}</h2>}
+              {use && <h2 className="wiki-heading text-xl font-semibold">{t(`uses.${use}`)}</h2>}
               <KindsEditor type={type} use={use} kinds={kinds} />
             </section>
           ))}

@@ -33,8 +33,8 @@ export default async function ArticlesPage({ searchParams }: Props) {
   const categories = (data?.articleCategories ?? []).filter(category => category.parents.length === 0);
 
   return (
-    <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-4 py-6 md:px-8">
-      <PageHeader title={<span className="wiki-heading text-4xl">{t("title")}</span>} description={t("description")}
+    <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 px-4 py-6 md:px-8">
+      <PageHeader title={t("title")} description={t("description")}
                   actions={viewer.member && <Link href="/articles/new" className={buttonVariants()}><Plus aria-hidden /> {t("new")}</Link>} />
       {categories.length > 0 && (
         <nav aria-label={t("categories")} className="flex flex-wrap gap-2">
@@ -52,8 +52,8 @@ export default async function ArticlesPage({ searchParams }: Props) {
         ]} />
         {viewer.member && (
           <nav aria-label={t("lists")} className="flex gap-4 text-sm">
-            <Link href="/articles/wanted" className="text-primary hover:underline">{t("wanted")}</Link>
-            <Link href="/articles/orphans" className="text-primary hover:underline">{t("orphans")}</Link>
+            <Link href="/articles/wanted" className="text-primary hover:text-primary/80">{t("wanted")}</Link>
+            <Link href="/articles/orphans" className="text-primary hover:text-primary/80">{t("orphans")}</Link>
           </nav>
         )}
       </div>

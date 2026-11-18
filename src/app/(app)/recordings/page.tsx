@@ -21,8 +21,8 @@ export default async function RecordingsPage() {
   const [t, recordings] = await Promise.all([getTranslations("Recordings"), getRecordings()]);
 
   return (
-    <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 px-4 py-6 md:px-8">
-      <PageHeader title={<span className="wiki-heading text-4xl">{t("title")}</span>} description={t("description")} />
+    <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 px-4 py-6 md:px-8">
+      <PageHeader title={t("title")} description={t("description")} />
       <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {recordings.map(recording => (
           <li key={recording.id}>

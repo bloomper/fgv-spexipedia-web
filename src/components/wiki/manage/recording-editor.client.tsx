@@ -145,7 +145,7 @@ export function RecordingEditor({ recording, spex, media }: { recording: Recordi
       </div>
 
       <section className="space-y-3" aria-labelledby="tracks-heading">
-        <h2 id="tracks-heading" className="wiki-heading text-2xl font-semibold">{t("tracks")}</h2>
+        <h2 id="tracks-heading" className="wiki-heading text-xl font-semibold">{t("tracks")}</h2>
         <ol className="space-y-2">
           {tracks.map((track, index) => (
             <li key={index} className="flex flex-wrap items-center gap-2">

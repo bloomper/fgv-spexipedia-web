@@ -35,14 +35,12 @@ test.describe("People on public pages", () => {
     await page.goto("/");
     await acceptCookies(page);
 
-    const pages = new Set<string>(["/", "/spex", "/figures", "/recordings", "/articles", "/search?q=spex"]);
+    const pages = new Set<string>(["/", "/spex", "/recordings", "/books", "/articles", "/search?q=spex"]);
 
     await page.goto("/spex");
     (await linksTo(page, "/spex/")).slice(0, 5).forEach(path => pages.add(path));
     await page.goto((await linksTo(page, "/spex/"))[0]);
     (await linksTo(page, "/categories/")).forEach(path => pages.add(path));
-    await page.goto("/figures");
-    (await linksTo(page, "/figures/")).slice(0, 3).forEach(path => pages.add(path));
     await page.goto("/recordings");
     (await linksTo(page, "/recordings/")).slice(0, 3).forEach(path => pages.add(path));
     await page.goto("/articles");

@@ -26,7 +26,7 @@ export default async function PackagesPage() {
     const [t, packages] = await Promise.all([getTranslations("Packages"), getSpexPackages()]);
 
     return (
-      <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-4 py-6 md:px-8">
+      <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 px-4 py-6 md:px-8">
         <RefreshWhileRunning running={packages.some(pkg => pkg.state === "PREVIEWING" || pkg.state === "APPLYING")} />
         <PageHeader title={t("title")} description={t("description")} actions={(
           <div className="flex flex-wrap gap-2">
@@ -40,7 +40,7 @@ export default async function PackagesPage() {
               <li key={pkg.id} className="link-row flex flex-wrap items-center gap-x-3 gap-y-1 px-4 py-3">
                 <Link href={`/manage/packages/${pkg.id}`} className="row-link font-medium">{pkg.fileName}</Link>
                 <StateChip state={pkg.state} />
-                {pkg.spex && <Link href={`/spex/${pkg.spex.slug}`} className="relative z-10 text-primary hover:underline">{pkg.spex.title} ({pkg.spex.year})</Link>}
+                {pkg.spex && <Link href={`/spex/${pkg.spex.slug}`} className="relative z-10 text-primary hover:text-primary/80">{pkg.spex.title} ({pkg.spex.year})</Link>}
                 <span className="ml-auto text-xs text-muted-foreground">
                   {[pkg.uploadedByName, formatInstant(pkg.createdAt)].filter(Boolean).join(" · ")}
                   {pkg.appliedAt && ` · ${t("appliedAt", { at: formatInstant(pkg.appliedAt) ?? "" })}`}

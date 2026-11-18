@@ -55,3 +55,11 @@ export function groupBy<T, K>(items: readonly T[], key: (item: T) => K): [K, T[]
   }
   return [...groups.entries()];
 }
+
+/**
+ * A scene as listed on the spex page: its title, after its number unless the title is only a number already
+ * ("Scen 3", "Scene 3", "3").
+ */
+export function sceneLabel(scene: { position: number; title: string }): string {
+  return /^(scen|scene)?\s*\d+\.?$/i.test(scene.title.trim()) ? scene.title : `${scene.position}. ${scene.title}`;
+}

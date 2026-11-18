@@ -29,7 +29,6 @@ const data = {
     { id: "t2", name: "Orkester", actorPresent: false, board: false, instruments: true, retired: false }],
   tasks: [{ id: "u1", name: "Regissör", retired: false, category: { id: "t1", name: "Ensemble" } },
     { id: "u2", name: "Sufflör", retired: false, category: { id: "t1", name: "Ensemble" } }],
-  figures: [{ id: "f1", slug: "bellman", name: "Bellman", description: null }],
 } as unknown as BaseData;
 
 const show = (admin = true, highlight: string | null = null) =>
@@ -50,17 +49,17 @@ describe("BaseDataManager", () => {
     expect(rows[0]).toHaveTextContent("2010 Lasse-Maja");
     expect(rows[0]).toHaveTextContent("revival");
     expect(rows[0]).toHaveTextContent("unpublished");
-    await userEvent.click(within(rows[1]).getByRole("button", { name: "edit" }));
-    expect(within(section("spex")).getByRole("link", { name: "openEditor" })).toHaveAttribute("href", "/manage/spex/s1");
+    expect(within(rows[1]).getByRole("link", { name: "edit" })).toHaveAttribute("href", "/manage/spex/s1");
   });
 
   it("creates a spex in a category", async () => {
     show();
 
     await userEvent.click(within(section("spex")).getByRole("button", { name: "add" }));
-    await userEvent.type(within(section("spex")).getByLabelText("year"), "2026");
-    await userEvent.type(within(section("spex")).getByLabelText("spexTitle"), " Abraham Lincoln ");
+    expect(within(section("spex")).getByLabelText("year")).toBeDisabled();
     await userEvent.selectOptions(within(section("spex")).getByLabelText("category"), "k1");
+    await userEvent.selectOptions(within(section("spex")).getByLabelText("year"), "2026");
+    await userEvent.type(within(section("spex")).getByLabelText("spexTitle"), " Abraham Lincoln ");
     await userEvent.click(within(section("spex")).getByRole("button", { name: "save" }));
     await waitFor(() => expect(actions.saveSpexAction).toHaveBeenCalledWith(null, { year: "2026", title: "Abraham Lincoln", categoryId: "k1" }));
   });
@@ -95,7 +94,7 @@ describe("BaseDataManager", () => {
     await waitFor(() => expect(actions.mergeAction).toHaveBeenCalledWith("TASK", "u2", "u1"));
   });
 
-  it("saves task categories with their markers, tasks and figures", async () => {
+  it("saves task categories with their markers, and tasks", async () => {
     show();
 
     await userEvent.click(within(section("task-categories")).getByRole("button", { name: "add" }));
@@ -110,11 +109,6 @@ describe("BaseDataManager", () => {
     await userEvent.selectOptions(within(section("tasks")).getByLabelText("category"), "t2");
     await userEvent.click(within(section("tasks")).getByRole("button", { name: "save" }));
     await waitFor(() => expect(actions.saveTaskAction).toHaveBeenCalledWith(null, { name: "Kostymör", categoryId: "t2" }));
-
-    await userEvent.click(within(section("figures")).getByRole("button", { name: "edit" }));
-    await userEvent.type(within(section("figures")).getByLabelText("description"), "Skald");
-    await userEvent.click(within(section("figures")).getByRole("button", { name: "save" }));
-    await waitFor(() => expect(actions.saveFigureAction).toHaveBeenCalledWith("f1", { name: "Bellman", description: "Skald" }));
   });
 
   it("offers retiring and merging to admins only, and opens a highlighted record", () => {

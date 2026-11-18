@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { cookies } from "next/headers";
 import React, { Suspense } from "react";
@@ -13,12 +13,6 @@ import svMessages from "../../messages/sv.json";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
-});
-
-const display = Cormorant_Garamond({
-  variable: "--font-display",
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
 });
 
 const geistMono = Geist_Mono({
@@ -50,7 +44,7 @@ export const metadata: Metadata = metaByLocale[defaultLocale] ?? metaByLocale.sv
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang={defaultLocale} suppressHydrationWarning>
-    <body className={`${geistSans.variable} ${geistMono.variable} ${display.variable} antialiased`}>
+    <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
     <Suspense
       fallback={
         <div className="fixed inset-0 flex items-center justify-center">

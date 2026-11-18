@@ -109,7 +109,7 @@
   "About": {
     "title": "Om",
     "heading": "Om Spexipedia",
-    "description": "Spexipedia tillhandahålls av FGV och är Chalmersspexets uppslagsverk: spexen genom åren, rollerna, musiken, scenografin och traditionerna. Bilder på personer kommer från Spexgram och namn från Spexregistret.",
+    "description": "Spexipedia tillhandahålls av FGV och är Chalmersspexets uppslagsverk: spexen genom åren, rollerna, musiken, scenografin och traditionerna.",
     "behindTheScenes": "Bakom kulisserna",
     "feedback": "Tyck till",
     "feedbackDescription": "Vi värdesätter dina åsikter. Har du förslag på förbättringar eller har du hittat en bugg? Hör gärna av dig på {email}.",
@@ -179,7 +179,7 @@
       "UNPUBLISH": "Avpublicerad",
       "HIDE": "Dold",
       "SHOW": "Visad",
-      "RETIRE": "Utgången",
+      "RETIRE": "Deaktiverad",
       "MERGE": "Ihopslagen"
     },
     "type": {
@@ -191,8 +191,8 @@
       "CHARACTER": "Roll",
       "SCENE": "Scen",
       "NUMBER": "Nummer",
-      "FIGURE": "Gestalt",
       "RECORDING": "Inspelning",
+      "BOOK": "Bok",
       "ARTICLE": "Artikel",
       "ARTICLE_CATEGORY": "Artikelkategori",
       "REVISION": "Version",
@@ -268,8 +268,7 @@
   },
   "Nav": {
     "home": "Hem",
-    "spex": "Spexen",
-    "figures": "Gestalter",
+    "spex": "Spex",
     "recordings": "Inspelningar",
     "articles": "Artiklar",
     "search": "Sök",
@@ -286,7 +285,9 @@
     "adminMaintenance": "Underhåll",
     "unresolvedCredits": "Olösta medverkande",
     "adminKinds": "Sorter",
-    "packages": "Spexpaket"
+    "packages": "Spexpaket",
+    "books": "Böcker",
+    "manageBooks": "Böcker"
   },
   "Home": {
     "kicker": "Chalmersspexets uppslagsverk",
@@ -299,8 +300,9 @@
     "allChanges": "Alla ändringar"
   },
   "Browse": {
-    "title": "Spexen",
+    "title": "Spex",
     "description": "Alla spex med en publicerad sida, decennium för decennium.",
+    "categories": "Spexkategorier",
     "decades": "Decennier",
     "decade": "{decade}-talet"
   },
@@ -315,20 +317,30 @@
     "noPoster": "Ingen affisch",
     "revivalOf": "Nyuppsättning av",
     "unpublished": "Opublicerad",
-    "retired": "Utgången",
-    "generation": "Spexgeneration",
+    "retired": "Inaktiv",
     "premiere": "Premiär",
     "revivals": "Nyuppsättningar",
     "edit": "Redigera",
-    "figure": "Gestalt: {name}",
     "act": "Akt {act}",
     "interval": "Paus",
+    "scenes": "Scener",
+    "roleViews": "Visa rollerna som",
+    "photosView": "Foton",
+    "compare": "Jämför",
+    "compareSlider": "Jämför {front} med {back}",
+    "openPictures": "Visa rollens bilder",
+    "noPicture": "Ingen bild: {view}",
+    "hiddenPhotos": "{count, plural, one {# foto} other {# foton}} som ditt konto inte når i Spexgram",
     "melody": "mel. {title} ({artist})",
     "sungBy": "Sjungs av {names}",
-    "showSolution": "Visa lösningen",
+    "pager": "Föregående och nästa spex",
+    "previousSpex": "Föregående spex",
+    "nextSpex": "Nästa spex",
+    "revealSolution": "Dra i bilden för att visa lösningen.",
+    "solutionSlider": "Visa lösningen",
+    "solutionShown": "{percent} % av lösningen visas",
     "wornBy": "Bars av",
     "peopleUnavailable": "Spexregistret kan inte nås just nu, så vilka som medverkade visas inte.",
-    "lastModified": "Senast ändrad {date}",
     "onThisPage": "På sidan",
     "originalYear": "Uruppsättningen {year}",
     "revivalYear": "Nyuppsättningen {year}",
@@ -359,7 +371,7 @@
       },
       "recordings": {
         "title": "Inspelningar",
-        "subtitle": "Skivor och utgåvor"
+        "subtitle": "Inspelningar och utgåvor"
       },
       "rebus": {
         "title": "Programrebus",
@@ -386,7 +398,9 @@
         "subtitle": "I FGV:s andra tjänster"
       }
     },
-    "fromWork": "ur {work}"
+    "fromWork": "ur {work}",
+    "inBooks": "I boken:",
+    "textOnly": "endast text"
   },
   "Photos": {
     "unavailable": "Spexgram kan inte nås just nu.",
@@ -430,15 +444,9 @@
     "newer": "Nyare",
     "older": "Äldre"
   },
-  "Figures": {
-    "title": "Gestalter",
-    "description": "Historiska och påhittade gestalter som dykt upp i flera spex.",
-    "characters": "{count, plural, one {# roll} other {# roller}}",
-    "figure": "Gestalt"
-  },
   "Recordings": {
     "title": "Inspelningar",
-    "description": "Spexens skivor och utgåvor, efter katalognummer.",
+    "description": "Spexens inspelningar och utgåvor, efter katalognummer.",
     "unpublished": "Opublicerad",
     "spex": "Spex",
     "released": "Utgiven",
@@ -446,7 +454,18 @@
     "conductor": "Dirigent",
     "edit": "Redigera",
     "tracks": "Spår",
-    "side": "Sida {side}"
+    "side": "Sida {side}",
+    "trackNumber": "{spex} · Akt {act}, nr {number}"
+  },
+  "Books": {
+    "title": "Böcker",
+    "description": "Böcker om och från spexen, till exempel spexböckerna Chalmersspex I, II och så vidare med spexens sånger.",
+    "empty": "Inga böcker än.",
+    "unpublished": "Opublicerad",
+    "edit": "Redigera",
+    "songs": "Sånger",
+    "textOnly": "Endast text",
+    "songNumber": "{spex} · Akt {act}, nr {number}"
   },
   "Articles": {
     "title": "Artiklar",
@@ -542,9 +561,9 @@
     "kinds": {
       "SPEX": "Spex",
       "CHARACTER": "Roller",
-      "FIGURE": "Gestalter",
       "NUMBER": "Nummer",
       "RECORDING": "Inspelningar",
+      "BOOK": "Böcker",
       "ARTICLE": "Artiklar",
       "SPEX_CATEGORY": "Kategorier"
     }
@@ -579,14 +598,15 @@
     "year": "År",
     "title": "Titel",
     "category": "Kategori",
+    "chooseCategory": "Välj kategori",
     "none": "Ingen",
     "newRevival": "Ny nyuppsättning, år",
+    "chooseYear": "Välj år",
     "createRevival": "Skapa nyuppsättning",
     "pagePublished": "Sidan är publicerad och syns för alla.",
     "pageUnpublished": "Sidan är opublicerad och syns bara för författare och redaktörer.",
     "publish": "Publicera",
     "unpublish": "Avpublicera",
-    "generation": "Spexgeneration",
     "premiere": "Premiär",
     "introduction": "Ingress",
     "introductionHelp": "Kort, för spexkort och förhandsvisningar när sidan delas.",
@@ -609,17 +629,16 @@
     "cancel": "Avbryt",
     "addCharacter": "Ny roll",
     "pasteCharactersHelp": "En roll per rad: ”Namn” eller ”Namn – beskrivning”.",
-    "retired": "Utgången",
+    "retired": "Inaktiv",
     "fromParent": "Från uruppsättningen",
     "edit": "Redigera",
     "imagesAndPhotos": "Bilder och skådespelarbilder",
     "characterImages": "Skisser, maskskisser och kostymdockor",
     "actorPhotos": "Bilder på skådespelarna, från Spexgram",
     "name": "Namn",
-    "figure": "Gestalt",
     "delete": "Radera",
     "deleteTitle": "Radera?",
-    "deleteText": "Bara det som inget hänvisar till kan raderas; annars får det gå ut.",
+    "deleteText": "Bara det som inget hänvisar till kan raderas; annars får det deaktiveras.",
     "addScene": "Ny scen",
     "pasteScenesHelp": "En scen per rad: ”Titel” eller ”Titel – plats”. En rad ”--” är paus efter scenen före; ”Akt 2” börjar en akt.",
     "actShort": "A{act}",
@@ -675,12 +694,12 @@
   "BaseData": {
     "title": "Basdata",
     "description": "Beskrivning",
-    "showRetired": "Visa utgångna",
+    "showRetired": "Visa inaktiva",
     "add": "Ny",
-    "retired": "Utgången",
+    "retired": "Inaktiv",
     "edit": "Redigera",
-    "retire": "Låt gå ut",
-    "unretire": "Ta tillbaka",
+    "retire": "Deaktivera",
+    "unretire": "Aktivera",
     "merge": "Slå ihop",
     "mergeTitle": "Slå ihop {label} med…",
     "mergeConfirm": "Slå ihop för gott?",
@@ -693,21 +712,21 @@
     "year": "År",
     "spexTitle": "Titel",
     "category": "Kategori",
-    "none": "Ingen",
+    "chooseCategory": "Välj kategori",
+    "chooseYear": "Välj år",
+    "noFreeYear": "Inga lediga år",
     "spexHelp": "Nyuppsättningar skapas från uruppsättningens sida.",
     "actorPresent": "Har roll och stämma",
     "board": "Visas som styrelsen",
     "instruments": "Instrument i Spexarkivet",
     "revival": "Nyuppsättning",
     "unpublished": "Opublicerad",
-    "openEditor": "Öppna spexets sida för redigering",
     "since": "sedan {year}",
     "sections": {
       "spex": "Spex",
       "spex-categories": "Spexkategorier",
       "task-categories": "Uppgiftskategorier",
-      "tasks": "Uppgifter",
-      "figures": "Gestalter"
+      "tasks": "Uppgifter"
     }
   },
   "ManageRecordings": {
@@ -746,6 +765,43 @@
     "saveTracks": "Spara spåren",
     "pasteTracks": "Klistra in spår",
     "pasteTracksHelp": "Ett spår per rad: ”A1 Titel” eller ”Titel”; ”Sida B” börjar en sida. Titlar matchas mot spexets nummer."
+  },
+  "ManageBooks": {
+    "title": "Böcker",
+    "description": "Beskrivning",
+    "editTitle": "Redigera bok",
+    "editDescription": "Bokens uppgifter, omslag och sånger i bokens ordning.",
+    "bookTitle": "Titel",
+    "volume": "Volym",
+    "publishedYear": "Utgiven",
+    "cover": "Omslag",
+    "create": "Skapa",
+    "save": "Spara",
+    "published": "Boken är publicerad och syns för alla.",
+    "unpublishedText": "Boken är opublicerad och syns bara för redaktörer.",
+    "publish": "Publicera",
+    "unpublish": "Avpublicera",
+    "unpublished": "Opublicerad",
+    "delete": "Ta bort",
+    "deleteTitle": "Ta bort boken?",
+    "deleteText": "Boken och dess sånglista tas bort. Spexens nummer finns kvar.",
+    "songs": "Sånger",
+    "noSongs": "Inga sånger än. Lägg till från ett spex nedan.",
+    "songTitle": "Titel",
+    "textOnly": "Endast text",
+    "moveUp": "Flytta upp",
+    "moveDown": "Flytta ner",
+    "removeSong": "Ta bort sången",
+    "addFreeSong": "Sång utan nummer",
+    "saveSongs": "Spara sångerna",
+    "addFromSpex": "Lägg till sånger från ett spex",
+    "spex": "Spex",
+    "chooseSpex": "Välj spex",
+    "pickAll": "Välj alla",
+    "addPicked": "Lägg till {count, plural, one {# sång} other {# sånger}}",
+    "noNumbers": "Spexet har inga nummer.",
+    "intro": "Tryckta böcker, till exempel spexböckerna. En bok är ingen inspelning: dess sånger är spexens nummer.",
+    "kind": "Sort"
   },
   "AdminRedirects": {
     "title": "Omdirigeringar",
@@ -799,16 +855,18 @@
       "label": "Typer av sorter",
       "NUMBER": "Nummer",
       "CREDIT": "Medverkande",
-      "MEDIUM": "Skivformat",
+      "MEDIUM": "Inspelningar",
       "IMAGE": "Bilder",
-      "FACT": "Fakta"
+      "FACT": "Fakta",
+      "BOOK": "Böcker"
     },
     "typeHelp": {
       "NUMBER": "Vad ett nummer är, t.ex. sång, ouvertyr eller final. Ett nummer kan sakna sort.",
       "CREDIT": "Vad någon gjorde för ett nummer, t.ex. text, musik eller arrangemang. Spexify, Spexarkivet och Spexflix läser dem i flödet.",
       "MEDIUM": "Inspelningarnas format; en ny inspelning får det första.",
       "IMAGE": "Bildsorter per användning: för roller, för scenografi och för sidans övriga bilder. Användningarna är givna; sorterna inom dem är data.",
-      "FACT": "Korta fakta om en uppsättning, som text eller som datum. En ny sorts fakta visas genast i redigeringen av spexsidorna."
+      "FACT": "Korta fakta om en uppsättning, som text eller som datum. En ny sorts fakta visas genast i redigeringen av spexsidorna.",
+      "BOOK": "Vad en bok är, t.ex. spexbok, sångbok eller jubileumsbok; en ny bok får den första."
     },
     "uses": {
       "CHARACTER": "Roller",
@@ -827,11 +885,11 @@
     "aliases": "Alias",
     "aliasesHelp": "En per rad: andra stavningar som importen känner igen, t.ex. ”Låt” för Sång.",
     "aliasesShort": "även: {aliases}",
-    "retired": "Ur bruk",
-    "retire": "Ta ur bruk",
-    "reinstate": "Ta i bruk igen",
-    "retiredToast": "Sorten är tagen ur bruk",
-    "reinstated": "Sorten är i bruk igen",
+    "retired": "Inaktiv",
+    "retire": "Deaktivera",
+    "reinstate": "Aktivera",
+    "retiredToast": "Sorten är deaktiverad",
+    "reinstated": "Sorten är aktiverad",
     "merge": "Slå ihop",
     "mergeTitle": "Slå ihop {name} med …",
     "mergeConfirm": "Slå ihop {name} med {into}?",

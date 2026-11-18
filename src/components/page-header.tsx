@@ -14,12 +14,12 @@ export function PageHeader({
   actions?: ReactNode;
 }) {
   return (
-    <>
+    <div className="space-y-1">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h1 className="text-2xl font-bold tracking-tight">{title}</h1>
         {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
       </div>
       {description && <p className="text-sm text-muted-foreground">{description}</p>}
-    </>
+    </div>
   );
 }

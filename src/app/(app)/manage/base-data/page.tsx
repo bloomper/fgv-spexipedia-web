@@ -13,15 +13,15 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 /**
- * Base data, which every other FGV application copies: spex categories, spex, task categories, tasks, and the
- * figures characters belong to. Editors create and change them; admins retire and merge.
+ * Base data, which every other FGV application copies: spex categories, spex, task categories and tasks. Editors
+ * create and change them; admins disable and merge.
  */
 export default async function BaseDataPage({ searchParams }: { searchParams: Promise<{ edit?: string }> }) {
   return withPolicyPage(Policies.editor.requireEditor, async () => {
     const [t, data, viewer, { edit }] = await Promise.all([getTranslations("BaseData"), getBaseData(), getViewer(), searchParams]);
 
     return (
-      <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 px-4 py-6 md:px-8">
+      <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 px-4 py-6 md:px-8">
         <PageHeader title={t("title")} description={t("description")} />
         {data && <BaseDataManager data={data} admin={viewer.admin} highlight={edit ?? null} />}
       </div>

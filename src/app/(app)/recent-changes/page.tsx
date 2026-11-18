@@ -28,7 +28,7 @@ async function RecentChanges({ searchParams }: { searchParams: Promise<{ page?: 
   const pages = changes ? Math.ceil(changes.totalCount / SIZE) : 0;
 
   return (
-    <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-4 py-6 md:px-8">
+    <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 px-4 py-6 md:px-8">
       <PageHeader title={t("recentTitle")} description={t("recentDescription")} />
       <RevisionList revisions={changes?.entries ?? []} />
       {pages > 1 && (

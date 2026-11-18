@@ -11,13 +11,16 @@ import { SectionBar, SectionRail } from "@/components/wiki/section-rail.client";
 import { HtmlContent } from "@/components/wiki/html-content";
 import { WikiImage } from "@/components/wiki/wiki-image";
 import { ImageGallery } from "@/components/wiki/image-gallery.client";
+import { RebusReveal } from "@/components/wiki/rebus-reveal.client";
+import { PHOTOS_VIEW, RoleGrid, type RoleView } from "@/components/wiki/role-grid.client";
 import { PhotoSet } from "@/components/wiki/photo-set.client";
 import { CreditList, PersonList, PersonName } from "@/components/wiki/person";
 import { AppLinks } from "@/components/wiki/app-links";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { formatDay } from "@/utils/format";
-import { creditLabel, groupBy, personLabel } from "@/utils/wiki";
+import { cn } from "@/utils/utils";
+import { creditLabel, groupBy, personLabel, sceneLabel } from "@/utils/wiki";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -90,13 +93,13 @@ export default async function SpexPage({ params }: Props) {
           <div className="space-y-4">
             <div className="space-y-2">
               <p className="text-sm tracking-[0.25em] text-primary">
-                {spex.year}{spex.category && <> · <Link href={`/categories/${spex.category.id}`} className="hover:underline">{spex.category.name}</Link></>}
+                {spex.year}{spex.category && <> · <Link href={`/categories/${spex.category.id}`} className="hover:text-primary">{spex.category.name}</Link></>}
               </p>
-              <h1 className="wiki-heading text-4xl leading-tight font-semibold md:text-5xl">{spex.title}</h1>
+              <h1 className="wiki-heading text-3xl leading-tight font-semibold md:text-4xl">{spex.title}</h1>
               <div className="flex flex-wrap gap-2">
                 {spex.revival && spex.parent && (
                   <Badge variant="secondary">
-                    {t("revivalOf")} <Link href={`/spex/${spex.parent.slug}`} className="ml-1 underline">{spex.parent.title} ({spex.parent.year})</Link>
+                    {t("revivalOf")} <Link href={`/spex/${spex.parent.slug}`} className="ml-1 font-medium hover:text-primary">{spex.parent.title} ({spex.parent.year})</Link>
                   </Badge>
                 )}
                 {!spex.published && <Badge variant="outline">{t("unpublished")}</Badge>}
@@ -104,7 +107,6 @@ export default async function SpexPage({ params }: Props) {
               </div>
             </div>
             <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-sm">
-              {page?.generation && <><dt className="text-muted-foreground">{t("generation")}</dt><dd>{page.generation}</dd></>}
               {page?.premiere && <><dt className="text-muted-foreground">{t("premiere")}</dt><dd>{formatDay(page.premiere, locale)}</dd></>}
               {page?.facts.map(fact => (
                 <div key={fact.kind.id} className="contents">
@@ -116,7 +118,7 @@ export default async function SpexPage({ params }: Props) {
                 <>
                   <dt className="text-muted-foreground">{t("revivals")}</dt>
                   <dd className="flex flex-wrap gap-x-2">
-                    {spex.revivals.map(revival => <Link key={revival.id} href={`/spex/${revival.slug}`} className="text-primary hover:underline">{revival.year}</Link>)}
+                    {spex.revivals.map(revival => <Link key={revival.id} href={`/spex/${revival.slug}`} className="text-primary hover:text-primary/80">{revival.year}</Link>)}
                   </dd>
                 </>
               )}
@@ -124,23 +126,13 @@ export default async function SpexPage({ params }: Props) {
             {page?.introduction && <p className="text-lg leading-relaxed text-foreground/90">{page.introduction}</p>}
             {page?.shortDescription && <p className="leading-relaxed text-foreground/80">{page.shortDescription}</p>}
             <HtmlContent html={page?.descriptionHtml} />
-            <div className="flex flex-wrap items-center gap-2 pt-2">
-              {viewer.author && (
+            {viewer.author && (
+              <div className="pt-2">
                 <Link href={`/manage/spex/${spex.id}`} className={buttonVariants({ variant: "outline", size: "sm" })}>
                   <Pencil aria-hidden /> {t("edit")}
                 </Link>
-              )}
-              {spex.previous && (
-                <Link href={`/spex/${spex.previous.slug}`} className={buttonVariants({ variant: "ghost", size: "sm" })}>
-                  <ArrowLeft aria-hidden /> {spex.previous.title} ({spex.previous.year})
-                </Link>
-              )}
-              {spex.next && (
-                <Link href={`/spex/${spex.next.slug}`} className={buttonVariants({ variant: "ghost", size: "sm" })}>
-                  {spex.next.title} ({spex.next.year}) <ArrowRight aria-hidden />
-                </Link>
-              )}
-            </div>
+              </div>
+            )}
           </div>
         </header>
         <SectionBar sections={sections} label={t("onThisPage")} />
@@ -153,34 +145,34 @@ export default async function SpexPage({ params }: Props) {
 
         {has("characters") && (
           <SpexSection id="characters" title={t("sections.characters.title")} subtitle={subtitle("characters")}>
-            <div className="space-y-8">
-              {spex.characters.map(character => (
-                <div key={character.id} id={`character-${character.id}`} className="scroll-mt-28 xl:scroll-mt-20 space-y-3 rounded-lg border border-border bg-card p-4 md:p-6">
-                  <div className="flex flex-wrap items-baseline justify-between gap-2">
-                    <h3 className="wiki-heading text-2xl font-semibold">{character.name}</h3>
-                    {character.figure && (
-                      <Link href={`/figures/${character.figure.slug}`} className="text-sm text-primary hover:underline">
-                        {t("figure", { name: character.figure.name })}
-                      </Link>
-                    )}
-                  </div>
+            <RoleGrid views={roleViews(spex.characters, t("photosView"))} cards={spex.characters.map(character => ({
+              id: character.id,
+              arts: [
+                ...character.images.map(image => ({ view: image.kind?.id ?? "", caption: image.caption ?? image.kind?.name, image: image.image })),
+                ...character.photos.photos.map(photo => ({ view: PHOTOS_VIEW, caption: photo.caption, photo })),
+              ],
+              hiddenPhotos: character.photos.hiddenCount,
+              body: (
+                <>
+                  <h3 className="wiki-heading text-base leading-tight font-semibold">{character.name}</h3>
                   {character.retired && <Badge variant="outline">{t("retired")}</Badge>}
-                  <HtmlContent html={character.descriptionHtml} className="text-sm" />
                   {character.playedBy.some(played => personLabel(played.person)) && (
-                    <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-sm">
+                    <dl className="text-xs">
                       {groupBy(character.playedBy, played => played.spex.id).map(([id, played]) => (
-                        <div key={id} className="contents">
-                          <dt className="text-muted-foreground">{production(played[0].spex)}</dt>
-                          <dd><PersonList people={played.map(p => p.person)} /></dd>
+                        <div key={id}>
+                          <dt className="sr-only">{production(played[0].spex)}</dt>
+                          <dd className="text-primary">
+                            <PersonList people={played.map(p => p.person)} />
+                            {played[0].spex.revival && <span className="text-muted-foreground"> · {production(played[0].spex)}</span>}
+                          </dd>
                         </div>
                       ))}
                     </dl>
                   )}
-                  <ImageGallery columns={4} images={character.images.map(image => ({ image: image.image, caption: image.caption ?? image.kind?.name ?? null }))} />
-                  <PhotoSet set={character.photos} member={viewer.member} />
-                </div>
-              ))}
-            </div>
+                  <HtmlContent html={character.descriptionHtml} className="text-sm text-foreground/85" />
+                </>
+              ),
+            }))} />
           </SpexSection>
         )}
 
@@ -192,25 +184,33 @@ export default async function SpexPage({ params }: Props) {
 
         {has("manuscript") && (
           <SpexSection id="manuscript" title={t("sections.manuscript.title")} subtitle={subtitle("manuscript")}>
-            <HtmlContent html={page?.synopsisHtml} />
-            {spex.scenes.length > 0 && (
-              <div className="space-y-4">
-                {groupBy(spex.scenes, scene => scene.act).map(([act, scenes]) => (
-                  <div key={act} className="space-y-2">
-                    <h3 className="wiki-heading text-xl font-semibold">{t("act", { act })}</h3>
-                    <ol className="space-y-1 text-sm">
-                      {scenes.map(scene => (
-                        <li key={scene.id}>
-                          <span className="font-medium">{scene.position}. {scene.title}</span>
-                          {scene.place && <span className="text-muted-foreground"> — {scene.place}</span>}
-                          {scene.intervalAfter && <p className="my-2 text-center text-xs tracking-[0.3em] text-primary uppercase">{t("interval")}</p>}
-                        </li>
-                      ))}
-                    </ol>
-                  </div>
-                ))}
-              </div>
-            )}
+            {/* The synopsis, with the scenes beside it as in a programme; the synopsis may have act headings of its own */}
+            <div className={cn("grid gap-8", page?.synopsisHtml && spex.scenes.length > 0 && "lg:grid-cols-[minmax(0,1fr)_18rem]")}>
+              <HtmlContent html={page?.synopsisHtml} />
+              {spex.scenes.length > 0 && (
+                <aside aria-labelledby="scenes-heading" className="h-fit space-y-4 rounded-lg border border-border bg-card p-4">
+                  <h3 id="scenes-heading" className="text-sm font-semibold">{t("scenes")}</h3>
+                  {groupBy(spex.scenes, scene => scene.act).map(([act, scenes]) => (
+                    <div key={act} className="space-y-1.5">
+                      <h4 className="text-xs font-semibold tracking-[0.15em] text-muted-foreground uppercase">{t("act", { act })}</h4>
+                      <ol className="space-y-1 text-sm">
+                        {scenes.map(scene => (
+                          <li key={scene.id}>
+                            <span className="font-medium">{sceneLabel(scene)}</span>
+                            {scene.place && <span className="text-muted-foreground"> — {scene.place}</span>}
+                            {scene.intervalAfter && (
+                              <p className="mt-3 flex items-center gap-3 text-xs tracking-[0.3em] text-primary uppercase before:h-px before:flex-1 before:bg-border after:h-px after:flex-1 after:bg-border">
+                                {t("interval")}
+                              </p>
+                            )}
+                          </li>
+                        ))}
+                      </ol>
+                    </div>
+                  ))}
+                </aside>
+              )}
+            </div>
             <AppLinks links={spex.links.filter(link => link.kind === "ARCHIVE_MANUSCRIPT")} />
           </SpexSection>
         )}
@@ -237,6 +237,18 @@ export default async function SpexPage({ params }: Props) {
                         </div>
                         {number.firstLine && <p className="text-xs text-foreground/80 italic">”{number.firstLine}”</p>}
                         {number.characters.length > 0 && <p className="text-xs text-muted-foreground">{t("sungBy", { names: number.characters.map(c => c.name).join(", ") })}</p>}
+                        {number.books.length > 0 && (
+                          <p className="text-xs text-muted-foreground">
+                            {t("inBooks")}{" "}
+                            {number.books.map((song, i) => (
+                              <span key={song.book.id}>
+                                {i > 0 && ", "}
+                                <Link href={`/books/${song.book.slug}`} className="text-primary hover:text-primary/80">{song.book.title}</Link>
+                                {song.textOnly && ` (${t("textOnly")})`}
+                              </span>
+                            ))}
+                          </p>
+                        )}
                         {credits.length > 0 && (
                           <p className="text-xs text-muted-foreground">
                             {credits.map(([kind, list], i) => <span key={kind}>{i > 0 && " · "}{list[0].kind.name}: <CreditList credits={list.map(credit => credit.credit)} /></span>)}
@@ -272,15 +284,9 @@ export default async function SpexPage({ params }: Props) {
 
         {has("rebus") && page && (
           <SpexSection id="rebus" title={t("sections.rebus.title")} subtitle={subtitle("rebus")}>
-            <div className="grid gap-4 md:grid-cols-2">
-              {page.rebus && <WikiImage image={page.rebus} className="w-full rounded-lg border border-border" />}
-              {page.rebusSolution && (
-                <details className="group rounded-lg border border-border bg-card p-3">
-                  <summary className="cursor-pointer text-sm font-medium text-primary">{t("showSolution")}</summary>
-                  <WikiImage image={page.rebusSolution} className="mt-3 w-full rounded" />
-                </details>
-              )}
-            </div>
+            {page.rebus && page.rebusSolution
+              ? <RebusReveal rebus={page.rebus} solution={page.rebusSolution} />
+              : page.rebus && <WikiImage image={page.rebus} sizes="(min-width: 1024px) 48rem, 100vw" className="w-full max-w-3xl rounded-lg border border-border" />}
           </SpexSection>
         )}
 
@@ -330,11 +336,31 @@ export default async function SpexPage({ params }: Props) {
           </SpexSection>
         )}
 
-        {page?.lastModifiedAt && (
-          <p className="border-t border-border/60 pt-4 text-xs text-muted-foreground">
-            {t("lastModified", { date: formatDay(page.lastModifiedAt.slice(0, 10), locale) ?? "" })}
-          </p>
+        {(spex.previous || spex.next) && (
+          <nav aria-label={t("pager")} className="grid gap-3 sm:grid-cols-2">
+            {spex.previous ? (
+              <Link href={`/spex/${spex.previous.slug}`} rel="prev"
+                    className="group flex items-center gap-3 rounded-lg border border-border bg-card p-3 hover:border-primary/60">
+                <ArrowLeft className="size-4 shrink-0 text-muted-foreground group-hover:text-primary" aria-hidden />
+                <span className="min-w-0">
+                  <span className="block text-xs text-muted-foreground">{t("previousSpex")}</span>
+                  <span className="block truncate font-semibold group-hover:text-primary">{spex.previous.title} ({spex.previous.year})</span>
+                </span>
+              </Link>
+            ) : <span className="max-sm:hidden" />}
+            {spex.next && (
+              <Link href={`/spex/${spex.next.slug}`} rel="next"
+                    className="group flex items-center justify-end gap-3 rounded-lg border border-border bg-card p-3 text-right hover:border-primary/60">
+                <span className="min-w-0">
+                  <span className="block text-xs text-muted-foreground">{t("nextSpex")}</span>
+                  <span className="block truncate font-semibold group-hover:text-primary">{spex.next.title} ({spex.next.year})</span>
+                </span>
+                <ArrowRight className="size-4 shrink-0 text-muted-foreground group-hover:text-primary" aria-hidden />
+              </Link>
+            )}
+          </nav>
         )}
+
       </article>
       <aside className="w-52 shrink-0 max-xl:hidden">
         <SectionRail sections={sections} label={t("onThisPage")} />
@@ -344,6 +370,24 @@ export default async function SpexPage({ params }: Props) {
 }
 
 type PageImage = NonNullable<SpexPageData["page"]>["other"][number];
+
+/**
+ * The views of the roles: the image kinds the roles have, in the kinds' order, then the actors' photos when the viewer
+ * gets any.
+ */
+function roleViews(characters: SpexPageData["characters"], photos: string): RoleView[] {
+  const views = new Map<string, string>();
+
+  characters.flatMap(character => character.images).forEach(image => {
+    if (image.kind && !views.has(image.kind.id)) {
+      views.set(image.kind.id, image.kind.name);
+    }
+  });
+  if (characters.some(character => character.photos.photos.length > 0)) {
+    views.set(PHOTOS_VIEW, photos);
+  }
+  return [...views].map(([key, label]) => ({ key, label }));
+}
 
 /**
  * Images grouped by their image kind (spec 4.6), which the server sends in the kinds' order; with `headings`, each

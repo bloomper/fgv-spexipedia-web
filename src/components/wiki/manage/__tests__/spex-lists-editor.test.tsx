@@ -20,7 +20,7 @@ import type { SpexEditData } from "@/lib/wiki/edit.server";
 const own = { id: "s1" };
 const parent = { id: "p1" };
 const character = (id: string, name: string, spex = own) => ({
-  id, name, spex, retired: false, description: null, figure: null, images: [], photos: { itemIds: [] },
+  id, name, spex, retired: false, description: null, images: [], photos: { itemIds: [] },
 });
 const scene = (id: string, title: string, act = 1, spex = own) => ({ id, title, act, place: "Torget", intervalAfter: act === 1, spex });
 const kind = (id: string, name: string, retired = false) => ({ id, name, retired, valueType: null });
@@ -54,16 +54,15 @@ describe("The spex list editors", () => {
     vi.clearAllMocks();
   });
 
-  it("add a character with a figure, and edit one", async () => {
-    show(<CharactersEditor spex={spex()} imageKinds={imageKinds} figures={[{ id: "f1", name: "Bellman" }]} editor />);
+  it("add a character, and edit one", async () => {
+    show(<CharactersEditor spex={spex()} imageKinds={imageKinds} editor />);
 
     await userEvent.click(screen.getByRole("button", { name: "addCharacter" }));
     await userEvent.type(screen.getByLabelText("name"), "Drottningen");
-    await userEvent.selectOptions(screen.getByLabelText("figure"), "f1");
     await userEvent.type(screen.getByLabelText("description"), "Klok");
     await userEvent.click(within(screen.getByLabelText("name").closest("form")!).getByRole("button", { name: "save" }));
 
-    await waitFor(() => expect(actions.saveCharacterAction).toHaveBeenCalledWith("s1", null, { name: "Drottningen", figureId: "f1", description: "Klok" }));
+    await waitFor(() => expect(actions.saveCharacterAction).toHaveBeenCalledWith("s1", null, { name: "Drottningen", description: "Klok" }));
     expect(toast.success).toHaveBeenCalledWith("saved");
     expect(router.refresh).toHaveBeenCalled();
 
@@ -74,7 +73,7 @@ describe("The spex list editors", () => {
   });
 
   it("move, paste and delete the spex's own characters, not the parent's", async () => {
-    show(<CharactersEditor spex={spex()} imageKinds={imageKinds} figures={[]} editor />);
+    show(<CharactersEditor spex={spex()} imageKinds={imageKinds} editor />);
 
     expect(screen.getByText("fromParent")).toBeInTheDocument();
     expect(screen.getAllByRole("button", { name: "moveDown" })).toHaveLength(2);
@@ -93,7 +92,7 @@ describe("The spex list editors", () => {
 
   it("show the server's message when it refuses", async () => {
     actions.deleteCharacterAction = vi.fn(() => Promise.resolve({ ok: false, code: "BAD_REQUEST", message: "Karaktären används." }));
-    show(<CharactersEditor spex={spex()} imageKinds={imageKinds} figures={[]} editor />);
+    show(<CharactersEditor spex={spex()} imageKinds={imageKinds} editor />);
 
     await userEvent.click(screen.getAllByRole("button", { name: "delete" })[0]);
     await userEvent.click(within(await screen.findByRole("dialog")).getByRole("button", { name: "delete" }));
@@ -102,7 +101,7 @@ describe("The spex list editors", () => {
   });
 
   it("let authors who are not editors change only images", () => {
-    show(<CharactersEditor spex={spex()} imageKinds={imageKinds} figures={[]} editor={false} />);
+    show(<CharactersEditor spex={spex()} imageKinds={imageKinds} editor={false} />);
 
     expect(screen.queryByRole("button", { name: "addCharacter" })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "edit" })).not.toBeInTheDocument();

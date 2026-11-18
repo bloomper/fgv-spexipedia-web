@@ -26,7 +26,7 @@ export default async function ManageRecordingPage({ params }: Props) {
       notFound();
     }
     return (
-      <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-4 py-6 md:px-8">
+      <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 px-4 py-6 md:px-8">
         <PageHeader title={`${recording.catalogueNumber} ${recording.title}`} description={t("editDescription")} />
         <RecordingEditor recording={recording} media={media} spex={(base?.spexAll ?? []).filter(s => !s.retired || s.id === recording.spex?.id).map(s => ({ id: s.id, label: `${s.year} ${s.title}` }))} />
       </div>

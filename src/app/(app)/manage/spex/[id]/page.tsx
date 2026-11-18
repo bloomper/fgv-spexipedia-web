@@ -51,7 +51,7 @@ export default async function ManageSpexPage({ params }: Props) {
           <PageHeader title={t("editSpex", { title: `${spex.title} (${spex.year})` })}
                       actions={<Link href={`/spex/${spex.slug}`} className={buttonVariants({ variant: "outline", size: "sm" })}><ExternalLink aria-hidden /> {t("showPage")}</Link>} />
           <SpexSection id="edit-base" title={t("editSections.base")}>
-            <SpexBaseDataEditor spex={spex} categories={base?.spexCategories ?? []} editor={viewer.editor} />
+            <SpexBaseDataEditor spex={spex} categories={base?.spexCategories ?? []} allSpex={base?.spexAll ?? []} editor={viewer.editor} />
           </SpexSection>
           <SpexSection id="edit-texts" title={t("editSections.texts")}>
             <SpexTextsEditor spex={spex} />
@@ -65,7 +65,7 @@ export default async function ManageSpexPage({ params }: Props) {
           {viewer.editor && (
             <>
               <SpexSection id="edit-characters" title={t("editSections.characters")}>
-                <CharactersEditor spex={spex} figures={data.figures} editor={viewer.editor} imageKinds={kinds?.characterImageKinds ?? []} />
+                <CharactersEditor spex={spex} editor={viewer.editor} imageKinds={kinds?.characterImageKinds ?? []} />
               </SpexSection>
               <SpexSection id="edit-scenes" title={t("editSections.scenes")}>
                 <ScenesEditor spex={spex} />

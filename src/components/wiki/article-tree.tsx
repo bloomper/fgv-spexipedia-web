@@ -23,11 +23,11 @@ export function Breadcrumbs({ ancestors, title }: { ancestors: Crumb[]; title: s
   return (
     <nav aria-label={t("breadcrumbs")} className="text-sm text-muted-foreground">
       <ol className="flex flex-wrap items-center gap-1">
-        <li><Link href="/articles" className="hover:text-primary hover:underline">{t("title")}</Link></li>
+        <li><Link href="/articles" className="hover:text-primary">{t("title")}</Link></li>
         {ancestors.map(ancestor => (
           <li key={ancestor.id} className="flex items-center gap-1">
             <ChevronRight className="size-3.5" aria-hidden />
-            <Link href={`/articles/${ancestor.slug}`} className="hover:text-primary hover:underline">{ancestor.title}</Link>
+            <Link href={`/articles/${ancestor.slug}`} className="hover:text-primary">{ancestor.title}</Link>
           </li>
         ))}
         <li className="flex items-center gap-1">
@@ -112,7 +112,7 @@ export function ArticleTree({ nodes }: { nodes: TreeNode[] }) {
       {nodes.map(node => (
         <li key={node.id}>
           <span className="inline-flex flex-wrap items-center gap-2">
-            <Link href={`/articles/${node.slug}`} className="hover:text-primary hover:underline">{node.title}</Link>
+            <Link href={`/articles/${node.slug}`} className="hover:text-primary">{node.title}</Link>
             {node.visibility === "MEMBERS" && <Lock className="size-3 text-muted-foreground" aria-label={t("members")} />}
             {node.published === false && <span className="text-xs text-muted-foreground">({t("unpublished")})</span>}
           </span>

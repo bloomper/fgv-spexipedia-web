@@ -4,6 +4,7 @@ import * as React from "react";
 import { useMemo } from "react";
 import {
   BookOpen,
+  BookText,
   Clock,
   Disc3,
   Drama,
@@ -13,7 +14,6 @@ import {
   Search,
   Settings,
   Theater,
-  UsersRound,
   Wrench,
 } from "lucide-react";
 
@@ -74,11 +74,11 @@ export function AppSidebar({ roles, accountUrl, user, ...props }: AppSidebarProp
   const navigation = useMemo((): { main: NavItem[]; secondary: NavSecondaryItem[] } => {
     const mainItems: NavItem[] = [
       { title: t("Nav.home"), url: "/", icon: House, isActive: pathname === "/" },
-      { title: t("Nav.spex"), url: "/spex", icon: Theater, isActive: pathname.startsWith("/spex") || pathname.startsWith("/categories") },
-      { title: t("Nav.figures"), url: "/figures", icon: UsersRound, isActive: pathname.startsWith("/figures") },
-      { title: t("Nav.recordings"), url: "/recordings", icon: Disc3, isActive: pathname.startsWith("/recordings") },
-      { title: t("Nav.articles"), url: "/articles", icon: BookOpen, isActive: pathname.startsWith("/articles") },
       { title: t("Nav.search"), url: "/search", icon: Search, isActive: pathname.startsWith("/search") },
+      { title: t("Nav.spex"), url: "/spex", icon: Theater, isActive: pathname.startsWith("/spex") || pathname.startsWith("/categories") },
+      { title: t("Nav.recordings"), url: "/recordings", icon: Disc3, isActive: pathname.startsWith("/recordings") },
+      { title: t("Nav.books"), url: "/books", icon: BookText, isActive: pathname.startsWith("/books") },
+      { title: t("Nav.articles"), url: "/articles", icon: BookOpen, isActive: pathname.startsWith("/articles") },
     ];
 
     // Members follow what is written
@@ -93,6 +93,7 @@ export function AppSidebar({ roles, accountUrl, user, ...props }: AppSidebarProp
         items.push(
           { title: t("Nav.baseData"), url: "/manage/base-data" },
           { title: t("Nav.manageRecordings"), url: "/manage/recordings" },
+          { title: t("Nav.manageBooks"), url: "/manage/books" },
           { title: t("Nav.unresolvedCredits"), url: "/manage/credits" },
           { title: t("Nav.packages"), url: "/manage/packages" },
         );

@@ -30,7 +30,7 @@ export default async function HomePage() {
 
   return (
     <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-12 px-4 py-6 md:px-8">
-      <section className="grid items-start gap-8 lg:grid-cols-[1fr_14rem]">
+      <section className="grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_15rem]">
         <div className="space-y-4">
           <p className="text-sm tracking-[0.3em] text-primary uppercase">{t("kicker")}</p>
           <h1 className="wiki-heading text-5xl leading-none font-semibold md:text-6xl">Spexipedia</h1>
@@ -44,6 +44,22 @@ export default async function HomePage() {
               </Link>
             ))}
           </div>
+          {start && start.thisDay.length > 0 && (
+            <HomeSection id="this-day" className="pt-6" title={t("thisDay")}>
+              <ul className="space-y-2">
+                {start.thisDay.map((entry, i) => {
+                  const href = entry.spex ? `/spex/${entry.spex.slug}` : entry.recording ? `/recordings/${entry.recording.slug}` : null;
+
+                  return (
+                    <li key={i} className="flex gap-4 text-sm">
+                      <span className="w-36 shrink-0 text-primary">{formatDay(entry.date, locale)}</span>
+                      {href ? <Link href={href} className="hover:text-primary">{entry.text}</Link> : <span>{entry.text}</span>}
+                    </li>
+                  );
+                })}
+              </ul>
+            </HomeSection>
+          )}
         </div>
         {featured && (
           <div className="w-56 space-y-2 lg:w-full">
@@ -52,23 +68,6 @@ export default async function HomePage() {
           </div>
         )}
       </section>
-
-      {start && start.thisDay.length > 0 && (
-        <HomeSection id="this-day" title={t("thisDay")}>
-          <ul className="space-y-2">
-            {start.thisDay.map((entry, i) => {
-              const href = entry.spex ? `/spex/${entry.spex.slug}` : entry.recording ? `/recordings/${entry.recording.slug}` : null;
-
-              return (
-                <li key={i} className="flex gap-4 text-sm">
-                  <span className="w-36 shrink-0 text-primary">{formatDay(entry.date, locale)}</span>
-                  {href ? <Link href={href} className="hover:underline">{entry.text}</Link> : <span>{entry.text}</span>}
-                </li>
-              );
-            })}
-          </ul>
-        </HomeSection>
-      )}
 
       {start && start.decades.map(decade => (
         <HomeSection key={decade.decade} id={`decade-${decade.decade}`} title={t("decade", { decade: decade.decade })}

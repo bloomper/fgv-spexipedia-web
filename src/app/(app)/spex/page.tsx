@@ -26,18 +26,24 @@ export default async function BrowsePage() {
 
   return (
     <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-8 px-4 py-6 md:px-8">
-      <PageHeader title={<span className="wiki-heading text-4xl">{t("title")}</span>} description={t("description")} />
-      <nav aria-label={t("decades")} className="flex flex-wrap gap-2">
-        {decades.map(([decade]) => (
-          <a key={decade} href={`#decade-${decade}`} className="rounded-full border border-border px-3 py-1 text-sm hover:border-primary hover:text-primary">{t("decade", { decade })}</a>
-        ))}
-        {(data?.spexCategories ?? []).map(category => (
-          <Link key={category.id} href={`/categories/${category.id}`} className="rounded-full bg-secondary px-3 py-1 text-sm hover:text-primary">{category.name}</Link>
-        ))}
-      </nav>
+      <PageHeader title={t("title")} description={t("description")} />
+      <div className="space-y-3">
+        {(data?.spexCategories ?? []).length > 0 && (
+          <nav aria-label={t("categories")} className="flex flex-wrap gap-2">
+            {(data?.spexCategories ?? []).map(category => (
+              <Link key={category.id} href={`/categories/${category.id}`} className="rounded-full bg-secondary px-3 py-1 text-sm hover:text-primary">{category.name}</Link>
+            ))}
+          </nav>
+        )}
+        <nav aria-label={t("decades")} className="flex flex-wrap gap-2">
+          {decades.map(([decade]) => (
+            <a key={decade} href={`#decade-${decade}`} className="rounded-full border border-border px-3 py-1 text-sm hover:border-primary hover:text-primary">{t("decade", { decade })}</a>
+          ))}
+        </nav>
+      </div>
       {decades.map(([decade, list]) => (
         <section key={decade} id={`decade-${decade}`} className="scroll-mt-20 space-y-3">
-          <h2 className="wiki-heading text-2xl font-semibold">{t("decade", { decade })}</h2>
+          <h2 className="wiki-heading text-xl font-semibold">{t("decade", { decade })}</h2>
           <div className="grid grid-cols-3 gap-2 sm:gap-4 md:grid-cols-4 xl:grid-cols-6">
             {list.map(s => <SpexCard key={s.id} spex={s} />)}
           </div>
