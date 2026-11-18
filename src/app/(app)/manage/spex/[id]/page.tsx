@@ -13,8 +13,9 @@ import { SpexSection } from "@/components/wiki/spex-section";
 import { SectionRail } from "@/components/wiki/section-rail.client";
 import { RevisionList } from "@/components/wiki/revision-list";
 import { buttonVariants } from "@/components/ui/button";
-import { FactsEditor, SpexBaseDataEditor, SpexTextsEditor } from "@/components/wiki/manage/spex-head-editor.client";
+import { FactsEditor, SpexBaseDataEditor, SpexProductions, SpexTextsEditor } from "@/components/wiki/manage/spex-head-editor.client";
 import { SpexMediaEditor } from "@/components/wiki/manage/spex-media-editor.client";
+import { SpexCompleteness } from "@/components/wiki/manage/spex-completeness";
 import { CharactersEditor, NumbersEditor, RevivalChangesEditor, ScenesEditor } from "@/components/wiki/manage/spex-lists-editor.client";
 
 type Props = { params: Promise<{ id: string }> };
@@ -26,7 +27,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 /**
- * Editing a spex and its page. Authors write the texts, images and photos; editors also keep the base data and the
+ * Editing a spex and its page, one production at a time: the original or one of its revivals (SpexProductions switches
+ * between them; a revival keeps only what it changes). Authors write the texts, images and photos; editors also keep the base data and the
  * characters, scenes and numbers. Spexregister's editors come here by the spex's id.
  */
 export default async function ManageSpexPage({ params }: Props) {
@@ -38,20 +40,24 @@ export default async function ManageSpexPage({ params }: Props) {
     if (!spex) {
       notFound();
     }
-    const sections = [
+    const shown = [
       "base", "texts", "facts", "media",
       ...(viewer.editor ? ["characters", "scenes", "numbers"] : []),
       ...(viewer.editor && spex.revival ? ["revival"] : []),
       "history",
-    ].map(section => ({ id: `edit-${section}`, title: t(`editSections.${section}`) }));
+    ];
+    const sections = shown.map(section => ({ id: `edit-${section}`, title: t(`editSections.${section}`) }));
+    const completeness = spex.completeness;
 
     return (
       <div className="mx-auto flex w-full max-w-7xl gap-10 px-4 py-6 md:px-8">
         <div className="min-w-0 flex-1 space-y-8">
           <PageHeader title={t("editSpex", { title: `${spex.title} (${spex.year})` })}
                       actions={<Link href={`/spex/${spex.slug}`} className={buttonVariants({ variant: "outline", size: "sm" })}><ExternalLink aria-hidden /> {t("showPage")}</Link>} />
+          {completeness && <SpexCompleteness completeness={completeness} sections={shown} revival={spex.revival} folded className="xl:hidden" />}
+          <SpexProductions spex={spex} editor={viewer.editor} admin={viewer.admin} />
           <SpexSection id="edit-base" title={t("editSections.base")}>
-            <SpexBaseDataEditor spex={spex} categories={base?.spexCategories ?? []} editor={viewer.editor} />
+            <SpexBaseDataEditor spex={spex} categories={base?.spexCategories ?? []} allSpex={base?.spexAll ?? []} editor={viewer.editor} />
           </SpexSection>
           <SpexSection id="edit-texts" title={t("editSections.texts")}>
             <SpexTextsEditor spex={spex} />
@@ -65,7 +71,7 @@ export default async function ManageSpexPage({ params }: Props) {
           {viewer.editor && (
             <>
               <SpexSection id="edit-characters" title={t("editSections.characters")}>
-                <CharactersEditor spex={spex} figures={data.figures} editor={viewer.editor} imageKinds={kinds?.characterImageKinds ?? []} />
+                <CharactersEditor spex={spex} editor={viewer.editor} imageKinds={kinds?.characterImageKinds ?? []} />
               </SpexSection>
               <SpexSection id="edit-scenes" title={t("editSections.scenes")}>
                 <ScenesEditor spex={spex} />
@@ -84,8 +90,11 @@ export default async function ManageSpexPage({ params }: Props) {
             {spex.page && spex.page.history.length > 0 ? <RevisionList revisions={spex.page.history} showTarget={false} /> : <p className="text-sm text-muted-foreground">{t("noHistory")}</p>}
           </SpexSection>
         </div>
-        <aside className="w-52 shrink-0 max-xl:hidden">
-          <SectionRail sections={sections} label={t("onThisPage")} />
+        <aside className="w-60 shrink-0 max-xl:hidden">
+          <div className="sticky top-20 max-h-[calc(100svh-6rem)] space-y-6 overflow-y-auto">
+            {completeness && <SpexCompleteness completeness={completeness} sections={shown} revival={spex.revival} />}
+            <SectionRail sections={sections} label={t("onThisPage")} />
+          </div>
         </aside>
       </div>
     );

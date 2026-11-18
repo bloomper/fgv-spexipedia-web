@@ -41,15 +41,15 @@ export default async function PackagePage({ params }: Props) {
     const zipComplete = pkg.zipSize == null || pkg.zipReceived >= pkg.zipSize;
 
     return (
-      <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 px-4 py-6 md:px-8">
+      <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 px-4 py-6 md:px-8">
         <RefreshWhileRunning running={running} />
         <PageHeader title={pkg.fileName} description={[pkg.zipFileName, pkg.uploadedByName, formatInstant(pkg.createdAt)].filter(Boolean).join(" · ")}
                     actions={<PackageActions id={pkg.id} state={pkg.state} zipComplete={zipComplete} />} />
         <div className="flex flex-wrap items-center gap-3 text-sm">
           <StateChip state={pkg.state} />
-          {pkg.spex && <Link href={`/spex/${pkg.spex.slug}`} className="text-primary hover:underline">{t("spexLink", { title: pkg.spex.title, year: pkg.spex.year })}</Link>}
+          {pkg.spex && <Link href={`/spex/${pkg.spex.slug}`} className="text-primary hover:text-primary/80">{t("spexLink", { title: pkg.spex.title, year: pkg.spex.year })}</Link>}
           {pkg.appliedAt && <span className="text-muted-foreground">{t("appliedAt", { at: formatInstant(pkg.appliedAt) ?? "" })}</span>}
-          <Link href="/manage/packages" className="ml-auto text-primary hover:underline">{t("back")}</Link>
+          <Link href="/manage/packages" className="ml-auto text-primary hover:text-primary/80">{t("back")}</Link>
         </div>
         {!zipComplete && !running && <ZipResume id={pkg.id} zipFileName={pkg.zipFileName ?? null} zipSize={pkg.zipSize!} zipReceived={pkg.zipReceived} />}
         {running && (

@@ -396,269 +396,6 @@
    ]
   }
  },
- "Figure {\"id\":\"bellman\"}": {
-  "data": {
-   "figure": {
-    "id": "01a1eefc-c245-72d2-9c73-97f7dc3addf6",
-    "slug": "bellman",
-    "name": "Bellman",
-    "descriptionHtml": "<p>Carl Michael Bellman, skald och flitig gäst i spex om 1700-talet.</p>\n",
-    "characters": [
-     {
-      "id": "1efba775-6e5a-3de6-a67d-bc89dd4d4bab",
-      "name": "Bellman",
-      "descriptionHtml": null,
-      "spex": {
-       "id": "c733337b-1a27-3264-a00f-dac3ab13e661",
-       "slug": "1948-bojan",
-       "title": "Bojan",
-       "year": "1948",
-       "poster": {
-        "id": "01a1eefc-c349-7a3b-a4cf-6f1efea94b4e",
-        "kind": "POSTER",
-        "caption": null,
-        "alt": "",
-        "width": 900,
-        "height": 1260,
-        "thumbnailUrl": "http://localhost:8089/media/images/01a1eefc-c349-7a3b-a4cf-6f1efea94b4e/thumbnail.webp",
-        "pageUrl": "http://localhost:8089/media/images/01a1eefc-c349-7a3b-a4cf-6f1efea94b4e/page.webp",
-        "fullUrl": "http://localhost:8089/media/images/01a1eefc-c349-7a3b-a4cf-6f1efea94b4e/full.webp",
-        "pageJpegUrl": "http://localhost:8089/media/images/01a1eefc-c349-7a3b-a4cf-6f1efea94b4e/page.jpg",
-        "__typename": "Image"
-       },
-       "__typename": "Spex"
-      },
-      "images": [],
-      "__typename": "Character"
-     },
-     {
-      "id": "6a8ef833-339c-3412-b398-87fe25872f5f",
-      "name": "Bellman",
-      "descriptionHtml": null,
-      "spex": {
-       "id": "5400a33b-cf1a-3af1-94b9-2c14b38d311b",
-       "slug": "1954-henrik-8",
-       "title": "Henrik 8",
-       "year": "1954",
-       "poster": {
-        "id": "01a1eefc-ef73-73a8-95a0-383eaa94b6bd",
-        "kind": "POSTER",
-        "caption": null,
-        "alt": "",
-        "width": 900,
-        "height": 1260,
-        "thumbnailUrl": "http://localhost:8089/media/images/01a1eefc-ef73-73a8-95a0-383eaa94b6bd/thumbnail.webp",
-        "pageUrl": "http://localhost:8089/media/images/01a1eefc-ef73-73a8-95a0-383eaa94b6bd/page.webp",
-        "fullUrl": "http://localhost:8089/media/images/01a1eefc-ef73-73a8-95a0-383eaa94b6bd/full.webp",
-        "pageJpegUrl": "http://localhost:8089/media/images/01a1eefc-ef73-73a8-95a0-383eaa94b6bd/page.jpg",
-        "__typename": "Image"
-       },
-       "__typename": "Spex"
-      },
-      "images": [],
-      "__typename": "Character"
-     },
-     {
-      "id": "7830f9c6-7251-3c43-81d4-e24895982c25",
-      "name": "Bellman",
-      "descriptionHtml": null,
-      "spex": {
-       "id": "857c6791-4659-3e6b-bb24-002312ce420b",
-       "slug": "1984-lasse-maja",
-       "title": "Lasse-Maja",
-       "year": "1984",
-       "poster": {
-        "id": "01a1eefd-3c4c-7657-80e2-9353c7cdf406",
-        "kind": "POSTER",
-        "caption": null,
-        "alt": "",
-        "width": 900,
-        "height": 1260,
-        "thumbnailUrl": "http://localhost:8089/media/images/01a1eefd-3c4c-7657-80e2-9353c7cdf406/thumbnail.webp",
-        "pageUrl": "http://localhost:8089/media/images/01a1eefd-3c4c-7657-80e2-9353c7cdf406/page.webp",
-        "fullUrl": "http://localhost:8089/media/images/01a1eefd-3c4c-7657-80e2-9353c7cdf406/full.webp",
-        "pageJpegUrl": "http://localhost:8089/media/images/01a1eefd-3c4c-7657-80e2-9353c7cdf406/page.jpg",
-        "__typename": "Image"
-       },
-       "__typename": "Spex"
-      },
-      "images": [],
-      "__typename": "Character"
-     },
-     {
-      "id": "ed0b2723-93f8-3576-ab22-1b168bc304ff",
-      "name": "Bellman",
-      "descriptionHtml": null,
-      "spex": {
-       "id": "e3133b1c-9e73-3f65-94ee-da4acf7912c5",
-       "slug": "2003-mata-hari",
-       "title": "Mata Hari",
-       "year": "2003",
-       "poster": {
-        "id": "01a1eefd-5e32-7623-b65c-380681e8b7fd",
-        "kind": "POSTER",
-        "caption": null,
-        "alt": "",
-        "width": 900,
-        "height": 1260,
-        "thumbnailUrl": "http://localhost:8089/media/images/01a1eefd-5e32-7623-b65c-380681e8b7fd/thumbnail.webp",
-        "pageUrl": "http://localhost:8089/media/images/01a1eefd-5e32-7623-b65c-380681e8b7fd/page.webp",
-        "fullUrl": "http://localhost:8089/media/images/01a1eefd-5e32-7623-b65c-380681e8b7fd/full.webp",
-        "pageJpegUrl": "http://localhost:8089/media/images/01a1eefd-5e32-7623-b65c-380681e8b7fd/page.jpg",
-        "__typename": "Image"
-       },
-       "__typename": "Spex"
-      },
-      "images": [],
-      "__typename": "Character"
-     },
-     {
-      "id": "d99626c3-5cb1-353d-8f23-79a6a3a02790",
-      "name": "Bellman",
-      "descriptionHtml": null,
-      "spex": {
-       "id": "cc46c8b6-cde5-36c6-8a1c-390adbda58bc",
-       "slug": "2022-h-c-andersen",
-       "title": "H. C. Andersen",
-       "year": "2022",
-       "poster": {
-        "id": "01a1eefd-7ef8-7d4e-8d82-a8974f314577",
-        "kind": "POSTER",
-        "caption": null,
-        "alt": "",
-        "width": 900,
-        "height": 1260,
-        "thumbnailUrl": "http://localhost:8089/media/images/01a1eefd-7ef8-7d4e-8d82-a8974f314577/thumbnail.webp",
-        "pageUrl": "http://localhost:8089/media/images/01a1eefd-7ef8-7d4e-8d82-a8974f314577/page.webp",
-        "fullUrl": "http://localhost:8089/media/images/01a1eefd-7ef8-7d4e-8d82-a8974f314577/full.webp",
-        "pageJpegUrl": "http://localhost:8089/media/images/01a1eefd-7ef8-7d4e-8d82-a8974f314577/page.jpg",
-        "__typename": "Image"
-       },
-       "__typename": "Spex"
-      },
-      "images": [],
-      "__typename": "Character"
-     },
-     {
-      "id": "5e468066-c075-314b-931b-2a57b4b3230d",
-      "name": "Bellman",
-      "descriptionHtml": null,
-      "spex": {
-       "id": "5dc13f75-fc0c-3238-a352-283eb027997a",
-       "slug": "2025-ask-och-embla",
-       "title": "Ask och Embla",
-       "year": "2025",
-       "poster": {
-        "id": "01a1eefd-aaa4-7aee-a672-a867d8086c45",
-        "kind": "POSTER",
-        "caption": null,
-        "alt": "",
-        "width": 900,
-        "height": 1260,
-        "thumbnailUrl": "http://localhost:8089/media/images/01a1eefd-aaa4-7aee-a672-a867d8086c45/thumbnail.webp",
-        "pageUrl": "http://localhost:8089/media/images/01a1eefd-aaa4-7aee-a672-a867d8086c45/page.webp",
-        "fullUrl": "http://localhost:8089/media/images/01a1eefd-aaa4-7aee-a672-a867d8086c45/full.webp",
-        "pageJpegUrl": "http://localhost:8089/media/images/01a1eefd-aaa4-7aee-a672-a867d8086c45/page.jpg",
-        "__typename": "Image"
-       },
-       "__typename": "Spex"
-      },
-      "images": [],
-      "__typename": "Character"
-     }
-    ],
-    "__typename": "Figure"
-   }
-  }
- },
- "Figure {\"id\":\"gustav-vasa\"}": {
-  "data": {
-   "figure": {
-    "id": "01a1eefc-c20e-75bc-a2aa-6c2d115d8385",
-    "slug": "gustav-vasa",
-    "name": "Gustav Vasa",
-    "descriptionHtml": "<p>Landsfader och skidlöpare.</p>\n",
-    "characters": [],
-    "__typename": "Figure"
-   }
-  }
- },
- "Figure {\"id\":\"kleopatra\"}": {
-  "data": {
-   "figure": {
-    "id": "01a1eefc-c23d-7cb5-93cd-75c96f0e1aa3",
-    "slug": "kleopatra",
-    "name": "Kleopatra",
-    "descriptionHtml": "<p>Egyptens drottning; spexens favorit bland antikens härskare.</p>\n",
-    "characters": [],
-    "__typename": "Figure"
-   }
-  }
- },
- "Figures {}": {
-  "data": {
-   "figures": [
-    {
-     "id": "01a1eefc-c245-72d2-9c73-97f7dc3addf6",
-     "slug": "bellman",
-     "name": "Bellman",
-     "characters": [
-      {
-       "id": "1efba775-6e5a-3de6-a67d-bc89dd4d4bab",
-       "__typename": "Character"
-      },
-      {
-       "id": "6a8ef833-339c-3412-b398-87fe25872f5f",
-       "__typename": "Character"
-      },
-      {
-       "id": "7830f9c6-7251-3c43-81d4-e24895982c25",
-       "__typename": "Character"
-      },
-      {
-       "id": "ed0b2723-93f8-3576-ab22-1b168bc304ff",
-       "__typename": "Character"
-      },
-      {
-       "id": "d99626c3-5cb1-353d-8f23-79a6a3a02790",
-       "__typename": "Character"
-      },
-      {
-       "id": "5e468066-c075-314b-931b-2a57b4b3230d",
-       "__typename": "Character"
-      }
-     ],
-     "__typename": "Figure"
-    },
-    {
-     "id": "01a1eefc-c20e-75bc-a2aa-6c2d115d8385",
-     "slug": "gustav-vasa",
-     "name": "Gustav Vasa",
-     "characters": [],
-     "__typename": "Figure"
-    },
-    {
-     "id": "01a1eefc-c23d-7cb5-93cd-75c96f0e1aa3",
-     "slug": "kleopatra",
-     "name": "Kleopatra",
-     "characters": [],
-     "__typename": "Figure"
-    },
-    {
-     "id": "01a1eefc-c24b-7f09-b5ef-2f4793dbadf3",
-     "slug": "napoleon",
-     "name": "Napoleon",
-     "characters": [
-      {
-       "id": "5713fc1c-d341-3ca7-93b7-b8dae20fc59b",
-       "__typename": "Character"
-      }
-     ],
-     "__typename": "Figure"
-    }
-   ]
-  }
- },
  "Recording {\"id\":\"ccd-004\"}": {
   "data": {
    "recording": {
@@ -1183,22 +920,6 @@
       "__typename": "Image"
      },
      "__typename": "Recording"
-    },
-    {
-     "id": "01a1eefd-c57f-7997-9537-9a274be1b646",
-     "slug": "spexbok-i",
-     "catalogueNumber": "Spexbok I",
-     "title": "Chalmersspex I",
-     "medium": {
-      "id": "01900000-0000-7000-8000-000000000306",
-      "name": "Spex book",
-      "__typename": "Kind"
-     },
-     "released": "1990",
-     "published": true,
-     "spex": null,
-     "front": null,
-     "__typename": "Recording"
     }
    ]
   }
@@ -1375,14 +1096,6 @@
      "__typename": "SearchHit"
     },
     {
-     "kind": "FIGURE",
-     "id": "01a1eefc-c245-72d2-9c73-97f7dc3addf6",
-     "title": "Bellman",
-     "context": null,
-     "path": "/figures/bellman",
-     "__typename": "SearchHit"
-    },
-    {
      "kind": "ARTICLE",
      "id": "01a1eefd-c661-706d-aecd-77ca5ab86490",
      "title": "Adrianpokalen",
@@ -1404,22 +1117,6 @@
      "title": "CEP 019 Lasse-Maja",
      "context": null,
      "path": "/recordings/cep-019",
-     "__typename": "SearchHit"
-    },
-    {
-     "kind": "FIGURE",
-     "id": "01a1eefc-c23d-7cb5-93cd-75c96f0e1aa3",
-     "title": "Kleopatra",
-     "context": null,
-     "path": "/figures/kleopatra",
-     "__typename": "SearchHit"
-    },
-    {
-     "kind": "FIGURE",
-     "id": "01a1eefc-c24b-7f09-b5ef-2f4793dbadf3",
-     "title": "Napoleon",
-     "context": null,
-     "path": "/figures/napoleon",
      "__typename": "SearchHit"
     }
    ]
@@ -6761,7 +6458,6 @@
      "__typename": "Spex"
     },
     "page": {
-     "generation": "Gamla Chalmersspexet",
      "premiere": "1948-11-18",
      "introduction": "Bojan – ett spex om makt, kärlek och en och annan felräknad tronföljd.",
      "shortDescription": "Ett spex om Bojan och hans hov.",
@@ -6774,7 +6470,7 @@
       {
        "kind": {
         "id": "01900000-0000-7000-8000-000000000501",
-        "name": "Venue",
+        "name": "Spelplats",
         "valueType": "TEXT",
         "__typename": "Kind"
        },
@@ -6784,7 +6480,7 @@
       {
        "kind": {
         "id": "01900000-0000-7000-8000-000000000502",
-        "name": "Number of performances",
+        "name": "Antal föreställningar",
         "valueType": "TEXT",
         "__typename": "Kind"
        },
@@ -6794,7 +6490,7 @@
       {
        "kind": {
         "id": "01900000-0000-7000-8000-000000000503",
-        "name": "Setting",
+        "name": "Handlingen utspelar sig",
         "valueType": "TEXT",
         "__typename": "Kind"
        },
@@ -6833,7 +6529,7 @@
       {
        "kind": {
         "id": "01900000-0000-7000-8000-000000000411",
-        "name": "Backdrop",
+        "name": "Fond",
         "__typename": "Kind"
        },
        "caption": "Fond: Slottet",
@@ -6855,7 +6551,7 @@
       {
        "kind": {
         "id": "01900000-0000-7000-8000-000000000411",
-        "name": "Backdrop",
+        "name": "Fond",
         "__typename": "Kind"
        },
        "caption": "Fond: Torget",
@@ -6877,7 +6573,7 @@
       {
        "kind": {
         "id": "01900000-0000-7000-8000-000000000412",
-        "name": "Stage",
+        "name": "Scen",
         "__typename": "Kind"
        },
        "caption": "Scenbygget",
@@ -6899,7 +6595,7 @@
       {
        "kind": {
         "id": "01900000-0000-7000-8000-000000000413",
-        "name": "Props",
+        "name": "Rekvisita",
         "__typename": "Kind"
        },
        "caption": "Kronan",
@@ -6921,7 +6617,7 @@
       {
        "kind": {
         "id": "01900000-0000-7000-8000-000000000413",
-        "name": "Props",
+        "name": "Rekvisita",
         "__typename": "Kind"
        },
        "caption": "Tronen",
@@ -6965,7 +6661,7 @@
       {
        "kind": {
         "id": "01900000-0000-7000-8000-000000000421",
-        "name": "Other images",
+        "name": "Övriga bilder",
         "__typename": "Kind"
        },
        "caption": "Programbladet",
@@ -7001,12 +6697,11 @@
       "descriptionHtml": "<p>Titelrollen. Bojan är både hjälte och skurk, beroende på akt.</p>\n",
       "position": 1,
       "retired": false,
-      "figure": null,
       "images": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000401",
-         "name": "Sketch",
+         "name": "Skiss",
          "__typename": "Kind"
         },
         "caption": "Skiss",
@@ -7028,7 +6723,7 @@
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000402",
-         "name": "Make-up sketch",
+         "name": "Sminkskiss",
          "__typename": "Kind"
         },
         "caption": "Sminkskiss",
@@ -7050,7 +6745,7 @@
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000403",
-         "name": "Costume doll",
+         "name": "Kostymdocka",
          "__typename": "Kind"
         },
         "caption": null,
@@ -7086,7 +6781,6 @@
       "descriptionHtml": "<p>Drottningen, som alla misstänker men ingen förstår.</p>\n",
       "position": 2,
       "retired": false,
-      "figure": null,
       "images": [],
       "playedBy": [],
       "photos": {
@@ -7104,12 +6798,6 @@
       "descriptionHtml": null,
       "position": 3,
       "retired": false,
-      "figure": {
-       "id": "01a1eefc-c245-72d2-9c73-97f7dc3addf6",
-       "slug": "bellman",
-       "name": "Bellman",
-       "__typename": "Figure"
-      },
       "images": [],
       "playedBy": [],
       "photos": {
@@ -7127,7 +6815,6 @@
       "descriptionHtml": "<p>Kardinalen, som alla misstänker men ingen förstår.</p>\n",
       "position": 4,
       "retired": false,
-      "figure": null,
       "images": [],
       "playedBy": [],
       "photos": {
@@ -7145,7 +6832,6 @@
       "descriptionHtml": null,
       "position": 5,
       "retired": false,
-      "figure": null,
       "images": [],
       "playedBy": [],
       "photos": {
@@ -7163,7 +6849,6 @@
       "descriptionHtml": "<p>Generalen, som alla misstänker men ingen förstår.</p>\n",
       "position": 6,
       "retired": false,
-      "figure": null,
       "images": [],
       "playedBy": [],
       "photos": {
@@ -7254,14 +6939,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000104",
-       "name": "Overture",
+       "name": "Ouvertyr",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -7287,7 +6972,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "82ed8e76-1c5b-34fb-88f0-0e99fcc3e3d4",
@@ -7301,14 +6987,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000101",
-       "name": "Song",
+       "name": "Sång",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -7334,7 +7020,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "36b252ce-3e4e-3bd6-aec5-575003aca2ee",
@@ -7348,14 +7035,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000101",
-       "name": "Song",
+       "name": "Sång",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000201",
-         "name": "Lyrics",
+         "name": "Text",
          "__typename": "Kind"
         },
         "position": 0,
@@ -7370,7 +7057,7 @@
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -7396,7 +7083,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "adfd532a-519e-36b1-9d8b-486df3c50810",
@@ -7410,14 +7098,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000101",
-       "name": "Song",
+       "name": "Sång",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -7443,7 +7131,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "386ba2de-4c81-3481-81d1-1b191ffeed02",
@@ -7457,14 +7146,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000101",
-       "name": "Song",
+       "name": "Sång",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -7490,7 +7179,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "7e2386de-66d1-312d-a386-3d08bd88e6a3",
@@ -7504,14 +7194,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000101",
-       "name": "Song",
+       "name": "Sång",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000201",
-         "name": "Lyrics",
+         "name": "Text",
          "__typename": "Kind"
         },
         "position": 0,
@@ -7526,7 +7216,7 @@
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -7552,7 +7242,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "d8a9dc4a-7d73-3e05-b0ee-9da64ac71ca9",
@@ -7566,14 +7257,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000101",
-       "name": "Song",
+       "name": "Sång",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -7599,7 +7290,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "605ca007-ebac-38d7-851f-c37ba5e89f39",
@@ -7613,14 +7305,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000107",
-       "name": "Finale",
+       "name": "Final",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -7646,7 +7338,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      }
     ],
     "recordings": [],
@@ -7714,7 +7407,6 @@
      "__typename": "Spex"
     },
     "page": {
-     "generation": "Gamla Chalmersspexet",
      "premiere": "1949-02-02",
      "introduction": "Erik XIV – ett spex om makt, kärlek och en och annan felräknad tronföljd.",
      "shortDescription": "Ett spex om Erik XIV och hans hov.",
@@ -7727,7 +7419,7 @@
       {
        "kind": {
         "id": "01900000-0000-7000-8000-000000000501",
-        "name": "Venue",
+        "name": "Spelplats",
         "valueType": "TEXT",
         "__typename": "Kind"
        },
@@ -7737,7 +7429,7 @@
       {
        "kind": {
         "id": "01900000-0000-7000-8000-000000000502",
-        "name": "Number of performances",
+        "name": "Antal föreställningar",
         "valueType": "TEXT",
         "__typename": "Kind"
        },
@@ -7747,7 +7439,7 @@
       {
        "kind": {
         "id": "01900000-0000-7000-8000-000000000503",
-        "name": "Setting",
+        "name": "Handlingen utspelar sig",
         "valueType": "TEXT",
         "__typename": "Kind"
        },
@@ -7786,7 +7478,7 @@
       {
        "kind": {
         "id": "01900000-0000-7000-8000-000000000411",
-        "name": "Backdrop",
+        "name": "Fond",
         "__typename": "Kind"
        },
        "caption": "Fond: Torget",
@@ -7808,7 +7500,7 @@
       {
        "kind": {
         "id": "01900000-0000-7000-8000-000000000411",
-        "name": "Backdrop",
+        "name": "Fond",
         "__typename": "Kind"
        },
        "caption": "Fond: Kungliga sovgemaket",
@@ -7830,7 +7522,7 @@
       {
        "kind": {
         "id": "01900000-0000-7000-8000-000000000412",
-        "name": "Stage",
+        "name": "Scen",
         "__typename": "Kind"
        },
        "caption": "Scenbygget",
@@ -7852,7 +7544,7 @@
       {
        "kind": {
         "id": "01900000-0000-7000-8000-000000000413",
-        "name": "Props",
+        "name": "Rekvisita",
         "__typename": "Kind"
        },
        "caption": "Kronan",
@@ -7874,7 +7566,7 @@
       {
        "kind": {
         "id": "01900000-0000-7000-8000-000000000413",
-        "name": "Props",
+        "name": "Rekvisita",
         "__typename": "Kind"
        },
        "caption": "Tronen",
@@ -7918,7 +7610,7 @@
       {
        "kind": {
         "id": "01900000-0000-7000-8000-000000000421",
-        "name": "Other images",
+        "name": "Övriga bilder",
         "__typename": "Kind"
        },
        "caption": "Programbladet",
@@ -7954,12 +7646,11 @@
       "descriptionHtml": "<p>Titelrollen. Erik XIV är både hjälte och skurk, beroende på akt.</p>\n",
       "position": 1,
       "retired": false,
-      "figure": null,
       "images": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000401",
-         "name": "Sketch",
+         "name": "Skiss",
          "__typename": "Kind"
         },
         "caption": "Skiss",
@@ -7981,7 +7672,7 @@
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000402",
-         "name": "Make-up sketch",
+         "name": "Sminkskiss",
          "__typename": "Kind"
         },
         "caption": "Sminkskiss",
@@ -8003,7 +7694,7 @@
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000403",
-         "name": "Costume doll",
+         "name": "Kostymdocka",
          "__typename": "Kind"
         },
         "caption": null,
@@ -8039,7 +7730,6 @@
       "descriptionHtml": "<p>Narren, som alla misstänker men ingen förstår.</p>\n",
       "position": 2,
       "retired": false,
-      "figure": null,
       "images": [],
       "playedBy": [],
       "photos": {
@@ -8057,7 +7747,6 @@
       "descriptionHtml": null,
       "position": 3,
       "retired": false,
-      "figure": null,
       "images": [],
       "playedBy": [],
       "photos": {
@@ -8075,7 +7764,6 @@
       "descriptionHtml": "<p>Hovdamen Åsa, som alla misstänker men ingen förstår.</p>\n",
       "position": 4,
       "retired": false,
-      "figure": null,
       "images": [],
       "playedBy": [],
       "photos": {
@@ -8093,7 +7781,6 @@
       "descriptionHtml": null,
       "position": 5,
       "retired": false,
-      "figure": null,
       "images": [],
       "playedBy": [],
       "photos": {
@@ -8111,7 +7798,6 @@
       "descriptionHtml": "<p>Spionen, som alla misstänker men ingen förstår.</p>\n",
       "position": 6,
       "retired": false,
-      "figure": null,
       "images": [],
       "playedBy": [],
       "photos": {
@@ -8129,7 +7815,6 @@
       "descriptionHtml": null,
       "position": 7,
       "retired": false,
-      "figure": null,
       "images": [],
       "playedBy": [],
       "photos": {
@@ -8220,14 +7905,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000104",
-       "name": "Overture",
+       "name": "Ouvertyr",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -8253,7 +7938,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "d68e2eb2-90aa-3ea2-a985-83c8575a3347",
@@ -8267,14 +7953,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000101",
-       "name": "Song",
+       "name": "Sång",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -8300,7 +7986,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "06228e56-6dc6-321d-8c6e-e22d8edd3cf3",
@@ -8314,14 +8001,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000101",
-       "name": "Song",
+       "name": "Sång",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000201",
-         "name": "Lyrics",
+         "name": "Text",
          "__typename": "Kind"
         },
         "position": 0,
@@ -8336,7 +8023,7 @@
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -8362,7 +8049,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "4c716b8e-fb77-3604-b38f-7912a9f14c0b",
@@ -8376,14 +8064,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000101",
-       "name": "Song",
+       "name": "Sång",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -8409,7 +8097,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "6affbe3c-cd3f-3ef1-aa11-d49a4c3cc0f9",
@@ -8423,14 +8112,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000101",
-       "name": "Song",
+       "name": "Sång",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -8456,7 +8145,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "27b81ccb-55c7-34c9-9a29-aa75bb8a21b4",
@@ -8470,14 +8160,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000101",
-       "name": "Song",
+       "name": "Sång",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000201",
-         "name": "Lyrics",
+         "name": "Text",
          "__typename": "Kind"
         },
         "position": 0,
@@ -8492,7 +8182,7 @@
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -8518,7 +8208,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "ba5d3f07-632f-3d51-8c6a-7c18655ab489",
@@ -8532,14 +8223,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000101",
-       "name": "Song",
+       "name": "Sång",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -8565,7 +8256,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "156db8ae-b25d-3ee6-aa7a-a180c8d96b2b",
@@ -8579,14 +8271,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000101",
-       "name": "Song",
+       "name": "Sång",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -8612,7 +8304,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "136e555b-7ce2-3068-a57c-b72f1652ba48",
@@ -8626,14 +8319,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000107",
-       "name": "Finale",
+       "name": "Final",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000201",
-         "name": "Lyrics",
+         "name": "Text",
          "__typename": "Kind"
         },
         "position": 0,
@@ -8648,7 +8341,7 @@
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -8674,7 +8367,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      }
     ],
     "recordings": [],
@@ -8757,7 +8451,6 @@
      "__typename": "Spex"
     },
     "page": {
-     "generation": "Gamla Chalmersspexet",
      "premiere": "1950-02-03",
      "introduction": "Cæsarion – ett spex om makt, kärlek och en och annan felräknad tronföljd.",
      "shortDescription": "Ett spex om Cæsarion och hans hov.",
@@ -8770,7 +8463,7 @@
       {
        "kind": {
         "id": "01900000-0000-7000-8000-000000000501",
-        "name": "Venue",
+        "name": "Spelplats",
         "valueType": "TEXT",
         "__typename": "Kind"
        },
@@ -8780,7 +8473,7 @@
       {
        "kind": {
         "id": "01900000-0000-7000-8000-000000000502",
-        "name": "Number of performances",
+        "name": "Antal föreställningar",
         "valueType": "TEXT",
         "__typename": "Kind"
        },
@@ -8790,7 +8483,7 @@
       {
        "kind": {
         "id": "01900000-0000-7000-8000-000000000503",
-        "name": "Setting",
+        "name": "Handlingen utspelar sig",
         "valueType": "TEXT",
         "__typename": "Kind"
        },
@@ -8829,7 +8522,7 @@
       {
        "kind": {
         "id": "01900000-0000-7000-8000-000000000411",
-        "name": "Backdrop",
+        "name": "Fond",
         "__typename": "Kind"
        },
        "caption": "Fond: Kungliga sovgemaket",
@@ -8851,7 +8544,7 @@
       {
        "kind": {
         "id": "01900000-0000-7000-8000-000000000411",
-        "name": "Backdrop",
+        "name": "Fond",
         "__typename": "Kind"
        },
        "caption": "Fond: Skogen",
@@ -8873,7 +8566,7 @@
       {
        "kind": {
         "id": "01900000-0000-7000-8000-000000000412",
-        "name": "Stage",
+        "name": "Scen",
         "__typename": "Kind"
        },
        "caption": "Scenbygget",
@@ -8895,7 +8588,7 @@
       {
        "kind": {
         "id": "01900000-0000-7000-8000-000000000413",
-        "name": "Props",
+        "name": "Rekvisita",
         "__typename": "Kind"
        },
        "caption": "Kronan",
@@ -8917,7 +8610,7 @@
       {
        "kind": {
         "id": "01900000-0000-7000-8000-000000000413",
-        "name": "Props",
+        "name": "Rekvisita",
         "__typename": "Kind"
        },
        "caption": "Tronen",
@@ -8961,7 +8654,7 @@
       {
        "kind": {
         "id": "01900000-0000-7000-8000-000000000421",
-        "name": "Other images",
+        "name": "Övriga bilder",
         "__typename": "Kind"
        },
        "caption": "Programbladet",
@@ -8997,12 +8690,11 @@
       "descriptionHtml": "<p>Titelrollen. Cæsarion är både hjälte och skurk, beroende på akt.</p>\n",
       "position": 1,
       "retired": false,
-      "figure": null,
       "images": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000401",
-         "name": "Sketch",
+         "name": "Skiss",
          "__typename": "Kind"
         },
         "caption": "Skiss",
@@ -9024,7 +8716,7 @@
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000402",
-         "name": "Make-up sketch",
+         "name": "Sminkskiss",
          "__typename": "Kind"
         },
         "caption": "Sminkskiss",
@@ -9046,7 +8738,7 @@
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000403",
-         "name": "Costume doll",
+         "name": "Kostymdocka",
          "__typename": "Kind"
         },
         "caption": null,
@@ -9082,7 +8774,6 @@
       "descriptionHtml": "<p>Kardinalen, som alla misstänker men ingen förstår.</p>\n",
       "position": 2,
       "retired": false,
-      "figure": null,
       "images": [],
       "playedBy": [],
       "photos": {
@@ -9100,7 +8791,6 @@
       "descriptionHtml": null,
       "position": 3,
       "retired": false,
-      "figure": null,
       "images": [],
       "playedBy": [],
       "photos": {
@@ -9118,7 +8808,6 @@
       "descriptionHtml": "<p>Generalen, som alla misstänker men ingen förstår.</p>\n",
       "position": 4,
       "retired": false,
-      "figure": null,
       "images": [],
       "playedBy": [],
       "photos": {
@@ -9136,7 +8825,6 @@
       "descriptionHtml": null,
       "position": 5,
       "retired": false,
-      "figure": null,
       "images": [],
       "playedBy": [],
       "photos": {
@@ -9154,7 +8842,6 @@
       "descriptionHtml": "<p>Bonden Örjan, som alla misstänker men ingen förstår.</p>\n",
       "position": 6,
       "retired": false,
-      "figure": null,
       "images": [],
       "playedBy": [],
       "photos": {
@@ -9172,7 +8859,6 @@
       "descriptionHtml": null,
       "position": 7,
       "retired": false,
-      "figure": null,
       "images": [],
       "playedBy": [],
       "photos": {
@@ -9190,7 +8876,6 @@
       "descriptionHtml": "<p>Prinsessan, som alla misstänker men ingen förstår.</p>\n",
       "position": 8,
       "retired": false,
-      "figure": null,
       "images": [],
       "playedBy": [],
       "photos": {
@@ -9281,14 +8966,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000104",
-       "name": "Overture",
+       "name": "Ouvertyr",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -9314,7 +8999,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "ab9e2d4e-5966-3ff5-bbfb-88de08313673",
@@ -9328,14 +9014,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000101",
-       "name": "Song",
+       "name": "Sång",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -9361,7 +9047,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "aa0ec27c-7597-3d33-9b0c-25c6d9023196",
@@ -9375,14 +9062,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000101",
-       "name": "Song",
+       "name": "Sång",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000201",
-         "name": "Lyrics",
+         "name": "Text",
          "__typename": "Kind"
         },
         "position": 0,
@@ -9397,7 +9084,7 @@
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -9423,7 +9110,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "083c3c59-97e9-349d-a190-2978bbf35947",
@@ -9437,14 +9125,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000101",
-       "name": "Song",
+       "name": "Sång",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -9470,7 +9158,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "860563c6-2865-346d-82fa-ff99bd425d8b",
@@ -9484,14 +9173,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000101",
-       "name": "Song",
+       "name": "Sång",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -9517,7 +9206,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "66c7ba29-7c03-3f3e-9bda-6f074fc0948d",
@@ -9531,14 +9221,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000101",
-       "name": "Song",
+       "name": "Sång",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000201",
-         "name": "Lyrics",
+         "name": "Text",
          "__typename": "Kind"
         },
         "position": 0,
@@ -9553,7 +9243,7 @@
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -9579,7 +9269,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "98edf97a-078e-3a33-aba6-60a0a1177b41",
@@ -9593,14 +9284,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000101",
-       "name": "Song",
+       "name": "Sång",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -9626,7 +9317,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "2904b28f-4b68-33bb-b7f4-e84d9302a588",
@@ -9640,14 +9332,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000101",
-       "name": "Song",
+       "name": "Sång",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -9673,7 +9365,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "61096973-00b8-39f1-874c-ac98df4d92a8",
@@ -9687,14 +9380,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000101",
-       "name": "Song",
+       "name": "Sång",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000201",
-         "name": "Lyrics",
+         "name": "Text",
          "__typename": "Kind"
         },
         "position": 0,
@@ -9709,7 +9402,7 @@
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -9735,7 +9428,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "8b2eac93-11aa-3ab2-a8ee-40c59710d136",
@@ -9749,14 +9443,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000107",
-       "name": "Finale",
+       "name": "Final",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -9782,7 +9476,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      }
     ],
     "recordings": [],
@@ -9865,7 +9560,6 @@
      "__typename": "Spex"
     },
     "page": {
-     "generation": "Gamla Chalmersspexet",
      "premiere": "1954-02-04",
      "introduction": "Henrik 8 – ett spex om makt, kärlek och en och annan felräknad tronföljd.",
      "shortDescription": "Ett spex om Henrik 8 och hans hov.",
@@ -9878,7 +9572,7 @@
       {
        "kind": {
         "id": "01900000-0000-7000-8000-000000000501",
-        "name": "Venue",
+        "name": "Spelplats",
         "valueType": "TEXT",
         "__typename": "Kind"
        },
@@ -9888,7 +9582,7 @@
       {
        "kind": {
         "id": "01900000-0000-7000-8000-000000000502",
-        "name": "Number of performances",
+        "name": "Antal föreställningar",
         "valueType": "TEXT",
         "__typename": "Kind"
        },
@@ -9898,7 +9592,7 @@
       {
        "kind": {
         "id": "01900000-0000-7000-8000-000000000503",
-        "name": "Setting",
+        "name": "Handlingen utspelar sig",
         "valueType": "TEXT",
         "__typename": "Kind"
        },
@@ -9937,7 +9631,7 @@
       {
        "kind": {
         "id": "01900000-0000-7000-8000-000000000411",
-        "name": "Backdrop",
+        "name": "Fond",
         "__typename": "Kind"
        },
        "caption": "Fond: Skogen",
@@ -9959,7 +9653,7 @@
       {
        "kind": {
         "id": "01900000-0000-7000-8000-000000000411",
-        "name": "Backdrop",
+        "name": "Fond",
         "__typename": "Kind"
        },
        "caption": "Fond: Hamnen",
@@ -9981,7 +9675,7 @@
       {
        "kind": {
         "id": "01900000-0000-7000-8000-000000000412",
-        "name": "Stage",
+        "name": "Scen",
         "__typename": "Kind"
        },
        "caption": "Scenbygget",
@@ -10003,7 +9697,7 @@
       {
        "kind": {
         "id": "01900000-0000-7000-8000-000000000413",
-        "name": "Props",
+        "name": "Rekvisita",
         "__typename": "Kind"
        },
        "caption": "Kronan",
@@ -10025,7 +9719,7 @@
       {
        "kind": {
         "id": "01900000-0000-7000-8000-000000000413",
-        "name": "Props",
+        "name": "Rekvisita",
         "__typename": "Kind"
        },
        "caption": "Tronen",
@@ -10069,7 +9763,7 @@
       {
        "kind": {
         "id": "01900000-0000-7000-8000-000000000421",
-        "name": "Other images",
+        "name": "Övriga bilder",
         "__typename": "Kind"
        },
        "caption": "Programbladet",
@@ -10105,12 +9799,11 @@
       "descriptionHtml": "<p>Titelrollen. Henrik är både hjälte och skurk, beroende på akt.</p>\n",
       "position": 1,
       "retired": false,
-      "figure": null,
       "images": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000401",
-         "name": "Sketch",
+         "name": "Skiss",
          "__typename": "Kind"
         },
         "caption": "Skiss",
@@ -10132,7 +9825,7 @@
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000402",
-         "name": "Make-up sketch",
+         "name": "Sminkskiss",
          "__typename": "Kind"
         },
         "caption": "Sminkskiss",
@@ -10154,7 +9847,7 @@
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000403",
-         "name": "Costume doll",
+         "name": "Kostymdocka",
          "__typename": "Kind"
         },
         "caption": null,
@@ -10190,7 +9883,6 @@
       "descriptionHtml": "<p>Hovdamen Åsa, som alla misstänker men ingen förstår.</p>\n",
       "position": 2,
       "retired": false,
-      "figure": null,
       "images": [],
       "playedBy": [],
       "photos": {
@@ -10208,12 +9900,6 @@
       "descriptionHtml": null,
       "position": 3,
       "retired": false,
-      "figure": {
-       "id": "01a1eefc-c245-72d2-9c73-97f7dc3addf6",
-       "slug": "bellman",
-       "name": "Bellman",
-       "__typename": "Figure"
-      },
       "images": [],
       "playedBy": [],
       "photos": {
@@ -10231,7 +9917,6 @@
       "descriptionHtml": "<p>Spionen, som alla misstänker men ingen förstår.</p>\n",
       "position": 4,
       "retired": false,
-      "figure": null,
       "images": [],
       "playedBy": [],
       "photos": {
@@ -10249,7 +9934,6 @@
       "descriptionHtml": null,
       "position": 5,
       "retired": false,
-      "figure": null,
       "images": [],
       "playedBy": [],
       "photos": {
@@ -10267,7 +9951,6 @@
       "descriptionHtml": "<p>Kocken, som alla misstänker men ingen förstår.</p>\n",
       "position": 6,
       "retired": false,
-      "figure": null,
       "images": [],
       "playedBy": [],
       "photos": {
@@ -10285,7 +9968,6 @@
       "descriptionHtml": null,
       "position": 7,
       "retired": false,
-      "figure": null,
       "images": [],
       "playedBy": [],
       "photos": {
@@ -10303,7 +9985,6 @@
       "descriptionHtml": "<p>Ärkebiskopen, som alla misstänker men ingen förstår.</p>\n",
       "position": 8,
       "retired": false,
-      "figure": null,
       "images": [],
       "playedBy": [],
       "photos": {
@@ -10321,7 +10002,6 @@
       "descriptionHtml": null,
       "position": 9,
       "retired": false,
-      "figure": null,
       "images": [],
       "playedBy": [],
       "photos": {
@@ -10412,14 +10092,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000104",
-       "name": "Overture",
+       "name": "Ouvertyr",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -10445,7 +10125,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "3aad0d4f-ecd1-3710-b01c-1e81fe4530a5",
@@ -10459,14 +10140,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000101",
-       "name": "Song",
+       "name": "Sång",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -10492,7 +10173,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "1e44b00a-7e30-395d-836c-827408b87ba3",
@@ -10506,14 +10188,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000101",
-       "name": "Song",
+       "name": "Sång",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000201",
-         "name": "Lyrics",
+         "name": "Text",
          "__typename": "Kind"
         },
         "position": 0,
@@ -10528,7 +10210,7 @@
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -10554,7 +10236,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "7598a888-f4b5-37b3-9279-b0b20bc54620",
@@ -10568,14 +10251,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000101",
-       "name": "Song",
+       "name": "Sång",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -10601,7 +10284,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "591466df-2cad-3946-be81-ba67fefb90ea",
@@ -10615,14 +10299,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000101",
-       "name": "Song",
+       "name": "Sång",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -10648,7 +10332,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "650e3760-690d-3510-840a-c7c59b23dff3",
@@ -10662,14 +10347,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000101",
-       "name": "Song",
+       "name": "Sång",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000201",
-         "name": "Lyrics",
+         "name": "Text",
          "__typename": "Kind"
         },
         "position": 0,
@@ -10684,7 +10369,7 @@
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -10710,7 +10395,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "101bbca8-c9bb-3bf4-8208-125ae5de59f8",
@@ -10724,14 +10410,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000101",
-       "name": "Song",
+       "name": "Sång",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -10757,7 +10443,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "b0aac1b2-2190-3506-9755-580386c04a86",
@@ -10771,14 +10458,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000101",
-       "name": "Song",
+       "name": "Sång",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -10804,7 +10491,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "f73870e0-663d-3e72-843c-234da0ca7501",
@@ -10818,14 +10506,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000101",
-       "name": "Song",
+       "name": "Sång",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000201",
-         "name": "Lyrics",
+         "name": "Text",
          "__typename": "Kind"
         },
         "position": 0,
@@ -10840,7 +10528,7 @@
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -10866,7 +10554,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "8c971dc4-2c86-3c2a-b46a-4a3700c0fb5d",
@@ -10880,14 +10569,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000101",
-       "name": "Song",
+       "name": "Sång",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -10913,7 +10602,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "edeff5e0-047b-3145-b894-dec7e63a973c",
@@ -10927,14 +10617,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000107",
-       "name": "Finale",
+       "name": "Final",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -10960,7 +10650,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      }
     ],
     "recordings": [],
@@ -11036,7 +10727,6 @@
      "__typename": "Spex"
     },
     "page": {
-     "generation": "Gamla Chalmersspexet",
      "premiere": "1956-02-05",
      "introduction": "Napoleon – ett spex om makt, kärlek och en och annan felräknad tronföljd.",
      "shortDescription": null,
@@ -11068,17 +10758,11 @@
       "descriptionHtml": "<p>Titelrollen. Napoleon är både hjälte och skurk, beroende på akt.</p>\n",
       "position": 1,
       "retired": false,
-      "figure": {
-       "id": "01a1eefc-c24b-7f09-b5ef-2f4793dbadf3",
-       "slug": "napoleon",
-       "name": "Napoleon",
-       "__typename": "Figure"
-      },
       "images": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000401",
-         "name": "Sketch",
+         "name": "Skiss",
          "__typename": "Kind"
         },
         "caption": "Skiss",
@@ -11100,7 +10784,7 @@
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000402",
-         "name": "Make-up sketch",
+         "name": "Sminkskiss",
          "__typename": "Kind"
         },
         "caption": "Sminkskiss",
@@ -11122,7 +10806,7 @@
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000403",
-         "name": "Costume doll",
+         "name": "Kostymdocka",
          "__typename": "Kind"
         },
         "caption": null,
@@ -11158,7 +10842,6 @@
       "descriptionHtml": "<p>Generalen, som alla misstänker men ingen förstår.</p>\n",
       "position": 2,
       "retired": false,
-      "figure": null,
       "images": [],
       "playedBy": [],
       "photos": {
@@ -11176,7 +10859,6 @@
       "descriptionHtml": null,
       "position": 3,
       "retired": false,
-      "figure": null,
       "images": [],
       "playedBy": [],
       "photos": {
@@ -11194,7 +10876,6 @@
       "descriptionHtml": "<p>Bonden Örjan, som alla misstänker men ingen förstår.</p>\n",
       "position": 4,
       "retired": false,
-      "figure": null,
       "images": [],
       "playedBy": [],
       "photos": {
@@ -11212,7 +10893,6 @@
       "descriptionHtml": null,
       "position": 5,
       "retired": false,
-      "figure": null,
       "images": [],
       "playedBy": [],
       "photos": {
@@ -11230,7 +10910,6 @@
       "descriptionHtml": "<p>Prinsessan, som alla misstänker men ingen förstår.</p>\n",
       "position": 6,
       "retired": false,
-      "figure": null,
       "images": [],
       "playedBy": [],
       "photos": {
@@ -11321,14 +11000,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000104",
-       "name": "Overture",
+       "name": "Ouvertyr",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -11354,7 +11033,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "d2dadd48-c0a7-3b0e-9445-2fe35d367656",
@@ -11368,14 +11048,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000101",
-       "name": "Song",
+       "name": "Sång",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -11401,7 +11081,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "bbf3d6a2-bf63-35f0-acc8-92c15c959bc5",
@@ -11415,14 +11096,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000101",
-       "name": "Song",
+       "name": "Sång",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000201",
-         "name": "Lyrics",
+         "name": "Text",
          "__typename": "Kind"
         },
         "position": 0,
@@ -11437,7 +11118,7 @@
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -11463,7 +11144,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "3a876261-c436-3b1b-b308-5f622e79e43d",
@@ -11477,14 +11159,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000101",
-       "name": "Song",
+       "name": "Sång",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -11510,7 +11192,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "7aa93943-0022-3578-9e17-97da0574c32b",
@@ -11524,14 +11207,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000101",
-       "name": "Song",
+       "name": "Sång",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -11557,7 +11240,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "b4ea4e10-1d96-3694-8f53-46ac5d67daf0",
@@ -11571,14 +11255,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000101",
-       "name": "Song",
+       "name": "Sång",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000201",
-         "name": "Lyrics",
+         "name": "Text",
          "__typename": "Kind"
         },
         "position": 0,
@@ -11593,7 +11277,7 @@
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -11619,7 +11303,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "a9aa8c49-cedb-3a87-a896-ac3100ed99ed",
@@ -11633,14 +11318,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000101",
-       "name": "Song",
+       "name": "Sång",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -11666,7 +11351,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "06bc3dcc-ff28-3a71-b324-1430b38309b9",
@@ -11680,14 +11366,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000101",
-       "name": "Song",
+       "name": "Sång",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -11713,7 +11399,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "547c47c8-b39a-3eea-9e30-414683f12966",
@@ -11727,14 +11414,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000101",
-       "name": "Song",
+       "name": "Sång",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000201",
-         "name": "Lyrics",
+         "name": "Text",
          "__typename": "Kind"
         },
         "position": 0,
@@ -11749,7 +11436,7 @@
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -11775,7 +11462,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "f3f2deb9-f8fe-33c9-aa67-dac11e5eea74",
@@ -11789,14 +11477,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000101",
-       "name": "Song",
+       "name": "Sång",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -11822,7 +11510,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "e0fe746f-47d8-36a3-af30-c710128d8e47",
@@ -11836,14 +11525,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000101",
-       "name": "Song",
+       "name": "Sång",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -11869,7 +11558,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      },
      {
       "id": "c734bd70-339a-337e-848e-1b02aa28ef59",
@@ -11883,14 +11573,14 @@
       "retired": false,
       "kind": {
        "id": "01900000-0000-7000-8000-000000000107",
-       "name": "Finale",
+       "name": "Final",
        "__typename": "Kind"
       },
       "credits": [
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000201",
-         "name": "Lyrics",
+         "name": "Text",
          "__typename": "Kind"
         },
         "position": 0,
@@ -11905,7 +11595,7 @@
        {
         "kind": {
          "id": "01900000-0000-7000-8000-000000000202",
-         "name": "Music",
+         "name": "Musik",
          "__typename": "Kind"
         },
         "position": 0,
@@ -11931,7 +11621,8 @@
        }
       ],
       "links": [],
-      "__typename": "Number"
+      "__typename": "Number",
+      "books": []
      }
     ],
     "recordings": [],
@@ -11955,7 +11646,7 @@
  "StartPage {}": {
   "data": {
    "startPage": {
-    "welcome": "Spexipedia är FGV:s uppslagsverk om Chalmersspexet och de andra spexen. Exempeldata – inget här är på riktigt.",
+    "welcome": "Spexipedia är FGV:s uppslagsverk om Chalmersspexet: alla spex sedan 1948, rollerna, musiken och traditionerna. Exempeldata – inget här är på riktigt.",
     "spexOfTheYear": {
      "id": "8d13183e-5a0a-386c-9614-f5718dc0be90",
      "slug": "2026-abraham-lincoln",
@@ -12788,6 +12479,27 @@
      "firstYear": "2020",
      "logo": null,
      "__typename": "SpexCategory"
+    }
+   ]
+  }
+ },
+ "Books {}": {
+  "data": {
+   "books": [
+    {
+     "id": "01a1eefe-0000-7000-8000-000000000001",
+     "slug": "chalmersspex-i",
+     "title": "Chalmersspex I",
+     "volume": 1,
+     "publishedYear": "1990",
+     "published": true,
+     "cover": null,
+     "__typename": "Book",
+     "kind": {
+      "id": "01900000-0000-7000-8000-000000000601",
+      "name": "Spexbok",
+      "__typename": "Kind"
+     }
     }
    ]
   }

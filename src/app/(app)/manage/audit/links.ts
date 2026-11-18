@@ -1,6 +1,6 @@
 /** The kinds of record Spexipedia's change log has. */
 export const ENTITY_TYPES = [
-  "SPEX", "SPEX_PAGE", "SPEX_CATEGORY", "TASK", "TASK_CATEGORY", "CHARACTER", "SCENE", "NUMBER", "FIGURE", "RECORDING",
+  "SPEX", "SPEX_PAGE", "SPEX_CATEGORY", "TASK", "TASK_CATEGORY", "CHARACTER", "SCENE", "NUMBER", "RECORDING", "BOOK",
   "ARTICLE", "ARTICLE_CATEGORY", "REVISION", "IMAGE", "REDIRECT", "SYNC_CONSUMER", "SETTINGS", "TRASH",
 ] as const;
 
@@ -16,10 +16,10 @@ export function auditLink(entityType: string, entityId: string): string | null {
     case "TASK":
     case "TASK_CATEGORY":
       return `/manage/base-data?edit=${entityId}`;
-    case "FIGURE":
-      return `/figures/${entityId}`;
     case "RECORDING":
       return `/manage/recordings/${entityId}`;
+    case "BOOK":
+      return `/manage/books/${entityId}`;
     case "ARTICLE":
       return `/articles/${entityId}`;
     case "REDIRECT":

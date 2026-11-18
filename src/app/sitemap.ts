@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { getSitemap } from "@/lib/wiki/wiki.server";
 
 /**
- * The public pages, as the server lists them for a visitor: published spex pages, public articles, figures,
+ * The public pages, as the server lists them for a visitor: published spex pages, public articles, books,
  * recordings and categories.
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -11,7 +11,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     { url: `${base}/` },
-    ...["/spex", "/articles", "/figures", "/recordings"].map(path => ({ url: `${base}${path}` })),
+    ...["/spex", "/articles", "/recordings", "/books"].map(path => ({ url: `${base}${path}` })),
     ...entries.map(entry => ({ url: `${base}${entry.path}`, lastModified: entry.lastModifiedAt ?? undefined })),
   ];
 }

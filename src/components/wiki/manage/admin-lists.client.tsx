@@ -35,7 +35,7 @@ export function RedirectsEditor({ redirects }: { redirects: Redirect[] }) {
           <li key={redirect.id} className="space-y-2 px-3 py-2">
             <div className="flex flex-wrap items-center gap-2">
               <span className="font-medium">{redirect.oldTitle}</span>
-              <span className="text-muted-foreground">→ <a href={redirect.target} className="text-primary hover:underline">{redirect.target}</a></span>
+              <span className="text-muted-foreground">→ <a href={redirect.target} className="text-primary hover:text-primary/80">{redirect.target}</a></span>
               <span className="ml-auto inline-flex">
                 <Button type="button" size="icon" variant="ghost" aria-label={t("edit")} onClick={() => setEditing(editing === redirect.id ? null : redirect.id)}><Pencil /></Button>
                 <Button type="button" size="icon" variant="ghost" aria-label={t("delete")} disabled={pending} onClick={async () => {

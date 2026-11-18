@@ -8,6 +8,8 @@ import { privateMetadata, publicMetadata } from "@/lib/wiki/metadata.server";
 import { PageHeader } from "@/components/page-header";
 import { ArticleList } from "@/components/wiki/article-list";
 import { LinkSegments } from "@/components/link-tabs";
+import { ArticleCategoryDialog } from "@/components/wiki/editor/article-category-dialog.client";
+import { getViewer } from "@/lib/wiki/viewer.server";
 
 type Props = { params: Promise<{ slug: string }>; searchParams: Promise<{ all?: string }> };
 
@@ -19,10 +21,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 /**
  * An article category (spec 4.5): the categories it belongs to, its subcategories, and its articles, or with `?all=1`
- * also the articles of the categories below it.
+ * also the articles of the categories below it. Members add subcategories; authors change the category and its parents.
  */
 export default async function ArticleCategoryPage({ params, searchParams }: Props) {
-  const [{ slug }, { all }, t] = await Promise.all([params, searchParams, getTranslations("Articles")]);
+  const [{ slug }, { all }, t, viewer] = await Promise.all([params, searchParams, getTranslations("Articles"), getViewer()]);
   const category = await getArticleCategory(decodeURIComponent(slug));
 
   if (!category) {
@@ -31,22 +33,28 @@ export default async function ArticleCategoryPage({ params, searchParams }: Prop
   const withSubcategories = all === "1" && category.subcategories.length > 0;
   const data = await getArticles(category.id, withSubcategories);
   const href = `/articles/categories/${category.slug}`;
+  const categories = data?.articleCategories ?? [];
 
   return (
-    <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-4 py-6 md:px-8">
-      <PageHeader title={<span className="wiki-heading text-4xl">{category.name}</span>} description={category.description} />
+    <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 px-4 py-6 md:px-8">
+      <PageHeader title={category.name} description={category.description} actions={viewer.member && (
+        <>
+          <ArticleCategoryDialog categories={categories} parentId={category.id} label={t("newSubcategory")} />
+          {viewer.author && <ArticleCategoryDialog category={category} categories={categories} label={t("editCategory")} />}
+        </>
+      )} />
       {category.parents.length > 0 && (
         <p className="text-sm text-muted-foreground">
           {t("inCategories")}{" "}
           {category.parents.map((parent, index) => (
-            <span key={parent.id}>{index > 0 && ", "}<Link href={`/articles/categories/${parent.slug}`} className="text-primary hover:underline">{parent.name}</Link></span>
+            <span key={parent.id}>{index > 0 && ", "}<Link href={`/articles/categories/${parent.slug}`} className="text-primary hover:text-primary/80">{parent.name}</Link></span>
           ))}
         </p>
       )}
       {category.subcategories.length > 0 && (
         <section aria-labelledby="subcategories-heading" className="space-y-2">
           <h2 id="subcategories-heading" className="text-sm font-semibold tracking-[0.15em] text-muted-foreground uppercase">{t("subcategories")}</h2>
-          <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {category.subcategories.map(sub => (
               <li key={sub.id}>
                 <Link href={`/articles/categories/${sub.slug}`} className="flex items-center gap-2 rounded-md border border-border px-3 py-2 text-sm hover:border-primary hover:text-primary">

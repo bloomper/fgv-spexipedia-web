@@ -13,10 +13,13 @@ export type SpexCardData = {
   published: boolean;
   category?: { name: string } | null;
   poster?: WikiImageData | null;
+  /** How much of the page is filled in; the server gives it to authors only. */
+  completeness?: { share: number } | null;
 };
 
 /**
- * A spex as a tile: its poster, year and title.
+ * A spex as a tile: its poster, year and title, and for authors how much of its page is filled in (a bar along the
+ * poster's foot, and the percentage).
  */
 export function SpexCard({ spex, introduction }: { spex: SpexCardData; introduction?: string | null }) {
   const t = useTranslations("Spex");
@@ -33,6 +36,7 @@ export function SpexCard({ spex, introduction }: { spex: SpexCardData; introduct
           {spex.revival && <Badge variant="secondary" className="max-w-full"><span className="min-w-0 truncate">{t("revival")}</span></Badge>}
           {!spex.published && <Badge variant="outline" className="max-w-full bg-background/80"><span className="min-w-0 truncate">{t("unpublished")}</span></Badge>}
         </div>
+        {spex.completeness && <CompletenessBar share={spex.completeness.share} label={t("filledIn", { percent: Math.round(spex.completeness.share * 100) })} />}
       </div>
       <div className="space-y-1 p-2 sm:p-3">
         <p className="text-xs tracking-[0.12em] text-primary sm:tracking-[0.18em]">{spex.year}</p>
@@ -40,5 +44,19 @@ export function SpexCard({ spex, introduction }: { spex: SpexCardData; introduct
         {introduction && <p className="line-clamp-2 text-xs text-muted-foreground">{introduction}</p>}
       </div>
     </Link>
+  );
+}
+
+function CompletenessBar({ share, label }: { share: number; label: string }) {
+  const percent = Math.round(share * 100);
+
+  return (
+    <div className="absolute inset-x-0 bottom-0" data-testid="spex-card-completeness">
+      <span className="absolute right-1.5 bottom-2.5 rounded-full bg-background/85 px-1.5 py-0.5 text-[11px] leading-none font-medium tabular-nums sm:right-2 sm:bottom-3"
+            aria-hidden>{percent}%</span>
+      <div className="h-1 bg-background/70" role="meter" aria-valuemin={0} aria-valuemax={100} aria-valuenow={percent} aria-label={label}>
+        <div className="h-full bg-primary" style={{ width: `${percent}%` }} />
+      </div>
+    </div>
   );
 }

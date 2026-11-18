@@ -20,7 +20,7 @@ export default async function WantedArticlesPage() {
     const [t, wanted] = await Promise.all([getTranslations("Articles"), getWantedArticles()]);
 
     return (
-      <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-4 py-6 md:px-8">
+      <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 px-4 py-6 md:px-8">
         <PageHeader title={t("wanted")} description={t("wantedDescription")} />
         {wanted.length === 0 ? <DataEmpty title={t("noWanted")} /> : (
           <ul className="divide-y divide-border rounded-lg border border-border bg-card">

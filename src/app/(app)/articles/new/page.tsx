@@ -22,7 +22,7 @@ export default async function NewArticlePage({ searchParams }: { searchParams: P
     const parent = parentId && ID.test(parentId) ? await getArticle(parentId) : null;
 
     return (
-      <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-4 py-6 md:px-8">
+      <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 px-4 py-6 md:px-8">
         <PageHeader title={t("newTitle")} description={parent ? t("newChildDescription", { parent: parent.title }) : t("newDescription")} />
         <ArticleForm id={null} revisionId={null} categories={data?.articleCategories ?? []} parentId={parent?.id ?? null}
                      initial={{ title: title?.slice(0, 255) ?? "", body: "", visibility: "PUBLIC", categoryIds: [] }} />

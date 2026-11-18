@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { creditLabel, groupBy, personLabel } from "@/utils/wiki";
+import { creditLabel, groupBy, personLabel, sceneLabel } from "@/utils/wiki";
 import { diffLines } from "@/utils/diff";
 
 describe("people on pages", () => {
@@ -29,5 +29,13 @@ describe("differences", () => {
       { kind: "added", text: "d" },
     ]);
     expect(diffLines("", "a")).toEqual([{ kind: "removed", text: "" }, { kind: "added", text: "a" }]);
+  });
+});
+
+describe("sceneLabel", () => {
+  it("numbers a scene with a title, not one named by its number", () => {
+    expect(sceneLabel({ position: 2, title: "Tronsalen" })).toBe("2. Tronsalen");
+    expect(sceneLabel({ position: 2, title: "Scen 2" })).toBe("Scen 2");
+    expect(sceneLabel({ position: 2, title: "2" })).toBe("2");
   });
 });

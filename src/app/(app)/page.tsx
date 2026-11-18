@@ -7,6 +7,13 @@ import { WikiImage } from "@/components/wiki/wiki-image";
 import { RevisionList } from "@/components/wiki/revision-list";
 import { getStartPage } from "@/lib/wiki/wiki.server";
 import { formatDay } from "@/utils/format";
+import { SortControl } from "@/components/sort-control";
+import { parseSort, type SortChoice, sortItems } from "@/utils/sorting";
+
+type Props = { searchParams: Promise<Record<string, string | string[] | undefined>> };
+
+const FIELDS = ["year", "title"] as const;
+const DEFAULT: SortChoice<(typeof FIELDS)[number]> = { field: "year", dir: "asc" };
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Meta");
@@ -21,16 +28,23 @@ export async function generateMetadata(): Promise<Metadata> {
 
 /**
  * The start page: the welcome text, the spex of the year, this day in history, recent changes and browsing by
- * category and decade.
+ * category and decade. The visitor picks which way the decades run and whether the spex in them go by year or title.
  */
-export default async function HomePage() {
-  const [t, data, locale] = await Promise.all([getTranslations("Home"), getStartPage(), getLocale()]);
+export default async function HomePage({ searchParams }: Props) {
+  const [t, ts, data, locale, params] = await Promise.all([getTranslations("Home"), getTranslations("Sort"), getStartPage(), getLocale(), searchParams]);
   const start = data?.startPage;
   const featured = start?.spexOfTheYear;
+  const sort = parseSort(params, FIELDS, DEFAULT);
+  const decades = sortItems(start?.decades ?? [], sort.dir, decade => decade.decade).map(decade => ({
+    ...decade,
+    spex: sort.field === "year"
+      ? sortItems(decade.spex, sort.dir, s => s.year, s => s.title)
+      : sortItems(decade.spex, sort.dir, s => s.title, s => s.year),
+  }));
 
   return (
     <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-12 px-4 py-6 md:px-8">
-      <section className="grid items-start gap-8 lg:grid-cols-[1fr_14rem]">
+      <section className="grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_15rem]">
         <div className="space-y-4">
           <p className="text-sm tracking-[0.3em] text-primary uppercase">{t("kicker")}</p>
           <h1 className="wiki-heading text-5xl leading-none font-semibold md:text-6xl">Spexipedia</h1>
@@ -44,6 +58,22 @@ export default async function HomePage() {
               </Link>
             ))}
           </div>
+          {start && start.thisDay.length > 0 && (
+            <HomeSection id="this-day" className="pt-6" title={t("thisDay")}>
+              <ul className="space-y-2">
+                {start.thisDay.map((entry, i) => {
+                  const href = entry.spex ? `/spex/${entry.spex.slug}` : entry.recording ? `/recordings/${entry.recording.slug}` : null;
+
+                  return (
+                    <li key={i} className="flex gap-4 text-sm">
+                      <span className="w-36 shrink-0 text-primary">{formatDay(entry.date, locale)}</span>
+                      {href ? <Link href={href} className="hover:text-primary">{entry.text}</Link> : <span>{entry.text}</span>}
+                    </li>
+                  );
+                })}
+              </ul>
+            </HomeSection>
+          )}
         </div>
         {featured && (
           <div className="w-56 space-y-2 lg:w-full">
@@ -53,24 +83,13 @@ export default async function HomePage() {
         )}
       </section>
 
-      {start && start.thisDay.length > 0 && (
-        <HomeSection id="this-day" title={t("thisDay")}>
-          <ul className="space-y-2">
-            {start.thisDay.map((entry, i) => {
-              const href = entry.spex ? `/spex/${entry.spex.slug}` : entry.recording ? `/recordings/${entry.recording.slug}` : null;
-
-              return (
-                <li key={i} className="flex gap-4 text-sm">
-                  <span className="w-36 shrink-0 text-primary">{formatDay(entry.date, locale)}</span>
-                  {href ? <Link href={href} className="hover:underline">{entry.text}</Link> : <span>{entry.text}</span>}
-                </li>
-              );
-            })}
-          </ul>
-        </HomeSection>
+      {decades.length > 0 && (
+        <div className="-mb-6 flex justify-end">
+          <SortControl path="/" params={params} current={sort} fallback={DEFAULT}
+                       fields={[{ field: "year", label: ts("year") }, { field: "title", label: ts("title") }]} />
+        </div>
       )}
-
-      {start && start.decades.map(decade => (
+      {decades.map(decade => (
         <HomeSection key={decade.decade} id={`decade-${decade.decade}`} title={t("decade", { decade: decade.decade })}
                      more={{ href: `/spex#decade-${decade.decade}`, label: t("allSpex") }}>
           <div className="grid grid-cols-3 gap-2 sm:gap-4 md:grid-cols-4 xl:grid-cols-6">
@@ -80,7 +99,7 @@ export default async function HomePage() {
       ))}
 
       {start && start.recentChanges.length > 0 && (
-        <HomeSection id="recent" title={t("recentChanges")} more={{ href: "/recent-changes", label: t("allChanges") }}>
+        <HomeSection id="recent" title={t("recentChanges")}>
           <RevisionList revisions={start.recentChanges.slice(0, 10)} />
         </HomeSection>
       )}

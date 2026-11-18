@@ -23,7 +23,7 @@ test.describe("On a phone", () => {
       await page.goto("/spex");
       await acceptCookies(page);
 
-      const pages = ["/", "/spex", "/figures", "/recordings", "/articles", "/about", "/support",
+      const pages = ["/", "/spex", "/recordings", "/books", "/articles", "/about", "/support",
         ...(await linksTo(page, "/spex/")).slice(0, 3)];
 
       for (const path of pages) {

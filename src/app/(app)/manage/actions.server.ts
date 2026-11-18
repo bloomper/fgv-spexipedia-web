@@ -10,7 +10,6 @@ import type {
   CharacterInput,
   CreditInput,
   FactInput,
-  FigureInput,
   ImageInput,
   ImageRefInput,
   ImageSection,
@@ -18,6 +17,8 @@ import type {
   OrderInput,
   PhotoSection,
   RecordingInput,
+  BookInput,
+  BookSongInput,
   RevivalChangeInput,
   RevivalChangeKind,
   SceneInput,
@@ -37,7 +38,7 @@ import { ID } from "@/utils/ids";
  * The editing pages' actions. Each is held to the role the server holds it to (AUTHOR for spex page texts, images and
  * photos; EDITOR for base data and the structured parts; ADMIN for retiring and merging), and refreshes the pages
  * that show what it changed. The whole site is revalidated, as a spex's change shows on the start page, its category,
- * its revivals and its figures.
+ * its revivals.
  */
 
 function requireIds(...ids: (string | null | undefined)[]) {
@@ -125,19 +126,6 @@ export async function saveTaskAction(id: string | null, input: TaskInput) {
   });
 }
 
-export async function saveFigureAction(id: string | null, input: FigureInput) {
-  requireIds(id);
-  return editor(async () => {
-    await (id ? edit.figureUpdate(id, input) : edit.figureCreate(input));
-    return null;
-  });
-}
-
-export async function deleteFigureAction(id: string) {
-  requireIds(id);
-  return editor(async () => (await edit.figureDelete(id), null));
-}
-
 export async function retireAction(kind: BaseDataKind, id: string, retired: boolean) {
   requireIds(id);
   return admin(async () => (await edit.baseDataRetire(kind, id, retired), null));
@@ -182,7 +170,7 @@ export async function setPagePublishedAction(spexId: string, published: boolean)
 }
 
 export async function saveCharacterAction(spexId: string, id: string | null, input: CharacterInput) {
-  requireIds(spexId, id, input.figureId);
+  requireIds(spexId, id);
   return editor(async () => (await (id ? edit.characterUpdate(id, input) : edit.characterCreate(spexId, input)), null));
 }
 
@@ -285,6 +273,34 @@ export async function setRecordingPublishedAction(id: string, published: boolean
 export async function deleteRecordingAction(id: string) {
   requireIds(id);
   return editor(async () => (await edit.recordingDelete(id), null));
+}
+
+// Books ------------------------------------------------------------------------------------------------------------
+
+export async function saveBookAction(id: string | null, input: BookInput) {
+  requireIds(id, input.coverImageId);
+  return editor(async () => id ? (await edit.bookUpdate(id, input), { id }) : await edit.bookCreate(input));
+}
+
+export async function setBookSongsAction(id: string, songs: BookSongInput[]) {
+  requireIds(id, ...songs.map(song => song.numberId));
+  return editor(async () => (await edit.bookSetSongs(id, songs), null));
+}
+
+export async function setBookPublishedAction(id: string, published: boolean) {
+  requireIds(id);
+  return editor(async () => (await edit.bookSetPublished(id, published), null));
+}
+
+export async function deleteBookAction(id: string) {
+  requireIds(id);
+  return editor(async () => (await edit.bookDelete(id), null));
+}
+
+/** A spex's numbers, to add to a book. */
+export async function spexNumbersAction(spexId: string) {
+  requireIds(spexId);
+  return editor(async () => await edit.getSpexNumbers(spexId));
 }
 
 // Images and the trash ----------------------------------------------------------------------------------------------------

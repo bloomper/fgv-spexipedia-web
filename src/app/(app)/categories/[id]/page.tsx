@@ -31,7 +31,7 @@ export default async function CategoryPage({ params }: Props) {
         {category.logo && <WikiImage image={category.logo} sizes="8rem" className="size-28 rounded-lg object-contain" />}
         <div className="space-y-1">
           <p className="text-sm tracking-[0.25em] text-primary">{t("since", { year: category.firstYear })}</p>
-          <h1 className="wiki-heading text-4xl font-semibold">{category.name}</h1>
+          <h1 className="wiki-heading text-3xl font-semibold md:text-4xl">{category.name}</h1>
         </div>
       </header>
       <HtmlContent html={category.descriptionHtml} className="max-w-3xl" />

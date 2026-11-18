@@ -28,6 +28,7 @@ export const KIND_TYPES: Record<KindType, readonly KindUse[]> = {
   MEDIUM: [],
   IMAGE: ["CHARACTER", "SCENOGRAPHY", "PAGE"],
   FACT: [],
+  BOOK: [],
 };
 
 /** Every use of image kinds, checked against the schema's enum the same way. */

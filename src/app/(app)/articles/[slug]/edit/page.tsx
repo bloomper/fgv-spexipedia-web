@@ -28,7 +28,7 @@ export default async function EditArticlePage({ params }: Props) {
       notFound();
     }
     return (
-      <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-4 py-6 md:px-8">
+      <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 px-4 py-6 md:px-8">
         <PageHeader title={t("editTitle", { title: article.title })} />
         <ArticleForm id={article.id} revisionId={article.revision?.id ?? null} categories={data?.articleCategories ?? []}
                      initial={{ title: article.title, body: article.body ?? "", visibility: article.visibility, categoryIds: article.categories.map(c => c.id) }} />

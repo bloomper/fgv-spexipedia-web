@@ -20,7 +20,7 @@ export default async function TrashPage() {
     const [t, trash, viewer] = await Promise.all([getTranslations("Trash"), getTrash(), getViewer()]);
 
     return (
-      <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-4 py-6 md:px-8">
+      <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 px-4 py-6 md:px-8">
         <PageHeader title={t("title")} description={t("description")} />
         <TrashView articles={trash?.articles ?? []} images={trash?.images ?? []} admin={viewer.admin} />
       </div>

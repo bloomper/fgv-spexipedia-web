@@ -92,12 +92,11 @@ function moved<T>(list: T[], from: number, to: number): T[] {
 // Characters ------------------------------------------------------------------------------------------------------------
 
 /**
- * The spex's characters: name, figure and description for editors; images and actor photos for authors. A revival
+ * The spex's characters: name and description for editors; images and actor photos for authors. A revival
  * edits only the characters it added; its parent's are cut or kept in the revival's changes.
  */
-export function CharactersEditor({ spex, figures, editor, imageKinds }: {
+export function CharactersEditor({ spex, editor, imageKinds }: {
   spex: SpexEditData;
-  figures: { id: string; name: string }[];
   editor: boolean;
   /** Image kinds for characters (spec 4.6). */
   imageKinds: EditKind[];
@@ -115,7 +114,7 @@ export function CharactersEditor({ spex, figures, editor, imageKinds }: {
           <PasteBox help={t("pasteCharactersHelp")} onPaste={text => save(() => pasteCharactersAction(spex.id, text))} />
         </div>
       )}
-      {editing === "new" && <CharacterForm spexId={spex.id} figures={figures} onDone={() => setEditing(null)} />}
+      {editing === "new" && <CharacterForm spexId={spex.id} onDone={() => setEditing(null)} />}
       <ol className="space-y-3">
         {spex.characters.map(character => {
           const mine = character.spex.id === spex.id;
@@ -125,7 +124,6 @@ export function CharactersEditor({ spex, figures, editor, imageKinds }: {
             <li key={character.id} className="space-y-3 rounded-lg border border-border bg-card p-3">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="wiki-heading text-lg font-semibold">{character.name}</span>
-                {character.figure && <Badge variant="secondary">{character.figure.name}</Badge>}
                 {character.retired && <Badge variant="outline">{t("retired")}</Badge>}
                 {!mine && <Badge variant="outline">{t("fromParent")}</Badge>}
                 {editor && mine && (
@@ -136,7 +134,7 @@ export function CharactersEditor({ spex, figures, editor, imageKinds }: {
                   </span>
                 )}
               </div>
-              {editing === character.id && <CharacterForm spexId={spex.id} figures={figures} character={character} onDone={() => setEditing(null)} />}
+              {editing === character.id && <CharacterForm spexId={spex.id} character={character} onDone={() => setEditing(null)} />}
               <details>
                 <summary className="cursor-pointer text-sm text-primary">{t("imagesAndPhotos")}</summary>
                 <div className="mt-3 space-y-4">
@@ -155,37 +153,26 @@ export function CharactersEditor({ spex, figures, editor, imageKinds }: {
   );
 }
 
-function CharacterForm({ spexId, figures, character, onDone }: {
+function CharacterForm({ spexId, character, onDone }: {
   spexId: string;
-  figures: { id: string; name: string }[];
   character?: Character;
   onDone: () => void;
 }) {
   const t = useTranslations("Manage");
   const { save, pending } = useSave();
   const [name, setName] = useState(character?.name ?? "");
-  const [figureId, setFigureId] = useState(character?.figure?.id ?? "");
   const [description, setDescription] = useState(character?.description ?? "");
 
   return (
     <form className="space-y-3 rounded-md border border-border p-3" onSubmit={async event => {
       event.preventDefault();
-      if (await save(() => saveCharacterAction(spexId, character?.id ?? null, { name: name.trim(), figureId: figureId || null, description: description.trim() || null }))) {
+      if (await save(() => saveCharacterAction(spexId, character?.id ?? null, { name: name.trim(), description: description.trim() || null }))) {
         onDone();
       }
     }}>
-      <div className="grid gap-3 sm:grid-cols-2">
-        <div className="space-y-1.5">
-          <Label htmlFor={`name-${character?.id ?? "new"}`}>{t("name")}</Label>
-          <Input id={`name-${character?.id ?? "new"}`} required value={name} onChange={event => setName(event.target.value)} />
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor={`figure-${character?.id ?? "new"}`}>{t("figure")}</Label>
-          <NativeSelect id={`figure-${character?.id ?? "new"}`} value={figureId} onChange={event => setFigureId(event.target.value)}>
-            <NativeSelectOption value="">{t("none")}</NativeSelectOption>
-            {figures.map(figure => <NativeSelectOption key={figure.id} value={figure.id}>{figure.name}</NativeSelectOption>)}
-          </NativeSelect>
-        </div>
+      <div className="space-y-1.5">
+        <Label htmlFor={`name-${character?.id ?? "new"}`}>{t("name")}</Label>
+        <Input id={`name-${character?.id ?? "new"}`} required value={name} onChange={event => setName(event.target.value)} />
       </div>
       <div className="space-y-1.5">
         <Label htmlFor={`description-${character?.id ?? "new"}`}>{t("description")}</Label>

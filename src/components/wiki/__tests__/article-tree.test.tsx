@@ -66,8 +66,25 @@ describe("The article tree", () => {
 
     expect(screen.getByRole("link", { name: "Adrian-cupen" })).toHaveAttribute("href", "/articles/b");
     expect(screen.getByLabelText("members")).toBeInTheDocument();
-    expect(screen.getByText("(unpublished)")).toBeInTheDocument();
+    expect(screen.getByText("unpublished")).toBeInTheDocument();
+    expect(screen.getByText("subArticles:{\"count\":3}")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "moreBelow:{\"count\":2}" })).toHaveAttribute("href", "/articles/b");
+  });
+});
+
+describe("Folding the article tree", () => {
+  it("folds a branch away and back", async () => {
+    render(<ArticleTree nodes={[node("a", "Traditioner", { children: [node("b", "Adrian-cupen", { children: [node("c", "Vinnare")] })] })]} />);
+
+    const toggle = screen.getByRole("button", { name: "toggleBranch:{\"title\":\"Adrian-cupen\"}" });
+
+    expect(toggle).toHaveAttribute("aria-expanded", "true");
+    expect(screen.getByRole("link", { name: "Vinnare" })).toBeInTheDocument();
+    await userEvent.click(toggle);
+    expect(toggle).toHaveAttribute("aria-expanded", "false");
+    await waitFor(() => expect(screen.queryByRole("link", { name: "Vinnare" })).not.toBeInTheDocument());
+    await userEvent.click(toggle);
+    expect(screen.getByRole("link", { name: "Vinnare" })).toBeInTheDocument();
   });
 });
 

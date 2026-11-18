@@ -76,7 +76,7 @@ function AppReport({ app }: { app: App }) {
         <h3 className="wiki-heading text-xl font-semibold">{name(app.app)}</h3>
         <StatusChip status={app.status} />
         {app.webUrl && (
-          <a href={app.webUrl} target="_blank" rel="noopener noreferrer" className="ml-auto inline-flex items-center gap-1 text-sm text-primary hover:underline">
+          <a href={app.webUrl} target="_blank" rel="noopener noreferrer" className="ml-auto inline-flex items-center gap-1 text-sm text-primary hover:text-primary/80">
             {t("open")} <ExternalLink className="size-3.5" aria-hidden />
           </a>
         )}

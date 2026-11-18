@@ -16,7 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 /**
- * Search across spex, characters, figures, numbers, original songs, recordings and articles. People are not searched:
+ * Search across spex, characters, numbers, original songs, recordings, books and articles. People are not searched:
  * they live in Spexregister. A title that finds nothing can be written as a new article by members.
  */
 export default async function SearchPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
@@ -24,7 +24,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
   const [t, hits, viewer] = await Promise.all([getTranslations("Search"), q.length >= 2 ? search(q) : Promise.resolve([]), getViewer()]);
 
   return (
-    <div className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-6 px-4 py-6 md:px-8">
+    <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 px-4 py-6 md:px-8">
       <PageHeader title={t("title")} />
       <form role="search" className="flex gap-2">
         <Input name="q" type="search" defaultValue={q} placeholder={t("placeholder")} aria-label={t("placeholder")} autoFocus />
@@ -33,7 +33,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
       {q.length >= 2 && hits.length === 0 && (
         <div className="space-y-2">
           <DataEmpty title={t("noHits", { q })} description={null} />
-          {viewer.member && <p className="text-center text-sm"><Link href={`/articles/new?title=${encodeURIComponent(q)}`} className="text-primary hover:underline">{t("writeArticle", { q })}</Link></p>}
+          {viewer.member && <p className="text-center text-sm"><Link href={`/articles/new?title=${encodeURIComponent(q)}`} className="text-primary hover:text-primary/80">{t("writeArticle", { q })}</Link></p>}
         </div>
       )}
       {groupBy(hits, hit => hit.kind).map(([kind, list]) => (

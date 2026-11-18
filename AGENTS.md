@@ -11,7 +11,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 # Spexipedia Web — project notes
 
 Next.js 16 App Router + React 19 frontend for Spexipedia, FGV's encyclopedia of the Chalmers spex: spex pages, characters,
-figures, numbers, recordings and wiki articles. It is backed by `fgv-spexipedia-server`'s GraphQL API (which answers
+numbers, recordings, books and wiki articles. It is backed by `fgv-spexipedia-server`'s GraphQL API (which answers
 without a token too, with what is public) and its `POST /api/images`; images come from the media server (nginx,
 `spexipedia-media`, under `MEDIA_ORIGIN`). Product spec: `fgv-spexipedia-spec`. The scaffolding comes from
 `fgv-spexgram-web`; keep them alike.
@@ -47,11 +47,11 @@ without a token too, with what is public) and its `POST /api/images`; images com
 
 ## Who sees what
 
-- **Visitors** read published spex pages, public articles, figures, recordings and search. People appear by nickname
+- **Visitors** read published spex pages, public articles, recordings, books and search. People appear by nickname
   only; the server never sends them names. `getViewer()` (`src/lib/wiki/viewer.server.ts`) says `loggedIn`, `member`,
   `author`, `editor`, `admin`; it only decides what to show.
 - **Members** (`USER`) also see names (with links to Spexregister), members' articles and photos from Spexgram, write
-  articles and follow *Senaste ändringar*.
+  articles and see the latest changes on the start page.
 - **Authors** write spex page texts, images and photos and publish articles; **editors** keep base data and the
   structured parts; **admins** retire and merge base data, keep redirects, notify recipients, settings and maintenance.
 - Not found and not allowed look the same: an article a visitor may not see shows `LoginPrompt`.
@@ -60,7 +60,7 @@ without a token too, with what is public) and its `POST /api/images`; images com
 ## How the pages work
 
 - **Spex page** (`/spex/[slug]`, `src/app/(app)/spex/[slug]/page.tsx`): the head (poster beside year, title, category,
-  introduction and description), then only the sections with content (`sectionsOf`), each a `SpexSection` with a serif
+  introduction and description), then only the sections with content (`sectionsOf`), each a `SpexSection` with a
   heading and subtitle, and `SectionRail` beside it (scroll-spy). An id or old slug redirects to the current slug, so
   other applications link by id. Structured data (`CreativeWork`) for published pages. Markdown texts arrive as HTML
   from the server (`descriptionHtml` and so on) and are shown with `HtmlContent`; never render Markdown in the web.
@@ -73,10 +73,13 @@ without a token too, with what is public) and its `POST /api/images`; images com
   Articles form a tree (`src/components/wiki/article-tree.tsx`: breadcrumbs, the tree around an article, its table of
   contents; authors move and reorder them) and categories nest; *What links here*, wanted and orphaned articles come
   from the server. Links to missing articles point at `/articles/new?title=` and are shown red by that address.
+- **Books** (`/books`, editors at `/manage/books`): anything printed, e.g. the spex books of the spex' songs; not
+  recordings. Songs are numbers (or free titles) in the book's order with a text-only flag; numbers on spex pages link
+  their books.
 - **Kinds** (number, credit, medium, image per use, fact) are data: pages read them from `kinds(type, use)`, editors
   are offered those in use (`src/utils/kinds.ts`), admins keep them at `/admin/kinds`. Only the schema's enums (types,
   uses, value types) appear in code. Imported credits nobody resolved are shown to editors only (`/manage/credits`).
-- **Spex packages** (`/manage/packages`, editors): a spreadsheet and an optional zip of up to 20 GB become a spex in
+- **Importera** (spex packages in code; `/manage/packages`, editors): a spreadsheet and an optional zip of up to 20 GB become a spex in
   every application. The files go through `/api/packages` (`src/lib/http/packages.server.ts`), streamed to the server
   with the user's token; the zip in 32 MB parts at the server's `Upload-Offset`, resumable
   (`src/components/wiki/packages/package-upload.client.ts`). The zip parts skip `src/proxy.ts` (its matcher), which
@@ -94,7 +97,9 @@ without a token too, with what is public) and its `POST /api/images`; images com
 FGV's shell (sidebar, header, application switcher) and colours as in the other webs: the palette in
 `src/app/globals.css` and the manifest colours are Spexgram's, so keep them in step with the other FGV webs. The page
 layouts follow the Apps Script pages Spexipedia replaces (poster beside the title, sections with subtitles, a right rail
-with scroll-spy), with Cormorant Garamond for content headings (`.wiki-heading`, `.prose-wiki`).
+with scroll-spy). Headings are Geist like the rest of FGV's webs (`.wiki-heading` only tightens them). Every content
+page uses one width, `max-w-7xl`, and the `loading.tsx` skeletons use the same container (`PAGE_CONTAINER` in
+`src/components/page-skeleton.tsx`); running text (`.prose-wiki`) keeps to 75ch.
 
 ## Consent and visitor statistics
 

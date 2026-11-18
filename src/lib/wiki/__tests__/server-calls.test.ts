@@ -71,7 +71,7 @@ describe("The reading calls", () => {
   it("answer with empty lists and nulls when the API gives nothing", async () => {
     runQuery.mockResolvedValue(null);
 
-    expect(await wiki.getFigures()).toEqual([]);
+    expect(await wiki.getBooks()).toEqual([]);
     expect(await wiki.search("x")).toEqual([]);
     expect(await wiki.getRedirect("Gammal titel")).toBeNull();
     expect(await wiki.markdownPreview("# Rubrik")).toBe("");
