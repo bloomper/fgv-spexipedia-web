@@ -11,6 +11,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
 import { Textarea } from "@/components/ui/textarea";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ImageSlot } from "@/components/wiki/editor/image-slot.client";
 import { useSave } from "@/components/wiki/editor/use-save.client";
 import { useDialogs } from "@/components/dialogs.client";
@@ -32,11 +34,9 @@ type Row = { id: string; label: string; retired?: boolean; categoryId?: string; 
 /**
  * One kind of base data as a list: each row can be edited in place; admins retire a record (it stays readable by id
  * but is not offered for new use) or merge it into another (the other applications move their references). Given
- * categories, the list can be narrowed to one of them.
+ * categories, the list can be narrowed to one of them. A new record is made in a dialog.
  */
-function BaseList({ id, title, kind, rows, admin, highlight, form, editHref, newForm, categories }: {
-  id: string;
-  title: string;
+function BaseList({ kind, rows, admin, highlight, form, editHref, newTitle, newForm, categories }: {
   kind: BaseDataKind | null;
   rows: Row[];
   admin: boolean;
@@ -44,6 +44,7 @@ function BaseList({ id, title, kind, rows, admin, highlight, form, editHref, new
   /** A row is edited in place by its form, or on its own page at editHref. */
   form?: (rowId: string, done: () => void) => ReactNode;
   editHref?: (rowId: string) => string;
+  newTitle: string;
   newForm: (done: () => void) => ReactNode;
   categories?: { id: string; name: string; retired?: boolean }[];
 }) {
@@ -51,29 +52,33 @@ function BaseList({ id, title, kind, rows, admin, highlight, form, editHref, new
   const { save, pending } = useSave();
   const { choose, confirm } = useDialogs();
   const [editing, setEditing] = useState<string | null>(rows.some(row => row.id === highlight) ? highlight : null);
+  const [adding, setAdding] = useState(false);
   const [showRetired, setShowRetired] = useState(false);
   const [category, setCategory] = useState("");
   const shown = rows.filter(row => row.id === highlight || ((showRetired || !row.retired) && (!category || row.categoryId === category)));
 
   return (
-    <section id={id} className="scroll-mt-20 space-y-3" aria-labelledby={`${id}-heading`}>
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 id={`${id}-heading`} className="wiki-heading text-xl font-semibold">{title} <span className="text-sm text-muted-foreground">({category ? rows.filter(row => row.categoryId === category).length : rows.length})</span></h2>
-        <div className="flex flex-wrap items-center gap-3">
-          {categories && (
-            <NativeSelect size="sm" aria-label={t("filterCategory")} value={category} onChange={event => setCategory(event.target.value)}>
-              <NativeSelectOption value="">{t("allCategories")}</NativeSelectOption>
-              {categories.filter(c => !c.retired || c.id === category || rows.some(row => row.categoryId === c.id))
-                .map(c => <NativeSelectOption key={c.id} value={c.id}>{c.name}</NativeSelectOption>)}
-            </NativeSelect>
-          )}
-          {rows.some(row => row.retired) && (
-            <label className="flex items-center gap-2 text-sm"><Checkbox checked={showRetired} onCheckedChange={checked => setShowRetired(!!checked)} /> {t("showRetired")}</label>
-          )}
-          <Button type="button" size="sm" variant="outline" onClick={() => setEditing("new")}><Plus aria-hidden /> {t("add")}</Button>
-        </div>
+    <div className="space-y-3">
+      <div className="flex flex-wrap items-center gap-3">
+        {categories && (
+          <NativeSelect size="sm" aria-label={t("filterCategory")} value={category} onChange={event => setCategory(event.target.value)}>
+            <NativeSelectOption value="">{t("allCategories")}</NativeSelectOption>
+            {categories.filter(c => !c.retired || c.id === category || rows.some(row => row.categoryId === c.id))
+              .map(c => <NativeSelectOption key={c.id} value={c.id}>{c.name}</NativeSelectOption>)}
+          </NativeSelect>
+        )}
+        {rows.some(row => row.retired) && (
+          <label className="flex items-center gap-2 text-sm"><Checkbox checked={showRetired} onCheckedChange={checked => setShowRetired(!!checked)} /> {t("showRetired")}</label>
+        )}
+        <Button type="button" size="sm" className="ml-auto" onClick={() => setAdding(true)}><Plus aria-hidden /> {newTitle}</Button>
       </div>
-      {editing === "new" && newForm(() => setEditing(null))}
+      <Dialog open={adding} onOpenChange={setAdding}>
+        <DialogContent className="sm:max-w-xl">
+          <DialogHeader><DialogTitle>{newTitle}</DialogTitle></DialogHeader>
+          {/* The forms frame themselves for editing in a row; the dialog is frame enough */}
+          <div className="[&_form]:border-0 [&_form]:bg-transparent [&_form]:p-0">{adding && newForm(() => setAdding(false))}</div>
+        </DialogContent>
+      </Dialog>
       <ul className="max-h-[36rem] divide-y divide-border overflow-y-auto rounded-lg border border-border bg-card text-sm">
         {shown.map(row => (
           <li key={row.id} className={cn("space-y-2 px-3 py-2", row.id === highlight && "bg-primary/10")}>
@@ -84,7 +89,7 @@ function BaseList({ id, title, kind, rows, admin, highlight, form, editHref, new
               <span className="ml-auto inline-flex">
                 {editHref
                   ? <Link href={editHref(row.id)} aria-label={t("edit")} title={t("edit")} className={buttonVariants({ size: "icon", variant: "ghost" })}><Pencil /></Link>
-                  : <Button type="button" size="icon" variant="ghost" aria-label={t("edit")} onClick={() => setEditing(editing === row.id ? null : row.id)}><Pencil /></Button>}
+                  : <Button type="button" size="icon" variant="ghost" aria-label={t("edit")} title={t("edit")} onClick={() => setEditing(editing === row.id ? null : row.id)}><Pencil /></Button>}
                 {admin && kind && (
                   <>
                     <Button type="button" size="icon" variant="ghost" aria-label={row.retired ? t("unretire") : t("retire")} title={row.retired ? t("unretire") : t("retire")} disabled={pending}
@@ -107,7 +112,7 @@ function BaseList({ id, title, kind, rows, admin, highlight, form, editHref, new
           </li>
         ))}
       </ul>
-    </section>
+    </div>
   );
 }
 
@@ -241,21 +246,45 @@ function TaskForm({ task, categories, done }: { task?: BaseData["tasks"][number]
   );
 }
 
-export function BaseDataManager({ data, admin, highlight }: { data: BaseData; admin: boolean; highlight: string | null }) {
+const SECTIONS = ["spex", "spex-categories", "task-categories", "tasks"] as const;
+
+type Section = typeof SECTIONS[number];
+
+const isSection = (value: string): value is Section => (SECTIONS as readonly string[]).includes(value);
+
+export function BaseDataManager({ data, admin, highlight, initialTab }: { data: BaseData; admin: boolean; highlight: string | null; initialTab?: string | null }) {
   const t = useTranslations("BaseData");
   // Only originals are listed; their revivals are edited on the original's page, and named here by year
   const originals = data.spexAll.filter(s => !s.parent).sort((a, b) => b.year.localeCompare(a.year));
   const revivalsOf = (id: string) => data.spexAll.filter(s => s.parent?.id === id).sort((a, b) => a.year.localeCompare(b.year));
   const highlighted = data.spexAll.find(s => s.id === highlight)?.parent?.id ?? highlight;
+  // A highlighted record opens its own tab; otherwise the one in the address (?tab=), or the first
+  const highlightedSection: Section | null =
+    data.spexAll.some(s => s.id === highlight) ? "spex"
+      : data.spexCategories.some(c => c.id === highlight) ? "spex-categories"
+        : data.taskCategories.some(c => c.id === highlight) ? "task-categories"
+          : data.tasks.some(task => task.id === highlight) ? "tasks" : null;
+  const [tab, setTab] = useState<Section>(highlightedSection ?? (initialTab && isSection(initialTab) ? initialTab : "spex"));
+
+  const counts: Record<Section, number> = {
+    "spex": originals.length,
+    "spex-categories": data.spexCategories.length,
+    "task-categories": data.taskCategories.length,
+    "tasks": data.tasks.length,
+  };
 
   return (
-    <div className="space-y-10">
-      <nav className="flex flex-wrap gap-2 text-sm">
-        {["spex", "spex-categories", "task-categories", "tasks"].map(id => (
-          <a key={id} href={`#${id}`} className="rounded-full border border-border px-3 py-1 hover:border-primary hover:text-primary">{t(`sections.${id}`)}</a>
+    <Tabs value={tab} onValueChange={value => {
+      setTab(value as Section);
+      window.history.replaceState(null, "", `?tab=${value}`);
+    }}>
+      <TabsList>
+        {SECTIONS.map(id => (
+          <TabsTrigger key={id} value={id}>{t(`sections.${id}`)} <span className="text-xs tabular-nums text-muted-foreground">{counts[id]}</span></TabsTrigger>
         ))}
-      </nav>
-      <BaseList id="spex" title={t("sections.spex")} kind="SPEX" admin={admin} highlight={highlighted}
+      </TabsList>
+      <TabsContent value="spex">
+        <BaseList kind="SPEX" admin={admin} highlight={highlighted}
                 rows={originals.map(s => {
                   const revivals = revivalsOf(s.id);
 
@@ -278,26 +307,37 @@ export function BaseDataManager({ data, admin, highlight }: { data: BaseData; ad
                 })}
                 categories={data.spexCategories}
                 editHref={id => `/manage/spex/${id}`}
+                newTitle={t("newTitles.spex")}
                 newForm={done => <SpexForm categories={data.spexCategories} spex={data.spexAll} done={done} />} />
-      <BaseList id="spex-categories" title={t("sections.spex-categories")} kind="SPEX_CATEGORY" admin={admin} highlight={highlight}
+      </TabsContent>
+      <TabsContent value="spex-categories">
+        <BaseList kind="SPEX_CATEGORY" admin={admin} highlight={highlight}
                 rows={data.spexCategories.map(c => ({ id: c.id, label: c.name, retired: c.retired, extra: <span className="text-xs text-muted-foreground">{t("since", { year: c.firstYear })}</span> }))}
                 form={(id, done) => <SpexCategoryForm category={data.spexCategories.find(c => c.id === id)} done={done} />}
+                newTitle={t("newTitles.spex-categories")}
                 newForm={done => <SpexCategoryForm done={done} />} />
-      <BaseList id="task-categories" title={t("sections.task-categories")} kind="TASK_CATEGORY" admin={admin} highlight={highlight}
+      </TabsContent>
+      <TabsContent value="task-categories">
+        <BaseList kind="TASK_CATEGORY" admin={admin} highlight={highlight}
                 rows={data.taskCategories.map(c => ({
                   id: c.id, label: c.name, retired: c.retired,
                   extra: <>{c.actorPresent && <Badge variant="secondary">{t("actorPresent")}</Badge>}{c.instruments && <Badge variant="secondary">{t("instruments")}</Badge>}</>,
                 }))}
                 form={(id, done) => <TaskCategoryForm category={data.taskCategories.find(c => c.id === id)} done={done} />}
+                newTitle={t("newTitles.task-categories")}
                 newForm={done => <TaskCategoryForm done={done} />} />
-      <BaseList id="tasks" title={t("sections.tasks")} kind="TASK" admin={admin} highlight={highlight}
+      </TabsContent>
+      <TabsContent value="tasks">
+        <BaseList kind="TASK" admin={admin} highlight={highlight}
                 rows={data.tasks.map(task => ({
                   id: task.id, label: task.name, retired: task.retired, categoryId: task.category?.id,
                   extra: <><span className="text-xs text-muted-foreground">{task.category?.name}</span>{task.board && <Badge variant="secondary">{t("board")}</Badge>}</>,
                 }))}
                 categories={data.taskCategories}
                 form={(id, done) => <TaskForm task={data.tasks.find(task => task.id === id)} categories={data.taskCategories} done={done} />}
+                newTitle={t("newTitles.tasks")}
                 newForm={done => <TaskForm categories={data.taskCategories} done={done} />} />
-    </div>
+      </TabsContent>
+    </Tabs>
   );
 }

@@ -699,6 +699,7 @@
   },
   "BaseData": {
     "title": "Base data",
+    "intro": "What the other applications copy: spex, spex categories, task categories and tasks.",
     "description": "Description",
     "showRetired": "Show disabled",
     "add": "New",
@@ -734,6 +735,12 @@
       "spex-categories": "Spex categories",
       "task-categories": "Task categories",
       "tasks": "Tasks"
+    },
+    "newTitles": {
+      "spex": "New spex",
+      "spex-categories": "New spex category",
+      "task-categories": "New task category",
+      "tasks": "New task"
     },
     "revivals": "{count, plural, one {# revival} other {# revivals}}"
   },

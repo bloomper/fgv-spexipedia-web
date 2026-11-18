@@ -32,9 +32,22 @@ const data = {
     { id: "u3", name: "Fiol", board: false, retired: false, category: { id: "t2", name: "Orkester" } }],
 } as unknown as BaseData;
 
-const show = (admin = true, highlight: string | null = null) =>
-  render(<DialogsProvider><BaseDataManager data={data} admin={admin} highlight={highlight} /></DialogsProvider>);
-const section = (name: string) => screen.getByRole("region", { name: new RegExp(`^sections.${name} \\(`) });
+const show = (admin = true, highlight: string | null = null, tab: string | null = null) =>
+  render(<DialogsProvider><BaseDataManager data={data} admin={admin} highlight={highlight} initialTab={tab} /></DialogsProvider>);
+const tab = (name: string) => screen.getByRole("tab", { name: new RegExp(`^sections.${name} `) });
+const panel = (name: string) => screen.getByRole("tabpanel", { name: new RegExp(`^sections.${name} `) });
+/** Opens a section's tab and returns its panel. */
+const section = async (name: string) => {
+  await userEvent.click(tab(name));
+
+  return panel(name);
+};
+/** Opens a section's dialog for a new record. */
+const add = async (name: string) => {
+  await userEvent.click(within(await section(name)).getByRole("button", { name: `newTitles.${name}` }));
+
+  return within(await screen.findByRole("dialog", { name: `newTitles.${name}` }));
+};
 
 describe("BaseDataManager", () => {
   beforeEach(() => {
@@ -45,7 +58,10 @@ describe("BaseDataManager", () => {
   it("lists only originals, each with its revivals' years, and links them to their editors", async () => {
     show();
 
-    const rows = within(section("spex")).getAllByRole("listitem");
+    expect(tab("spex")).toHaveAttribute("aria-selected", "true");
+    expect(tab("spex")).toHaveTextContent("1");
+
+    const rows = within(await section("spex")).getAllByRole("listitem");
 
     expect(rows).toHaveLength(1);
     expect(rows[0]).toHaveTextContent("1984 Lasse-Maja");
@@ -58,33 +74,36 @@ describe("BaseDataManager", () => {
   it("highlights a revival's original", async () => {
     show(true, "s2");
 
-    expect(within(section("spex")).getByRole("listitem")).toHaveClass("bg-primary/10");
+    expect(within(panel("spex")).getByRole("listitem")).toHaveClass("bg-primary/10");
   });
 
   it("creates a spex in a category", async () => {
     show();
 
-    await userEvent.click(within(section("spex")).getByRole("button", { name: "add" }));
-    expect(within(section("spex")).getByLabelText("year")).toBeDisabled();
-    await userEvent.selectOptions(within(section("spex")).getByLabelText("category"), "k1");
-    await userEvent.selectOptions(within(section("spex")).getByLabelText("year"), "2026");
-    await userEvent.type(within(section("spex")).getByLabelText("spexTitle"), " Abraham Lincoln ");
-    await userEvent.click(within(section("spex")).getByRole("button", { name: "save" }));
+    const dialog = await add("spex");
+
+    expect(dialog.getByLabelText("year")).toBeDisabled();
+    await userEvent.selectOptions(dialog.getByLabelText("category"), "k1");
+    await userEvent.selectOptions(dialog.getByLabelText("year"), "2026");
+    await userEvent.type(dialog.getByLabelText("spexTitle"), " Abraham Lincoln ");
+    await userEvent.click(dialog.getByRole("button", { name: "save" }));
     await waitFor(() => expect(actions.saveSpexAction).toHaveBeenCalledWith(null, { year: "2026", title: "Abraham Lincoln", categoryId: "k1" }));
   });
 
   it("hides retired records until asked, and edits a category", async () => {
     show();
 
-    expect(within(section("spex-categories")).queryByText("Gamla spexet")).not.toBeInTheDocument();
-    await userEvent.click(within(section("spex-categories")).getByRole("checkbox"));
-    expect(within(section("spex-categories")).getByText("Gamla spexet")).toBeInTheDocument();
+    const categories = within(await section("spex-categories"));
 
-    await userEvent.click(within(section("spex-categories")).getAllByRole("button", { name: "edit" })[0]);
-    await userEvent.clear(within(section("spex-categories")).getByLabelText("name"));
-    await userEvent.type(within(section("spex-categories")).getByLabelText("name"), "Chalmersspexet Bob");
-    await userEvent.type(within(section("spex-categories")).getByLabelText("description"), "Spexet");
-    await userEvent.click(within(section("spex-categories")).getByRole("button", { name: "save" }));
+    expect(categories.queryByText("Gamla spexet")).not.toBeInTheDocument();
+    await userEvent.click(categories.getByRole("checkbox"));
+    expect(categories.getByText("Gamla spexet")).toBeInTheDocument();
+
+    await userEvent.click(categories.getAllByRole("button", { name: "edit" })[0]);
+    await userEvent.clear(categories.getByLabelText("name"));
+    await userEvent.type(categories.getByLabelText("name"), "Chalmersspexet Bob");
+    await userEvent.type(categories.getByLabelText("description"), "Spexet");
+    await userEvent.click(categories.getByRole("button", { name: "save" }));
     await waitFor(() => expect(actions.saveSpexCategoryAction).toHaveBeenCalledWith("k1",
       { name: "Chalmersspexet Bob", firstYear: "1948", description: "Spexet" }, undefined));
   });
@@ -92,7 +111,7 @@ describe("BaseDataManager", () => {
   it("retires a record and merges one into another after confirming", async () => {
     show();
 
-    const tasks = section("tasks");
+    const tasks = await section("tasks");
 
     await userEvent.click(within(tasks).getAllByRole("button", { name: "retire" })[0]);
     await waitFor(() => expect(actions.retireAction).toHaveBeenCalledWith("TASK", "u1", true));
@@ -106,42 +125,54 @@ describe("BaseDataManager", () => {
   it("saves task categories with their markers, and tasks", async () => {
     show();
 
-    await userEvent.click(within(section("task-categories")).getByRole("button", { name: "add" }));
-    await userEvent.type(within(section("task-categories")).getByLabelText("name"), "Kommitté");
-    await userEvent.click(within(section("task-categories")).getByRole("checkbox", { name: "actorPresent" }));
-    await userEvent.click(within(section("task-categories")).getByRole("button", { name: "save" }));
+    const category = await add("task-categories");
+
+    await userEvent.type(category.getByLabelText("name"), "Kommitté");
+    await userEvent.click(category.getByRole("checkbox", { name: "actorPresent" }));
+    await userEvent.click(category.getByRole("button", { name: "save" }));
     await waitFor(() => expect(actions.saveTaskCategoryAction).toHaveBeenCalledWith(null,
       { name: "Kommitté", actorPresent: true, instruments: false }));
 
-    await userEvent.click(within(section("tasks")).getByRole("button", { name: "add" }));
-    await userEvent.type(within(section("tasks")).getByLabelText("name"), "Kostymör");
-    await userEvent.selectOptions(within(section("tasks")).getByLabelText("category"), "t2");
-    await userEvent.click(within(section("tasks")).getByRole("checkbox", { name: "board" }));
-    await userEvent.click(within(section("tasks")).getByRole("button", { name: "save" }));
+    await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
+
+    const task = await add("tasks");
+
+    await userEvent.type(task.getByLabelText("name"), "Kostymör");
+    await userEvent.selectOptions(task.getByLabelText("category"), "t2");
+    await userEvent.click(task.getByRole("checkbox", { name: "board" }));
+    await userEvent.click(task.getByRole("button", { name: "save" }));
     await waitFor(() => expect(actions.saveTaskAction).toHaveBeenCalledWith(null, { name: "Kostymör", categoryId: "t2", board: true }));
   });
 
   it("marks the board's tasks and narrows tasks and spex to a category", async () => {
     show();
 
-    const tasks = section("tasks");
+    const tasks = await section("tasks");
 
     expect(within(tasks).getAllByRole("listitem")[0]).toHaveTextContent("board");
     expect(within(tasks).getAllByRole("listitem")).toHaveLength(3);
     await userEvent.selectOptions(within(tasks).getByRole("combobox", { name: "filterCategory" }), "t2");
-    expect(within(section("tasks")).getAllByRole("listitem").map(row => row.textContent)).toEqual([expect.stringContaining("Fiol")]);
+    expect(within(tasks).getAllByRole("listitem").map(row => row.textContent)).toEqual([expect.stringContaining("Fiol")]);
 
-    const spex = within(section("spex")).getByRole("combobox", { name: "filterCategory" });
+    const spex = within(await section("spex")).getByRole("combobox", { name: "filterCategory" });
 
     expect(within(spex).queryByRole("option", { name: "Gamla spexet" })).not.toBeInTheDocument();
     await userEvent.selectOptions(spex, "k1");
-    expect(within(section("spex")).getAllByRole("listitem")).toHaveLength(1);
+    expect(within(panel("spex")).getAllByRole("listitem")).toHaveLength(1);
   });
 
   it("offers retiring and merging to admins only, and opens a highlighted record", () => {
     show(false, "u2");
 
     expect(screen.queryByRole("button", { name: "retire" })).not.toBeInTheDocument();
-    expect(within(section("tasks")).getByLabelText("name")).toHaveValue("Sufflör");
+    expect(tab("tasks")).toHaveAttribute("aria-selected", "true");
+    expect(within(panel("tasks")).getByLabelText("name")).toHaveValue("Sufflör");
+  });
+
+  it("opens the tab in the address", () => {
+    show(true, null, "task-categories");
+
+    expect(within(panel("task-categories")).getAllByRole("listitem").map(row => row.textContent)).toEqual([
+      expect.stringContaining("Ensemble"), expect.stringContaining("Orkester")]);
   });
 });
