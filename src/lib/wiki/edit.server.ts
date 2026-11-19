@@ -15,9 +15,6 @@ import type {
   NumberInput,
   OrderInput,
   PhotoSection,
-  RecordingInput,
-  BookInput,
-  BookSongInput,
   RevivalChangeInput,
   RevivalChangeKind,
   SceneInput,
@@ -26,7 +23,6 @@ import type {
   SpexPageInput,
   TaskCategoryInput,
   TaskInput,
-  TrackInput,
 } from "@/gql/graphql";
 
 /*
@@ -129,14 +125,6 @@ const EditKindsQuery = graphql(`
   }
 `);
 
-const MediaQuery = graphql(`
-  query RecordingMedia { kinds(type: MEDIUM, includeRetired: true) { ...EditKind } }
-`);
-
-const BookKindsQuery = graphql(`
-  query BookKinds { kinds(type: BOOK, includeRetired: true) { ...EditKind } }
-`);
-
 const SpexEditQuery = graphql(`
   query SpexEdit($id: ID!) {
     spex(id: $id) {
@@ -214,8 +202,6 @@ const RevivalSetChanges = graphql(`mutation RevivalSetChanges($revivalId: ID!, $
 
 export const getSpexEdit = async (id: string) => runQuery(SpexEditQuery, { id });
 export const getEditKinds = async () => runQuery(EditKindsQuery, {});
-export const getMedia = async () => (await runQuery(MediaQuery, {}))?.kinds ?? [];
-export const getBookKinds = async () => (await runQuery(BookKindsQuery, {}))?.kinds ?? [];
 export const getSpexgramAlbums = async (spexId: string) => (await runQuery(SpexgramAlbumsQuery, { spexId }))?.spexgramAlbums ?? [];
 export const spexPageUpdate = (spexId: string, input: SpexPageInput) => runMutation(SpexPageUpdate, { spexId, input });
 export const spexPageSetImages = (spexId: string, section: ImageSection, kindId: string | null, images: ImageRefInput[]) =>
@@ -248,63 +234,6 @@ export const numbersReorder = (spexId: string, items: OrderInput[]) => runMutati
 export const revivalSetChanges = (revivalId: string, kind: RevivalChangeKind, changes: RevivalChangeInput[]) =>
   runMutation(RevivalSetChanges, { revivalId, kind, changes });
 
-// Recordings ----------------------------------------------------------------------------------------------------------
-
-const RecordingEditQuery = graphql(`
-  query RecordingEdit($id: ID!) {
-    recording(id: $id) {
-      id slug catalogueNumber title medium { id } released recorded description published spexifyAlbumId
-      spex { id title year numbers { id act position title } }
-      conductor { ...EditCredit }
-      tracks { id side position title number { id } }
-      front { ...ImageFields }
-      back { ...ImageFields }
-    }
-  }
-`);
-const RecordingCreate = graphql(`mutation RecordingCreate($input: RecordingInput!) { recordingCreate(input: $input) { id } }`);
-const RecordingUpdate = graphql(`mutation RecordingUpdate($id: ID!, $input: RecordingInput!) { recordingUpdate(id: $id, input: $input) { id } }`);
-const RecordingSetTracks = graphql(`mutation RecordingSetTracks($id: ID!, $tracks: [TrackInput!]!) { recordingSetTracks(id: $id, tracks: $tracks) { id } }`);
-const RecordingPasteTracks = graphql(`mutation RecordingPasteTracks($id: ID!, $text: String!) { recordingPasteTracks(id: $id, text: $text) { id } }`);
-const RecordingSetPublished = graphql(`mutation RecordingSetPublished($id: ID!, $published: Boolean!) { recordingSetPublished(id: $id, published: $published) { id } }`);
-const RecordingDelete = graphql(`mutation RecordingDelete($id: ID!) { recordingDelete(id: $id) }`);
-
-export const getRecordingEdit = async (id: string) => (await runQuery(RecordingEditQuery, { id }))?.recording ?? null;
-export const recordingCreate = async (input: RecordingInput) => (await runMutation(RecordingCreate, { input }))!.recordingCreate;
-export const recordingUpdate = (id: string, input: RecordingInput) => runMutation(RecordingUpdate, { id, input });
-export const recordingSetTracks = (id: string, tracks: TrackInput[]) => runMutation(RecordingSetTracks, { id, tracks });
-export const recordingPasteTracks = (id: string, text: string) => runMutation(RecordingPasteTracks, { id, text });
-export const recordingSetPublished = (id: string, published: boolean) => runMutation(RecordingSetPublished, { id, published });
-export const recordingDelete = (id: string) => runMutation(RecordingDelete, { id });
-
-// Books ----------------------------------------------------------------------------------------------------------
-
-const BookEditQuery = graphql(`
-  query BookEdit($id: ID!) {
-    book(id: $id) {
-      id slug title kind { id } volume publishedYear description published
-      cover { ...ImageFields }
-      songs { id title textOnly number { id title act position spex { id title year } } }
-    }
-  }
-`);
-const SpexNumbersQuery = graphql(`
-  query SpexNumbersForBook($id: ID!) { spex(id: $id) { id title year numbers { id act position title } } }
-`);
-const BookCreate = graphql(`mutation BookCreate($input: BookInput!) { bookCreate(input: $input) { id } }`);
-const BookUpdate = graphql(`mutation BookUpdate($id: ID!, $input: BookInput!) { bookUpdate(id: $id, input: $input) { id } }`);
-const BookSetSongs = graphql(`mutation BookSetSongs($id: ID!, $songs: [BookSongInput!]!) { bookSetSongs(id: $id, songs: $songs) { id } }`);
-const BookSetPublished = graphql(`mutation BookSetPublished($id: ID!, $published: Boolean!) { bookSetPublished(id: $id, published: $published) { id } }`);
-const BookDelete = graphql(`mutation BookDelete($id: ID!) { bookDelete(id: $id) }`);
-
-export const getBookEdit = async (id: string) => (await runQuery(BookEditQuery, { id }))?.book ?? null;
-export const getSpexNumbers = async (id: string) => (await runQuery(SpexNumbersQuery, { id }))?.spex ?? null;
-export const bookCreate = async (input: BookInput) => (await runMutation(BookCreate, { input }))!.bookCreate;
-export const bookUpdate = (id: string, input: BookInput) => runMutation(BookUpdate, { id, input });
-export const bookSetSongs = (id: string, songs: BookSongInput[]) => runMutation(BookSetSongs, { id, songs });
-export const bookSetPublished = (id: string, published: boolean) => runMutation(BookSetPublished, { id, published });
-export const bookDelete = (id: string) => runMutation(BookDelete, { id });
-
 // Images and the trash ------------------------------------------------------------------------------------------------
 
 const ImageUpdate = graphql(`mutation ImageUpdate($id: ID!, $input: ImageInput!) { imageUpdate(id: $id, input: $input) { id } }`);
@@ -328,8 +257,6 @@ export const getTrash = async () => (await runQuery(TrashQuery, {}))?.trash;
 
 export type SpexEditData = NonNullable<NonNullable<Awaited<ReturnType<typeof getSpexEdit>>>["spex"]>;
 export type BaseData = NonNullable<Awaited<ReturnType<typeof getBaseData>>>;
-export type RecordingEditData = NonNullable<Awaited<ReturnType<typeof getRecordingEdit>>>;
-export type BookEditData = NonNullable<Awaited<ReturnType<typeof getBookEdit>>>;
 export type EditKinds = NonNullable<Awaited<ReturnType<typeof getEditKinds>>>;
 export type EditKind = EditKinds["numberKinds"][number];
 export type Completeness = NonNullable<SpexEditData["completeness"]>;

@@ -16,7 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 /**
- * Search across spex, characters, numbers, original songs, recordings, books and articles. People are not searched:
+ * Search across spex, characters, numbers, original songs and articles. People are not searched:
  * they live in Spexregister. A title that finds nothing can be written as a new article by members.
  */
 export default async function SearchPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {

@@ -16,7 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 /**
- * The kinds admins keep (spec 4.6), one type at a time: number kinds, credit kinds, recording media, image kinds per
+ * The kinds admins keep (spec 4.6), one type at a time: number kinds, credit kinds, image kinds per
  * use, and fact kinds. The types and uses are the schema's; the kinds within them are data.
  */
 export default async function KindsPage({ searchParams }: Props) {

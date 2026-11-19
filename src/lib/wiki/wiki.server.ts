@@ -57,7 +57,7 @@ const StartPageQuery = graphql(`
     startPage {
       welcome
       spexOfTheYear { ...SpexTile page { introduction } }
-      thisDay { date text spex { id slug title year } recording { id slug title catalogueNumber } }
+      thisDay { date text spex { id slug title year } }
       recentChanges { ...RevisionFields }
       decades { decade spex { ...SpexTile } }
     }
@@ -98,9 +98,12 @@ const SpexPageQuery = graphql(`
         credits { kind { ...KindName } position credit { ...CreditFields unresolved } }
         characters { id name }
         links { kind title url }
-        books { textOnly book { id slug title } }
+        books { id title volume position textOnly url }
       }
-      recordings { id slug title catalogueNumber medium { ...KindName } released front { ...ImageFields } }
+      records {
+        id title year kindNameSv kindNameEn mediumNameSv mediumNameEn catalogueNumber released conductor coverUrl url
+        tracks { id side discNumber position title hasAudio url number { id title } }
+      }
       people {
         available
         board { spex { id year revival } task { id name } people { ...PersonFields } }
@@ -125,42 +128,6 @@ const CategoryQuery = graphql(`
       id name firstYear descriptionHtml retired
       logo { ...ImageFields }
       spex { ...SpexTile page { introduction } }
-    }
-  }
-`);
-
-const RecordingsQuery = graphql(`
-  query Recordings {
-    recordings { id slug catalogueNumber title medium { ...KindName } released published spex { id slug title year } front { ...ImageFields } }
-  }
-`);
-
-const BooksQuery = graphql(`
-  query Books {
-    books { id slug title kind { ...KindName } volume publishedYear published cover { ...ImageFields } }
-  }
-`);
-
-const BookQuery = graphql(`
-  query Book($id: ID!) {
-    book(id: $id) {
-      id slug title kind { ...KindName } volume publishedYear descriptionHtml published
-      cover { ...ImageFields }
-      songs { id position title textOnly number { id title act position spex { id slug title year } } }
-    }
-  }
-`);
-
-const RecordingQuery = graphql(`
-  query Recording($id: ID!) {
-    recording(id: $id) {
-      id slug catalogueNumber title medium { ...KindName } released recorded descriptionHtml published spexifyAlbumId
-      spex { id slug title year }
-      conductor { ...CreditFields }
-      tracks { id side position title number { id title act position spex { id slug title year } } }
-      front { ...ImageFields }
-      back { ...ImageFields }
-      links { kind title url }
     }
   }
 `);
@@ -259,10 +226,6 @@ export const getStartPage = async () => runQuery(StartPageQuery, {});
 export const getSpexPage = cache(async (id: string) => (await runQuery(SpexPageQuery, { id }))?.spex ?? null);
 export const getSpexBrowse = async () => runQuery(SpexBrowseQuery, {});
 export const getCategory = cache(async (id: string) => (await runQuery(CategoryQuery, { id }))?.spexCategory ?? null);
-export const getRecordings = async () => (await runQuery(RecordingsQuery, {}))?.recordings ?? [];
-export const getBooks = async () => (await runQuery(BooksQuery, {}))?.books ?? [];
-export const getBook = cache(async (id: string) => (await runQuery(BookQuery, { id }))?.book ?? null);
-export const getRecording = cache(async (id: string) => (await runQuery(RecordingQuery, { id }))?.recording ?? null);
 export const getArticles = async (categoryId?: string | null, includeSubcategories = false) =>
   runQuery(ArticlesQuery, { categoryId: categoryId ?? null, includeSubcategories });
 export const getArticleTree = async () => (await runQuery(ArticleTreeQuery, {}))?.articleRoots ?? [];

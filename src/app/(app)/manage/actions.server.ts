@@ -16,9 +16,6 @@ import type {
   NumberInput,
   OrderInput,
   PhotoSection,
-  RecordingInput,
-  BookInput,
-  BookSongInput,
   RevivalChangeInput,
   RevivalChangeKind,
   SceneInput,
@@ -27,7 +24,6 @@ import type {
   SpexPageInput,
   TaskCategoryInput,
   TaskInput,
-  TrackInput,
 } from "@/gql/graphql";
 import type { AuthzResult } from "@/types/auth";
 import { withPolicyAction } from "@/utils/route.server";
@@ -246,61 +242,6 @@ export async function reorderNumbersAction(spexId: string, items: OrderInput[]) 
 export async function setRevivalChangesAction(revivalId: string, kind: RevivalChangeKind, changes: RevivalChangeInput[]) {
   requireIds(revivalId, ...changes.map(change => change.recordId));
   return editor(async () => (await edit.revivalSetChanges(revivalId, kind, changes), null));
-}
-
-// Recordings ------------------------------------------------------------------------------------------------------------
-
-export async function saveRecordingAction(id: string | null, input: RecordingInput) {
-  requireIds(id, input.mediumId, input.spexId, input.frontImageId, input.backImageId, input.spexifyAlbumId);
-  return editor(async () => id ? (await edit.recordingUpdate(id, input), { id }) : await edit.recordingCreate(input));
-}
-
-export async function setTracksAction(id: string, tracks: TrackInput[]) {
-  requireIds(id, ...tracks.map(track => track.numberId));
-  return editor(async () => (await edit.recordingSetTracks(id, tracks), null));
-}
-
-export async function pasteTracksAction(id: string, text: string) {
-  requireIds(id);
-  return editor(async () => (await edit.recordingPasteTracks(id, text.slice(0, 20_000)), null));
-}
-
-export async function setRecordingPublishedAction(id: string, published: boolean) {
-  requireIds(id);
-  return editor(async () => (await edit.recordingSetPublished(id, published), null));
-}
-
-export async function deleteRecordingAction(id: string) {
-  requireIds(id);
-  return editor(async () => (await edit.recordingDelete(id), null));
-}
-
-// Books ------------------------------------------------------------------------------------------------------------
-
-export async function saveBookAction(id: string | null, input: BookInput) {
-  requireIds(id, input.coverImageId);
-  return editor(async () => id ? (await edit.bookUpdate(id, input), { id }) : await edit.bookCreate(input));
-}
-
-export async function setBookSongsAction(id: string, songs: BookSongInput[]) {
-  requireIds(id, ...songs.map(song => song.numberId));
-  return editor(async () => (await edit.bookSetSongs(id, songs), null));
-}
-
-export async function setBookPublishedAction(id: string, published: boolean) {
-  requireIds(id);
-  return editor(async () => (await edit.bookSetPublished(id, published), null));
-}
-
-export async function deleteBookAction(id: string) {
-  requireIds(id);
-  return editor(async () => (await edit.bookDelete(id), null));
-}
-
-/** A spex's numbers, to add to a book. */
-export async function spexNumbersAction(spexId: string) {
-  requireIds(spexId);
-  return editor(async () => await edit.getSpexNumbers(spexId));
 }
 
 // Images and the trash ----------------------------------------------------------------------------------------------------

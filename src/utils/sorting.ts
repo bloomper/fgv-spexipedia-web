@@ -1,5 +1,5 @@
 /*
- * The orders a visitor picks for the lists (spex, recordings, books, articles and the start page), kept in the address
+ * The orders a visitor picks for the lists (spex, articles and the start page), kept in the address
  * as ?sort=<field>&dir=<asc|desc> so that the pages stay server-rendered and a sorted list can be linked to.
  */
 

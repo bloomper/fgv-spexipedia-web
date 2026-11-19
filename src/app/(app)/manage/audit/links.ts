@@ -16,10 +16,6 @@ export function auditLink(entityType: string, entityId: string): string | null {
     case "TASK":
     case "TASK_CATEGORY":
       return `/manage/base-data?edit=${entityId}`;
-    case "RECORDING":
-      return `/manage/recordings/${entityId}`;
-    case "BOOK":
-      return `/manage/books/${entityId}`;
     case "ARTICLE":
       return `/articles/${entityId}`;
     case "REDIRECT":
