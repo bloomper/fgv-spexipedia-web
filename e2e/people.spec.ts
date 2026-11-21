@@ -28,7 +28,7 @@ test.describe("People on public pages", () => {
 
     expect(spex, "a spex in the list").toBeTruthy();
     await expectNoNames(page, spex);
-    await expect(page.getByText("Kalle Kula").first()).toBeVisible();
+    await expect(page.getByText("Kalle Kula").filter({ visible: true }).first()).toBeVisible();
   });
 
   test("a visitor finds no names on any public page", async ({ page }) => {
@@ -56,8 +56,8 @@ test.describe("People on public pages", () => {
 
     await loginAs("member");
     await page.goto(spex);
-    await expect(page.getByText("Karl Kulsson").first()).toBeVisible();
-    await expect(page.getByText("Hemlig Hemligsson").first()).toBeVisible();
+    await expect(page.getByText("Karl Kulsson").filter({ visible: true }).first()).toBeVisible();
+    await expect(page.getByText("Hemlig Hemligsson").filter({ visible: true }).first()).toBeVisible();
 
     // A page rendered for a member must not be served to the next visitor
     const visitor = await browser.newPage();
