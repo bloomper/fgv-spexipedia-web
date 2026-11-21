@@ -191,8 +191,6 @@
       "CHARACTER": "Roll",
       "SCENE": "Scen",
       "NUMBER": "Nummer",
-      "RECORDING": "Inspelning",
-      "BOOK": "Bok",
       "ARTICLE": "Artikel",
       "ARTICLE_CATEGORY": "Artikelkategori",
       "REVISION": "Version",
@@ -269,12 +267,10 @@
   "Nav": {
     "home": "Hem",
     "spex": "Spex",
-    "recordings": "Inspelningar",
     "articles": "Artiklar",
     "search": "Sök",
     "manage": "Redigera",
     "baseData": "Basdata",
-    "manageRecordings": "Inspelningar",
     "trash": "Papperskorgen",
     "auditLog": "Ändringslogg",
     "admin": "Administration",
@@ -284,9 +280,7 @@
     "adminMaintenance": "Underhåll",
     "unresolvedCredits": "Olösta medverkande",
     "adminKinds": "Sorter",
-    "packages": "Importera",
-    "books": "Böcker",
-    "manageBooks": "Böcker"
+    "packages": "Importera"
   },
   "Home": {
     "kicker": "Chalmersspexets uppslagsverk",
@@ -369,8 +363,8 @@
         "subtitle": "Nummer, melodier och upphovspersoner"
       },
       "recordings": {
-        "title": "Inspelningar",
-        "subtitle": "Inspelningar och utgåvor"
+        "title": "Skivor",
+        "subtitle": "Skivorna i Spexify"
       },
       "rebus": {
         "title": "Programrebus",
@@ -399,7 +393,20 @@
     },
     "fromWork": "ur {work}",
     "inBooks": "I boken:",
-    "textOnly": "endast text"
+    "textOnly": "endast text",
+    "records": {
+      "catalogue": "Katalognummer",
+      "conductor": "Dirigent: {name}",
+      "noAudio": "Inte digitaliserad",
+      "open": "Öppna i Spexify",
+      "listen": "Lyssna i Spexify",
+      "side": "Sida {side}",
+      "cover": "Omslag till {title}",
+      "source": "Skivorna förs i Spexify."
+    },
+    "openBook": "Öppna i Spexarkivet",
+    "bookVolume": "del {volume}",
+    "allMaterial": "Allt om spexet i FGV:s andra tjänster:"
   },
   "Photos": {
     "unavailable": "Spexgram kan inte nås just nu.",
@@ -416,7 +423,13 @@
     "SPEXFLIX_VIDEO": "Se i Spexflix",
     "ARCHIVE_MANUSCRIPT": "Manus i Spexarkivet",
     "ARCHIVE_ARRANGEMENT": "Arrangemang",
-    "SPEXGRAM_ALBUM": "Album i Spexgram"
+    "SPEXGRAM_ALBUM": "Album i Spexgram",
+    "SPEXFLIX_CHAPTER": "Se i Spexflix",
+    "ARCHIVE_DOCUMENT": "Spexarkivet",
+    "SPEXIFY_SPEX": "Allt i Spexify",
+    "SPEXFLIX_SPEX": "Allt i Spexflix",
+    "SPEXGRAM_SPEX": "Allt i Spexgram",
+    "ARCHIVE_SPEX": "Allt i Spexarkivet"
   },
   "Revisions": {
     "fields": {
@@ -437,29 +450,6 @@
     "restored": "Versionen är återställd",
     "hide": "Dölj texten",
     "unhide": "Visa texten"
-  },
-  "Recordings": {
-    "title": "Inspelningar",
-    "description": "Spexens inspelningar och utgåvor.",
-    "unpublished": "Opublicerad",
-    "spex": "Spex",
-    "released": "Utgiven",
-    "recorded": "Inspelad",
-    "conductor": "Dirigent",
-    "edit": "Redigera",
-    "tracks": "Spår",
-    "side": "Sida {side}",
-    "trackNumber": "{spex} · Akt {act}, nr {number}"
-  },
-  "Books": {
-    "title": "Böcker",
-    "description": "Böcker om och från spexen, till exempel spexböckerna Chalmersspex I, II och så vidare med spexens sånger.",
-    "empty": "Inga böcker än.",
-    "unpublished": "Opublicerad",
-    "edit": "Redigera",
-    "songs": "Sånger",
-    "textOnly": "Endast text",
-    "songNumber": "{spex} · Akt {act}, nr {number}"
   },
   "Articles": {
     "title": "Artiklar",
@@ -553,7 +543,13 @@
     "write": "Skriv",
     "preview": "Förhandsvisa",
     "previewFailed": "Förhandsvisningen misslyckades.",
-    "help": "Markdown: **fet**, *kursiv*, # rubrik, - lista, tabeller. [[Titel]] länkar till en artikel."
+    "help": "Markdown: **fet**, *kursiv*, # rubrik, - lista, tabeller. [[Titel]] länkar till en artikel.",
+    "appLink": "Länk till annan tjänst",
+    "appLinkAddress": "Adressen till sidan i Spexify, Spexflix, Spexgram eller Spexarkivet",
+    "appLinkNext": "Nästa",
+    "appLinkText": "Länktext",
+    "appLinkInsert": "Infoga",
+    "appLinkUnknown": "Adressen är ingen sida i Spexify, Spexflix, Spexgram eller Spexarkivet som en artikel kan länka till."
   },
   "Search": {
     "title": "Sök",
@@ -565,8 +561,6 @@
       "SPEX": "Spex",
       "CHARACTER": "Roller",
       "NUMBER": "Nummer",
-      "RECORDING": "Inspelningar",
-      "BOOK": "Böcker",
       "ARTICLE": "Artiklar",
       "SPEX_CATEGORY": "Kategorier"
     }
@@ -782,80 +776,6 @@
     },
     "revivals": "{count, plural, one {# nyuppsättning} other {# nyuppsättningar}}"
   },
-  "ManageRecordings": {
-    "title": "Inspelningar",
-    "unpublished": "Opublicerad",
-    "editTitle": "Redigera inspelning",
-    "editDescription": "Omslag, fakta, spår och albumet i Spexify.",
-    "catalogueNumber": "Katalognummer",
-    "recordingTitle": "Titel",
-    "medium": "Format",
-    "spex": "Spex",
-    "compilation": "Inget (samling)",
-    "create": "Skapa",
-    "published": "Inspelningen är publicerad.",
-    "unpublishedText": "Inspelningen är opublicerad.",
-    "publish": "Publicera",
-    "unpublish": "Avpublicera",
-    "deleteTitle": "Radera inspelningen?",
-    "deleteText": "Den raderas med sina spår.",
-    "delete": "Radera",
-    "front": "Framsida",
-    "back": "Baksida",
-    "released": "Utgiven",
-    "recorded": "Inspelad",
-    "conductor": "Dirigent",
-    "description": "Beskrivning",
-    "spexifyAlbumId": "Albumets id i Spexify",
-    "save": "Spara",
-    "tracks": "Spår",
-    "side": "Sida",
-    "number": "Nummer",
-    "freeTitle": "Annan titel",
-    "trackTitle": "Titel",
-    "removeTrack": "Ta bort spåret",
-    "addTrack": "Nytt spår",
-    "saveTracks": "Spara spåren",
-    "pasteTracks": "Klistra in spår",
-    "pasteTracksHelp": "Ett spår per rad: ”A1 Titel” eller ”Titel”; ”Sida B” börjar en sida. Titlar matchas mot spexets nummer."
-  },
-  "ManageBooks": {
-    "title": "Böcker",
-    "description": "Beskrivning",
-    "editTitle": "Redigera bok",
-    "editDescription": "Bokens uppgifter, omslag och sånger i bokens ordning.",
-    "bookTitle": "Titel",
-    "volume": "Volym",
-    "publishedYear": "Utgiven",
-    "cover": "Omslag",
-    "create": "Skapa",
-    "save": "Spara",
-    "published": "Boken är publicerad och syns för alla.",
-    "unpublishedText": "Boken är opublicerad och syns bara för redaktörer.",
-    "publish": "Publicera",
-    "unpublish": "Avpublicera",
-    "unpublished": "Opublicerad",
-    "delete": "Ta bort",
-    "deleteTitle": "Ta bort boken?",
-    "deleteText": "Boken och dess sånglista tas bort. Spexens nummer finns kvar.",
-    "songs": "Sånger",
-    "noSongs": "Inga sånger än. Lägg till från ett spex nedan.",
-    "songTitle": "Titel",
-    "textOnly": "Endast text",
-    "moveUp": "Flytta upp",
-    "moveDown": "Flytta ner",
-    "removeSong": "Ta bort sången",
-    "addFreeSong": "Sång utan nummer",
-    "saveSongs": "Spara sångerna",
-    "addFromSpex": "Lägg till sånger från ett spex",
-    "spex": "Spex",
-    "chooseSpex": "Välj spex",
-    "pickAll": "Välj alla",
-    "addPicked": "Lägg till {count, plural, one {# sång} other {# sånger}}",
-    "noNumbers": "Spexet har inga nummer.",
-    "intro": "Tryckta böcker, till exempel spexböckerna. En bok är ingen inspelning: dess sånger är spexens nummer.",
-    "kind": "Sort"
-  },
   "AdminRedirects": {
     "title": "Omdirigeringar",
     "description": "Gamla MediaWiki-titlar och sidorna som ersatt dem. Adresser utan omdirigering leder till en sökning.",
@@ -908,18 +828,14 @@
       "label": "Typer av sorter",
       "NUMBER": "Nummer",
       "CREDIT": "Medverkande",
-      "MEDIUM": "Inspelningar",
       "IMAGE": "Bilder",
-      "FACT": "Fakta",
-      "BOOK": "Böcker"
+      "FACT": "Fakta"
     },
     "typeHelp": {
       "NUMBER": "Vad ett nummer är, t.ex. sång, ouvertyr eller final. Ett nummer kan sakna sort.",
       "CREDIT": "Vad någon gjorde för ett nummer, t.ex. text, musik eller arrangemang. Spexify, Spexarkivet och Spexflix läser dem i flödet.",
-      "MEDIUM": "Inspelningarnas format; en ny inspelning får det första.",
       "IMAGE": "Bildsorter per användning: för roller, för scenografi och för sidans övriga bilder. Användningarna är givna; sorterna inom dem är data.",
-      "FACT": "Korta fakta om en uppsättning, som text eller som datum. En ny sorts fakta visas genast i redigeringen av spexsidorna.",
-      "BOOK": "Vad en bok är, t.ex. spexbok, sångbok eller jubileumsbok; en ny bok får den första."
+      "FACT": "Korta fakta om en uppsättning, som text eller som datum. En ny sorts fakta visas genast i redigeringen av spexsidorna."
     },
     "uses": {
       "CHARACTER": "Roller",

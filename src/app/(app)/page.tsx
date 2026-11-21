@@ -62,7 +62,7 @@ export default async function HomePage({ searchParams }: Props) {
             <HomeSection id="this-day" className="pt-6" title={t("thisDay")}>
               <ul className="space-y-2">
                 {start.thisDay.map((entry, i) => {
-                  const href = entry.spex ? `/spex/${entry.spex.slug}` : entry.recording ? `/recordings/${entry.recording.slug}` : null;
+                  const href = entry.spex ? `/spex/${entry.spex.slug}` : null;
 
                   return (
                     <li key={i} className="flex gap-4 text-sm">

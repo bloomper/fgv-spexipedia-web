@@ -20,6 +20,7 @@ import type { ArticleCategoryInput, ArticleInput } from "@/gql/graphql";
 import { withPolicyAction } from "@/utils/route.server";
 import { Policies } from "@/utils/policy.server";
 import { ID } from "@/utils/ids";
+import { appRef } from "@/utils/app-refs";
 
 function requireId(...ids: (string | null | undefined)[]) {
   if (ids.some(id => id != null && !ID.test(id))) {
@@ -29,6 +30,24 @@ function requireId(...ids: (string | null | undefined)[]) {
 
 const member = <T, >(work: () => Promise<T>) => withPolicyAction(Policies.app.requireAccess, () => toActionResult(work));
 const author = <T, >(work: () => Promise<T>) => withPolicyAction(Policies.author.requireAuthor, () => toActionResult(work));
+
+/**
+ * The reference for an address pasted from another FGV application (spec 4.5), e.g. `spexify:album/<id>`; an error
+ * when it is no page an article can link to.
+ */
+export async function appRefAction(address: string): Promise<ActionResult<string>> {
+  return member(async () => {
+    const ref = appRef(address.slice(0, 2000), {
+      spexify: process.env.SPEXIFY_WEB_URL, spexflix: process.env.SPEXFLIX_WEB_URL,
+      spexgram: process.env.SPEXGRAM_WEB_URL, archive: process.env.ARCHIVE_WEB_URL,
+    });
+
+    if (!ref) {
+      throw new Error("APP_LINK_UNKNOWN");
+    }
+    return ref;
+  });
+}
 
 /** The Markdown as the page will show it. */
 export async function previewAction(markdown: string): Promise<ActionResult<string>> {

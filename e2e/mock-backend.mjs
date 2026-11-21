@@ -2,7 +2,7 @@
 // its sample data (recorded.json), and a mini-Keycloak (discovery, authorize, token, JWKS, userinfo, logout).
 //
 // People come from Spexregister, which the recording did not have: the mock adds the sample spexare in constants.ts to
-// every spex page (the board, a task, a character's actor, a number's lyrics) as the server would answer: for visitors
+// every spex page (the board, a task, a character's actor, a number's lyrics credits) as the server would answer: for visitors
 // the nickname of each spexare who has one and nothing else, for members (USER) names, ids and Spexregister links too.
 //
 // With MOCK_RECORD_FROM set (the local API with sample data), queries are passed on without a token and the answers
@@ -86,7 +86,13 @@ function withPeople(persona, spex) {
     spex.characters[0] = { ...spex.characters[0], playedBy: people.map(person => ({ person, spex: production })) };
   }
   if (spex.numbers?.length) {
-    spex.numbers[0] = { ...spex.numbers[0], lyrics: people.map(person => ({ name: null, person })) };
+    // The number's lyrics credits, by spexare in Spexregister
+    const lyrics = { id: "01900000-0000-7000-8000-000000000201", name: "Text" };
+
+    spex.numbers[0] = {
+      ...spex.numbers[0],
+      credits: people.map((person, position) => ({ kind: lyrics, position, credit: { person, name: null, unresolved: false } })),
+    };
   }
   return spex;
 }

@@ -11,7 +11,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 # Spexipedia Web — project notes
 
 Next.js 16 App Router + React 19 frontend for Spexipedia, FGV's encyclopedia of the Chalmers spex: spex pages, characters,
-numbers, recordings, books and wiki articles. It is backed by `fgv-spexipedia-server`'s GraphQL API (which answers
+numbers and wiki articles. It is backed by `fgv-spexipedia-server`'s GraphQL API (which answers
 without a token too, with what is public) and its `POST /api/images`; images come from the media server (nginx,
 `spexipedia-media`, under `MEDIA_ORIGIN`). Product spec: `fgv-spexipedia-spec`. The scaffolding comes from
 `fgv-spexgram-web`; keep them alike.
@@ -47,7 +47,7 @@ without a token too, with what is public) and its `POST /api/images`; images com
 
 ## Who sees what
 
-- **Visitors** read published spex pages, public articles, recordings, books and search. People appear by nickname
+- **Visitors** read published spex pages, public articles and search. People appear by nickname
   only; the server never sends them names. `getViewer()` (`src/lib/wiki/viewer.server.ts`) says `loggedIn`, `member`,
   `author`, `editor`, `admin`; it only decides what to show.
 - **Members** (`USER`) also see names (with links to Spexregister), members' articles and photos from Spexgram, write
@@ -73,10 +73,10 @@ without a token too, with what is public) and its `POST /api/images`; images com
   Articles form a tree (`src/components/wiki/article-tree.tsx`: breadcrumbs, the tree around an article, its table of
   contents; authors move and reorder them) and categories nest; *What links here*, wanted and orphaned articles come
   from the server. Links to missing articles point at `/articles/new?title=` and are shown red by that address.
-- **Books** (`/books`, editors at `/manage/books`): anything printed, e.g. the spex books of the spex' songs; not
-  recordings. Songs are numbers (or free titles) in the book's order with a text-only flag; numbers on spex pages link
-  their books.
-- **Kinds** (number, credit, medium, image per use, fact) are data: pages read them from `kinds(type, use)`, editors
+- **Records and books are not Spexipedia's** (`fgv-infra-deploy` `docs/data-ownership.md`): a spex page shows the
+  spex' records from Spexify's discography (`Spex.records`, covers by links Spexify signs) and each number the books of
+  Spexarkivet it is in (`Number.books`), read-only, with links into those applications for users with access there.
+- **Kinds** (number, credit, image per use, fact) are data: pages read them from `kinds(type, use)`, editors
   are offered those in use (`src/utils/kinds.ts`), admins keep them at `/admin/kinds`. Only the schema's enums (types,
   uses, value types) appear in code. Imported credits nobody resolved are shown to editors only (`/manage/credits`).
 - **Importera** (spex packages in code; `/manage/packages`, editors): a spreadsheet and an optional zip of up to 20 GB become a spex in
@@ -87,7 +87,7 @@ without a token too, with what is public) and its `POST /api/images`; images com
   report per application the server sends.
 - **Old MediaWiki addresses**: `src/proxy.ts` (`src/lib/http/old-wiki.ts`) answers with HTTP redirects: `/<Title>` and `/index.php?title=` by the
   server's redirect table, else to a search.
-- **Editing** (`/manage/spex/[id]`, `/manage/base-data`, `/manage/recordings`): `useSave()` runs an action, toasts and
+- **Editing** (`/manage/spex/[id]`, `/manage/base-data`): `useSave()` runs an action, toasts and
   refreshes. Images go through `/api/images` (streamed to the server with the user's token). Lists can be pasted as
   text (formats as in the schema's descriptions) and reordered. Spexregister links its editors to
   `/manage/spex/<id>`, `/manage/spex-categories/<id>`, `/manage/tasks/<id>` and `/manage/task-categories/<id>`.

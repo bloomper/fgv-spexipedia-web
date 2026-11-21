@@ -15,7 +15,7 @@ import { RebusReveal } from "@/components/wiki/rebus-reveal.client";
 import { PHOTOS_VIEW, RoleGrid, type RoleView } from "@/components/wiki/role-grid.client";
 import { PhotoSet } from "@/components/wiki/photo-set.client";
 import { CreditList, PersonList, PersonName } from "@/components/wiki/person";
-import { AppLinks } from "@/components/wiki/app-links";
+import { AppLinks, isSpexPageLink } from "@/components/wiki/app-links";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { formatDay } from "@/utils/format";
@@ -240,11 +240,14 @@ export default async function SpexPage({ params }: Props) {
                         {number.books.length > 0 && (
                           <p className="text-xs text-muted-foreground">
                             {t("inBooks")}{" "}
-                            {number.books.map((song, i) => (
-                              <span key={song.book.id}>
+                            {number.books.map((book, i) => (
+                              <span key={`${book.id}-${book.position}`}>
                                 {i > 0 && ", "}
-                                <Link href={`/books/${song.book.slug}`} className="text-primary hover:text-primary/80">{song.book.title}</Link>
-                                {song.textOnly && ` (${t("textOnly")})`}
+                                {/* Books are Spexarkivet's (spec 4.4): a link for those with access there */}
+                                {book.url
+                                  ? <a href={book.url} className="text-primary hover:text-primary/80" title={t("openBook")}>{book.title}</a>
+                                  : book.title}
+                                {book.textOnly && ` (${t("textOnly")})`}
                               </span>
                             ))}
                           </p>
@@ -266,16 +269,39 @@ export default async function SpexPage({ params }: Props) {
 
         {has("recordings") && (
           <SpexSection id="recordings" title={t("sections.recordings.title")} subtitle={subtitle("recordings")}>
-            <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {spex.recordings.map(recording => (
-                <li key={recording.id}>
-                  <Link href={`/recordings/${recording.slug}`} className="flex gap-3 rounded-lg border border-border bg-card p-3 hover:border-primary/60">
-                    {recording.front && <WikiImage image={recording.front} sizes="5rem" className="size-20 rounded object-cover" />}
-                    <div className="text-sm">
-                      <p className="font-semibold">{recording.title}</p>
-                      <p className="text-muted-foreground">{recording.catalogueNumber} · {recording.medium.name}{recording.released && ` · ${recording.released}`}</p>
-                    </div>
-                  </Link>
+            {/* The records are Spexify's discography (spec 4.4), shown read-only; they are kept in Spexify */}
+            <ul className="grid gap-4 lg:grid-cols-2">
+              {spex.records.map(record => (
+                <li key={record.id} className="flex gap-3 rounded-lg border border-border bg-card p-3 text-sm">
+                  {record.coverUrl && (
+                    // A link Spexify signs for some hours, not one of Spexipedia's own images
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={record.coverUrl} alt={t("records.cover", { title: record.title })} loading="lazy" className="size-20 shrink-0 rounded object-cover" />
+                  )}
+                  <div className="min-w-0 flex-1 space-y-1">
+                    <p className="font-semibold">{record.title}</p>
+                    <p className="text-muted-foreground">
+                      {[record.catalogueNumber, record.mediumNameSv && (locale === "en" ? record.mediumNameEn : record.mediumNameSv), record.released ?? record.year]
+                        .filter(Boolean).join(" · ")}
+                    </p>
+                    {record.conductor && <p className="text-xs text-muted-foreground">{t("records.conductor", { name: record.conductor })}</p>}
+                    {record.tracks.length > 0 && (
+                      <ol className="space-y-0.5 text-xs">
+                        {record.tracks.map(track => (
+                          <li key={track.id} className="flex flex-wrap items-baseline gap-x-2">
+                            <span className="text-muted-foreground tabular-nums">{track.side ? `${track.side}${track.position}` : `${track.position}.`}</span>
+                            {track.number
+                              ? <a href={`#number-${track.number.id}`} className="hover:text-primary">{track.title}</a>
+                              : <span>{track.title}</span>}
+                            {track.url
+                              ? <a href={track.url} className="text-primary hover:text-primary/80">{t("records.listen")}</a>
+                              : !track.hasAudio && <span className="text-muted-foreground">({t("records.noAudio")})</span>}
+                          </li>
+                        ))}
+                      </ol>
+                    )}
+                    {record.url && <a href={record.url} className="inline-block text-xs text-primary hover:text-primary/80">{t("records.open")}</a>}
+                  </div>
                 </li>
               ))}
             </ul>
@@ -332,7 +358,16 @@ export default async function SpexPage({ params }: Props) {
 
         {has("links") && (
           <SpexSection id="links" title={t("sections.links.title")} subtitle={subtitle("links")}>
-            <AppLinks links={spex.links.filter(link => link.kind !== "ARCHIVE_MANUSCRIPT" && link.kind !== "SPEXIFY_ALBUM")} />
+            {/* Everything about the spex in the other applications, for a logged-in user with access there */}
+            <div className="space-y-4">
+              <AppLinks links={spex.links.filter(link => link.kind !== "ARCHIVE_MANUSCRIPT" && link.kind !== "SPEXIFY_ALBUM" && !isSpexPageLink(link))} />
+              {spex.links.some(isSpexPageLink) && (
+                <div className="space-y-2">
+                  <p className="text-sm text-muted-foreground">{t("allMaterial")}</p>
+                  <AppLinks links={spex.links.filter(isSpexPageLink)} />
+                </div>
+              )}
+            </div>
           </SpexSection>
         )}
 
@@ -440,7 +475,7 @@ function sectionsOf(spex: SpexPageData, member: boolean): string[] {
     page && page.scenography.length > 0 && "scenography",
     (page?.synopsisHtml || spex.scenes.length > 0) && "manuscript",
     spex.numbers.length > 0 && "music",
-    spex.recordings.length > 0 && "recordings",
+    spex.records.length > 0 && "recordings",
     page?.rebus && "rebus",
     page && (page.vestDescriptionHtml || page.vest.length > 0) && "vest",
     (!spex.people.available || shownPeople(spex.people.board) || photos(spex.people.boardPhotos)) && "board",
