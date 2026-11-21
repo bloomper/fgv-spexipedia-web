@@ -64,6 +64,7 @@ test.describe("On a phone", () => {
     await expect(page).toHaveURL(new RegExp(`${target}$`));
     // Still there, under the header, once the page has scrolled
     await expect(bar).toBeInViewport();
-    await expect(page.locator(target)).toBeInViewport();
+    // Next.js keeps pages it navigated away from hidden in the document (React's Activity), so an id can be there twice
+    await expect(page.locator(target).filter({ visible: true })).toBeInViewport();
   });
 });

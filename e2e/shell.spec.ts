@@ -72,7 +72,7 @@ test.describe("The application shell", () => {
 
   test("someone without access to Spexipedia reads as a visitor and is told why", async ({ page, loginAs }) => {
     await loginAs("noaccess");
-    await expect(page.getByText(/nils@example\.org/).first()).toBeVisible();
+    await expect(page.getByText(/nils@example\.org/).filter({ visible: true }).first()).toBeVisible();
     await expect(sidebar(page).getByRole("link", { name: "Redigera" })).toHaveCount(0);
 
     await page.goto("/articles/new");

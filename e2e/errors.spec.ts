@@ -36,8 +36,8 @@ test.describe("Errors", () => {
     await page.goto("/articles/repetitionerna");
     await mock.failNext("ArticleSetPublished", "FORBIDDEN");
     await page.getByRole("button", { name: "Publicera" }).click();
-    await expect(page.getByText("Fel: FORBIDDEN")).toBeVisible();
-    await expect(page.getByRole("article").locator("header").getByText("Opublicerad")).toBeVisible();
+    await expect(page.getByText("Fel: FORBIDDEN").filter({ visible: true })).toBeVisible();
+    await expect(page.getByRole("article").locator("header").getByText("Opublicerad").filter({ visible: true })).toBeVisible();
     expect((await mock.state()).articles.find(article => article.slug === "repetitionerna")?.published).toBe(false);
   });
 });

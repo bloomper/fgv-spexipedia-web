@@ -44,7 +44,7 @@ test.describe("Articles", () => {
     await expect(page.getByRole("link", { name: "Repetitionerna" })).toBeVisible();
     await page.goto("/articles/kulissen-som-foll");
     await expect(page.getByRole("heading", { level: 1, name: "Kulissen som föll" })).toBeVisible();
-    await expect(page.getByRole("article").locator("header").getByText("Medlemmar", { exact: true })).toBeVisible();
+    await expect(page.getByRole("article").locator("header").getByText("Medlemmar", { exact: true }).filter({ visible: true })).toBeVisible();
   });
 
   test("a member writes a new article, previews it, and it starts unpublished", async ({ page, loginAs, mock }) => {
@@ -66,7 +66,7 @@ test.describe("Articles", () => {
 
     await expect(page).toHaveURL(/\/articles\/premiarfesten$/);
     await expect(page.getByRole("heading", { level: 1, name: "Premiärfesten" })).toBeVisible();
-    await expect(page.getByRole("article").locator("header").getByText("Opublicerad")).toBeVisible();
+    await expect(page.getByRole("article").locator("header").getByText("Opublicerad").filter({ visible: true })).toBeVisible();
     await expect(page.getByRole("link", { name: "Traditioner" }).first()).toHaveAttribute("href", "/articles/categories/traditioner");
     // A member cannot publish; that is for authors
     await expect(page.getByRole("button", { name: "Publicera" })).toHaveCount(0);
@@ -81,7 +81,7 @@ test.describe("Articles", () => {
     await loginAs("member");
     await page.goto("/articles/wanted");
     await expect(page.getByRole("link", { name: "Spexets kör" })).toBeVisible();
-    await expect(page.getByText("1 länk")).toBeVisible();
+    await expect(page.getByText("1 länk").filter({ visible: true })).toBeVisible();
 
     await page.getByRole("link", { name: "Spexets kör" }).click();
     await expect(page.getByLabel("Titel")).toHaveValue("Spexets kör");
@@ -90,7 +90,7 @@ test.describe("Articles", () => {
     await expect(page.getByRole("heading", { level: 1, name: "Spexets kör" })).toBeVisible();
 
     await page.goto("/articles/wanted");
-    await expect(page.getByText("Alla länkar leder till artiklar.")).toBeVisible();
+    await expect(page.getByText("Alla länkar leder till artiklar.").filter({ visible: true })).toBeVisible();
     await page.goto("/articles/spexets-traditioner");
     await expect(page.getByRole("article").getByRole("link", { name: "Spexets kör" })).toHaveAttribute("href", "/articles/spexets-kor");
   });
@@ -103,7 +103,7 @@ test.describe("Articles", () => {
     await page.getByLabel("Text", { exact: true }).fill("Tackkören sjungs efter sista föreställningen.");
     await page.getByLabel("Kommentar till historiken").fill("Rättade när den sjungs");
     await page.getByRole("button", { name: "Spara" }).click();
-    await expect(page.getByRole("article").getByText("Tackkören sjungs efter sista föreställningen.")).toBeVisible();
+    await expect(page.getByRole("article").getByText("Tackkören sjungs efter sista föreställningen.").filter({ visible: true })).toBeVisible();
 
     await page.getByRole("link", { name: "Historik" }).click();
     await expect(page.getByRole("heading", { level: 1, name: "Historik för Tackkören" })).toBeVisible();
@@ -114,16 +114,16 @@ test.describe("Articles", () => {
     await expect(revisions.first()).toContainText("Rättade när den sjungs");
     await expect(revisions.nth(1)).toContainText("Exempeldata");
     // The latest is compared with the one before it
-    await expect(page.getByText("tillagt").first()).toBeVisible();
-    await expect(page.getByText("borttaget").first()).toBeVisible();
-    await expect(page.getByText(/Exempeltext om Tackkören/).first()).toBeVisible();
+    await expect(page.getByText("tillagt").filter({ visible: true }).first()).toBeVisible();
+    await expect(page.getByText("borttaget").filter({ visible: true }).first()).toBeVisible();
+    await expect(page.getByText(/Exempeltext om Tackkören/).filter({ visible: true }).first()).toBeVisible();
     await expect(page.getByRole("button", { name: "Återställ" })).toHaveCount(0);
 
     await revisions.nth(1).getByRole("link").click();
     await page.getByRole("button", { name: "Återställ" }).click();
     await answerDialog(page, "Återställ");
     await expect(page).toHaveURL(/\/articles\/tackkoren$/);
-    await expect(page.getByRole("article").getByText(/Exempeltext om Tackkören/)).toBeVisible();
+    await expect(page.getByRole("article").getByText(/Exempeltext om Tackkören/).filter({ visible: true })).toBeVisible();
 
     const article = (await mock.state()).articles.find(each => each.slug === "tackkoren")!;
 
@@ -138,20 +138,20 @@ test.describe("Articles", () => {
     await mock.failNext("ArticleUpdate", "CONFLICT");
     await page.getByRole("button", { name: "Spara" }).click();
 
-    await expect(page.getByText("Någon annan har sparat en nyare version medan du skrev.")).toBeVisible();
-    await expect(page.getByText(/Exempeltext om Adrianpokalen/).first()).toBeVisible();
+    await expect(page.getByText("Någon annan har sparat en nyare version medan du skrev.").filter({ visible: true })).toBeVisible();
+    await expect(page.getByText(/Exempeltext om Adrianpokalen/).filter({ visible: true }).first()).toBeVisible();
     await page.getByRole("button", { name: "Spara min över deras" }).click();
 
     await expect(page).toHaveURL(/\/articles\/adrianpokalen$/);
-    await expect(page.getByRole("article").getByText("Adrianpokalen delas ut varje år.")).toBeVisible();
+    await expect(page.getByRole("article").getByText("Adrianpokalen delas ut varje år.").filter({ visible: true })).toBeVisible();
   });
 
   test("an author publishes an article, which visitors then read", async ({ page, loginAs, browser }) => {
     await loginAs("author");
     await page.goto("/articles/repetitionerna");
-    await expect(page.getByRole("article").locator("header").getByText("Opublicerad")).toBeVisible();
+    await expect(page.getByRole("article").locator("header").getByText("Opublicerad").filter({ visible: true })).toBeVisible();
     await page.getByRole("button", { name: "Publicera" }).click();
-    await expect(page.getByText("Artikeln är publicerad")).toBeVisible();
+    await expect(page.getByText("Artikeln är publicerad").filter({ visible: true })).toBeVisible();
     await expect(page.getByRole("article").locator("header").getByText("Opublicerad")).toHaveCount(0);
     await expect(page.getByRole("button", { name: "Avpublicera" })).toBeVisible();
 
@@ -196,7 +196,7 @@ test.describe("Articles", () => {
     await page.goto("/manage/trash");
     await page.getByRole("button", { name: "Töm papperskorgen" }).click();
     await answerDialog(page, "Töm papperskorgen");
-    await expect(page.getByText("Papperskorgen är tom.")).toBeVisible();
+    await expect(page.getByText("Papperskorgen är tom.").filter({ visible: true })).toBeVisible();
     expect((await mock.state()).articles.some(article => article.slug === "anekdoter")).toBe(false);
   });
 
@@ -204,12 +204,12 @@ test.describe("Articles", () => {
     await loginAs("author");
     await page.goto("/articles/spexikon/history");
     await page.getByRole("button", { name: "Dölj texten" }).click();
-    await expect(page.getByText("Den här versionens text är dold.")).toBeVisible();
+    await expect(page.getByText("Den här versionens text är dold.").filter({ visible: true })).toBeVisible();
     await expect(page.getByRole("button", { name: "Visa texten" })).toBeVisible();
     expect((await mock.state()).articles.find(article => article.slug === "spexikon")?.revisions[0].hidden).toBe(true);
 
     await page.goto("/articles/spexikon");
-    await expect(page.getByText("Den senaste versionens text är dold.")).toBeVisible();
+    await expect(page.getByText("Den senaste versionens text är dold.").filter({ visible: true })).toBeVisible();
   });
 
   test("a member adds a category, and the article tree shows parents with their children", async ({ page, loginAs }) => {

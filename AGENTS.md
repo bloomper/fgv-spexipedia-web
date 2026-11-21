@@ -30,6 +30,8 @@ without a token too, with what is public) and its `POST /api/images`; images com
   beyond the recorded query and the old-wiki redirects. Personas: `admin`, `editor`, `author`, `member`, `noaccess`;
   `mock.failNext(operation, classification)` fails the next call, `mock.state()` reads what the web sent. While
   recording, everything goes to the real server, so record with the reading specs only (`people`, `reading`, `mobile`).
+  Next.js keeps pages it navigated away from in the document, hidden (React's `<Activity>`), so text and ids can be
+  there twice: role locators skip hidden elements, `getByText` and CSS locators need `.filter({ visible: true })`.
   The `mobile` project (Pixel 7) runs `e2e/mobile.spec.ts`: no page wider than the screen down to 320 pixels, and the
   spex page's section bar.
 - `npm run gql-codegen` — regenerate `src/gql/` from the sibling `../fgv-spexipedia-server` checkout. Commit the result.

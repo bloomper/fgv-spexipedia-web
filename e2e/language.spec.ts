@@ -12,12 +12,12 @@ test.describe("Language", () => {
 
     // The choice is kept for the next page
     await page.goto("/");
-    await expect(page.getByText("This day in history")).toBeVisible();
+    await expect(page.getByText("This day in history").filter({ visible: true })).toBeVisible();
 
     await page.getByRole("button", { name: "Change language" }).click();
     await page.getByRole("menuitem", { name: "Svenska" }).click();
     await expect(page.getByRole("link", { name: "Logga in" }).first()).toBeVisible();
-    await expect(page.getByText("Den här dagen i historien")).toBeVisible();
+    await expect(page.getByText("Den här dagen i historien").filter({ visible: true })).toBeVisible();
   });
 
   test("an admin's English welcome text is shown to members reading in English", async ({ page, loginAs }) => {
@@ -25,12 +25,12 @@ test.describe("Language", () => {
     await page.goto("/admin/settings");
     await page.getByLabel("Text för medlemmar, på engelska").fill("Welcome, spexare!");
     await page.getByRole("button", { name: "Spara" }).click();
-    await expect(page.getByText("Inställningarna är sparade")).toBeVisible();
+    await expect(page.getByText("Inställningarna är sparade").filter({ visible: true })).toBeVisible();
 
     await page.goto("/");
     await page.getByRole("button", { name: "Byt språk" }).click();
     await page.getByRole("menuitem", { name: "English" }).click();
-    await expect(page.getByRole("main").getByText("Welcome, spexare!")).toBeVisible();
+    await expect(page.getByRole("main").getByText("Welcome, spexare!").filter({ visible: true })).toBeVisible();
   });
 });
 

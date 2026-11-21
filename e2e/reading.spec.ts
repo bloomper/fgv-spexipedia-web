@@ -12,8 +12,8 @@ test.describe("Reading", () => {
 
   test("the start page welcomes, features the spex of the year, and links this day's premiere", async ({ page }) => {
     await expect(page.getByRole("heading", { level: 1, name: "Spexipedia" })).toBeVisible();
-    await expect(page.getByText(/FGV:s uppslagsverk om Chalmersspexet/)).toBeVisible();
-    await expect(page.getByText("Årets spex")).toBeVisible();
+    await expect(page.getByText(/FGV:s uppslagsverk om Chalmersspexet/).filter({ visible: true })).toBeVisible();
+    await expect(page.getByText("Årets spex").filter({ visible: true })).toBeVisible();
     await expect(page.getByRole("link", { name: "Premiär för Bojan (1948)" })).toHaveAttribute("href", "/spex/1948-bojan");
     await expect(page.getByRole("link", { name: "Gamla Chalmersspexet" }).first()).toHaveAttribute("href", /^\/categories\//);
   });
@@ -26,23 +26,23 @@ test.describe("Reading", () => {
 
     await page.goto("/categories/e9bd2ef4-af0e-376a-91a4-9b20a1fd67c8");
     await expect(page.getByRole("heading", { level: 1, name: "Gamla Chalmersspexet" })).toBeVisible();
-    await expect(page.getByText("Sedan 1948")).toBeVisible();
+    await expect(page.getByText("Sedan 1948").filter({ visible: true })).toBeVisible();
     expect(await linksTo(page, "/spex/")).toEqual(expect.arrayContaining(["/spex/1948-bojan", "/spex/1956-napoleon"]));
   });
 
   test("a spex page shows its sections, with the rail to them", async ({ page }) => {
     await page.goto("/spex/1948-bojan");
     await expect(page.getByRole("heading", { level: 1, name: /Bojan/ })).toBeVisible();
-    await expect(page.getByText("Bojan – ett spex om makt, kärlek").first()).toBeVisible();
+    await expect(page.getByText("Bojan – ett spex om makt, kärlek").filter({ visible: true }).first()).toBeVisible();
 
     for (const section of ["Roller", "Manus och program", "Musik", "Programrebus", "Spexvästen"]) {
       await expect(page.getByRole("heading", { level: 2, name: section }), section).toBeVisible();
     }
     const roles = page.getByRole("region", { name: "Roller" });
 
-    await expect(roles.getByText("Drottningen").first()).toBeVisible();
-    await expect(page.getByRole("region", { name: "Musik" }).getByText("Kärleksduett i månsken").first()).toBeVisible();
-    await expect(page.getByRole("region", { name: "Manus och program" }).getByText("Hovet samlas i tronsalen")).toBeVisible();
+    await expect(roles.getByText("Drottningen").filter({ visible: true }).first()).toBeVisible();
+    await expect(page.getByRole("region", { name: "Musik" }).getByText("Kärleksduett i månsken").filter({ visible: true }).first()).toBeVisible();
+    await expect(page.getByRole("region", { name: "Manus och program" }).getByText("Hovet samlas i tronsalen").filter({ visible: true })).toBeVisible();
 
     const rail = page.getByRole("navigation", { name: "På sidan" });
 
@@ -93,7 +93,7 @@ test.describe("Reading", () => {
     await expect(page.getByRole("link", { name: "Napoleon (1956)" })).toBeVisible();
 
     await page.goto("/search?q=xyzzy");
-    await expect(page.getByText("Inget hittades för ”xyzzy”.")).toBeVisible();
+    await expect(page.getByText("Inget hittades för ”xyzzy”.").filter({ visible: true })).toBeVisible();
     // Only members are offered to write the article
     await expect(page.getByRole("link", { name: "Skriv en artikel om ”xyzzy”" })).toHaveCount(0);
   });
@@ -107,7 +107,7 @@ test.describe("Reading", () => {
 
     await page.goto("/Gyldene_Freden");
     await expect(page).toHaveURL(/\/search\?q=Gyldene\+Freden$/);
-    await expect(page.getByText("Inget hittades för ”Gyldene Freden”.")).toBeVisible();
+    await expect(page.getByText("Inget hittades för ”Gyldene Freden”.").filter({ visible: true })).toBeVisible();
   });
 
   test("the about and support pages give the addresses to write to", async ({ page }) => {
