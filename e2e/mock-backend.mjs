@@ -5,6 +5,9 @@
 // every spex page (the board, a task, a character's actor, a number's lyrics credits) as the server would answer: for visitors
 // the nickname of each spexare who has one and nothing else, for members (USER) names, ids and Spexregister links too.
 //
+// What the recording cannot hold (articles and their revisions, the admin lists, settings, kinds, the change log, the
+// trash, search beyond the recorded query) is kept in mock-live.mjs, seeded from the recording and checked by role.
+//
 // With MOCK_RECORD_FROM set (the local API with sample data), queries are passed on without a token and the answers
 // recorded; rerun the tests without it to replay them.
 
@@ -12,6 +15,7 @@ import { createServer } from "node:http";
 import { randomUUID } from "node:crypto";
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { exportJWK, generateKeyPair, SignJWT } from "jose";
+import { answerLive, failNext, patchStartPage, reset, seedFrom, snapshot } from "./mock-live.mjs";
 
 const PORT = Number(process.env.MOCK_PORT || 4106);
 const ISSUER = `http://localhost:${PORT}/realms/fgv`;
@@ -30,6 +34,8 @@ const PEOPLE = [
 
 const PERSONAS = {
   admin: { sub: "p-admin", name: "Sara Admin", email: "sara.admin@example.org", roles: ["USER", "AUTHOR", "EDITOR", "ADMIN"] },
+  editor: { sub: "p-editor", name: "Erik Redaktör", email: "erik@example.org", roles: ["USER", "EDITOR"] },
+  author: { sub: "p-author", name: "Anna Författare", email: "anna@example.org", roles: ["USER", "AUTHOR"] },
   member: { sub: "p-member", name: "Tina Tittare", email: "tina@example.org", roles: ["USER"] },
   noaccess: { sub: "p-noaccess", name: "Nils Nekad", email: "nils@example.org", roles: [] },
 };
@@ -37,6 +43,8 @@ const bySub = Object.fromEntries(Object.values(PERSONAS).map(persona => [persona
 let currentPersona = "member";
 
 const recorded = existsSync(RECORDED) ? JSON.parse(readFileSync(RECORDED, "utf8")) : {};
+
+seedFrom(recorded);
 
 const isMember = persona => Boolean(persona?.roles.includes("USER"));
 
@@ -127,7 +135,13 @@ async function handleGraphql(req, body, res) {
   const payload = JSON.parse(body);
   const op = operationNameOf(payload.query || "");
   const persona = personaOf(req);
-  const json = await answer(op, payload);
+  // While recording, everything goes to the real server; otherwise the live state answers first
+  const json = (!RECORD_FROM && answerLive(op, payload.variables, persona, recorded[keyOf(op, payload.variables)]))
+    || await answer(op, payload);
+
+  if (op === "StartPage") {
+    patchStartPage(json, persona, req.headers["accept-language"]);
+  }
 
   if (op === "SpexPage" && json.data?.spex) {
     json.data.spex = withPeople(persona, json.data.spex);
@@ -254,7 +268,15 @@ async function handle(req, res, body) {
     res.writeHead(302, { location: url.searchParams.get("post_logout_redirect_uri") || `http://localhost:${PORT}/` }).end();
   } else if (req.method === "POST" && path === "/__reset") {
     currentPersona = "member";
+    reset();
     res.writeHead(204).end();
+  } else if (req.method === "POST" && path === "/__fail") {
+    const { operation, classification } = JSON.parse(body);
+
+    failNext(operation, classification);
+    res.writeHead(204).end();
+  } else if (req.method === "GET" && path === "/__state") {
+    res.writeHead(200, { "content-type": "application/json" }).end(JSON.stringify(snapshot()));
   } else if (req.method === "POST" && path === "/__persona") {
     const { persona } = JSON.parse(body);
 
