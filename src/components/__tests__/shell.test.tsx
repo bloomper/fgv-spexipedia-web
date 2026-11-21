@@ -16,7 +16,6 @@ import { LinkSegments, LinkTabs } from "@/components/link-tabs";
 import { DataEmpty } from "@/components/data-empty";
 import { HomeSection } from "@/components/home-section";
 import { Logo } from "@/components/logo";
-import { LogoHome } from "@/components/logo-home";
 import { LogoText } from "@/components/logo-text";
 import { Umami } from "@/components/umami";
 import { SpexCard } from "@/components/wiki/spex-card";
@@ -126,7 +125,7 @@ describe("the shell", () => {
         <LinkSegments label="Typ" items={[{ href: "/c", label: "C", active: false }]} />
         <DataEmpty title="Inget" description="Här finns inget" />
         <HomeSection id="s" title="Senaste" more={{ href: "/spex", label: "Alla" }}>innehåll</HomeSection>
-        <Logo /><LogoHome /><LogoText />
+        <Logo /><LogoText />
       </SidebarProvider>,
     );
     expect(screen.getByRole("link", { name: "A" })).toHaveAttribute("aria-current", "page");
