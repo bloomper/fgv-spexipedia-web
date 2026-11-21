@@ -97,7 +97,7 @@ const SpexPageQuery = graphql(`
         kind { ...KindName }
         credits { kind { ...KindName } position credit { ...CreditFields unresolved } }
         characters { id name }
-        links { kind title url }
+        links { kind title url detail }
         books { id title volume position textOnly url }
       }
       records {
@@ -110,7 +110,7 @@ const SpexPageQuery = graphql(`
         tasks { spex { id year revival } task { id name category { id name } } people { ...PersonFields } }
         boardPhotos { ...PhotoSetFields }
       }
-      links { kind title url }
+      links { kind title url detail }
     }
   }
 `);

@@ -12,7 +12,7 @@ describe("kinds", () => {
   });
 
   it("know the schema's types and uses, and only image kinds have uses", () => {
-    expect(kindTypes()).toEqual(["NUMBER", "CREDIT", "MEDIUM", "IMAGE", "FACT", "BOOK"]);
+    expect(kindTypes()).toEqual(["NUMBER", "CREDIT", "IMAGE", "FACT"]);
     expect(kindTypes().filter(type => KIND_TYPES[type].length > 0)).toEqual(["IMAGE"]);
     expect(isKindType("FACT")).toBe(true);
     expect(isKindType("fact")).toBe(false);

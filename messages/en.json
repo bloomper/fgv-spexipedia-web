@@ -405,7 +405,8 @@
       "source": "The records are kept in Spexify."
     },
     "openBook": "Open in Spexarkivet",
-    "bookVolume": "vol. {volume}"
+    "bookVolume": "vol. {volume}",
+    "allMaterial": "Everything about the spex in FGV's other services:"
   },
   "Photos": {
     "unavailable": "Spexgram cannot be reached right now.",
@@ -422,7 +423,13 @@
     "SPEXFLIX_VIDEO": "Watch in Spexflix",
     "ARCHIVE_MANUSCRIPT": "Script in Spexarkivet",
     "ARCHIVE_ARRANGEMENT": "Arrangement",
-    "SPEXGRAM_ALBUM": "Album in Spexgram"
+    "SPEXGRAM_ALBUM": "Album in Spexgram",
+    "SPEXFLIX_CHAPTER": "Watch in Spexflix",
+    "ARCHIVE_DOCUMENT": "Spexarkivet",
+    "SPEXIFY_SPEX": "All in Spexify",
+    "SPEXFLIX_SPEX": "All in Spexflix",
+    "SPEXGRAM_SPEX": "All in Spexgram",
+    "ARCHIVE_SPEX": "All in Spexarkivet"
   },
   "Revisions": {
     "fields": {
@@ -536,7 +543,13 @@
     "write": "Write",
     "preview": "Preview",
     "previewFailed": "The preview failed.",
-    "help": "Markdown: **bold**, *italic*, # heading, - list, tables. [[Title]] links to an article."
+    "help": "Markdown: **bold**, *italic*, # heading, - list, tables. [[Title]] links to an article.",
+    "appLink": "Link to another service",
+    "appLinkAddress": "The address of the page in Spexify, Spexflix, Spexgram or Spexarkivet",
+    "appLinkNext": "Next",
+    "appLinkText": "Link text",
+    "appLinkInsert": "Insert",
+    "appLinkUnknown": "The address is no page of Spexify, Spexflix, Spexgram or Spexarkivet that an article can link to."
   },
   "Search": {
     "title": "Search",

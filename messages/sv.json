@@ -405,7 +405,8 @@
       "source": "Skivorna förs i Spexify."
     },
     "openBook": "Öppna i Spexarkivet",
-    "bookVolume": "del {volume}"
+    "bookVolume": "del {volume}",
+    "allMaterial": "Allt om spexet i FGV:s andra tjänster:"
   },
   "Photos": {
     "unavailable": "Spexgram kan inte nås just nu.",
@@ -422,7 +423,13 @@
     "SPEXFLIX_VIDEO": "Se i Spexflix",
     "ARCHIVE_MANUSCRIPT": "Manus i Spexarkivet",
     "ARCHIVE_ARRANGEMENT": "Arrangemang",
-    "SPEXGRAM_ALBUM": "Album i Spexgram"
+    "SPEXGRAM_ALBUM": "Album i Spexgram",
+    "SPEXFLIX_CHAPTER": "Se i Spexflix",
+    "ARCHIVE_DOCUMENT": "Spexarkivet",
+    "SPEXIFY_SPEX": "Allt i Spexify",
+    "SPEXFLIX_SPEX": "Allt i Spexflix",
+    "SPEXGRAM_SPEX": "Allt i Spexgram",
+    "ARCHIVE_SPEX": "Allt i Spexarkivet"
   },
   "Revisions": {
     "fields": {
@@ -536,7 +543,13 @@
     "write": "Skriv",
     "preview": "Förhandsvisa",
     "previewFailed": "Förhandsvisningen misslyckades.",
-    "help": "Markdown: **fet**, *kursiv*, # rubrik, - lista, tabeller. [[Titel]] länkar till en artikel."
+    "help": "Markdown: **fet**, *kursiv*, # rubrik, - lista, tabeller. [[Titel]] länkar till en artikel.",
+    "appLink": "Länk till annan tjänst",
+    "appLinkAddress": "Adressen till sidan i Spexify, Spexflix, Spexgram eller Spexarkivet",
+    "appLinkNext": "Nästa",
+    "appLinkText": "Länktext",
+    "appLinkInsert": "Infoga",
+    "appLinkUnknown": "Adressen är ingen sida i Spexify, Spexflix, Spexgram eller Spexarkivet som en artikel kan länka till."
   },
   "Search": {
     "title": "Sök",

@@ -15,7 +15,7 @@ import { RebusReveal } from "@/components/wiki/rebus-reveal.client";
 import { PHOTOS_VIEW, RoleGrid, type RoleView } from "@/components/wiki/role-grid.client";
 import { PhotoSet } from "@/components/wiki/photo-set.client";
 import { CreditList, PersonList, PersonName } from "@/components/wiki/person";
-import { AppLinks } from "@/components/wiki/app-links";
+import { AppLinks, isSpexPageLink } from "@/components/wiki/app-links";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { formatDay } from "@/utils/format";
@@ -358,7 +358,16 @@ export default async function SpexPage({ params }: Props) {
 
         {has("links") && (
           <SpexSection id="links" title={t("sections.links.title")} subtitle={subtitle("links")}>
-            <AppLinks links={spex.links.filter(link => link.kind !== "ARCHIVE_MANUSCRIPT" && link.kind !== "SPEXIFY_ALBUM")} />
+            {/* Everything about the spex in the other applications, for a logged-in user with access there */}
+            <div className="space-y-4">
+              <AppLinks links={spex.links.filter(link => link.kind !== "ARCHIVE_MANUSCRIPT" && link.kind !== "SPEXIFY_ALBUM" && !isSpexPageLink(link))} />
+              {spex.links.some(isSpexPageLink) && (
+                <div className="space-y-2">
+                  <p className="text-sm text-muted-foreground">{t("allMaterial")}</p>
+                  <AppLinks links={spex.links.filter(isSpexPageLink)} />
+                </div>
+              )}
+            </div>
           </SpexSection>
         )}
 
