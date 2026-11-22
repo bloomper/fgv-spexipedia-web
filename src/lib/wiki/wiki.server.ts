@@ -58,7 +58,6 @@ const StartPageQuery = graphql(`
       welcome
       spexOfTheYear { ...SpexTile page { introduction } }
       thisDay { date text spex { id slug title year } }
-      recentChanges { ...RevisionFields }
       decades { decade spex { ...SpexTile } }
     }
     spexCategories { id name firstYear logo { ...ImageFields } }
