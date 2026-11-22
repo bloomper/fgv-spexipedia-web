@@ -12,8 +12,8 @@ import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select"
 import { useSave } from "@/components/wiki/editor/use-save.client";
 import { useDialogs } from "@/components/dialogs.client";
 import { mergeKindAction, reorderKindsAction, retireKindAction, saveKindAction } from "@/app/(app)/admin/actions.server";
-import type { FactValueType, KindType, KindUse } from "@/gql/graphql";
-import { factValueTypes } from "@/utils/kinds";
+import type { FactValueType, KindType, KindUse, SectionContent } from "@/gql/graphql";
+import { creatableContents, factValueTypes, SECTION_CONTENTS } from "@/utils/kinds";
 
 export type KindRow = {
   id: string;
@@ -23,14 +23,19 @@ export type KindRow = {
   position: number;
   retired: boolean;
   valueType?: FactValueType | null;
+  content?: SectionContent | null;
+  subtitleSv?: string | null;
+  subtitleEn?: string | null;
 };
 
 /**
- * The kinds of one type (and, for image kinds, one use), as admins keep them (spec 4.6): Swedish and English names,
- * the aliases the import recognises, their order (the first in use is the default), retired or in use, and merging one
- * into another. A kind in use is never deleted; merging moves what refers to it and keeps its names as aliases.
+ * The kinds of one type (and, for image kinds, one use, or one image section), as admins keep them (spec 4.6): Swedish
+ * and English names, the aliases the import recognises, their order (the first in use is the default), retired or in
+ * use, and merging one into another. A kind in use is never deleted; merging moves what refers to it and keeps its names
+ * as aliases. Section kinds also have a content and a subtitle, and their order is the spex pages' default order;
+ * those of a content with one kind (the vest, the music …) are never merged.
  */
-export function KindsEditor({ type, use, kinds }: { type: KindType; use: KindUse | null; kinds: KindRow[] }) {
+export function KindsEditor({ type, use, sectionId = null, kinds }: { type: KindType; use: KindUse | null; sectionId?: string | null; kinds: KindRow[] }) {
   const t = useTranslations("AdminKinds");
   const { save, pending } = useSave();
   const { confirm, choose } = useDialogs();
@@ -42,13 +47,13 @@ export function KindsEditor({ type, use, kinds }: { type: KindType; use: KindUse
     const [id] = ids.splice(from, 1);
 
     ids.splice(to, 0, id);
-    void save(() => reorderKindsAction(type, use, ids), { success: false });
+    void save(() => reorderKindsAction(type, use, ids, sectionId), { success: false });
   };
 
   return (
     <div className="space-y-3">
       <Button type="button" size="sm" variant="outline" onClick={() => setEditing("new")}><Plus aria-hidden /> {t("add")}</Button>
-      {editing === "new" && <KindForm type={type} use={use} onDone={() => setEditing(null)} />}
+      {editing === "new" && <KindForm type={type} use={use} sectionId={sectionId} onDone={() => setEditing(null)} />}
       {kinds.length === 0 && <p className="text-sm text-muted-foreground">{t("none")}</p>}
       <ol className="divide-y divide-border rounded-lg border border-border bg-card text-sm">
         {kinds.map((kind, index) => (
@@ -57,6 +62,7 @@ export function KindsEditor({ type, use, kinds }: { type: KindType; use: KindUse
               <span className="w-6 text-muted-foreground">{index + 1}</span>
               <span className={kind.retired ? "font-medium text-muted-foreground line-through" : "font-medium"}>{label(kind)}</span>
               {type === "FACT" && kind.valueType && <Badge variant="secondary">{t(`valueTypes.${kind.valueType}`)}</Badge>}
+              {kind.content && <Badge variant="secondary">{t(`contents.${kind.content}`)}</Badge>}
               {kind.retired && <Badge variant="outline">{t("retired")}</Badge>}
               {kind.aliases.length > 0 && (
                 <span className="min-w-0 truncate text-xs text-muted-foreground" title={kind.aliases.join("\n")}>
@@ -71,17 +77,18 @@ export function KindsEditor({ type, use, kinds }: { type: KindType; use: KindUse
                         onClick={() => save(() => retireKindAction(kind.id, !kind.retired), { success: kind.retired ? t("reinstated") : t("retiredToast") })}>
                   {kind.retired ? <ArchiveRestore /> : <Archive />}
                 </Button>
-                <Button type="button" size="icon" variant="ghost" aria-label={t("merge")} title={t("merge")} disabled={pending || kinds.length < 2} onClick={async () => {
-                  const intoId = await choose({ title: t("mergeTitle", { name: kind.nameSv }), items: kinds.filter(other => other.id !== kind.id).map(other => ({ id: other.id, label: label(other) })) });
+                {mergeable(kind) && <Button type="button" size="icon" variant="ghost" aria-label={t("merge")} title={t("merge")} disabled={pending || kinds.filter(other => sameGroup(other, kind)).length < 2} onClick={async () => {
+                  const intoId = await choose({ title: t("mergeTitle", { name: kind.nameSv }), items: kinds.filter(other => other.id !== kind.id && sameGroup(other, kind)).map(other => ({ id: other.id, label: label(other) })) });
                   const into = kinds.find(other => other.id === intoId);
 
                   if (into && await confirm({ title: t("mergeConfirm", { name: kind.nameSv, into: into.nameSv }), description: t("mergeText"), confirmLabel: t("merge"), destructive: true })) {
                     void save(() => mergeKindAction(kind.id, into.id), { success: t("merged") });
                   }
-                }}><Merge /></Button>
+                }}><Merge /></Button>}
               </span>
             </div>
-            {editing === kind.id && <KindForm type={type} use={use} kind={kind} onDone={() => setEditing(null)} />}
+            {kind.subtitleSv && <p className="pl-8 text-xs text-muted-foreground">{kind.subtitleSv}{kind.subtitleEn && kind.subtitleEn !== kind.subtitleSv && ` / ${kind.subtitleEn}`}</p>}
+            {editing === kind.id && <KindForm type={type} use={use} sectionId={sectionId} kind={kind} onDone={() => setEditing(null)} />}
           </li>
         ))}
       </ol>
@@ -89,26 +96,36 @@ export function KindsEditor({ type, use, kinds }: { type: KindType; use: KindUse
   );
 }
 
-function KindForm({ type, use, kind, onDone }: { type: KindType; use: KindUse | null; kind?: KindRow; onDone: () => void }) {
+/** Section kinds of a content with one kind are never merged, and merge only with kinds of the same content. */
+const mergeable = (kind: KindRow) => !kind.content || !SECTION_CONTENTS[kind.content].single;
+const sameGroup = (a: KindRow, b: KindRow) => (a.content ?? null) === (b.content ?? null);
+
+function KindForm({ type, use, sectionId, kind, onDone }: { type: KindType; use: KindUse | null; sectionId: string | null; kind?: KindRow; onDone: () => void }) {
   const t = useTranslations("AdminKinds");
   const { save, pending } = useSave();
-  const id = kind?.id ?? `new-${type}-${use ?? ""}`;
+  const id = kind?.id ?? `new-${type}-${use ?? ""}-${sectionId ?? ""}`;
   const [values, setValues] = useState({
     nameSv: kind?.nameSv ?? "",
     nameEn: kind?.nameEn ?? "",
     aliases: kind?.aliases.join("\n") ?? "",
     valueType: (kind?.valueType ?? "TEXT") as FactValueType,
+    content: (kind?.content ?? "IMAGES") as SectionContent,
+    subtitleSv: kind?.subtitleSv ?? "",
+    subtitleEn: kind?.subtitleEn ?? "",
   });
+  const section = type === "SECTION";
 
   return (
     <form className="space-y-3 rounded-md border border-border p-3" onSubmit={async event => {
       event.preventDefault();
       const input = {
-        type, use,
+        type, use, sectionId,
+        content: section && !kind ? values.content : null,
         valueType: type === "FACT" ? values.valueType : null,
         nameSv: values.nameSv,
         nameEn: values.nameEn,
         aliases: values.aliases.split("\n"),
+        ...(section ? { subtitleSv: values.subtitleSv, subtitleEn: values.subtitleEn } : {}),
       };
 
       if (await save(() => saveKindAction(kind?.id ?? null, input))) {
@@ -119,6 +136,23 @@ function KindForm({ type, use, kind, onDone }: { type: KindType; use: KindUse | 
         <div className="space-y-1.5"><Label htmlFor={`sv-${id}`}>{t("nameSv")}</Label><Input id={`sv-${id}`} required maxLength={100} value={values.nameSv} onChange={event => setValues({ ...values, nameSv: event.target.value })} /></div>
         <div className="space-y-1.5"><Label htmlFor={`en-${id}`}>{t("nameEn")}</Label><Input id={`en-${id}`} required maxLength={100} value={values.nameEn} onChange={event => setValues({ ...values, nameEn: event.target.value })} /></div>
       </div>
+      {section && (
+        <>
+          {!kind && (
+            <div className="space-y-1.5 sm:max-w-xs">
+              <Label htmlFor={`ct-${id}`}>{t("content")}</Label>
+              <NativeSelect id={`ct-${id}`} value={values.content} onChange={event => setValues({ ...values, content: event.target.value as SectionContent })}>
+                {creatableContents().map(content => <NativeSelectOption key={content} value={content}>{t(`contents.${content}`)}</NativeSelectOption>)}
+              </NativeSelect>
+              <p className="text-xs text-muted-foreground">{t("contentHelp")}</p>
+            </div>
+          )}
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div className="space-y-1.5"><Label htmlFor={`ssv-${id}`}>{t("subtitleSv")}</Label><Input id={`ssv-${id}`} maxLength={200} value={values.subtitleSv} onChange={event => setValues({ ...values, subtitleSv: event.target.value })} /></div>
+            <div className="space-y-1.5"><Label htmlFor={`sen-${id}`}>{t("subtitleEn")}</Label><Input id={`sen-${id}`} maxLength={200} value={values.subtitleEn} onChange={event => setValues({ ...values, subtitleEn: event.target.value })} /></div>
+          </div>
+        </>
+      )}
       {type === "FACT" && (
         <div className="space-y-1.5 sm:max-w-xs">
           <Label htmlFor={`vt-${id}`}>{t("valueType")}</Label>

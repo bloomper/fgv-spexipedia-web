@@ -15,6 +15,10 @@ import { RevisionList } from "@/components/wiki/revision-list";
 import { buttonVariants } from "@/components/ui/button";
 import { FactsEditor, SpexBaseDataEditor, SpexProductions, SpexTextsEditor } from "@/components/wiki/manage/spex-head-editor.client";
 import { SpexMediaEditor } from "@/components/wiki/manage/spex-media-editor.client";
+import { type SectionMaterial, SpexSectionsEditor } from "@/components/wiki/manage/spex-sections-editor.client";
+import type { SpexEditData } from "@/lib/wiki/edit.server";
+import type { AppLinkKind, SectionContent } from "@/gql/graphql";
+import { appRef } from "@/utils/app-refs";
 import { SpexCompleteness } from "@/components/wiki/manage/spex-completeness";
 import { CharactersEditor, NumbersEditor, RevivalChangesEditor, ScenesEditor } from "@/components/wiki/manage/spex-lists-editor.client";
 
@@ -41,7 +45,7 @@ export default async function ManageSpexPage({ params }: Props) {
       notFound();
     }
     const shown = [
-      "base", "texts", "facts", "media",
+      "base", "texts", "facts", "sections", "media",
       ...(viewer.editor ? ["characters", "scenes", "numbers"] : []),
       ...(viewer.editor && spex.revival ? ["revival"] : []),
       "history",
@@ -65,8 +69,11 @@ export default async function ManageSpexPage({ params }: Props) {
           <SpexSection id="edit-facts" title={t("editSections.facts")}>
             <FactsEditor spex={spex} factKinds={kinds?.factKinds ?? []} />
           </SpexSection>
+          <SpexSection id="edit-sections" title={t("editSections.sections")}>
+            <SpexSectionsEditor spex={spex} sectionKinds={kinds?.sectionKinds ?? []} materials={materials(spex)} />
+          </SpexSection>
           <SpexSection id="edit-media" title={t("editSections.media")}>
-            <SpexMediaEditor spex={spex} kinds={{ scenographyImageKinds: kinds?.scenographyImageKinds ?? [], pageImageKinds: kinds?.pageImageKinds ?? [] }} />
+            <SpexMediaEditor spex={spex} sectionKinds={kinds?.sectionKinds ?? []} />
           </SpexSection>
           {viewer.editor && (
             <>
@@ -99,4 +106,40 @@ export default async function ManageSpexPage({ params }: Props) {
       </div>
     );
   });
+}
+
+/** The link kinds whose material a section of that content can show (spec 4.2.1). */
+const MATERIAL_LINKS: Partial<Record<AppLinkKind, { content: SectionContent; ref: string }>> = {
+  SPEXFLIX_VIDEO: { content: "SPEXFLIX_VIDEO", ref: "spexflix:video/" },
+  SPEXGRAM_ALBUM: { content: "SPEXGRAM", ref: "spexgram:album/" },
+  SPEXIFY_ALBUM: { content: "SPEXIFY_ALBUM", ref: "spexify:album/" },
+  ARCHIVE_MANUSCRIPT: { content: "ARCHIVE_DOCUMENT", ref: "arkiv:document/" },
+  ARCHIVE_DOCUMENT: { content: "ARCHIVE_DOCUMENT", ref: "arkiv:document/" },
+};
+
+/**
+ * What the spex has in the other applications that a section can show: the material it links to, by the ids in the
+ * links' addresses, and its records, which everyone sees.
+ */
+function materials(spex: SpexEditData): SectionMaterial[] {
+  const webs = {
+    spexify: process.env.SPEXIFY_WEB_URL, spexflix: process.env.SPEXFLIX_WEB_URL,
+    spexgram: process.env.SPEXGRAM_WEB_URL, archive: process.env.ARCHIVE_WEB_URL,
+  };
+  const found = new Map<string, SectionMaterial>();
+
+  for (const link of spex.links) {
+    const material = MATERIAL_LINKS[link.kind];
+    const ref = material && appRef(link.url, webs);
+
+    if (material && ref?.startsWith(material.ref)) {
+      const id = ref.slice(material.ref.length);
+
+      found.set(`${material.content}:${id}`, { content: material.content, id, title: link.detail ? `${link.title} (${link.detail})` : link.title });
+    }
+  }
+  for (const record of spex.records) {
+    found.set(`SPEXIFY_ALBUM:${record.id}`, { content: "SPEXIFY_ALBUM", id: record.id, title: record.year ? `${record.title} (${record.year})` : record.title });
+  }
+  return [...found.values()];
 }

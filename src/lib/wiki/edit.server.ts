@@ -11,9 +11,9 @@ import type {
   FactInput,
   ImageInput,
   ImageRefInput,
-  ImageSection,
   NumberInput,
   OrderInput,
+  PageSectionInput,
   PhotoSection,
   RevivalChangeInput,
   RevivalChangeKind,
@@ -120,8 +120,7 @@ const EditKindsQuery = graphql(`
     creditKinds: kinds(type: CREDIT, includeRetired: true) { ...EditKind }
     factKinds: kinds(type: FACT, includeRetired: true) { ...EditKind }
     characterImageKinds: kinds(type: IMAGE, use: CHARACTER, includeRetired: true) { ...EditKind }
-    scenographyImageKinds: kinds(type: IMAGE, use: SCENOGRAPHY, includeRetired: true) { ...EditKind }
-    pageImageKinds: kinds(type: IMAGE, use: PAGE, includeRetired: true) { ...EditKind }
+    sectionKinds: kinds(type: SECTION, includeRetired: true) { ...EditKind content imageKinds { ...EditKind } }
   }
 `);
 
@@ -142,12 +141,21 @@ const SpexEditQuery = graphql(`
         vestWornBy { ...EditCredit }
         rebus { ...ImageFields }
         rebusSolution { ...ImageFields }
-        scenography: images(section: SCENOGRAPHY) { ...PageImageFields }
-        vest: images(section: VEST) { ...PageImageFields }
-        other: images(section: OTHER) { ...PageImageFields }
         groupPhotos: photos(section: GROUP) { ...PhotoSetFields }
         boardPhotos: photos(section: BOARD) { ...PhotoSetFields }
         history { ...RevisionFields }
+      }
+      links { kind title url detail }
+      records { id title year }
+      sectionOrder
+      sections(includeHidden: true) {
+        id content title ownTitle hidden refId itemIds startSeconds
+        kind { id name content }
+        images { ...PageImageFields }
+        video { title access }
+        photos { title }
+        record { title }
+        document { title access }
       }
       characters { id name description position retired images { ...PageImageFields } photos { ...PhotoSetFields } spex { id } }
       scenes { id act position title place intervalAfter spex { id } }
@@ -168,7 +176,8 @@ const SpexgramAlbumsQuery = graphql(`
 `);
 
 const SpexPageUpdate = graphql(`mutation SpexPageUpdate($spexId: ID!, $input: SpexPageInput!) { spexPageUpdate(spexId: $spexId, input: $input) { published } }`);
-const SpexPageSetImages = graphql(`mutation SpexPageSetImages($spexId: ID!, $section: ImageSection!, $kindId: ID, $images: [ImageRefInput!]!) { spexPageSetImages(spexId: $spexId, section: $section, kindId: $kindId, images: $images) { published } }`);
+const SpexPageSetImages = graphql(`mutation SpexPageSetImages($spexId: ID!, $sectionId: ID!, $kindId: ID, $images: [ImageRefInput!]!) { spexPageSetImages(spexId: $spexId, sectionId: $sectionId, kindId: $kindId, images: $images) { published } }`);
+const SpexSetSections = graphql(`mutation SpexSetSections($spexId: ID!, $sections: [PageSectionInput!]!) { spexSetSections(spexId: $spexId, sections: $sections) { id } }`);
 const SpexPageSetFacts = graphql(`mutation SpexPageSetFacts($spexId: ID!, $facts: [FactInput!]!) { spexPageSetFacts(spexId: $spexId, facts: $facts) { published } }`);
 const SpexPageSetPhotos = graphql(`mutation SpexPageSetPhotos($spexId: ID!, $section: PhotoSection!, $characterId: ID, $itemIds: [ID!]!) { spexPageSetPhotos(spexId: $spexId, section: $section, characterId: $characterId, itemIds: $itemIds) { published } }`);
 const SpexPageSetRebus = graphql(`mutation SpexPageSetRebus($spexId: ID!, $rebusImageId: ID, $solutionImageId: ID) { spexPageSetRebus(spexId: $spexId, rebusImageId: $rebusImageId, solutionImageId: $solutionImageId) { published } }`);
@@ -204,8 +213,9 @@ export const getSpexEdit = async (id: string) => runQuery(SpexEditQuery, { id })
 export const getEditKinds = async () => runQuery(EditKindsQuery, {});
 export const getSpexgramAlbums = async (spexId: string) => (await runQuery(SpexgramAlbumsQuery, { spexId }))?.spexgramAlbums ?? [];
 export const spexPageUpdate = (spexId: string, input: SpexPageInput) => runMutation(SpexPageUpdate, { spexId, input });
-export const spexPageSetImages = (spexId: string, section: ImageSection, kindId: string | null, images: ImageRefInput[]) =>
-  runMutation(SpexPageSetImages, { spexId, section, kindId, images });
+export const spexPageSetImages = (spexId: string, sectionId: string, kindId: string | null, images: ImageRefInput[]) =>
+  runMutation(SpexPageSetImages, { spexId, sectionId, kindId, images });
+export const spexSetSections = (spexId: string, sections: PageSectionInput[]) => runMutation(SpexSetSections, { spexId, sections });
 export const spexPageSetFacts = (spexId: string, facts: FactInput[]) => runMutation(SpexPageSetFacts, { spexId, facts });
 export const spexPageSetPhotos = (spexId: string, section: PhotoSection, characterId: string | null, itemIds: string[]) =>
   runMutation(SpexPageSetPhotos, { spexId, section, characterId, itemIds });
@@ -259,5 +269,7 @@ export type SpexEditData = NonNullable<NonNullable<Awaited<ReturnType<typeof get
 export type BaseData = NonNullable<Awaited<ReturnType<typeof getBaseData>>>;
 export type EditKinds = NonNullable<Awaited<ReturnType<typeof getEditKinds>>>;
 export type EditKind = EditKinds["numberKinds"][number];
+export type EditSection = SpexEditData["sections"][number];
+export type SectionKind = EditKinds["sectionKinds"][number];
 export type Completeness = NonNullable<SpexEditData["completeness"]>;
 export type UnresolvedCreditsData = NonNullable<Awaited<ReturnType<typeof getUnresolvedCredits>>>;

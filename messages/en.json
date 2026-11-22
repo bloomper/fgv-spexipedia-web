@@ -340,54 +340,6 @@
       "overview": {
         "title": "Overview",
         "subtitle": "About the spex"
-      },
-      "group": {
-        "title": "The ensemble",
-        "subtitle": "The group photo"
-      },
-      "characters": {
-        "title": "Characters",
-        "subtitle": "Characters and who played them"
-      },
-      "scenography": {
-        "title": "Scenography",
-        "subtitle": "Backdrop, stage and props"
-      },
-      "manuscript": {
-        "title": "Script and programme",
-        "subtitle": "Synopsis and scenes"
-      },
-      "music": {
-        "title": "Music",
-        "subtitle": "Numbers, melodies and credits"
-      },
-      "recordings": {
-        "title": "Records",
-        "subtitle": "The records in Spexify"
-      },
-      "rebus": {
-        "title": "Programme rebus",
-        "subtitle": "Can you solve it?"
-      },
-      "vest": {
-        "title": "The vest",
-        "subtitle": "The vest and who wore it"
-      },
-      "board": {
-        "title": "The board",
-        "subtitle": "The spex's board"
-      },
-      "tasks": {
-        "title": "Crew and cast",
-        "subtitle": "Who did what"
-      },
-      "images": {
-        "title": "Other images",
-        "subtitle": "More images from the spex"
-      },
-      "links": {
-        "title": "More about the spex",
-        "subtitle": "In FGV's other services"
       }
     },
     "fromWork": "from {work}",
@@ -401,11 +353,24 @@
       "listen": "Listen in Spexify",
       "side": "Side {side}",
       "cover": "Cover of {title}",
-      "source": "The records are kept in Spexify."
+      "source": "The records are kept in Spexify.",
+      "play": "Play {title}",
+      "pause": "Pause {title}"
     },
     "openBook": "Open in Spexarkivet",
     "bookVolume": "vol. {volume}",
-    "allMaterial": "Everything about the spex in FGV's other services:"
+    "allMaterial": "Everything about the spex in FGV's other services:",
+    "embeds": {
+      "openVideo": "Open in Spexflix",
+      "videoFailed": "The video could not be played. Reload the page and try again.",
+      "chapters": "Chapters",
+      "inSpexflix": "“{title}” is in Spexflix, for those with access there.",
+      "openAlbum": "The whole album “{title}” in Spexgram",
+      "inArchive": "“{title}” is in Spexarkivet, for those with access there.",
+      "firstPage": "The first page of {title}",
+      "pages": "{count} pp.",
+      "openDocument": "Open in Spexarkivet"
+    }
   },
   "Photos": {
     "unavailable": "Spexgram cannot be reached right now.",
@@ -611,11 +576,6 @@
     "vestDescription": "The vest",
     "vestWornBy": "The vest was worn by",
     "saveTexts": "Save the texts",
-    "sections": {
-      "VEST": "The vest",
-      "OTHER": "Other images",
-      "SCENOGRAPHY": "Scenography"
-    },
     "rebus": "Programme rebus",
     "rebusSolution": "The rebus's solution",
     "groupPhotos": "Group photo",
@@ -666,7 +626,8 @@
       "numbers": "Numbers",
       "revival": "The revival's changes",
       "history": "History",
-      "facts": "Facts"
+      "facts": "Facts",
+      "sections": "Sections"
     },
     "noHistory": "No changes to the texts yet.",
     "unresolved": "unresolved",
@@ -710,7 +671,7 @@
         "VEST_DESCRIPTION": "spex vest",
         "VEST_WORN_BY": "who wore the vest",
         "FACTS": "facts",
-        "SCENOGRAPHY": "scenography images",
+        "IMAGES": "images in the image sections",
         "VEST": "images of the vest",
         "REBUS": "programme rebus",
         "REBUS_SOLUTION": "rebus solution",
@@ -726,7 +687,42 @@
         "NUMBER_CREDITS": "credits of the numbers",
         "NUMBER_CHARACTERS": "characters in the numbers"
       }
-    }
+    },
+    "sectionOrder": {
+      "DEFAULT": "The page has the default order. Change it here, or add sections from the other services.",
+      "OWN": "The page has an order of its own. Sections added later go after the one before them in the default order.",
+      "ORIGINAL": "The revival shows its original’s order until it has its own; save here to give it one."
+    },
+    "sectionMaterial": {
+      "SPEXFLIX_VIDEO": "Spexflix",
+      "SPEXGRAM": "Spexgram",
+      "SPEXIFY_ALBUM": "Spexify",
+      "ARCHIVE_DOCUMENT": "Spexarkivet"
+    },
+    "sectionHidden": "Hidden",
+    "sectionRemove": "Remove the section",
+    "sectionShow": "Show the section",
+    "sectionHide": "Hide the section",
+    "sectionTitle": "Own heading",
+    "sectionStart": "Start at (m:ss)",
+    "sectionShows": "Shows “{title}”",
+    "sectionNotFound": "Not found: the material was removed or unpublished, or the service does not answer.",
+    "sectionSomeItems": "Chosen photos of the album",
+    "sectionWholeAlbum": "The whole album (choose photos to show some)",
+    "sectionAdd": "Add from another service",
+    "sectionAddIt": "Add",
+    "sectionDefault": "Use the default order",
+    "sectionDefaultTitle": "Go back to the default order?",
+    "sectionDefaultText": "The page’s own order is removed, with the sections from other services it added.",
+    "sectionAddressWrong": "The address leads to nothing a section of the kind {kind} can show.",
+    "sectionPickMaterial": "Choose something to show, or paste an address.",
+    "sectionSavedFirst": "shown once you have saved",
+    "sectionKind": "Section",
+    "sectionMaterialLabel": "The spex’s material there",
+    "sectionNoMaterial": "Nothing you have access to",
+    "sectionChoose": "Choose …",
+    "sectionAddress": "… or an address from the service",
+    "sectionAddressHelp": "E.g. a video in Spexflix (with ?t= for where it starts), an album in Spexgram or Spexify, or a document in Spexarkivet."
   },
   "BaseData": {
     "title": "Base data",
@@ -828,18 +824,19 @@
       "NUMBER": "Numbers",
       "CREDIT": "Credits",
       "IMAGE": "Images",
-      "FACT": "Facts"
+      "FACT": "Facts",
+      "SECTION": "Sections"
     },
     "typeHelp": {
       "NUMBER": "What a number is, e.g. song, overture or finale. A number may have none.",
       "CREDIT": "What someone did for a number, e.g. lyrics, music or arrangement. Spexify, Spexarkivet and Spexflix read them from the feed.",
-      "IMAGE": "Image kinds per use: for characters, for scenography and for the page’s other images. The uses are fixed; the kinds within them are data.",
-      "FACT": "Short facts about a production, as text or as a date. A new kind of fact shows at once when spex pages are edited."
+      "IMAGE": "Image kinds of characters. The image sections’ own image kinds are under Sections.",
+      "FACT": "Short facts about a production, as text or as a date. A new kind of fact shows at once when spex pages are edited.",
+      "SECTION": "The sections of the spex pages. The order here is the pages’ default order; a spex page may have its own. Image sections and sections from the other services can be added; each of the others exists once."
     },
     "uses": {
       "CHARACTER": "Characters",
-      "SCENOGRAPHY": "Scenography",
-      "PAGE": "Other images"
+      "SECTION": "Image section"
     },
     "valueTypes": {
       "TEXT": "Text",
@@ -867,7 +864,29 @@
     "moveDown": "Move down",
     "edit": "Edit",
     "save": "Save",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "contents": {
+      "GROUP": "Group photo",
+      "CHARACTERS": "Characters",
+      "IMAGES": "Images",
+      "MANUSCRIPT": "Script and scenes",
+      "MUSIC": "Music",
+      "RECORDS": "Records",
+      "REBUS": "Rebus",
+      "VEST": "Vest",
+      "BOARD": "Board",
+      "TASKS": "Tasks",
+      "LINKS": "Links",
+      "SPEXFLIX_VIDEO": "Video in Spexflix",
+      "SPEXGRAM": "Album in Spexgram",
+      "SPEXIFY_ALBUM": "Record in Spexify",
+      "ARCHIVE_DOCUMENT": "Document in Spexarkivet"
+    },
+    "content": "Content",
+    "contentHelp": "A new image section gets an image kind of the same name. Sections from other services are added on each spex page.",
+    "subtitleSv": "Subtitle in Swedish",
+    "subtitleEn": "Subtitle in English",
+    "imageKindsOf": "Image kinds of {section}"
   },
   "UnresolvedCredits": {
     "title": "Unresolved credits",

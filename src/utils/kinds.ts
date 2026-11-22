@@ -1,4 +1,4 @@
-import type { FactValueType, KindType, KindUse } from "@/gql/graphql";
+import type { FactValueType, KindType, KindUse, SectionContent } from "@/gql/graphql";
 
 /*
  * Kinds are data that admins keep (spec 4.6): the web never lists them, it reads them from the server. Only the types
@@ -25,12 +25,45 @@ export const defaultKindId = (kinds: readonly KindOption[]) => offeredKinds(kind
 export const KIND_TYPES: Record<KindType, readonly KindUse[]> = {
   NUMBER: [],
   CREDIT: [],
-  IMAGE: ["CHARACTER", "SCENOGRAPHY", "PAGE"],
+  // The image kinds of image sections are kept with their section, under SECTION
+  IMAGE: ["CHARACTER"],
   FACT: [],
+  SECTION: [],
 };
 
 /** Every use of image kinds, checked against the schema's enum the same way. */
-const USES: Record<KindUse, true> = { CHARACTER: true, SCENOGRAPHY: true, PAGE: true };
+const USES: Record<KindUse, true> = { CHARACTER: true, SECTION: true };
+
+/**
+ * What each content of a section shows (spec 4.2): whether it has exactly one section kind, which admins never create
+ * or merge, and whether it shows material of another application, which an author picks per spex.
+ */
+export const SECTION_CONTENTS: Record<SectionContent, { single: boolean; external: boolean }> = {
+  GROUP: { single: true, external: false },
+  CHARACTERS: { single: true, external: false },
+  IMAGES: { single: false, external: false },
+  MANUSCRIPT: { single: true, external: false },
+  MUSIC: { single: true, external: false },
+  RECORDS: { single: true, external: false },
+  REBUS: { single: true, external: false },
+  VEST: { single: true, external: false },
+  BOARD: { single: true, external: false },
+  TASKS: { single: true, external: false },
+  LINKS: { single: true, external: false },
+  SPEXFLIX_VIDEO: { single: false, external: true },
+  SPEXGRAM: { single: false, external: true },
+  SPEXIFY_ALBUM: { single: false, external: true },
+  ARCHIVE_DOCUMENT: { single: false, external: true },
+};
+
+/** The contents admins create section kinds of: image sections and those of the other applications. */
+export const creatableContents = () => (Object.keys(SECTION_CONTENTS) as SectionContent[]).filter(content => !SECTION_CONTENTS[content].single);
+
+export const isExternal = (content: SectionContent | null | undefined) => !!content && SECTION_CONTENTS[content].external;
+
+export function isSectionContent(value: string | null | undefined): value is SectionContent {
+  return !!value && value in SECTION_CONTENTS;
+}
 
 export const kindTypes = () => Object.keys(KIND_TYPES) as KindType[];
 

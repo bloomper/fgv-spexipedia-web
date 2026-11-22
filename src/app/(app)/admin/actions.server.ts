@@ -15,7 +15,7 @@ import {
 } from "@/lib/admin/admin.server";
 import { type ActionResult, toActionResult } from "@/lib/graphql.server";
 import type { KindInput, KindType, KindUse, MaintenanceJob, RedirectInput, SettingsInput, SyncConsumerInput } from "@/gql/graphql";
-import { isKindType, isKindUse } from "@/utils/kinds";
+import { isKindType, isKindUse, isSectionContent } from "@/utils/kinds";
 import { ID } from "@/utils/ids";
 import { withPolicyAction } from "@/utils/route.server";
 import { Policies } from "@/utils/policy.server";
@@ -86,34 +86,46 @@ const kinds = <T, >(work: () => Promise<T>) => withPolicyAction(Policies.admin.r
   return result;
 }));
 
-function requireKindGroup(type: KindType | null | undefined, use: KindUse | null | undefined) {
+function requireKindGroup(type: KindType | null | undefined, use: KindUse | null | undefined, sectionId?: string | null) {
   if ((type != null && !isKindType(type)) || (use != null && !isKindUse(use))) {
     throw new Error("Invalid kind type");
   }
+  if (sectionId) {
+    requireId(sectionId);
+  }
 }
 
-/** A new kind (no id: with its type, and use for image kinds) or changes to one; aliases one per entry. */
+/**
+ * A new kind (no id: with its type, use for image kinds, the image section for those of use SECTION, and the content
+ * for section kinds) or changes to one; aliases one per entry.
+ */
 export async function saveKindAction(id: string | null, input: KindInput): Promise<ActionResult<null>> {
   if (id) {
     requireId(id);
   }
-  requireKindGroup(input.type, input.use);
+  requireKindGroup(input.type, input.use, input.sectionId);
+  if (input.content != null && !isSectionContent(input.content)) {
+    throw new Error("Invalid content");
+  }
   return kinds(async () => {
+    const section = (id ? null : input.type) === "SECTION" || input.subtitleSv != null || input.subtitleEn != null;
+
     await kindSave(id, {
-      ...(id ? {} : { type: input.type, use: input.use ?? null }),
+      ...(id ? {} : { type: input.type, use: input.use ?? null, sectionId: input.sectionId ?? null, content: input.content ?? null }),
       valueType: input.valueType ?? null,
       nameSv: input.nameSv.trim(),
       nameEn: input.nameEn.trim(),
       aliases: (input.aliases ?? []).map(alias => alias.trim()).filter(Boolean),
+      ...(section ? { subtitleSv: input.subtitleSv?.trim().slice(0, 200) || null, subtitleEn: input.subtitleEn?.trim().slice(0, 200) || null } : {}),
     });
     return null;
   });
 }
 
-export async function reorderKindsAction(type: KindType, use: KindUse | null, ids: string[]): Promise<ActionResult<null>> {
-  requireKindGroup(type, use);
+export async function reorderKindsAction(type: KindType, use: KindUse | null, ids: string[], sectionId: string | null = null): Promise<ActionResult<null>> {
+  requireKindGroup(type, use, sectionId);
   ids.forEach(requireId);
-  return kinds(async () => (await kindsReorder(type, use, ids), null));
+  return kinds(async () => (await kindsReorder(type, use, sectionId, ids), null));
 }
 
 export async function retireKindAction(id: string, retired: boolean): Promise<ActionResult<null>> {

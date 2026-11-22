@@ -12,9 +12,9 @@ import type {
   FactInput,
   ImageInput,
   ImageRefInput,
-  ImageSection,
   NumberInput,
   OrderInput,
+  PageSectionInput,
   PhotoSection,
   RevivalChangeInput,
   RevivalChangeKind,
@@ -139,9 +139,27 @@ export async function savePageAction(spexId: string, input: SpexPageInput) {
   return author(async () => (await edit.spexPageUpdate(spexId, input), null));
 }
 
-export async function setPageImagesAction(spexId: string, section: ImageSection, kindId: string | null, images: ImageRefInput[]) {
-  requireIds(spexId, kindId, ...images.map(image => image.imageId));
-  return author(async () => (await edit.spexPageSetImages(spexId, section, kindId, images), null));
+/** The images of an image section's kind, or of the vest (kindId null), in order. */
+export async function setPageImagesAction(spexId: string, sectionId: string, kindId: string | null, images: ImageRefInput[]) {
+  requireIds(spexId, sectionId, kindId, ...images.map(image => image.imageId));
+  return author(async () => (await edit.spexPageSetImages(spexId, sectionId, kindId, images), null));
+}
+
+/**
+ * The spex' own order of the sections of its page (spec 4.2), with the sections of the other applications; an empty
+ * list goes back to the default order.
+ */
+export async function setSectionsAction(spexId: string, sections: PageSectionInput[]) {
+  requireIds(spexId, ...sections.flatMap(section => [section.id, section.kindId, section.refId, ...(section.itemIds ?? [])]));
+  if (sections.length > 100) {
+    throw new Error("Too many sections");
+  }
+  return author(async () => (await edit.spexSetSections(spexId, sections.map(section => ({
+    id: section.id ?? null, kindId: section.kindId, hidden: !!section.hidden,
+    title: section.title?.trim().slice(0, 200) || null, refId: section.refId ?? null,
+    itemIds: section.itemIds?.slice(0, 100) ?? null,
+    startSeconds: section.startSeconds == null ? null : Math.max(0, Math.round(section.startSeconds)),
+  }))), null));
 }
 
 /** The facts of the spex (spec 4.2), at most one per fact kind; empty values are left out. */

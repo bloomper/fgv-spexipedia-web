@@ -14,6 +14,9 @@ services:
       - API_ENDPOINT=https://api.spexipedia.fgv.local.nu:8443
       - MEDIA_ORIGIN=https://media.spexipedia.fgv.local.nu:8443
       - SPEXGRAM_MEDIA_ORIGIN=https://media.spexgram.fgv.local.nu:8443
+      - SPEXFLIX_MEDIA_ORIGIN=https://media.spexflix.fgv.local.nu:8443
+      - SPEXIFY_MEDIA_ORIGIN=https://api.spexify.fgv.local.nu:8443
+      - ARCHIVE_MEDIA_ORIGIN=https://api.archive.fgv.local.nu:8443
       - SPEXREGISTER_WEB_URL=https://spexregister.fgv.local.nu:9443
       - KEYCLOAK_ISSUER=https://auth.fgv.local.nu:8443/auth/realms/fgv
     env_file:

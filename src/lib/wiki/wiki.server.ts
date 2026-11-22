@@ -79,9 +79,6 @@ const SpexPageQuery = graphql(`
         vestWornBy { ...CreditFields }
         rebus { ...ImageFields }
         rebusSolution { ...ImageFields }
-        scenography: images(section: SCENOGRAPHY) { ...PageImageFields }
-        vest: images(section: VEST) { ...PageImageFields }
-        other: images(section: OTHER) { ...PageImageFields }
         groupPhotos: photos(section: GROUP) { ...PhotoSetFields }
       }
       characters {
@@ -110,6 +107,21 @@ const SpexPageQuery = graphql(`
         boardPhotos { ...PhotoSetFields }
       }
       links { kind title url detail }
+      sections {
+        id content title subtitle
+        images { ...PageImageFields }
+        video {
+          id title year durationSeconds access url posterUrl startSeconds
+          chapters { title startSeconds }
+          playback { masterUrl thumbnailsUrl expiresAt subtitles { language label url } }
+        }
+        photos { albumId title url photos { ...PhotoSetFields } }
+        record {
+          id title year mediumNameSv mediumNameEn catalogueNumber released conductor coverUrl url
+          tracks { id side position title hasAudio url audioUrl number { id title } }
+        }
+        document { id title year kindName access url files { id title pages previewUrl } }
+      }
     }
   }
 `);

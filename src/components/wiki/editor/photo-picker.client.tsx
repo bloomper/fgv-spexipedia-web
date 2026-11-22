@@ -15,10 +15,12 @@ type Item = { itemId: string; caption?: string | null; thumbnailUrl: string; pub
  * photos. Only the items' ids are stored; public items are shown to everyone, members' items to those with access to
  * Spexgram.
  */
-export function PhotoPicker({ title, spexId, chosen, onSave }: {
+export function PhotoPicker({ title, spexId, chosen, onSave, albumId }: {
   title: string;
   spexId: string;
   chosen: string[];
+  /** Only this album's items, e.g. for a section that shows some items of one album. */
+  albumId?: string;
   onSave: (itemIds: string[]) => Promise<boolean>;
 }) {
   const t = useTranslations("Manage");
@@ -46,7 +48,7 @@ export function PhotoPicker({ title, spexId, chosen, onSave }: {
         </div>
       </div>
       {albums?.length === 0 && <p className="text-sm text-muted-foreground">{t("noAlbums")}</p>}
-      {albums?.map(album => (
+      {albums?.filter(album => !albumId || album.id === albumId).map(album => (
         <div key={album.id} className="space-y-2">
           <p className="text-sm font-medium">{album.title}</p>
           <div className="grid grid-cols-3 gap-2 sm:grid-cols-5 lg:grid-cols-8">
