@@ -891,7 +891,15 @@
     "deleteText": "Det går bara när inget har sorten; slå annars ihop den med en annan eller deaktivera den. Det går inte att ångra.",
     "deleteSectionText": "Sektionen tas bort med sina bildsorter. Det går bara när ingen spexsida har bilder eller innehåll i den. Det går inte att ångra.",
     "deleted": "Sorten är borttagen",
-    "imageKinds": "Bildsorter"
+    "imageKinds": "Bildsorter",
+    "sections": {
+      "add": "Ny sektion",
+      "none": "Inga sektioner än.",
+      "retiredToast": "Sektionen är deaktiverad",
+      "reinstated": "Sektionen är aktiverad",
+      "merged": "Sektionerna är ihopslagna",
+      "deleted": "Sektionen är borttagen"
+    }
   },
   "AdminSections": {
     "title": "Sektioner",

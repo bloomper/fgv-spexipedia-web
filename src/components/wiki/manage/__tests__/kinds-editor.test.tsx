@@ -51,7 +51,7 @@ describe("The kinds editor", () => {
     ]} />);
 
     expect(screen.getAllByRole("button", { name: "merge" })).toHaveLength(1);
-    await userEvent.click(screen.getByRole("button", { name: "add" }));
+    await userEvent.click(screen.getByRole("button", { name: "sections.add" }));
     expect(screen.getByLabelText("content")).toHaveValue("IMAGES");
     await userEvent.type(screen.getByLabelText("nameSv"), "Kostymer");
     await userEvent.type(screen.getByLabelText("nameEn"), "Costumes");
