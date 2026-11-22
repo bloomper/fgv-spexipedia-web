@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Eye, Play, Trash2, Upload, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { FileInput } from "@/components/file-input.client";
 import { Label } from "@/components/ui/label";
 import { useDialogs } from "@/components/dialogs.client";
 import { useSave } from "@/components/wiki/editor/use-save.client";
@@ -95,12 +95,12 @@ export function NewPackageForm() {
     }}>
       <div className="space-y-1.5">
         <Label htmlFor="spreadsheet">{t("spreadsheet")}</Label>
-        <Input id="spreadsheet" type="file" accept={SPREADSHEET_TYPES} disabled={busy} onChange={event => setSpreadsheet(event.target.files?.[0] ?? null)} />
+        <FileInput id="spreadsheet" accept={SPREADSHEET_TYPES} disabled={busy} onChange={setSpreadsheet} />
         <p className="text-xs text-muted-foreground">{t("spreadsheetHelp")}</p>
       </div>
       <div className="space-y-1.5">
         <Label htmlFor="zip">{t("zip")}</Label>
-        <Input id="zip" type="file" accept={ZIP_TYPES} disabled={busy} onChange={event => setZip(event.target.files?.[0] ?? null)} />
+        <FileInput id="zip" accept={ZIP_TYPES} disabled={busy} onChange={setZip} />
         <p className="text-xs text-muted-foreground">{zip ? t("zipChosen", { size: formatBytes(zip.size) }) : t("zipHelp")}</p>
       </div>
       {zip && received !== null && <ZipProgress received={received} size={zip.size} />}
@@ -129,10 +129,7 @@ export function ZipResume({ id, zipFileName, zipSize, zipReceived }: { id: strin
       <ZipProgress received={received} size={zipSize} />
       <div className="flex flex-wrap items-center gap-2">
         <Label htmlFor="resume-zip" className="sr-only">{t("pickSameZip")}</Label>
-        <Input id="resume-zip" type="file" accept={ZIP_TYPES} disabled={busy} className="max-w-sm" onChange={async event => {
-          const file = event.target.files?.[0];
-
-          event.target.value = "";
+        <FileInput id="resume-zip" accept={ZIP_TYPES} disabled={busy} className="max-w-sm" onChange={async file => {
           if (!file) {
             return;
           }
