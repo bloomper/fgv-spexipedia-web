@@ -499,9 +499,9 @@
     "save": "Spara",
     "cancel": "Avbryt",
     "newTitle": "Ny artikel",
-    "newDescription": "Alla medlemmar kan skriva. Nya artiklar är opublicerade tills en författare publicerar dem. Anekdoter som nämner personer ska vara för medlemmar.",
+    "newDescription": "Alla medlemmar kan skriva. Nya artiklar är opublicerade, och syns bara för dem som skrivit dem och för författarna, tills en författare publicerar dem. Anekdoter som nämner personer ska vara för medlemmar.",
     "editTitle": "Redigera {title}",
-    "newChildDescription": "Artikeln hamnar under ”{parent}” och är opublicerad tills en författare publicerar den."
+    "newChildDescription": "Artikeln hamnar under ”{parent}” och är opublicerad, och syns bara för dem som skrivit den och för författarna, tills en författare publicerar den."
   },
   "Editor": {
     "write": "Skriv",

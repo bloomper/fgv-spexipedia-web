@@ -499,9 +499,9 @@
     "save": "Save",
     "cancel": "Cancel",
     "newTitle": "New article",
-    "newDescription": "Every member can write. New articles are unpublished until an author publishes them. Anecdotes that name people should be for members.",
+    "newDescription": "Every member can write. New articles are unpublished, and seen only by their writers and the authors, until an author publishes them. Anecdotes that name people should be for members.",
     "editTitle": "Edit {title}",
-    "newChildDescription": "The article goes under “{parent}” and stays unpublished until an author publishes it."
+    "newChildDescription": "The article goes under “{parent}” and stays unpublished, seen only by its writers and the authors, until an author publishes it."
   },
   "Editor": {
     "write": "Write",
