@@ -726,7 +726,7 @@
   },
   "BaseData": {
     "title": "Basdata",
-    "intro": "Det som de andra programmen kopierar: spex, spexkategorier, funktionskategorier och funktioner.",
+    "intro": "Det som de andra programmen kopierar: spex, funktioner, spexkategorier och funktionskategorier.",
     "description": "Beskrivning",
     "showRetired": "Visa inaktiva",
     "add": "Ny",

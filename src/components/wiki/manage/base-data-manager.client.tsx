@@ -246,7 +246,7 @@ function TaskForm({ task, categories, done }: { task?: BaseData["tasks"][number]
   );
 }
 
-const SECTIONS = ["spex", "spex-categories", "task-categories", "tasks"] as const;
+const SECTIONS = ["spex", "tasks", "spex-categories", "task-categories"] as const;
 
 type Section = typeof SECTIONS[number];
 

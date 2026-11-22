@@ -726,7 +726,7 @@
   },
   "BaseData": {
     "title": "Base data",
-    "intro": "What the other applications copy: spex, spex categories, task categories and tasks.",
+    "intro": "What the other applications copy: spex, tasks, spex categories and task categories.",
     "description": "Description",
     "showRetired": "Show disabled",
     "add": "New",
