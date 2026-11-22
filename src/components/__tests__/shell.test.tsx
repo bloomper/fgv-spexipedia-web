@@ -78,7 +78,7 @@ describe("the shell", () => {
     expect(screen.getByRole("link", { name: "Nav.baseData" })).toHaveAttribute("href", "/manage/base-data");
   });
 
-  it("gives authors the trash and change log but not base data", () => {
+  it("gives authors the trash and change log but not base data", async () => {
     render(
       <TooltipProvider>
         <SidebarProvider>
@@ -86,8 +86,11 @@ describe("the shell", () => {
         </SidebarProvider>
       </TooltipProvider>,
     );
+    expect(screen.queryByRole("link", { name: "Nav.manage" })).not.toBeInTheDocument();
+    await userEvent.click(screen.getByRole("button", { name: "Nav.manage" }));
+    expect(screen.getByRole("link", { name: "Nav.trash" })).toHaveAttribute("href", "/manage/trash");
+    expect(screen.getByRole("link", { name: "Nav.auditLog" })).toHaveAttribute("href", "/manage/audit");
     expect(screen.queryByRole("link", { name: "Nav.baseData" })).not.toBeInTheDocument();
-    expect(screen.getAllByRole("link", { name: "Nav.manage" })[0]).toHaveAttribute("href", "/manage/trash");
   });
 
   it("has a header with the menu button, search and login", async () => {
