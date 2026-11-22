@@ -43,6 +43,8 @@ export function KindsEditor({ type, use, sectionId = null, kinds }: { type: Kind
   const [editing, setEditing] = useState<string | null>(null);
   // The last kind in use of a type is its default; sections may all be retired
   const last = (kind: KindRow) => type !== "SECTION" && !kind.retired && kinds.filter(other => !other.retired).length === 1;
+  // Sections say section where other kinds say kind
+  const say = (key: "add" | "none" | "retiredToast" | "reinstated" | "merged" | "deleted") => t(type === "SECTION" ? `sections.${key}` : key);
   const label = (kind: KindRow) => kind.nameSv === kind.nameEn ? kind.nameSv : `${kind.nameSv} / ${kind.nameEn}`;
 
   const move = (from: number, to: number) => {
@@ -55,9 +57,9 @@ export function KindsEditor({ type, use, sectionId = null, kinds }: { type: Kind
 
   return (
     <div className="space-y-3">
-      <Button type="button" size="sm" variant="outline" onClick={() => setEditing("new")}><Plus aria-hidden /> {t("add")}</Button>
+      <Button type="button" size="sm" variant="outline" onClick={() => setEditing("new")}><Plus aria-hidden /> {say("add")}</Button>
       {editing === "new" && <KindForm type={type} use={use} sectionId={sectionId} onDone={() => setEditing(null)} />}
-      {kinds.length === 0 && <p className="text-sm text-muted-foreground">{t("none")}</p>}
+      {kinds.length === 0 && <p className="text-sm text-muted-foreground">{say("none")}</p>}
       <ol className="divide-y divide-border rounded-lg border border-border bg-card text-sm">
         {kinds.map((kind, index) => (
           <li key={kind.id} className="space-y-2 px-3 py-2">
@@ -78,7 +80,7 @@ export function KindsEditor({ type, use, sectionId = null, kinds }: { type: Kind
                 <Button type="button" size="icon" variant="ghost" aria-label={t("moveDown")} disabled={pending || index === kinds.length - 1} onClick={() => move(index, index + 1)}><ArrowDown /></Button>
                 <Button type="button" size="icon" variant="ghost" aria-label={t("edit")} onClick={() => setEditing(editing === kind.id ? null : kind.id)}><Pencil /></Button>
                 <Button type="button" size="icon" variant="ghost" aria-label={kind.retired ? t("reinstate") : t("retire")} title={kind.retired ? t("reinstate") : t("retire")} disabled={pending}
-                        onClick={() => save(() => retireKindAction(kind.id, !kind.retired), { success: kind.retired ? t("reinstated") : t("retiredToast") })}>
+                        onClick={() => save(() => retireKindAction(kind.id, !kind.retired), { success: kind.retired ? say("reinstated") : say("retiredToast") })}>
                   {kind.retired ? <ArchiveRestore /> : <Archive />}
                 </Button>
                 {mergeable(kind) && <Button type="button" size="icon" variant="ghost" aria-label={t("merge")} title={t("merge")} disabled={pending || kinds.filter(other => sameGroup(other, kind)).length < 2} onClick={async () => {
@@ -86,12 +88,12 @@ export function KindsEditor({ type, use, sectionId = null, kinds }: { type: Kind
                   const into = kinds.find(other => other.id === intoId);
 
                   if (into && await confirm({ title: t("mergeConfirm", { name: kind.nameSv, into: into.nameSv }), description: t("mergeText"), confirmLabel: t("merge"), destructive: true })) {
-                    void save(() => mergeKindAction(kind.id, into.id), { success: t("merged") });
+                    void save(() => mergeKindAction(kind.id, into.id), { success: say("merged") });
                   }
                 }}><Merge /></Button>}
                 {mergeable(kind) && <Button type="button" size="icon" variant="ghost" aria-label={t("delete")} title={t("delete")} disabled={pending || last(kind)} onClick={async () => {
                   if (await confirm({ title: t("deleteConfirm", { name: label(kind) }), description: kind.content === "IMAGES" ? t("deleteSectionText") : t("deleteText"), confirmLabel: t("delete"), destructive: true })) {
-                    void save(() => deleteKindAction(kind.id), { success: t("deleted") });
+                    void save(() => deleteKindAction(kind.id), { success: say("deleted") });
                   }
                 }}><Trash2 /></Button>}
               </span>

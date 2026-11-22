@@ -157,7 +157,7 @@ test.describe("Administration", () => {
     const sections = page.getByRole("region", { name: "Sektioner" });
 
     // A new image section, with its own image kind of the same name under Kinds
-    await sections.getByRole("button", { name: "Ny sort" }).click();
+    await sections.getByRole("button", { name: "Ny sektion" }).click();
     await sections.getByLabel("Namn på svenska").fill("Kostymer");
     await sections.getByLabel("Namn på engelska").fill("Costumes");
     await sections.getByLabel("Underrubrik på svenska").fill("Kläderna");
@@ -173,7 +173,7 @@ test.describe("Administration", () => {
     await expect(sections.getByRole("listitem").filter({ hasText: "Spexvästen" }).getByRole("button", { name: "Ta bort" })).toHaveCount(0);
     await costumes.getByRole("button", { name: "Ta bort" }).click();
     await page.getByRole("dialog").getByRole("button", { name: "Ta bort" }).click();
-    await expect(page.getByText("Sorten är borttagen").filter({ visible: true })).toBeVisible();
+    await expect(page.getByText("Sektionen är borttagen").filter({ visible: true })).toBeVisible();
     await expect(costumes).toHaveCount(0);
     expect((await mock.state()).kinds.filter(kind => kind.nameSv === "Kostymer")).toEqual([]);
   });

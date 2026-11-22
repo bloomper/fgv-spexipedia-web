@@ -891,7 +891,15 @@
     "deleteText": "This works only when nothing has the kind; otherwise merge it into another or disable it. This cannot be undone.",
     "deleteSectionText": "The section is deleted with its image kinds. This works only when no spex page has images or content in it. This cannot be undone.",
     "deleted": "The kind is deleted",
-    "imageKinds": "Image kinds"
+    "imageKinds": "Image kinds",
+    "sections": {
+      "add": "New section",
+      "none": "No sections yet.",
+      "retiredToast": "The section is disabled",
+      "reinstated": "The section is enabled",
+      "merged": "The sections are merged",
+      "deleted": "The section is deleted"
+    }
   },
   "AdminSections": {
     "title": "Sections",
