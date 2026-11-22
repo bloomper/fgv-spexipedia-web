@@ -4,7 +4,6 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { HomeSection } from "@/components/home-section";
 import { SpexCard } from "@/components/wiki/spex-card";
 import { WikiImage } from "@/components/wiki/wiki-image";
-import { RevisionList } from "@/components/wiki/revision-list";
 import { getStartPage } from "@/lib/wiki/wiki.server";
 import { formatDay } from "@/utils/format";
 import { SortControl } from "@/components/sort-control";
@@ -27,7 +26,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 /**
- * The start page: the welcome text, the spex of the year, this day in history, recent changes and browsing by
+ * The start page: the welcome text, the spex of the year, this day in history and browsing by
  * category and decade. The visitor picks which way the decades run and whether the spex in them go by year or title.
  */
 export default async function HomePage({ searchParams }: Props) {
@@ -97,12 +96,6 @@ export default async function HomePage({ searchParams }: Props) {
           </div>
         </HomeSection>
       ))}
-
-      {start && start.recentChanges.length > 0 && (
-        <HomeSection id="recent" title={t("recentChanges")}>
-          <RevisionList revisions={start.recentChanges.slice(0, 10)} />
-        </HomeSection>
-      )}
     </div>
   );
 }
