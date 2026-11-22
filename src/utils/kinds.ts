@@ -25,7 +25,7 @@ export const defaultKindId = (kinds: readonly KindOption[]) => offeredKinds(kind
 export const KIND_TYPES: Record<KindType, readonly KindUse[]> = {
   NUMBER: [],
   CREDIT: [],
-  // The image kinds of image sections are kept with their section, under SECTION
+  // The image kinds of image sections are kept per section, beside those of characters
   IMAGE: ["CHARACTER"],
   FACT: [],
   SECTION: [],
@@ -66,6 +66,13 @@ export function isSectionContent(value: string | null | undefined): value is Sec
 }
 
 export const kindTypes = () => Object.keys(KIND_TYPES) as KindType[];
+
+/** The types kept under Kinds; the section kinds have a page of their own, Sections. */
+export type KindTab = Exclude<KindType, "SECTION">;
+
+export const kindTabs = () => kindTypes().filter((type): type is KindTab => type !== "SECTION");
+
+export const isKindTab = (value: string | null | undefined): value is KindTab => isKindType(value) && value !== "SECTION";
 
 export function isKindType(value: string | null | undefined): value is KindType {
   return !!value && value in KIND_TYPES;

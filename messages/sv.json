@@ -280,6 +280,7 @@
     "adminMaintenance": "Underhåll",
     "unresolvedCredits": "Olösta medverkande",
     "adminKinds": "Sorter",
+    "adminSections": "Sektioner",
     "packages": "Importera"
   },
   "Home": {
@@ -824,15 +825,13 @@
       "NUMBER": "Nummer",
       "CREDIT": "Medverkande",
       "IMAGE": "Bilder",
-      "FACT": "Fakta",
-      "SECTION": "Sektioner"
+      "FACT": "Fakta"
     },
     "typeHelp": {
       "NUMBER": "Vad ett nummer är, t.ex. sång, ouvertyr eller final. Ett nummer kan sakna sort.",
       "CREDIT": "Vad någon gjorde för ett nummer, t.ex. text, musik eller arrangemang. Spexify, Spexarkivet och Spexflix läser dem i flödet.",
-      "IMAGE": "Bildsorter för roller. Bildsektionernas egna bildsorter finns under Sektioner.",
-      "FACT": "Korta fakta om en uppsättning, som text eller som datum. En ny sorts fakta visas genast i redigeringen av spexsidorna.",
-      "SECTION": "Sektionerna på spexsidorna. Ordningen här är sidornas standardordning; en spexsida kan få en egen. Bildsektioner och sektioner från de andra tjänsterna kan läggas till; de andra finns en gång var."
+      "IMAGE": "Bildsorter för rollernas bilder och för bilderna i varje bildsektion. Bildsektionerna själva läggs till under Sektioner.",
+      "FACT": "Korta fakta om en uppsättning, som text eller som datum. En ny sorts fakta visas genast i redigeringen av spexsidorna."
     },
     "uses": {
       "CHARACTER": "Roller",
@@ -886,7 +885,19 @@
     "contentHelp": "En ny bildsektion får en bildsort med samma namn. Sektioner från andra tjänster läggs till på varje spexsida för sig.",
     "subtitleSv": "Underrubrik på svenska",
     "subtitleEn": "Underrubrik på engelska",
-    "imageKindsOf": "Bildsorter i {section}"
+    "imageKindsOf": "Bildsektionen {section}",
+    "delete": "Ta bort",
+    "deleteConfirm": "Ta bort {name}?",
+    "deleteText": "Det går bara när inget har sorten; slå annars ihop den med en annan eller deaktivera den. Det går inte att ångra.",
+    "deleteSectionText": "Sektionen tas bort med sina bildsorter. Det går bara när ingen spexsida har bilder eller innehåll i den. Det går inte att ångra.",
+    "deleted": "Sorten är borttagen",
+    "imageKinds": "Bildsorter"
+  },
+  "AdminSections": {
+    "title": "Sektioner",
+    "description": "Sektionerna på spexsidorna. Ordningen här är sidornas standardordning; en spexsida kan få en egen. Bildsektioner och sektioner från de andra tjänsterna kan läggas till och tas bort; de andra finns en gång var.",
+    "imageKinds": "Bildsorterna i varje bildsektion finns under",
+    "imageKindsLink": "Sorter → Bilder"
   },
   "UnresolvedCredits": {
     "title": "Olösta medverkande",

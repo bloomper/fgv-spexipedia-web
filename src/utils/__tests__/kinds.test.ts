@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { creatableContents, defaultKindId, imagesByKind, isExternal, isKindType, isKindUse, isSectionContent, KIND_TYPES, kindTypes, offeredKinds } from "@/utils/kinds";
+import { creatableContents, defaultKindId, imagesByKind, isExternal, isKindTab, isKindType, isKindUse, isSectionContent, KIND_TYPES, kindTabs, kindTypes, offeredKinds } from "@/utils/kinds";
 
 const kinds = [{ id: "a", name: "A", retired: true }, { id: "b", name: "B" }, { id: "c", name: "C", retired: false }];
 
@@ -14,6 +14,10 @@ describe("kinds", () => {
   it("know the schema's types and uses, and only image kinds have uses", () => {
     expect(kindTypes()).toEqual(["NUMBER", "CREDIT", "IMAGE", "FACT", "SECTION"]);
     expect(kindTypes().filter(type => KIND_TYPES[type].length > 0)).toEqual(["IMAGE"]);
+    // Sections have a page of their own
+    expect(kindTabs()).toEqual(["NUMBER", "CREDIT", "IMAGE", "FACT"]);
+    expect(isKindTab("SECTION")).toBe(false);
+    expect(isKindTab("IMAGE")).toBe(true);
     expect(isKindType("FACT")).toBe(true);
     expect(isKindType("fact")).toBe(false);
     expect(isKindType(undefined)).toBe(false);

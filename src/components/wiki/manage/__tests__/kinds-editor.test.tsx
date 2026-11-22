@@ -109,6 +109,34 @@ describe("The kinds editor", () => {
     await waitFor(() => expect(actions.mergeKindAction).toHaveBeenCalledWith("k3", "k1"));
     await waitFor(() => expect(toast.error).toHaveBeenCalledWith("Fel sort."));
   });
+
+  it("deletes a kind after confirming, and shows the server's refusal when it is in use", async () => {
+    actions.deleteKindAction = vi.fn(() => Promise.resolve({ ok: false, code: "BAD_REQUEST", message: "Sorten används." }));
+    show(<KindsEditor type="NUMBER" use={null} kinds={kinds} />);
+
+    await userEvent.click(screen.getAllByRole("button", { name: "delete" })[1]);
+    const dialog = await screen.findByRole("dialog");
+
+    expect(within(dialog).getByText("deleteText")).toBeInTheDocument();
+    await userEvent.click(within(dialog).getByRole("button", { name: "delete" }));
+    await waitFor(() => expect(actions.deleteKindAction).toHaveBeenCalledWith("k2"));
+    await waitFor(() => expect(toast.error).toHaveBeenCalledWith("Sorten används."));
+  });
+
+  it("keeps the last kind in use, and deletes no section of a content with one kind", () => {
+    show(<KindsEditor type="NUMBER" use={null} kinds={[kind("k1", "Sång", "Song"), kind("k3", "Gammal", "Old", { retired: true })]} />);
+    expect(screen.getAllByRole("button", { name: "delete" }).map(button => (button as HTMLButtonElement).disabled)).toEqual([true, false]);
+  });
+
+  it("deletes image sections with their image kinds, and links each to its image kinds", () => {
+    show(<KindsEditor type="SECTION" use={null} kinds={[
+      kind("v1", "Spexvästen", "The vest", { content: "VEST" }),
+      kind("i1", "Scenografi", "Scenography", { content: "IMAGES" }),
+    ]} />);
+
+    expect(screen.getAllByRole("button", { name: "delete" })).toHaveLength(1);
+    expect(screen.getByRole("link", { name: "imageKinds" })).toHaveAttribute("href", "/admin/kinds?type=IMAGE#section-i1");
+  });
 });
 
 describe("The unresolved credits", () => {

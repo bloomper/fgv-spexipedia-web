@@ -792,6 +792,17 @@ const OPERATIONS = {
     kind.retired = retired;
     return { kindRetire: { id } };
   },
+  KindDelete: ({ id }, persona) => {
+    need(persona, "ADMIN");
+    const kind = state.kinds.find(each => each.id === id);
+
+    if (!kind) {
+      throw notFound();
+    }
+    // As the server: a section's image kinds go along with it
+    state.kinds = state.kinds.filter(each => each.id !== id && each.sectionId !== id);
+    return { kindDelete: true };
+  },
   KindMerge: ({ id, intoId }, persona) => {
     need(persona, "ADMIN");
     const kind = state.kinds.find(each => each.id === id);

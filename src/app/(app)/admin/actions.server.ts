@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import {
+  kindDelete,
   kindMerge,
   kindRetire,
   kindSave,
@@ -137,6 +138,12 @@ export async function mergeKindAction(id: string, intoId: string): Promise<Actio
   requireId(id);
   requireId(intoId);
   return kinds(async () => (await kindMerge(id, intoId), null));
+}
+
+/** Deletes a kind nothing refers to; the server refuses one in use, which is merged or retired instead. */
+export async function deleteKindAction(id: string): Promise<ActionResult<null>> {
+  requireId(id);
+  return kinds(async () => (await kindDelete(id), null));
 }
 
 function requireId(id: string) {
