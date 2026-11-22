@@ -37,15 +37,20 @@ import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useIsClient } from "@/hooks/use-is-client.client";
 
-interface NavItem {
+interface NavLink {
   title: string;
   url: string;
   icon?: LucideIcon;
   isActive?: boolean;
-  items?: NavItem[];
+  items?: NavLink[];
 }
 
-interface NavSecondaryItem extends Omit<NavItem, "icon"> {
+/** A group without an address only opens and closes its entries. */
+interface NavItem extends Omit<NavLink, "url"> {
+  url?: string;
+}
+
+interface NavSecondaryItem extends Omit<NavLink, "icon"> {
   icon: LucideIcon;
 }
 
@@ -77,7 +82,7 @@ export function AppSidebar({ roles, accountUrl, user, ...props }: AppSidebarProp
     ];
 
     if (isAuthor(roles)) {
-      const items: NavItem[] = [];
+      const items: NavLink[] = [];
 
       if (isEditor(roles)) {
         items.push(
@@ -89,7 +94,6 @@ export function AppSidebar({ roles, accountUrl, user, ...props }: AppSidebarProp
       items.push({ title: t("Nav.trash"), url: "/manage/trash" }, { title: t("Nav.auditLog"), url: "/manage/audit" });
       mainItems.push({
         title: t("Nav.manage"),
-        url: items[0].url,
         icon: Pencil,
         isActive: pathname.startsWith("/manage"),
         items,
@@ -99,7 +103,6 @@ export function AppSidebar({ roles, accountUrl, user, ...props }: AppSidebarProp
     if (isAdmin(roles)) {
       mainItems.push({
         title: t("Nav.admin"),
-        url: "/admin/settings",
         icon: Settings,
         isActive: pathname.startsWith("/admin/"),
         items: [

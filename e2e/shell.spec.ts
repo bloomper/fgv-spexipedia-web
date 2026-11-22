@@ -16,8 +16,8 @@ test.describe("The application shell", () => {
     await expect(nav.getByRole("link", { name: "Sök" })).toHaveAttribute("href", "/search");
     await expect(nav.getByRole("link", { name: "Spex" })).toHaveAttribute("href", "/spex");
     await expect(nav.getByRole("link", { name: "Artiklar" })).toHaveAttribute("href", "/articles");
-    await expect(nav.getByRole("link", { name: "Redigera" })).toHaveCount(0);
-    await expect(nav.getByRole("link", { name: "Administration" })).toHaveCount(0);
+    await expect(nav.getByRole("button", { name: "Redigera", exact: true })).toHaveCount(0);
+    await expect(nav.getByRole("button", { name: "Administration", exact: true })).toHaveCount(0);
     await expect(page.getByRole("link", { name: "Logga in" }).first()).toBeVisible();
   });
 
@@ -26,8 +26,8 @@ test.describe("The application shell", () => {
 
     const nav = sidebar(page);
 
-    await expect(nav.getByRole("link", { name: "Redigera" })).toBeVisible();
-    await expect(nav.getByRole("link", { name: "Administration" })).toHaveAttribute("href", "/admin/settings");
+    await expect(nav.getByRole("button", { name: "Redigera", exact: true })).toBeVisible();
+    await expect(nav.getByRole("button", { name: "Administration", exact: true })).toBeVisible();
   });
 
   test("an author edits but neither keeps base data nor administers", async ({ page, loginAs }) => {
@@ -35,24 +35,27 @@ test.describe("The application shell", () => {
 
     const nav = sidebar(page);
 
-    await expect(nav.getByRole("link", { name: "Redigera" })).toHaveAttribute("href", "/manage/trash");
-    await expect(nav.getByRole("link", { name: "Administration" })).toHaveCount(0);
+    await nav.getByRole("button", { name: "Redigera", exact: true }).click();
+    await expect(nav.getByRole("link", { name: "Papperskorgen" })).toHaveAttribute("href", "/manage/trash");
+    await expect(nav.getByRole("link", { name: "Basdata" })).toHaveCount(0);
+    await expect(nav.getByRole("button", { name: "Administration", exact: true })).toHaveCount(0);
     await page.goto("/manage/base-data");
     await expect(page.getByRole("heading", { name: "Du har inte behörighet" })).toBeVisible();
     await page.goto("/admin/settings");
     await expect(page.getByRole("heading", { name: "Du har inte behörighet" })).toBeVisible();
   });
 
-  test("an editor's Redigera starts at the base data", async ({ page, loginAs }) => {
+  test("an editor's Redigera has the base data", async ({ page, loginAs }) => {
     await loginAs("editor");
-    await expect(sidebar(page).getByRole("link", { name: "Redigera" })).toHaveAttribute("href", "/manage/base-data");
-    await expect(sidebar(page).getByRole("link", { name: "Administration" })).toHaveCount(0);
+    await sidebar(page).getByRole("button", { name: "Redigera", exact: true }).click();
+    await expect(sidebar(page).getByRole("link", { name: "Basdata" })).toHaveAttribute("href", "/manage/base-data");
+    await expect(sidebar(page).getByRole("button", { name: "Administration", exact: true })).toHaveCount(0);
   });
 
   test("a member gets no editing, and is refused its pages", async ({ page, loginAs }) => {
     await loginAs("member");
 
-    await expect(sidebar(page).getByRole("link", { name: "Redigera" })).toHaveCount(0);
+    await expect(sidebar(page).getByRole("button", { name: "Redigera", exact: true })).toHaveCount(0);
     for (const path of ["/manage/trash", "/manage/audit", "/admin/settings", "/admin/maintenance"]) {
       await page.goto(path);
       await expect(page.getByRole("heading", { name: "Du har inte behörighet" }), path).toBeVisible();
@@ -73,7 +76,7 @@ test.describe("The application shell", () => {
   test("someone without access to Spexipedia reads as a visitor and is told why", async ({ page, loginAs }) => {
     await loginAs("noaccess");
     await expect(page.getByText(/nils@example\.org/).filter({ visible: true }).first()).toBeVisible();
-    await expect(sidebar(page).getByRole("link", { name: "Redigera" })).toHaveCount(0);
+    await expect(sidebar(page).getByRole("button", { name: "Redigera", exact: true })).toHaveCount(0);
 
     await page.goto("/articles/new");
     await expect(page.getByRole("heading", { name: "Du har inte åtkomst till Spexipedia" })).toBeVisible();
