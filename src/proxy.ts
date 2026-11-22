@@ -40,7 +40,8 @@ export async function proxy(request: NextRequest) {
 
   if (!request.nextUrl.pathname.startsWith("/api/")) {
     result.headers.set("Content-Security-Policy",
-      contentSecurityPolicy([process.env.MEDIA_ORIGIN, process.env.SPEXGRAM_MEDIA_ORIGIN], process.env.NODE_ENV === "development"));
+      contentSecurityPolicy([process.env.MEDIA_ORIGIN, process.env.SPEXGRAM_MEDIA_ORIGIN, process.env.SPEXFLIX_MEDIA_ORIGIN,
+        process.env.SPEXIFY_MEDIA_ORIGIN, process.env.ARCHIVE_MEDIA_ORIGIN], process.env.NODE_ENV === "development"));
   }
   return result;
 }

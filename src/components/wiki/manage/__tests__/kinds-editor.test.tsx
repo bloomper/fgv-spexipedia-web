@@ -29,8 +29,8 @@ describe("The kinds editor", () => {
     vi.clearAllMocks();
   });
 
-  it("creates a kind of its type and use, with aliases one per line", async () => {
-    show(<KindsEditor type="IMAGE" use="SCENOGRAPHY" kinds={[]} />);
+  it("creates a kind of its type, use and image section, with aliases one per line", async () => {
+    show(<KindsEditor type="IMAGE" use="SECTION" sectionId="s1" kinds={[]} />);
 
     expect(screen.getByText("none")).toBeInTheDocument();
     await userEvent.click(screen.getByRole("button", { name: "add" }));
@@ -40,8 +40,26 @@ describe("The kinds editor", () => {
     await userEvent.type(screen.getByLabelText("aliases"), "ljus{enter}belysning");
     await userEvent.click(screen.getByRole("button", { name: "save" }));
     await waitFor(() => expect(actions.saveKindAction).toHaveBeenCalledWith(null, {
-      type: "IMAGE", use: "SCENOGRAPHY", valueType: null, nameSv: "Ljus", nameEn: "Lighting", aliases: ["ljus", "belysning"],
+      type: "IMAGE", use: "SECTION", sectionId: "s1", content: null, valueType: null, nameSv: "Ljus", nameEn: "Lighting", aliases: ["ljus", "belysning"],
     }));
+  });
+
+  it("creates an image section with subtitles, and merges no section of a content with one kind", async () => {
+    show(<KindsEditor type="SECTION" use={null} kinds={[
+      kind("v1", "Spexvästen", "The vest", { content: "VEST" }),
+      kind("i1", "Scenografi", "Scenography", { content: "IMAGES" }),
+    ]} />);
+
+    expect(screen.getAllByRole("button", { name: "merge" })).toHaveLength(1);
+    await userEvent.click(screen.getByRole("button", { name: "add" }));
+    expect(screen.getByLabelText("content")).toHaveValue("IMAGES");
+    await userEvent.type(screen.getByLabelText("nameSv"), "Kostymer");
+    await userEvent.type(screen.getByLabelText("nameEn"), "Costumes");
+    await userEvent.type(screen.getByLabelText("subtitleSv"), "Kläderna");
+    await userEvent.click(screen.getByRole("button", { name: "save" }));
+    await waitFor(() => expect(actions.saveKindAction).toHaveBeenCalledWith(null, expect.objectContaining({
+      type: "SECTION", content: "IMAGES", nameSv: "Kostymer", subtitleSv: "Kläderna", subtitleEn: "",
+    })));
   });
 
   it("renames a fact kind and makes it a date", async () => {
@@ -67,9 +85,9 @@ describe("The kinds editor", () => {
     expect(screen.getByText("aliasesShort:{\"aliases\":\"låt, visa\"}")).toBeInTheDocument();
     expect(screen.getByText("retired")).toBeInTheDocument();
     await userEvent.click(screen.getAllByRole("button", { name: "moveDown" })[0]);
-    await waitFor(() => expect(actions.reorderKindsAction).toHaveBeenCalledWith("NUMBER", null, ["k2", "k1", "k3"]));
+    await waitFor(() => expect(actions.reorderKindsAction).toHaveBeenCalledWith("NUMBER", null, ["k2", "k1", "k3"], null));
     await userEvent.click(screen.getAllByRole("button", { name: "moveUp" })[2]);
-    await waitFor(() => expect(actions.reorderKindsAction).toHaveBeenCalledWith("NUMBER", null, ["k1", "k3", "k2"]));
+    await waitFor(() => expect(actions.reorderKindsAction).toHaveBeenCalledWith("NUMBER", null, ["k1", "k3", "k2"], null));
 
     await userEvent.click(screen.getAllByRole("button", { name: "retire" })[0]);
     await waitFor(() => expect(actions.retireKindAction).toHaveBeenCalledWith("k1", true));

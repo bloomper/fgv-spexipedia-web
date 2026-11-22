@@ -138,7 +138,7 @@ export function CharactersEditor({ spex, editor, imageKinds }: {
               <details>
                 <summary className="cursor-pointer text-sm text-primary">{t("imagesAndPhotos")}</summary>
                 <div className="mt-3 space-y-4">
-                  <ImageListEditor title={t("characterImages")} uploadKind="SKETCH" kinds={imageKinds}
+                  <ImageListEditor title={t("characterImages")} uploadKind="CHARACTER" kinds={imageKinds}
                                    images={character.images}
                                    onSave={images => save(() => setCharacterImagesAction(character.id, images))} />
                   <PhotoPicker title={t("actorPhotos")} spexId={spex.id} chosen={character.photos.itemIds}

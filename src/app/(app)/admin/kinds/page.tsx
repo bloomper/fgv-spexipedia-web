@@ -16,8 +16,9 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 /**
- * The kinds admins keep (spec 4.6), one type at a time: number kinds, credit kinds, image kinds per
- * use, and fact kinds. The types and uses are the schema's; the kinds within them are data.
+ * The kinds admins keep (spec 4.6), one type at a time: number kinds, credit kinds, image kinds of characters, fact
+ * kinds, and section kinds, whose order is the spex pages' default order, with each image section's own image kinds.
+ * The types, uses and contents are the schema's; the kinds within them are data.
  */
 export default async function KindsPage({ searchParams }: Props) {
   return withPolicyPage(Policies.admin.requireAdmin, async () => {
@@ -28,6 +29,11 @@ export default async function KindsPage({ searchParams }: Props) {
       getTranslations("AdminKinds"),
       Promise.all(uses.map(async use => ({ use, kinds: await getKinds(type, use) }))),
     ]);
+    // Each image section keeps image kinds of its own
+    const imageSections = type === "SECTION"
+      ? await Promise.all(groups[0].kinds.filter(kind => kind.content === "IMAGES")
+        .map(async section => ({ section, kinds: await getKinds("IMAGE", "SECTION", section.id) })))
+      : [];
 
     return (
       <div className="flex flex-1 flex-col gap-6 p-4 md:p-8">
@@ -39,6 +45,12 @@ export default async function KindsPage({ searchParams }: Props) {
             <section key={use ?? "all"} className="space-y-3" aria-label={use ? t(`uses.${use}`) : t(`types.${type}`)}>
               {use && <h2 className="wiki-heading text-xl font-semibold">{t(`uses.${use}`)}</h2>}
               <KindsEditor type={type} use={use} kinds={kinds} />
+            </section>
+          ))}
+          {imageSections.map(({ section, kinds }) => (
+            <section key={section.id} className="space-y-3" aria-label={t("imageKindsOf", { section: section.name })}>
+              <h2 className="wiki-heading text-xl font-semibold">{t("imageKindsOf", { section: section.name })}</h2>
+              <KindsEditor type="IMAGE" use="SECTION" sectionId={section.id} kinds={kinds} />
             </section>
           ))}
         </div>

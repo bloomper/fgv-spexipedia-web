@@ -70,15 +70,17 @@ export const redirectDelete = (id: string) => runMutation(RedirectDeleteMutation
 // Kinds (spec 4.6) ---------------------------------------------------------------------------------------------------------
 
 const KindsQuery = graphql(`
-    query AdminKinds($type: KindType!, $use: KindUse) {
-        kinds(type: $type, use: $use, includeRetired: true) { id type use valueType name nameSv nameEn aliases position retired }
+    query AdminKinds($type: KindType!, $use: KindUse, $sectionId: ID) {
+        kinds(type: $type, use: $use, sectionId: $sectionId, includeRetired: true) {
+            id type use valueType content name nameSv nameEn subtitleSv subtitleEn aliases position retired
+        }
     }
 `);
 const KindSaveMutation = graphql(`
     mutation KindSave($id: ID, $input: KindInput!) { kindSave(id: $id, input: $input) { id } }
 `);
 const KindsReorderMutation = graphql(`
-    mutation KindsReorder($type: KindType!, $use: KindUse, $ids: [ID!]!) { kindsReorder(type: $type, use: $use, ids: $ids) { id } }
+    mutation KindsReorder($type: KindType!, $use: KindUse, $sectionId: ID, $ids: [ID!]!) { kindsReorder(type: $type, use: $use, sectionId: $sectionId, ids: $ids) { id } }
 `);
 const KindRetireMutation = graphql(`
     mutation KindRetire($id: ID!, $retired: Boolean!) { kindRetire(id: $id, retired: $retired) { id } }
@@ -87,10 +89,12 @@ const KindMergeMutation = graphql(`
     mutation KindMerge($id: ID!, $intoId: ID!) { kindMerge(id: $id, intoId: $intoId) { id } }
 `);
 
-/** Every kind of a type (and, for image kinds, a use), retired ones included, in order. */
-export const getKinds = async (type: KindType, use: KindUse | null = null) => (await runQuery(KindsQuery, { type, use }))?.kinds ?? [];
+/** Every kind of a type (and, for image kinds, a use and maybe an image section), retired ones included, in order. */
+export const getKinds = async (type: KindType, use: KindUse | null = null, sectionId: string | null = null) =>
+  (await runQuery(KindsQuery, { type, use, sectionId }))?.kinds ?? [];
 export const kindSave = (id: string | null, input: KindInput) => runMutation(KindSaveMutation, { id, input });
-export const kindsReorder = (type: KindType, use: KindUse | null, ids: string[]) => runMutation(KindsReorderMutation, { type, use, ids });
+export const kindsReorder = (type: KindType, use: KindUse | null, sectionId: string | null, ids: string[]) =>
+  runMutation(KindsReorderMutation, { type, use, sectionId, ids });
 export const kindRetire = (id: string, retired: boolean) => runMutation(KindRetireMutation, { id, retired });
 export const kindMerge = (id: string, intoId: string) => runMutation(KindMergeMutation, { id, intoId });
 

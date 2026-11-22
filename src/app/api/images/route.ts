@@ -3,7 +3,7 @@ import { apiFetch } from "@/lib/api.server";
 import { crossSite, sameOrigin } from "@/lib/http/proxy.server";
 import { getSessionContext } from "@/utils/auth.server";
 
-const KINDS = new Set(["POSTER", "LOGO", "SKETCH", "MAKEUP", "COSTUME", "SCENOGRAPHY", "REBUS", "VEST", "COVER", "ARTICLE", "OTHER"]);
+const KINDS = new Set(["POSTER", "LOGO", "CHARACTER", "SECTION", "REBUS", "COVER", "ARTICLE", "OTHER"]);
 
 /**
  * An image upload from the editing pages, passed on to the server's `POST /api/images` with the user's token: the

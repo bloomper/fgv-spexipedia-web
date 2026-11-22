@@ -48,8 +48,10 @@ without a token too, with what is public) and its `POST /api/images`; images com
 - Locale is a cookie (`sv` default); messages in `messages/{sv,en}.json`. Dark by default.
 - Auth: Better Auth + Keycloak, stateless. `getSessionContext()` in `src/utils/auth.server.ts`; roles come from
   `resource_access["fgv-spexipedia"].roles`: `USER` (members), `AUTHOR`, `EDITOR`, `ADMIN`. The tokens stay on the server.
-- The Content Security Policy is set in `src/proxy.ts` (`src/utils/csp.ts`) because it names `MEDIA_ORIGIN` and
-  `SPEXGRAM_MEDIA_ORIGIN` (Spexgram's media server, for the photos and videos of people). No third-party scripts or frames.
+- The Content Security Policy is set in `src/proxy.ts` (`src/utils/csp.ts`) because it names `MEDIA_ORIGIN`,
+  `SPEXGRAM_MEDIA_ORIGIN` (Spexgram's media server, for the photos and videos of people) and `SPEXFLIX_MEDIA_ORIGIN`,
+  `SPEXIFY_MEDIA_ORIGIN` and `ARCHIVE_MEDIA_ORIGIN` (sections that show those applications' material). No third-party
+  scripts or frames.
 - Dialogs: never `window.confirm`/`prompt`/`alert`; use `useDialogs()`.
 
 ## Who sees what
@@ -67,8 +69,12 @@ without a token too, with what is public) and its `POST /api/images`; images com
 ## How the pages work
 
 - **Spex page** (`/spex/[slug]`, `src/app/(app)/spex/[slug]/page.tsx`): the head (poster beside year, title, category,
-  introduction and description), then only the sections with content (`sectionsOf`), each a `SpexSection` with a
-  heading and subtitle, and `SectionRail` beside it (scroll-spy). An id or old slug redirects to the current slug, so
+  introduction and description), then the sections in the order the server gives (`Spex.sections`: the section kinds'
+  default order, or the spex' own), each by its content (`body`) and only when it has something, a `SpexSection` with
+  the kind's name (or the section's own heading) and subtitle, and `SectionRail` beside it (scroll-spy). Sections of
+  other applications (spec 4.2.1) show what the server got for the viewer: a Spexflix video (`EmbeddedVideo`, hls.js
+  loaded on demand), Spexgram photos (`PhotoSet`), a Spexify record (`RecordCard`, with tracks playing from Spexify's
+  signed links) or a Spexarkivet document's first pages. The contents with one kind keep their old anchors (`#music`). An id or old slug redirects to the current slug, so
   other applications link by id. Structured data (`CreativeWork`) for published pages. Markdown texts arrive as HTML
   from the server (`descriptionHtml` and so on) and are shown with `HtmlContent`; never render Markdown in the web.
 - **Images** are Spexipedia's own (no people): `WikiImage` with the thumbnail/page/full variants as `srcset`;
@@ -83,9 +89,11 @@ without a token too, with what is public) and its `POST /api/images`; images com
 - **Records and books are not Spexipedia's** (`fgv-infra-deploy` `docs/data-ownership.md`): a spex page shows the
   spex' records from Spexify's discography (`Spex.records`, covers by links Spexify signs) and each number the books of
   Spexarkivet it is in (`Number.books`), read-only, with links into those applications for users with access there.
-- **Kinds** (number, credit, image per use, fact) are data: pages read them from `kinds(type, use)`, editors
-  are offered those in use (`src/utils/kinds.ts`), admins keep them at `/admin/kinds`. Only the schema's enums (types,
-  uses, value types) appear in code. Imported credits nobody resolved are shown to editors only (`/manage/credits`).
+- **Kinds** (number, credit, image per use, fact, section) are data: pages read them from `kinds(type, use)`, editors
+  are offered those in use (`src/utils/kinds.ts`), admins keep them at `/admin/kinds`. Section kinds have a content and
+  a subtitle and are the pages' default order; each image section (content `IMAGES`) has image kinds of its own
+  (`kinds(type: IMAGE, use: SECTION, sectionId:)`). Only the schema's enums (types, uses, contents, value types) appear in
+  code. Authors arrange a spex' sections on its editing page (`SpexSectionsEditor`). Imported credits nobody resolved are shown to editors only (`/manage/credits`).
 - **Importera** (spex packages in code; `/manage/packages`, editors): a spreadsheet and an optional zip of up to 20 GB become a spex in
   every application. The files go through `/api/packages` (`src/lib/http/packages.server.ts`), streamed to the server
   with the user's token; the zip in 32 MB parts at the server's `Upload-Offset`, resumable

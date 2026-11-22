@@ -15,7 +15,7 @@ import { createServer } from "node:http";
 import { randomUUID } from "node:crypto";
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { exportJWK, generateKeyPair, SignJWT } from "jose";
-import { answerLive, failNext, patchStartPage, reset, seedFrom, snapshot } from "./mock-live.mjs";
+import { answerLive, failNext, patchSpexPage, patchStartPage, reset, seedFrom, snapshot } from "./mock-live.mjs";
 
 const PORT = Number(process.env.MOCK_PORT || 4106);
 const ISSUER = `http://localhost:${PORT}/realms/fgv`;
@@ -144,6 +144,7 @@ async function handleGraphql(req, body, res) {
   }
 
   if (op === "SpexPage" && json.data?.spex) {
+    patchSpexPage(json, req.headers["accept-language"]);
     json.data.spex = withPeople(persona, json.data.spex);
   }
   res.writeHead(200, { "content-type": "application/json" }).end(JSON.stringify(json));

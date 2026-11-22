@@ -340,54 +340,6 @@
       "overview": {
         "title": "Översikt",
         "subtitle": "Om spexet"
-      },
-      "group": {
-        "title": "Ensemblen",
-        "subtitle": "Gruppbilden"
-      },
-      "characters": {
-        "title": "Roller",
-        "subtitle": "Rollfigurer och de som spelade dem"
-      },
-      "scenography": {
-        "title": "Scenografi",
-        "subtitle": "Fond, scen och rekvisita"
-      },
-      "manuscript": {
-        "title": "Manus och program",
-        "subtitle": "Handling och scener"
-      },
-      "music": {
-        "title": "Musik",
-        "subtitle": "Nummer, melodier och upphovspersoner"
-      },
-      "recordings": {
-        "title": "Skivor",
-        "subtitle": "Skivorna i Spexify"
-      },
-      "rebus": {
-        "title": "Programrebus",
-        "subtitle": "Kan du lösa den?"
-      },
-      "vest": {
-        "title": "Spexvästen",
-        "subtitle": "Västen och vem som bar den"
-      },
-      "board": {
-        "title": "Direktionen",
-        "subtitle": "Spexets direktion"
-      },
-      "tasks": {
-        "title": "Medverkande",
-        "subtitle": "Vem gjorde vad"
-      },
-      "images": {
-        "title": "Övriga bilder",
-        "subtitle": "Fler bilder från spexet"
-      },
-      "links": {
-        "title": "Mer om spexet",
-        "subtitle": "I FGV:s andra tjänster"
       }
     },
     "fromWork": "ur {work}",
@@ -401,11 +353,24 @@
       "listen": "Lyssna i Spexify",
       "side": "Sida {side}",
       "cover": "Omslag till {title}",
-      "source": "Skivorna förs i Spexify."
+      "source": "Skivorna förs i Spexify.",
+      "play": "Spela {title}",
+      "pause": "Pausa {title}"
     },
     "openBook": "Öppna i Spexarkivet",
     "bookVolume": "del {volume}",
-    "allMaterial": "Allt om spexet i FGV:s andra tjänster:"
+    "allMaterial": "Allt om spexet i FGV:s andra tjänster:",
+    "embeds": {
+      "openVideo": "Öppna i Spexflix",
+      "videoFailed": "Videon kunde inte spelas. Ladda om sidan och försök igen.",
+      "chapters": "Kapitel",
+      "inSpexflix": "”{title}” finns i Spexflix, för den som har tillgång dit.",
+      "openAlbum": "Hela albumet ”{title}” i Spexgram",
+      "inArchive": "”{title}” finns i Spexarkivet, för den som har tillgång dit.",
+      "firstPage": "Första sidan av {title}",
+      "pages": "{count} s.",
+      "openDocument": "Öppna i Spexarkivet"
+    }
   },
   "Photos": {
     "unavailable": "Spexgram kan inte nås just nu.",
@@ -611,11 +576,6 @@
     "vestDescription": "Spexvästen",
     "vestWornBy": "Västen bars av",
     "saveTexts": "Spara texterna",
-    "sections": {
-      "VEST": "Spexvästen",
-      "OTHER": "Övriga bilder",
-      "SCENOGRAPHY": "Scenografi"
-    },
     "rebus": "Programrebus",
     "rebusSolution": "Rebusens lösning",
     "groupPhotos": "Gruppbild",
@@ -666,7 +626,8 @@
       "numbers": "Nummer",
       "revival": "Nyuppsättningens ändringar",
       "history": "Historik",
-      "facts": "Fakta"
+      "facts": "Fakta",
+      "sections": "Sektioner"
     },
     "noHistory": "Inga ändringar av texterna ännu.",
     "unresolved": "olöst",
@@ -710,7 +671,7 @@
         "VEST_DESCRIPTION": "spexvästen",
         "VEST_WORN_BY": "vem som bar västen",
         "FACTS": "fakta",
-        "SCENOGRAPHY": "scenografibilder",
+        "IMAGES": "bilder i bildsektionerna",
         "VEST": "bilder på västen",
         "REBUS": "programrebus",
         "REBUS_SOLUTION": "rebusens lösning",
@@ -726,7 +687,42 @@
         "NUMBER_CREDITS": "medverkande i numren",
         "NUMBER_CHARACTERS": "roller i numren"
       }
-    }
+    },
+    "sectionOrder": {
+      "DEFAULT": "Sidan har standardordningen. Ändra den här, eller lägg till sektioner från de andra tjänsterna.",
+      "OWN": "Sidan har en egen ordning. Sektioner som läggs till senare hamnar efter den som kommer före dem i standardordningen.",
+      "ORIGINAL": "Nyuppsättningen visar originalets ordning tills den får en egen; spara här för att ge den en."
+    },
+    "sectionMaterial": {
+      "SPEXFLIX_VIDEO": "Spexflix",
+      "SPEXGRAM": "Spexgram",
+      "SPEXIFY_ALBUM": "Spexify",
+      "ARCHIVE_DOCUMENT": "Spexarkivet"
+    },
+    "sectionHidden": "Dold",
+    "sectionRemove": "Ta bort sektionen",
+    "sectionShow": "Visa sektionen",
+    "sectionHide": "Dölj sektionen",
+    "sectionTitle": "Egen rubrik",
+    "sectionStart": "Börja vid (m:ss)",
+    "sectionShows": "Visar ”{title}”",
+    "sectionNotFound": "Hittas inte: materialet är borttaget eller opublicerat, eller tjänsten svarar inte.",
+    "sectionSomeItems": "Valda bilder ur albumet",
+    "sectionWholeAlbum": "Hela albumet (välj bilder för att visa några)",
+    "sectionAdd": "Lägg till från en annan tjänst",
+    "sectionAddIt": "Lägg till",
+    "sectionDefault": "Använd standardordningen",
+    "sectionDefaultTitle": "Gå tillbaka till standardordningen?",
+    "sectionDefaultText": "Sidans egen ordning tas bort, med de sektioner från andra tjänster den har lagt till.",
+    "sectionAddressWrong": "Adressen leder inte till något som en sektion av typen {kind} kan visa.",
+    "sectionPickMaterial": "Välj något att visa, eller klistra in en adress.",
+    "sectionSavedFirst": "visas när du har sparat",
+    "sectionKind": "Sektion",
+    "sectionMaterialLabel": "Spexets material där",
+    "sectionNoMaterial": "Inget du har tillgång till",
+    "sectionChoose": "Välj …",
+    "sectionAddress": "… eller en adress från tjänsten",
+    "sectionAddressHelp": "T.ex. en video i Spexflix (med ?t= för var den börjar), ett album i Spexgram eller Spexify, eller ett dokument i Spexarkivet."
   },
   "BaseData": {
     "title": "Basdata",
@@ -828,18 +824,19 @@
       "NUMBER": "Nummer",
       "CREDIT": "Medverkande",
       "IMAGE": "Bilder",
-      "FACT": "Fakta"
+      "FACT": "Fakta",
+      "SECTION": "Sektioner"
     },
     "typeHelp": {
       "NUMBER": "Vad ett nummer är, t.ex. sång, ouvertyr eller final. Ett nummer kan sakna sort.",
       "CREDIT": "Vad någon gjorde för ett nummer, t.ex. text, musik eller arrangemang. Spexify, Spexarkivet och Spexflix läser dem i flödet.",
-      "IMAGE": "Bildsorter per användning: för roller, för scenografi och för sidans övriga bilder. Användningarna är givna; sorterna inom dem är data.",
-      "FACT": "Korta fakta om en uppsättning, som text eller som datum. En ny sorts fakta visas genast i redigeringen av spexsidorna."
+      "IMAGE": "Bildsorter för roller. Bildsektionernas egna bildsorter finns under Sektioner.",
+      "FACT": "Korta fakta om en uppsättning, som text eller som datum. En ny sorts fakta visas genast i redigeringen av spexsidorna.",
+      "SECTION": "Sektionerna på spexsidorna. Ordningen här är sidornas standardordning; en spexsida kan få en egen. Bildsektioner och sektioner från de andra tjänsterna kan läggas till; de andra finns en gång var."
     },
     "uses": {
       "CHARACTER": "Roller",
-      "SCENOGRAPHY": "Scenografi",
-      "PAGE": "Övriga bilder"
+      "SECTION": "Bildsektion"
     },
     "valueTypes": {
       "TEXT": "Text",
@@ -867,7 +864,29 @@
     "moveDown": "Flytta ner",
     "edit": "Ändra",
     "save": "Spara",
-    "cancel": "Avbryt"
+    "cancel": "Avbryt",
+    "contents": {
+      "GROUP": "Gruppbild",
+      "CHARACTERS": "Roller",
+      "IMAGES": "Bilder",
+      "MANUSCRIPT": "Manus och scener",
+      "MUSIC": "Musik",
+      "RECORDS": "Skivor",
+      "REBUS": "Rebus",
+      "VEST": "Väst",
+      "BOARD": "Direktion",
+      "TASKS": "Funktioner",
+      "LINKS": "Länkar",
+      "SPEXFLIX_VIDEO": "Video i Spexflix",
+      "SPEXGRAM": "Album i Spexgram",
+      "SPEXIFY_ALBUM": "Skiva i Spexify",
+      "ARCHIVE_DOCUMENT": "Dokument i Spexarkivet"
+    },
+    "content": "Innehåll",
+    "contentHelp": "En ny bildsektion får en bildsort med samma namn. Sektioner från andra tjänster läggs till på varje spexsida för sig.",
+    "subtitleSv": "Underrubrik på svenska",
+    "subtitleEn": "Underrubrik på engelska",
+    "imageKindsOf": "Bildsorter i {section}"
   },
   "UnresolvedCredits": {
     "title": "Olösta medverkande",

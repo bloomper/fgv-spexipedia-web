@@ -138,17 +138,27 @@ test.describe("Administration", () => {
     expect(numbers.find(kind => kind.nameSv === "Final")?.retired).toBe(true);
   });
 
-  test("image kinds are kept per use", async ({ page }) => {
-    await page.goto("/admin/kinds?type=IMAGE");
-    for (const use of ["Roller", "Scenografi", "Övriga bilder"]) {
-      await expect(page.getByRole("heading", { level: 2, name: use })).toBeVisible();
-    }
-    await page.getByRole("region", { name: "Scenografi" }).getByRole("button", { name: "Ny sort" }).click();
-    await page.getByRole("region", { name: "Scenografi" }).getByLabel("Namn på svenska").fill("Fond");
-    await page.getByRole("region", { name: "Scenografi" }).getByLabel("Namn på engelska").fill("Backdrop");
-    await page.getByRole("region", { name: "Scenografi" }).getByRole("button", { name: "Spara" }).click();
-    await expect(page.getByRole("region", { name: "Scenografi" }).getByText("Fond / Backdrop").filter({ visible: true })).toBeVisible();
-    await expect(page.getByRole("region", { name: "Roller" }).getByText("Fond / Backdrop")).toHaveCount(0);
+  test("sections are kinds with a content, and each image section keeps image kinds of its own", async ({ page, mock }) => {
+    await page.goto("/admin/kinds?type=SECTION");
+    const sections = page.getByRole("region", { name: "Sektioner" });
+    const scenography = page.getByRole("region", { name: "Bildsorter i Scenografi" });
+
+    await expect(scenography.getByText("Fond / Backdrop").filter({ visible: true })).toBeVisible();
+    await scenography.getByRole("button", { name: "Ny sort" }).click();
+    await scenography.getByLabel("Namn på svenska").fill("Ljus");
+    await scenography.getByLabel("Namn på engelska").fill("Lighting");
+    await scenography.getByRole("button", { name: "Spara" }).click();
+    await expect(scenography.getByText("Ljus / Lighting").filter({ visible: true })).toBeVisible();
+    await expect(page.getByRole("region", { name: "Bildsorter i Övriga bilder" }).getByText("Ljus / Lighting")).toHaveCount(0);
+
+    // A new image section, with its own image kind of the same name
+    await sections.getByRole("button", { name: "Ny sort" }).click();
+    await sections.getByLabel("Namn på svenska").fill("Kostymer");
+    await sections.getByLabel("Namn på engelska").fill("Costumes");
+    await sections.getByLabel("Underrubrik på svenska").fill("Kläderna");
+    await sections.getByRole("button", { name: "Spara" }).click();
+    await expect(page.getByRole("region", { name: "Bildsorter i Kostymer" }).getByText("Kostymer / Costumes").filter({ visible: true })).toBeVisible();
+    expect((await mock.state()).kinds.find(kind => kind.nameSv === "Kostymer" && kind.type === "SECTION")).toMatchObject({ content: "IMAGES", subtitleSv: "Kläderna" });
   });
 
   test("the change log lists everyone's changes for an admin, and only the author's own for an author", async ({ page, loginAs }) => {

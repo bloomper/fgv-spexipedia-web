@@ -10,6 +10,27 @@ const SEEDED_AT = "2026-11-01T10:00:00Z";
 
 /** Ids the mock makes, UUIDv7-shaped as the web's ID check wants. */
 let counter = 0;
+/** The server's default section kinds (its V1_10 migration): number, content, names and subtitles. */
+const SECTIONS = [
+  [701, "GROUP", "Ensemblen", "The ensemble", "Gruppbilden", "The group photo"],
+  [702, "CHARACTERS", "Roller", "Characters", "Rollfigurer och de som spelade dem", "Characters and who played them"],
+  [703, "IMAGES", "Scenografi", "Scenography", "Fond, scen och rekvisita", "Backdrop, stage and props"],
+  [704, "MANUSCRIPT", "Manus och program", "Script and programme", "Handling och scener", "Synopsis and scenes"],
+  [705, "MUSIC", "Musik", "Music", "Nummer, melodier och upphovspersoner", "Numbers, melodies and credits"],
+  [706, "RECORDS", "Skivor", "Records", "Skivorna i Spexify", "The records in Spexify"],
+  [707, "REBUS", "Programrebus", "Programme rebus", "Kan du lösa den?", "Can you solve it?"],
+  [708, "VEST", "Spexvästen", "The vest", "Västen och vem som bar den", "The vest and who wore it"],
+  [709, "BOARD", "Direktionen", "The board", "Spexets direktion", "The spex's board"],
+  [710, "TASKS", "Medverkande", "Crew and cast", "Vem gjorde vad", "Who did what"],
+  [711, "IMAGES", "Övriga bilder", "Other images", "Fler bilder från spexet", "More images from the spex"],
+  [712, "LINKS", "Mer om spexet", "More about the spex", "I FGV:s andra tjänster", "In FGV's other services"],
+  [721, "SPEXFLIX_VIDEO", "Film", "Video", "Från Spexflix", "From Spexflix"],
+  [722, "SPEXGRAM", "Foton", "Photos", "Från Spexgram", "From Spexgram"],
+  [723, "SPEXIFY_ALBUM", "Skiva", "Record", "Från Spexify", "From Spexify"],
+  [724, "ARCHIVE_DOCUMENT", "Dokument", "Document", "Från Spexarkivet", "From Spexarkivet"],
+];
+const EXTERNAL = ["SPEXFLIX_VIDEO", "SPEXGRAM", "SPEXIFY_ALBUM", "ARCHIVE_DOCUMENT"];
+const sectionId = n => `01900000-0000-7000-8000-000000000${n}`;
 const newId = () => `0190e2e0-0000-7000-8000-${(++counter).toString(16).padStart(12, "0")}`;
 const now = () => new Date().toISOString();
 
@@ -141,8 +162,15 @@ function freshState() {
       ...[["Sång", "Song", ["Låt"]], ["Ouvertyr", "Overture", []], ["Final", "Finale", []]].map(([nameSv, nameEn, aliases], position) => ({ type: "NUMBER", use: null, valueType: null, nameSv, nameEn, aliases, position })),
       ...[["Text", "Lyrics", []], ["Musik", "Music", []], ["Arrangemang", "Arrangement", ["Arr."]]].map(([nameSv, nameEn, aliases], position) => ({ type: "CREDIT", use: null, valueType: null, nameSv, nameEn, aliases, position })),
       ...[["Spelplats", "Venue", "TEXT"], ["Antal föreställningar", "Performances", "TEXT"], ["Sista föreställningen", "Last performance", "DATE"]].map(([nameSv, nameEn, valueType], position) => ({ type: "FACT", use: null, valueType, nameSv, nameEn, aliases: [], position })),
-      ...["CHARACTER", "SCENOGRAPHY", "PAGE"].map(use => ({ type: "IMAGE", use, valueType: null, nameSv: "Skiss", nameEn: "Sketch", aliases: [], position: 0 })),
-    ].map(kind => ({ ...kind, id: newId(), retired: false })),
+      { type: "IMAGE", use: "CHARACTER", valueType: null, nameSv: "Skiss", nameEn: "Sketch", aliases: [], position: 0 },
+      // Section kinds, with the server's fixed ids, in the pages' default order (spec 4.2)
+      ...SECTIONS.map(([n, content, nameSv, nameEn, subtitleSv, subtitleEn], position) => ({
+        id: sectionId(n), type: "SECTION", use: null, valueType: null, content, nameSv, nameEn, subtitleSv, subtitleEn, aliases: [], position,
+      })),
+      // The image sections' own image kinds
+      ...[[703, "Fond", "Backdrop"], [703, "Scen", "Stage"], [703, "Rekvisita", "Props"], [711, "Övriga bilder", "Other images"]]
+        .map(([n, nameSv, nameEn], position) => ({ type: "IMAGE", use: "SECTION", sectionId: sectionId(n), valueType: null, nameSv, nameEn, aliases: [], position })),
+    ].map(kind => ({ id: newId(), ...kind, retired: false })),
     audit: [],
     failures: new Map(),
   };
@@ -355,8 +383,8 @@ function search(q, persona) {
 
 // --- Operations --------------------------------------------------------------------------------------------------------
 
-const kindOut = kind => ({ ...kind, name: kind.nameSv, __typename: "Kind" });
-const sameGroup = (a, b) => a.type === b.type && (a.use ?? null) === (b.use ?? null);
+const kindOut = kind => ({ content: null, subtitleSv: null, subtitleEn: null, ...kind, name: kind.nameSv, __typename: "Kind" });
+const sameGroup = (a, b) => a.type === b.type && (a.use ?? null) === (b.use ?? null) && (a.sectionId ?? null) === (b.sectionId ?? null);
 
 const OPERATIONS = {
   // Articles
@@ -707,10 +735,10 @@ const OPERATIONS = {
   },
 
   // Kinds
-  AdminKinds: ({ type, use }, persona) => {
+  AdminKinds: ({ type, use, sectionId }, persona) => {
     need(persona, "ADMIN");
     return {
-      kinds: state.kinds.filter(kind => sameGroup(kind, { type, use })).sort((a, b) => a.position - b.position).map(kindOut),
+      kinds: state.kinds.filter(kind => sameGroup(kind, { type, use, sectionId })).sort((a, b) => a.position - b.position).map(kindOut),
     };
   },
   KindSave: ({ id, input }, persona) => {
@@ -719,12 +747,25 @@ const OPERATIONS = {
     let kind = state.kinds.find(each => each.id === id);
 
     if (!kind) {
-      const group = { type: input.type, use: input.type === "IMAGE" ? input.use : null };
+      const group = { type: input.type, use: input.type === "IMAGE" ? input.use : null, sectionId: input.use === "SECTION" ? input.sectionId : null };
 
-      kind = { id: newId(), ...group, valueType: input.type === "FACT" ? input.valueType ?? "TEXT" : null, retired: false, position: state.kinds.filter(each => sameGroup(each, group)).length };
+      if (input.type === "SECTION" && !["IMAGES", "SPEXFLIX_VIDEO", "SPEXGRAM", "SPEXIFY_ALBUM", "ARCHIVE_DOCUMENT"].includes(input.content)) {
+        throw new GraphQLFailure("BAD_REQUEST", "Bara bildsektioner och sektioner från de andra tjänsterna kan läggas till.");
+      }
+      kind = {
+        id: newId(), ...group, valueType: input.type === "FACT" ? input.valueType ?? "TEXT" : null,
+        content: input.type === "SECTION" ? input.content : null, retired: false, position: state.kinds.filter(each => sameGroup(each, group)).length,
+      };
       state.kinds.push(kind);
+      // A new image section gets an image kind of its own name, as the server does
+      if (kind.content === "IMAGES") {
+        state.kinds.push({ id: newId(), type: "IMAGE", use: "SECTION", sectionId: kind.id, valueType: null, nameSv: input.nameSv.trim(), nameEn: input.nameEn.trim(), aliases: [], position: 0, retired: false });
+      }
     }
     Object.assign(kind, { nameSv: input.nameSv.trim(), nameEn: input.nameEn.trim(), aliases });
+    if (kind.type === "SECTION") {
+      Object.assign(kind, { subtitleSv: input.subtitleSv?.trim() || null, subtitleEn: input.subtitleEn?.trim() || null });
+    }
     return { kindSave: { id: kind.id } };
   },
   KindsReorder: ({ ids }, persona) => {
@@ -822,6 +863,34 @@ export function answerLive(op, variables, persona, recorded) {
     }
     throw error;
   }
+}
+
+/**
+ * A recorded spex page as the server answers now: its sections (spec 4.2) in the section kinds' order, named in the
+ * viewer's language, with the images the recording has of the scenography, the vest and the other images. Spex pages
+ * were recorded before sections were data.
+ */
+export function patchSpexPage(json, locale) {
+  const spex = json.data?.spex;
+
+  if (!spex || spex.sections) {
+    return json;
+  }
+  const en = locale?.toLowerCase().startsWith("en");
+  const page = spex.page ?? {};
+  const images = { 703: page.scenography ?? [], 708: page.vest ?? [], 711: page.other ?? [] };
+
+  delete page.scenography;
+  delete page.vest;
+  delete page.other;
+  spex.sections = state.kinds
+    .filter(kind => kind.type === "SECTION" && !kind.retired && !EXTERNAL.includes(kind.content))
+    .sort((a, b) => a.position - b.position)
+    .map(kind => ({
+      id: kind.id, content: kind.content, title: en ? kind.nameEn : kind.nameSv, subtitle: (en ? kind.subtitleEn : kind.subtitleSv) ?? null,
+      images: images[Number(kind.id.slice(-3))] ?? [], video: null, photos: null, record: null, document: null,
+    }));
+  return json;
 }
 
 /** The start page's welcome text, once an admin has changed it: the members' or the visitors', in the viewer's language. */
