@@ -30,6 +30,7 @@ type Documents = {
     "\n    mutation KindSave($id: ID, $input: KindInput!) { kindSave(id: $id, input: $input) { id } }\n": typeof types.KindSaveDocument,
     "\n    mutation KindsReorder($type: KindType!, $use: KindUse, $sectionId: ID, $ids: [ID!]!) { kindsReorder(type: $type, use: $use, sectionId: $sectionId, ids: $ids) { id } }\n": typeof types.KindsReorderDocument,
     "\n    mutation KindRetire($id: ID!, $retired: Boolean!) { kindRetire(id: $id, retired: $retired) { id } }\n": typeof types.KindRetireDocument,
+    "\n    mutation KindDelete($id: ID!) { kindDelete(id: $id) }\n": typeof types.KindDeleteDocument,
     "\n    mutation KindMerge($id: ID!, $intoId: ID!) { kindMerge(id: $id, intoId: $intoId) { id } }\n": typeof types.KindMergeDocument,
     "\n  fragment SpexPackageReportFields on SpexPackageReport {\n    unmatched warnings\n    apps {\n      app status records files created updated unchanged kept failed message webUrl\n      items { kind sourceKey id outcome message warnings }\n    }\n  }\n": typeof types.SpexPackageReportFieldsFragmentDoc,
     "\n  fragment SpexPackageRow on SpexPackage {\n    id state fileName zipFileName zipSize zipReceived progress message uploadedByName createdAt appliedAt\n    spex { id slug title year }\n  }\n": typeof types.SpexPackageRowFragmentDoc,
@@ -144,6 +145,7 @@ const documents: Documents = {
     "\n    mutation KindSave($id: ID, $input: KindInput!) { kindSave(id: $id, input: $input) { id } }\n": types.KindSaveDocument,
     "\n    mutation KindsReorder($type: KindType!, $use: KindUse, $sectionId: ID, $ids: [ID!]!) { kindsReorder(type: $type, use: $use, sectionId: $sectionId, ids: $ids) { id } }\n": types.KindsReorderDocument,
     "\n    mutation KindRetire($id: ID!, $retired: Boolean!) { kindRetire(id: $id, retired: $retired) { id } }\n": types.KindRetireDocument,
+    "\n    mutation KindDelete($id: ID!) { kindDelete(id: $id) }\n": types.KindDeleteDocument,
     "\n    mutation KindMerge($id: ID!, $intoId: ID!) { kindMerge(id: $id, intoId: $intoId) { id } }\n": types.KindMergeDocument,
     "\n  fragment SpexPackageReportFields on SpexPackageReport {\n    unmatched warnings\n    apps {\n      app status records files created updated unchanged kept failed message webUrl\n      items { kind sourceKey id outcome message warnings }\n    }\n  }\n": types.SpexPackageReportFieldsFragmentDoc,
     "\n  fragment SpexPackageRow on SpexPackage {\n    id state fileName zipFileName zipSize zipReceived progress message uploadedByName createdAt appliedAt\n    spex { id slug title year }\n  }\n": types.SpexPackageRowFragmentDoc,
@@ -320,6 +322,10 @@ export function graphql(source: "\n    mutation KindsReorder($type: KindType!, $
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n    mutation KindRetire($id: ID!, $retired: Boolean!) { kindRetire(id: $id, retired: $retired) { id } }\n"): (typeof documents)["\n    mutation KindRetire($id: ID!, $retired: Boolean!) { kindRetire(id: $id, retired: $retired) { id } }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n    mutation KindDelete($id: ID!) { kindDelete(id: $id) }\n"): (typeof documents)["\n    mutation KindDelete($id: ID!) { kindDelete(id: $id) }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

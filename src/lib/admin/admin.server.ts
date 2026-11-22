@@ -85,6 +85,9 @@ const KindsReorderMutation = graphql(`
 const KindRetireMutation = graphql(`
     mutation KindRetire($id: ID!, $retired: Boolean!) { kindRetire(id: $id, retired: $retired) { id } }
 `);
+const KindDeleteMutation = graphql(`
+    mutation KindDelete($id: ID!) { kindDelete(id: $id) }
+`);
 const KindMergeMutation = graphql(`
     mutation KindMerge($id: ID!, $intoId: ID!) { kindMerge(id: $id, intoId: $intoId) { id } }
 `);
@@ -96,6 +99,7 @@ export const kindSave = (id: string | null, input: KindInput) => runMutation(Kin
 export const kindsReorder = (type: KindType, use: KindUse | null, sectionId: string | null, ids: string[]) =>
   runMutation(KindsReorderMutation, { type, use, sectionId, ids });
 export const kindRetire = (id: string, retired: boolean) => runMutation(KindRetireMutation, { id, retired });
+export const kindDelete = (id: string) => runMutation(KindDeleteMutation, { id });
 export const kindMerge = (id: string, intoId: string) => runMutation(KindMergeMutation, { id, intoId });
 
 export type AdminKind = Awaited<ReturnType<typeof getKinds>>[number];

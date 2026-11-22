@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { ArrowDown, ArrowUp, Archive, ArchiveRestore, Merge, Pencil, Plus, Save, X } from "lucide-react";
+import { ArrowDown, ArrowUp, Archive, ArchiveRestore, Merge, Pencil, Plus, Save, Trash2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,7 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
 import { useSave } from "@/components/wiki/editor/use-save.client";
 import { useDialogs } from "@/components/dialogs.client";
-import { mergeKindAction, reorderKindsAction, retireKindAction, saveKindAction } from "@/app/(app)/admin/actions.server";
+import { deleteKindAction, mergeKindAction, reorderKindsAction, retireKindAction, saveKindAction } from "@/app/(app)/admin/actions.server";
 import type { FactValueType, KindType, KindUse, SectionContent } from "@/gql/graphql";
 import { creatableContents, factValueTypes, SECTION_CONTENTS } from "@/utils/kinds";
 
@@ -31,15 +32,17 @@ export type KindRow = {
 /**
  * The kinds of one type (and, for image kinds, one use, or one image section), as admins keep them (spec 4.6): Swedish
  * and English names, the aliases the import recognises, their order (the first in use is the default), retired or in
- * use, and merging one into another. A kind in use is never deleted; merging moves what refers to it and keeps its names
- * as aliases. Section kinds also have a content and a subtitle, and their order is the spex pages' default order;
- * those of a content with one kind (the vest, the music …) are never merged.
+ * use, merging one into another, and deleting one. Only a kind nothing refers to is deleted (the server says when one
+ * is in use); merging moves what refers to it and keeps its names as aliases. Section kinds also have a content and a subtitle, and their order is the spex pages' default order;
+ * those of a content with one kind (the vest, the music …) are never merged or deleted.
  */
 export function KindsEditor({ type, use, sectionId = null, kinds }: { type: KindType; use: KindUse | null; sectionId?: string | null; kinds: KindRow[] }) {
   const t = useTranslations("AdminKinds");
   const { save, pending } = useSave();
   const { confirm, choose } = useDialogs();
   const [editing, setEditing] = useState<string | null>(null);
+  // The last kind in use of a type is its default; sections may all be retired
+  const last = (kind: KindRow) => type !== "SECTION" && !kind.retired && kinds.filter(other => !other.retired).length === 1;
   const label = (kind: KindRow) => kind.nameSv === kind.nameEn ? kind.nameSv : `${kind.nameSv} / ${kind.nameEn}`;
 
   const move = (from: number, to: number) => {
@@ -64,6 +67,7 @@ export function KindsEditor({ type, use, sectionId = null, kinds }: { type: Kind
               {type === "FACT" && kind.valueType && <Badge variant="secondary">{t(`valueTypes.${kind.valueType}`)}</Badge>}
               {kind.content && <Badge variant="secondary">{t(`contents.${kind.content}`)}</Badge>}
               {kind.retired && <Badge variant="outline">{t("retired")}</Badge>}
+              {kind.content === "IMAGES" && <Link href={`/admin/kinds?type=IMAGE#section-${kind.id}`} className="text-xs text-muted-foreground underline underline-offset-4 hover:text-foreground">{t("imageKinds")}</Link>}
               {kind.aliases.length > 0 && (
                 <span className="min-w-0 truncate text-xs text-muted-foreground" title={kind.aliases.join("\n")}>
                   {t("aliasesShort", { aliases: kind.aliases.join(", ") })}
@@ -85,6 +89,11 @@ export function KindsEditor({ type, use, sectionId = null, kinds }: { type: Kind
                     void save(() => mergeKindAction(kind.id, into.id), { success: t("merged") });
                   }
                 }}><Merge /></Button>}
+                {mergeable(kind) && <Button type="button" size="icon" variant="ghost" aria-label={t("delete")} title={t("delete")} disabled={pending || last(kind)} onClick={async () => {
+                  if (await confirm({ title: t("deleteConfirm", { name: label(kind) }), description: kind.content === "IMAGES" ? t("deleteSectionText") : t("deleteText"), confirmLabel: t("delete"), destructive: true })) {
+                    void save(() => deleteKindAction(kind.id), { success: t("deleted") });
+                  }
+                }}><Trash2 /></Button>}
               </span>
             </div>
             {kind.subtitleSv && <p className="pl-8 text-xs text-muted-foreground">{kind.subtitleSv}{kind.subtitleEn && kind.subtitleEn !== kind.subtitleSv && ` / ${kind.subtitleEn}`}</p>}

@@ -138,27 +138,44 @@ test.describe("Administration", () => {
     expect(numbers.find(kind => kind.nameSv === "Final")?.retired).toBe(true);
   });
 
-  test("sections are kinds with a content, and each image section keeps image kinds of its own", async ({ page, mock }) => {
-    await page.goto("/admin/kinds?type=SECTION");
-    const sections = page.getByRole("region", { name: "Sektioner" });
-    const scenography = page.getByRole("region", { name: "Bildsorter i Scenografi" });
+  test("image kinds are kept together: those of characters and each image section's own", async ({ page }) => {
+    await page.goto("/admin/kinds?type=IMAGE");
+    const scenography = page.getByRole("region", { name: "Bildsektionen Scenografi" });
 
+    await expect(page.getByRole("region", { name: "Roller" })).toBeVisible();
     await expect(scenography.getByText("Fond / Backdrop").filter({ visible: true })).toBeVisible();
     await scenography.getByRole("button", { name: "Ny sort" }).click();
     await scenography.getByLabel("Namn på svenska").fill("Ljus");
     await scenography.getByLabel("Namn på engelska").fill("Lighting");
     await scenography.getByRole("button", { name: "Spara" }).click();
     await expect(scenography.getByText("Ljus / Lighting").filter({ visible: true })).toBeVisible();
-    await expect(page.getByRole("region", { name: "Bildsorter i Övriga bilder" }).getByText("Ljus / Lighting")).toHaveCount(0);
+    await expect(page.getByRole("region", { name: "Bildsektionen Övriga bilder" }).getByText("Ljus / Lighting")).toHaveCount(0);
+  });
 
-    // A new image section, with its own image kind of the same name
+  test("sections have a page of their own, where an image section is added and deleted", async ({ page, mock }) => {
+    await page.goto("/admin/sections");
+    const sections = page.getByRole("region", { name: "Sektioner" });
+
+    // A new image section, with its own image kind of the same name under Kinds
     await sections.getByRole("button", { name: "Ny sort" }).click();
     await sections.getByLabel("Namn på svenska").fill("Kostymer");
     await sections.getByLabel("Namn på engelska").fill("Costumes");
     await sections.getByLabel("Underrubrik på svenska").fill("Kläderna");
     await sections.getByRole("button", { name: "Spara" }).click();
-    await expect(page.getByRole("region", { name: "Bildsorter i Kostymer" }).getByText("Kostymer / Costumes").filter({ visible: true })).toBeVisible();
+    const costumes = sections.getByRole("listitem").filter({ hasText: "Kostymer / Costumes" });
+
+    await expect(costumes).toBeVisible();
     expect((await mock.state()).kinds.find(kind => kind.nameSv === "Kostymer" && kind.type === "SECTION")).toMatchObject({ content: "IMAGES", subtitleSv: "Kläderna" });
+    await costumes.getByRole("link", { name: "Bildsorter" }).click();
+    await expect(page.getByRole("region", { name: "Bildsektionen Kostymer" }).getByText("Kostymer / Costumes").filter({ visible: true })).toBeVisible();
+
+    await page.goto("/admin/sections");
+    await expect(sections.getByRole("listitem").filter({ hasText: "Spexvästen" }).getByRole("button", { name: "Ta bort" })).toHaveCount(0);
+    await costumes.getByRole("button", { name: "Ta bort" }).click();
+    await page.getByRole("dialog").getByRole("button", { name: "Ta bort" }).click();
+    await expect(page.getByText("Sorten är borttagen").filter({ visible: true })).toBeVisible();
+    await expect(costumes).toHaveCount(0);
+    expect((await mock.state()).kinds.filter(kind => kind.nameSv === "Kostymer")).toEqual([]);
   });
 
   test("the change log lists everyone's changes for an admin, and only the author's own for an author", async ({ page, loginAs }) => {
@@ -193,7 +210,7 @@ test.describe("Administration for others", () => {
 
   test("an editor is refused the admin pages", async ({ page, loginAs }) => {
     await loginAs("editor");
-    for (const path of ["/admin/settings", "/admin/kinds", "/admin/redirects", "/admin/consumers", "/admin/maintenance"]) {
+    for (const path of ["/admin/settings", "/admin/kinds", "/admin/sections", "/admin/redirects", "/admin/consumers", "/admin/maintenance"]) {
       await page.goto(path);
       await expect(page.getByRole("heading", { name: "Du har inte behörighet" }), path).toBeVisible();
     }
