@@ -173,7 +173,7 @@ describe("A package's report", () => {
 
     expect(screen.getByText("PREVIEWING")).toBeInTheDocument();
     expect(screen.getByRole("progressbar")).toHaveAttribute("aria-valuenow", "100");
-    expect(formatBytes(0)).toBe("0 B");
+    expect(formatBytes(0, "sv")).toBe("0 B");
     expect(formatBytes(20_000_000_000, "en")).toBe("20 GB");
     expect(formatBytes(1_500_000, "en")).toBe("1.5 MB");
   });
