@@ -10,7 +10,7 @@ import { cn } from "@/utils/utils";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { DatePicker } from "@/components/ui/date-picker.client";
+import { DatePicker } from "@/components/date-picker.client";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
 import { ImageSlot } from "@/components/wiki/editor/image-slot.client";
 import { MarkdownEditor } from "@/components/wiki/editor/markdown-editor.client";
