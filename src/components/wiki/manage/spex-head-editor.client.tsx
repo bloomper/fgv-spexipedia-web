@@ -10,6 +10,7 @@ import { cn } from "@/utils/utils";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { DatePicker } from "@/components/ui/date-picker.client";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
 import { ImageSlot } from "@/components/wiki/editor/image-slot.client";
 import { MarkdownEditor } from "@/components/wiki/editor/markdown-editor.client";
@@ -198,7 +199,7 @@ export function SpexTextsEditor({ spex }: { spex: SpexEditData }) {
       </div>
       <div className="space-y-1.5">
         <Label htmlFor="premiere">{t("premiere")}</Label>
-        <Input id="premiere" type="date" className="w-fit" value={values.premiere} onChange={event => set("premiere")(event.target.value)} />
+        <DatePicker id="premiere" value={values.premiere} onChange={set("premiere")} />
       </div>
       <div className="space-y-1.5">
         <Label htmlFor="introduction">{t("introduction")}</Label>

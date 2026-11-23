@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Eye, Play, Trash2, Upload, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -14,8 +14,8 @@ import { applyPackageAction, deletePackageAction, previewPackageAction } from "@
 import { createPackage, SPREADSHEET_TYPES, uploadZip, ZIP_TYPES } from "@/components/wiki/packages/package-upload.client";
 import type { SpexPackageState } from "@/gql/graphql";
 
-/** Bytes as the user reads them. */
-export function formatBytes(bytes: number, locale = "sv"): string {
+/** Bytes as the user reads them, in the page's language. */
+export function formatBytes(bytes: number, locale: string): string {
   const units = ["B", "kB", "MB", "GB", "TB"];
   let value = bytes;
   let unit = 0;
@@ -44,11 +44,12 @@ export function ProgressBar({ value, label }: { value: number; label: string }) 
 /** The zip's upload as it goes: bytes received of all, and a bar. */
 function ZipProgress({ received, size }: { received: number; size: number }) {
   const t = useTranslations("Packages");
+  const locale = useLocale();
 
   return (
     <div className="space-y-1">
       <ProgressBar value={size > 0 ? (received / size) * 100 : 0} label={t("zipProgress")} />
-      <p className="text-xs text-muted-foreground tabular-nums">{t("received", { received: formatBytes(received), size: formatBytes(size) })}</p>
+      <p className="text-xs text-muted-foreground tabular-nums">{t("received", { received: formatBytes(received, locale), size: formatBytes(size, locale) })}</p>
     </div>
   );
 }
@@ -59,6 +60,7 @@ function ZipProgress({ received, size }: { received: number; size: number }) {
  */
 export function NewPackageForm() {
   const t = useTranslations("Packages");
+  const locale = useLocale();
   const router = useRouter();
   const [spreadsheet, setSpreadsheet] = useState<File | null>(null);
   const [zip, setZip] = useState<File | null>(null);
@@ -101,7 +103,7 @@ export function NewPackageForm() {
       <div className="space-y-1.5">
         <Label htmlFor="zip">{t("zip")}</Label>
         <FileInput id="zip" accept={ZIP_TYPES} disabled={busy} onChange={setZip} />
-        <p className="text-xs text-muted-foreground">{zip ? t("zipChosen", { size: formatBytes(zip.size) }) : t("zipHelp")}</p>
+        <p className="text-xs text-muted-foreground">{zip ? t("zipChosen", { size: formatBytes(zip.size, locale) }) : t("zipHelp")}</p>
       </div>
       {zip && received !== null && <ZipProgress received={received} size={zip.size} />}
       <div className="flex gap-2">
@@ -118,6 +120,7 @@ export function NewPackageForm() {
  */
 export function ZipResume({ id, zipFileName, zipSize, zipReceived }: { id: string; zipFileName: string | null; zipSize: number; zipReceived: number }) {
   const t = useTranslations("Packages");
+  const locale = useLocale();
   const router = useRouter();
   const [received, setReceived] = useState(zipReceived);
   const [busy, setBusy] = useState(false);
@@ -134,7 +137,7 @@ export function ZipResume({ id, zipFileName, zipSize, zipReceived }: { id: strin
             return;
           }
           if (file.size !== zipSize || (zipFileName && file.name !== zipFileName)) {
-            toast.error(t("notTheSameZip", { name: zipFileName ?? "", size: formatBytes(zipSize) }));
+            toast.error(t("notTheSameZip", { name: zipFileName ?? "", size: formatBytes(zipSize, locale) }));
             return;
           }
           setBusy(true);
