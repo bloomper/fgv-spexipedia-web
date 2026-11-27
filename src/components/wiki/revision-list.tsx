@@ -40,13 +40,13 @@ export function RevisionList({ revisions, showTarget = true, compare }: {
           <li key={revision.id} className="flex flex-wrap items-baseline gap-x-3 gap-y-1 px-3 py-2">
             <span className="w-36 shrink-0 text-xs text-muted-foreground">{formatInstant(revision.createdAt)}</span>
             {showTarget && (
-              <Link href={revisionTargetHref(revision)} className="font-medium hover:text-primary">{revision.targetTitle}</Link>
+              <Link href={revisionTargetHref(revision)} className="font-medium hover:text-link">{revision.targetTitle}</Link>
             )}
             {revision.field && <span className="text-xs text-muted-foreground">{t(`fields.${revision.field}`)}</span>}
             {revision.comment && <span className="text-muted-foreground italic">{revision.comment}</span>}
             {revision.hidden && <span className="inline-flex items-center gap-1 text-xs text-muted-foreground"><EyeOff className="size-3" aria-hidden />{t("hidden")}</span>}
             {revision.authorName && <span className="ml-auto text-xs text-muted-foreground">{revision.authorName}</span>}
-            {href && <Link href={href} className="text-xs text-primary hover:text-primary/80">{t("compare")}</Link>}
+            {href && <Link href={href} className="text-xs text-link hover:text-link/80">{t("compare")}</Link>}
           </li>
         );
       })}

@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { ArrowDown, ArrowUp, FolderTree, Lock } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { useDialogs } from "@/components/dialogs.client";
+import { Button } from "@bloomper/fgv-web-ui/ui/button";
+import { Badge } from "@bloomper/fgv-web-ui/ui/badge";
+import { useDialogs } from "@bloomper/fgv-web-ui/shell/dialogs";
 import { useSave } from "@/components/wiki/editor/use-save.client";
 import { moveArticleAction, reorderChildrenAction } from "@/app/(app)/articles/actions.server";
 
@@ -79,7 +79,7 @@ export function ChildArticles({ parentId, items, reorder }: { parentId: string |
     <ol className="divide-y divide-border rounded-lg border border-border bg-card">
       {items.map((child, index) => (
         <li key={child.id} className="flex flex-wrap items-center gap-2 px-3 py-2">
-          <Link href={`/articles/${child.slug}`} className="wiki-heading text-lg font-semibold hover:text-primary">{child.title}</Link>
+          <Link href={`/articles/${child.slug}`} className="wiki-heading text-lg font-semibold hover:text-link">{child.title}</Link>
           {child.visibility === "MEMBERS" && <Badge variant="secondary"><Lock aria-hidden /> {t("members")}</Badge>}
           {!child.published && <Badge variant="outline">{t("unpublished")}</Badge>}
           {reorder && (

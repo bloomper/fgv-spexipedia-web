@@ -8,11 +8,11 @@ import { Policies } from "@/utils/policy.server";
 import { getBaseData, getEditKinds, getSpexEdit } from "@/lib/wiki/edit.server";
 import { getViewer } from "@/lib/wiki/viewer.server";
 import { privateMetadata } from "@/lib/wiki/metadata.server";
-import { PageHeader } from "@/components/page-header";
+import { PageHeader } from "@bloomper/fgv-web-ui/shell/page-header";
 import { SpexSection } from "@/components/wiki/spex-section";
 import { SectionRail } from "@/components/wiki/section-rail.client";
 import { RevisionList } from "@/components/wiki/revision-list";
-import { buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@bloomper/fgv-web-ui/ui/button";
 import { FactsEditor, SpexBaseDataEditor, SpexProductions, SpexTextsEditor } from "@/components/wiki/manage/spex-head-editor.client";
 import { SpexMediaEditor } from "@/components/wiki/manage/spex-media-editor.client";
 import { type SectionMaterial, SpexSectionsEditor } from "@/components/wiki/manage/spex-sections-editor.client";
@@ -54,7 +54,7 @@ export default async function ManageSpexPage({ params }: Props) {
     const completeness = spex.completeness;
 
     return (
-      <div className="mx-auto flex w-full max-w-7xl gap-10 px-4 py-6 md:px-8">
+      <div className="mx-auto flex w-full max-w-7xl gap-10 p-4 md:p-8">
         <div className="min-w-0 flex-1 space-y-8">
           <PageHeader title={t("editSpex", { title: `${spex.title} (${spex.year})` })}
                       actions={<Link href={`/spex/${spex.slug}`} className={buttonVariants({ variant: "outline", size: "sm" })}><ExternalLink aria-hidden /> {t("showPage")}</Link>} />

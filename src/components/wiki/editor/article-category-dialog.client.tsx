@@ -4,12 +4,12 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { FolderPlus, Pencil, Save, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Button } from "@bloomper/fgv-web-ui/ui/button";
+import { Checkbox } from "@bloomper/fgv-web-ui/ui/checkbox";
+import { Input } from "@bloomper/fgv-web-ui/ui/input";
+import { Label } from "@bloomper/fgv-web-ui/ui/label";
+import { Textarea } from "@bloomper/fgv-web-ui/ui/textarea";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@bloomper/fgv-web-ui/ui/dialog";
 import { useSave } from "@/components/wiki/editor/use-save.client";
 import { saveArticleCategoryAction } from "@/app/(app)/articles/actions.server";
 

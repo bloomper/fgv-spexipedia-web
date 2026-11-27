@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { PageHeader } from "@/components/page-header";
+import { Page, PageHeader } from "@bloomper/fgv-web-ui/shell/page-header";
 import { SpexCard } from "@/components/wiki/spex-card";
 import { getViewer } from "@/lib/wiki/viewer.server";
 import { getSpexBrowse } from "@/lib/wiki/wiki.server";
@@ -38,20 +38,20 @@ export default async function BrowsePage({ searchParams }: Props) {
   const decades = sort.field === "year" ? groupBy(spex, s => `${s.year.slice(0, 3)}0`) : [];
 
   return (
-    <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-8 px-4 py-6 md:px-8">
+    <Page variant="content" className="mx-auto w-full max-w-7xl">
       <PageHeader title={t("title")} description={t("description")} />
       <div className="space-y-3">
         {(data?.spexCategories ?? []).length > 0 && (
           <nav aria-label={t("categories")} className="flex flex-wrap gap-2">
             {(data?.spexCategories ?? []).map(category => (
-              <Link key={category.id} href={`/categories/${category.id}`} className="rounded-full bg-secondary px-3 py-1 text-sm hover:text-primary">{category.name}</Link>
+              <Link key={category.id} href={`/categories/${category.id}`} className="rounded-full bg-secondary px-3 py-1 text-sm hover:text-link">{category.name}</Link>
             ))}
           </nav>
         )}
         {decades.length > 0 && (
           <nav aria-label={t("decades")} className="flex flex-wrap gap-2">
             {decades.map(([decade]) => (
-              <a key={decade} href={`#decade-${decade}`} className="rounded-full border border-border px-3 py-1 text-sm hover:border-primary hover:text-primary">{t("decade", { decade })}</a>
+              <a key={decade} href={`#decade-${decade}`} className="rounded-full border border-border px-3 py-1 text-sm hover:border-primary hover:text-link">{t("decade", { decade })}</a>
             ))}
           </nav>
         )}
@@ -71,6 +71,6 @@ export default async function BrowsePage({ searchParams }: Props) {
           </div>
         </section>
       ))}
-    </div>
+    </Page>
   );
 }

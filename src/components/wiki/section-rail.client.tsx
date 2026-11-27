@@ -65,7 +65,7 @@ export function SectionRail({ sections, label }: { sections: Section[]; label: s
           <li key={section.id}>
             <a href={`#${section.id}`} onClick={() => pick(section.id)} aria-current={active === section.id ? "location" : undefined}
                className={cn("-ml-px block border-l-2 py-1 pl-3 text-sm transition-colors",
-                 active === section.id ? "border-primary text-primary" : "border-transparent text-muted-foreground hover:text-foreground")}>
+                 active === section.id ? "border-primary text-link" : "border-transparent text-muted-foreground hover:text-foreground")}>
               {section.title}
             </a>
           </li>
@@ -104,7 +104,7 @@ export function SectionBar({ sections, label }: { sections: Section[]; label: st
           <li key={section.id} className="shrink-0">
             <a href={`#${section.id}`} onClick={() => pick(section.id)} data-section-link={section.id} aria-current={active === section.id ? "location" : undefined}
                className={cn("flex min-h-9 items-center rounded-full border px-3 text-sm whitespace-nowrap transition-colors",
-                 active === section.id ? "border-primary text-primary" : "border-border text-muted-foreground hover:text-foreground")}>
+                 active === section.id ? "border-primary text-link" : "border-border text-muted-foreground hover:text-foreground")}>
               {section.title}
             </a>
           </li>

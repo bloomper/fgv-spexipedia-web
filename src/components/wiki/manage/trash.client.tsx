@@ -2,11 +2,11 @@
 
 import { useTranslations } from "next-intl";
 import { ArchiveRestore, Trash } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { DataEmpty } from "@/components/data-empty";
+import { Button } from "@bloomper/fgv-web-ui/ui/button";
+import { DataEmpty } from "@bloomper/fgv-web-ui/shell/data-empty";
 import { WikiImage, type WikiImageData } from "@/components/wiki/wiki-image";
 import { useSave } from "@/components/wiki/editor/use-save.client";
-import { useDialogs } from "@/components/dialogs.client";
+import { useDialogs } from "@bloomper/fgv-web-ui/shell/dialogs";
 import { emptyTrashAction, restoreArticleAction, restoreImageAction } from "@/app/(app)/manage/actions.server";
 import { formatInstant } from "@/utils/format";
 

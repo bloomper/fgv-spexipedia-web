@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { CreditResolver } from "@/components/wiki/editor/credit-picker.client";
 import { useSave } from "@/components/wiki/editor/use-save.client";
-import { DataEmpty } from "@/components/data-empty";
+import { DataEmpty } from "@bloomper/fgv-web-ui/shell/data-empty";
 import { resolveCreditAction } from "@/app/(app)/manage/actions.server";
 import type { UnresolvedCreditsData } from "@/lib/wiki/edit.server";
 import { groupBy } from "@/utils/wiki";
@@ -26,12 +26,12 @@ export function UnresolvedCredits({ data }: { data: UnresolvedCreditsData }) {
       {groupBy(data.credits, credit => credit.number.spex.id).map(([spexId, credits]) => (
         <section key={spexId} className="space-y-2">
           <h2 className="wiki-heading text-xl font-semibold">
-            <Link href={`/manage/spex/${spexId}#edit-numbers`} className="hover:text-primary">{credits[0].number.spex.title} ({credits[0].number.spex.year})</Link>
+            <Link href={`/manage/spex/${spexId}#edit-numbers`} className="hover:text-link">{credits[0].number.spex.title} ({credits[0].number.spex.year})</Link>
           </h2>
           <ul className="divide-y divide-border rounded-lg border border-border bg-card text-sm">
             {credits.map(credit => (
               <li key={`${credit.number.id}-${credit.kind?.id}-${credit.position}`} className="flex flex-wrap items-center gap-2 px-3 py-2">
-                <Link href={`/manage/spex/${spexId}#number-${credit.number.id}`} className="font-medium hover:text-primary">{credit.number.title}</Link>
+                <Link href={`/manage/spex/${spexId}#number-${credit.number.id}`} className="font-medium hover:text-link">{credit.number.title}</Link>
                 {credit.kind && <span className="text-muted-foreground">· {credit.kind.name}</span>}
                 <span className="font-semibold">”{credit.name}”</span>
                 <span className="ml-auto">

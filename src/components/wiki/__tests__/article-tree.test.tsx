@@ -17,7 +17,7 @@ import { ArticleTree, Breadcrumbs, TableOfContents, TreeAround } from "@/compone
 import { ChildArticles, MoveArticleButton, subtree } from "@/components/wiki/editor/article-tree-actions.client";
 import { ArticleActions } from "@/components/wiki/editor/article-actions.client";
 import { ArticleForm } from "@/components/wiki/editor/article-form.client";
-import { DialogsProvider } from "@/components/dialogs.client";
+import { DialogsProvider } from "@bloomper/fgv-web-ui/shell/dialogs";
 
 const show = (node: React.ReactNode) => render(<DialogsProvider>{node}</DialogsProvider>);
 const node = (id: string, title: string, extra = {}) => ({ id, slug: id, title, visibility: "PUBLIC", published: true, ...extra });
@@ -138,7 +138,7 @@ describe("Moving and ordering articles", () => {
     show(<ArticleActions id="a" published childCount={2} />);
 
     await userEvent.click(screen.getByRole("button", { name: "trash" }));
-    const dialog = await screen.findByRole("dialog");
+    const dialog = await screen.findByRole("alertdialog");
 
     expect(within(dialog).getByText(/trashChildren/)).toBeInTheDocument();
     await userEvent.click(within(dialog).getByRole("button", { name: "trash" }));

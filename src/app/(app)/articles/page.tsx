@@ -2,15 +2,15 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { Plus } from "lucide-react";
-import { PageHeader } from "@/components/page-header";
-import { buttonVariants } from "@/components/ui/button";
+import { Page, PageHeader } from "@bloomper/fgv-web-ui/shell/page-header";
+import { buttonVariants } from "@bloomper/fgv-web-ui/ui/button";
 import { getArticles, getArticleTree } from "@/lib/wiki/wiki.server";
 import { getViewer } from "@/lib/wiki/viewer.server";
 import { publicMetadata } from "@/lib/wiki/metadata.server";
 import { ArticleList } from "@/components/wiki/article-list";
 import { ArticleTree } from "@/components/wiki/article-tree";
 import { LinkSegments } from "@/components/link-tabs";
-import { DataEmpty } from "@/components/data-empty";
+import { DataEmpty } from "@bloomper/fgv-web-ui/shell/data-empty";
 import { SortControl } from "@/components/sort-control";
 import { ArticleCategoryDialog } from "@/components/wiki/editor/article-category-dialog.client";
 import { parseSort, type SortChoice, sortItems } from "@/utils/sorting";
@@ -44,7 +44,7 @@ export default async function ArticlesPage({ searchParams }: Props) {
   const categories = (data?.articleCategories ?? []).filter(category => category.parents.length === 0);
 
   return (
-    <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 px-4 py-6 md:px-8">
+    <Page variant="content" className="mx-auto w-full max-w-7xl">
       <PageHeader title={t("title")} description={t("description")}
                   actions={viewer.member && (
                     <>
@@ -55,7 +55,7 @@ export default async function ArticlesPage({ searchParams }: Props) {
       {categories.length > 0 && (
         <nav aria-label={t("categories")} className="flex flex-wrap gap-2">
           {categories.map(category => (
-            <Link key={category.id} href={`/articles/categories/${category.slug}`} className="rounded-full border border-border px-3 py-1 text-sm hover:border-primary hover:text-primary">
+            <Link key={category.id} href={`/articles/categories/${category.slug}`} className="rounded-full border border-border px-3 py-1 text-sm hover:border-primary hover:text-link">
               {category.name} <span className="text-muted-foreground">({category.articleCount})</span>
             </Link>
           ))}
@@ -72,14 +72,14 @@ export default async function ArticlesPage({ searchParams }: Props) {
         )}
         {viewer.member && (
           <nav aria-label={t("lists")} className="flex gap-4 text-sm">
-            <Link href="/articles/wanted" className="text-primary hover:text-primary/80">{t("wanted")}</Link>
-            <Link href="/articles/orphans" className="text-primary hover:text-primary/80">{t("orphans")}</Link>
+            <Link href="/articles/wanted" className="text-link hover:text-link/80">{t("wanted")}</Link>
+            <Link href="/articles/orphans" className="text-link hover:text-link/80">{t("orphans")}</Link>
           </nav>
         )}
       </div>
       {tree
         ? roots.length > 0 ? <ArticleTree nodes={roots} /> : <DataEmpty title={t("empty")} />
         : <ArticleList articles={articles} ordered changed={sort.field === "changed"} />}
-    </div>
+    </Page>
   );
 }

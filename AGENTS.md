@@ -41,7 +41,7 @@ without a token too, with what is public) and its `POST /api/images`; images com
 ## Conventions
 
 - `"use client"` ⇔ `*.client.ts(x)`; `import "server-only"` and `"use server"` ⇔ `*.server.ts`. Exceptions:
-  `src/auth.ts`, Next.js reserved file names, and shadcn's `src/components/ui/**` and `src/hooks/use-mobile.ts`.
+  `src/auth.ts` and Next.js reserved file names.
 - Cache Components is on. `(app)/layout.tsx` keeps `export const instant = false`. Pages set their own titles, robots
   and Open Graph tags (`src/lib/wiki/metadata.server.ts`: `publicMetadata`, `privateMetadata`).
 - A client component that copies a server prop into state uses `useServerState`, never `useState(prop)`.
@@ -65,6 +65,34 @@ without a token too, with what is public) and its `POST /api/images`; images com
   structured parts; **admins** retire and merge base data, keep redirects, notify recipients, settings and maintenance.
 - Not found and not allowed look the same: an article a visitor may not see shows `LoginPrompt`.
 - Names of spexare are never written by the web either: credits are picked by `searchSpexareAction` and stored as ids.
+
+## Shared FGV UI
+
+The theme, the shadcn components and the application shell come from `@bloomper/fgv-web-ui` (repo
+`bloomper/fgv-web-ui`, published to GitHub Packages), shared by all eight FGV web applications:
+
+- `@bloomper/fgv-web-ui/ui/<name>` for every shadcn component (`button`, `sidebar`, `dialog`, …). Don't add a local
+  copy with `shadcn add`: the shell and the application must share one `SidebarProvider`, and a change that belongs in
+  every application goes into the package.
+- `shell/*`: `SiteHeader` (wrapped in `src/components/site-header.client.tsx` with Spexipedia's own controls),
+  `AppSwitcher`, `resolveApplications`, `SidebarBrand`, `NavMain`, `NavSecondary`, the toggles, `DataEmpty`, the
+  status pages and the logos.
+- **Pages** are a `Page` (`variant="content"` for articles and records, the default for lists and forms) with a
+  `PageHeader` first (`title`, `description`, `actions`, `eyebrow`, `badges`), both from `shell/page-header`; a page's
+  `loading.tsx` uses the same `Page`.
+- **Confirmations** always ask in an alert dialog: `ConfirmButton` (`shell/confirm-button`), or
+  `useDialogs().confirm` / `prompt` / `choose` (`shell/dialogs`, `DialogsProvider` in the `(app)` layout) inside a
+  handler. Never `window.confirm` or `window.prompt`.
+- `src/app/globals.css` imports `tailwindcss` and the package's `styles.css`, then only what is Spexipedia's own. The brand
+  colour on the page background (links, labels, active icons) is `text-link`; `primary` is for fills.
+- The favicons in `src/app/` (`icon.svg`, `favicon.ico`, `apple-icon.png`) are Spexipedia's switcher icon on the brand
+  blue, generated in the package (`scripts/app-icons.mjs`).
+- The shell's texts live in the package under `FgvUi`; `withFgvMessages` adds them wherever messages are loaded
+  (`src/i18n/request.ts`, `src/app/layout.tsx`, `changeLocale` in `src/app/provider.client.tsx`), and
+  `FgvShellProvider` there hands the shell `changeLocale` and Umami's `track`.
+- Installing needs a token, even locally: `.npmrc` reads `NODE_AUTH_TOKEN` (a token with `read:packages`). CI uses
+  `GITHUB_TOKEN`, and the image build gets it as the `npm_token` build secret.
+- Vitest inlines the package (`server.deps.inline`) so the mocks in the setup file reach it.
 
 ## How the pages work
 
@@ -109,12 +137,14 @@ without a token too, with what is public) and its `POST /api/images`; images com
 
 ## Look
 
-FGV's shell (sidebar, header, application switcher) and colours as in the other webs: the palette in
-`src/app/globals.css` and the manifest colours are Spexgram's, so keep them in step with the other FGV webs. The page
-layouts follow the Apps Script pages Spexipedia replaces (poster beside the title, sections with subtitles, a right rail
-with scroll-spy). Headings are Geist like the rest of FGV's webs (`.wiki-heading` only tightens them). Every content
-page uses one width, `max-w-7xl`, and the `loading.tsx` skeletons use the same container (`PAGE_CONTAINER` in
-`src/components/page-skeleton.tsx`); running text (`.prose-wiki`) keeps to 75ch.
+FGV's shell (sidebar, header, application switcher) and colours as in the other webs, from `@bloomper/fgv-web-ui`;
+`src/app/globals.css` adds only the wiki's own classes (`.wiki-heading`, `.article-tree`, `.wiki-missing`,
+`.prose-wiki`, whose links take `--link`). The page layouts follow the Apps Script pages Spexipedia replaces (poster
+beside the title, sections with subtitles, a right rail with scroll-spy). Headings are Geist like the rest of FGV's webs
+(`.wiki-heading` only tightens them). Every page is a `Page` one width wide, `className="mx-auto w-full max-w-7xl"`,
+and its `loading.tsx` skeleton uses the same; the article and spex pages with a rail keep that width and padding in a
+row of their own. Running text (`.prose-wiki`) keeps to 75ch. The favicons in `src/app/` are Spexipedia's switcher icon
+on the brand blue, from the package.
 
 ## Consent and visitor statistics
 
@@ -122,5 +152,5 @@ As in Spexgram: c15t with only the `necessary` category; Umami through `/stats/`
 
 ## Application switcher
 
-As in the other webs (`src/components/app-switcher.client.tsx`, `src/utils/applications.ts`); the id passed in
+`AppSwitcher` and `resolveApplications` from `@bloomper/fgv-web-ui`, as in every FGV application; the id passed in
 `applications.server.ts` is `"spexipedia"`.

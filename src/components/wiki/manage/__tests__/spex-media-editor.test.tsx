@@ -13,7 +13,7 @@ vi.mock("sonner", async () => ({ toast: (await import("@/test/manage-mocks")).to
 vi.mock("@/app/(app)/manage/actions.server", async () => (await import("@/test/manage-mocks")).actionsMock(actions));
 
 import { SpexMediaEditor } from "@/components/wiki/manage/spex-media-editor.client";
-import { DialogsProvider } from "@/components/dialogs.client";
+import { DialogsProvider } from "@bloomper/fgv-web-ui/shell/dialogs";
 import type { SectionKind, SpexEditData } from "@/lib/wiki/edit.server";
 
 const image = (id: string) => ({

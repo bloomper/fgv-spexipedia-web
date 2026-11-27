@@ -1,10 +1,11 @@
-import { Skeleton } from "@/components/ui/skeleton";
-import { HeaderSkeleton, PAGE_CONTAINER } from "@/components/page-skeleton";
+import { Skeleton } from "@bloomper/fgv-web-ui/ui/skeleton";
+import { Page } from "@bloomper/fgv-web-ui/shell/page-header";
+import { HeaderSkeleton } from "@/components/page-skeleton";
 
 /** The browsing pages: a title, then posters by decade as `SpexCard` shows them. */
 export default function Loading() {
   return (
-    <div className={PAGE_CONTAINER}>
+    <Page variant="content" className="mx-auto w-full max-w-7xl">
       <HeaderSkeleton />
       <Skeleton className="h-6 w-40" />
       <div className="grid grid-cols-3 gap-2 sm:gap-4 md:grid-cols-4 xl:grid-cols-6">
@@ -15,6 +16,6 @@ export default function Loading() {
           </div>
         ))}
       </div>
-    </div>
+    </Page>
   );
 }

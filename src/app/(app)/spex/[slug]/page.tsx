@@ -19,8 +19,8 @@ import { CreditList, PersonList, PersonName } from "@/components/wiki/person";
 import { AppLinks, isSpexPageLink } from "@/components/wiki/app-links";
 import { RecordCard } from "@/components/wiki/record-card.client";
 import { EmbeddedVideo } from "@/components/wiki/embedded-video.client";
-import { Badge } from "@/components/ui/badge";
-import { buttonVariants } from "@/components/ui/button";
+import { Badge } from "@bloomper/fgv-web-ui/ui/badge";
+import { buttonVariants } from "@bloomper/fgv-web-ui/ui/button";
 import { formatDay } from "@/utils/format";
 import { cn } from "@/utils/utils";
 import { creditLabel, groupBy, personLabel, sceneLabel } from "@/utils/wiki";
@@ -93,7 +93,7 @@ export default async function SpexPage({ params }: Props) {
                       {groupBy(character.playedBy, played => played.spex.id).map(([id, played]) => (
                         <div key={id}>
                           <dt className="sr-only">{production(played[0].spex)}</dt>
-                          <dd className="text-primary">
+                          <dd className="text-link">
                             <PersonList people={played.map(p => p.person)} />
                             {played[0].spex.revival && <span className="text-muted-foreground"> · {production(played[0].spex)}</span>}
                           </dd>
@@ -125,7 +125,7 @@ export default async function SpexPage({ params }: Props) {
                             <span className="font-medium">{sceneLabel(scene)}</span>
                             {scene.place && <span className="text-muted-foreground"> — {scene.place}</span>}
                             {scene.intervalAfter && (
-                              <p className="mt-3 flex items-center gap-3 text-xs tracking-[0.3em] text-primary uppercase before:h-px before:flex-1 before:bg-border after:h-px after:flex-1 after:bg-border">
+                              <p className="mt-3 flex items-center gap-3 text-xs tracking-[0.3em] text-link uppercase before:h-px before:flex-1 before:bg-border after:h-px after:flex-1 after:bg-border">
                                 {t("interval")}
                               </p>
                             )}
@@ -171,7 +171,7 @@ export default async function SpexPage({ params }: Props) {
                                 {i > 0 && ", "}
                                 {/* Books are Spexarkivet's (spec 4.4): a link for those with access there */}
                                 {book.url
-                                  ? <a href={book.url} className="text-primary hover:text-primary/80" title={t("openBook")}>{book.title}</a>
+                                  ? <a href={book.url} className="text-link hover:text-link/80" title={t("openBook")}>{book.title}</a>
                                   : book.title}
                                 {book.textOnly && ` (${t("textOnly")})`}
                               </span>
@@ -283,7 +283,7 @@ export default async function SpexPage({ params }: Props) {
   };
 
   return (
-    <div className="mx-auto flex w-full max-w-7xl gap-10 px-4 py-6 md:px-8">
+    <div className="mx-auto flex w-full max-w-7xl gap-10 p-4 md:p-8">
       {spex.published && (
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
       )}
@@ -302,14 +302,14 @@ export default async function SpexPage({ params }: Props) {
           </div>
           <div className="space-y-4">
             <div className="space-y-2">
-              <p className="text-sm tracking-[0.25em] text-primary">
-                {spex.year}{spex.category && <> · <Link href={`/categories/${spex.category.id}`} className="hover:text-primary">{spex.category.name}</Link></>}
+              <p className="text-sm tracking-[0.25em] text-link">
+                {spex.year}{spex.category && <> · <Link href={`/categories/${spex.category.id}`} className="hover:text-link">{spex.category.name}</Link></>}
               </p>
               <h1 className="wiki-heading text-3xl leading-tight font-semibold md:text-4xl">{spex.title}</h1>
               <div className="flex flex-wrap gap-2">
                 {spex.revival && spex.parent && (
                   <Badge variant="secondary">
-                    {t("revivalOf")} <Link href={`/spex/${spex.parent.slug}`} className="ml-1 font-medium hover:text-primary">{spex.parent.title} ({spex.parent.year})</Link>
+                    {t("revivalOf")} <Link href={`/spex/${spex.parent.slug}`} className="ml-1 font-medium hover:text-link">{spex.parent.title} ({spex.parent.year})</Link>
                   </Badge>
                 )}
                 {!spex.published && <Badge variant="outline">{t("unpublished")}</Badge>}
@@ -328,7 +328,7 @@ export default async function SpexPage({ params }: Props) {
                 <>
                   <dt className="text-muted-foreground">{t("revivals")}</dt>
                   <dd className="flex flex-wrap gap-x-2">
-                    {spex.revivals.map(revival => <Link key={revival.id} href={`/spex/${revival.slug}`} className="text-primary hover:text-primary/80">{revival.year}</Link>)}
+                    {spex.revivals.map(revival => <Link key={revival.id} href={`/spex/${revival.slug}`} className="text-link hover:text-link/80">{revival.year}</Link>)}
                   </dd>
                 </>
               )}
@@ -358,10 +358,10 @@ export default async function SpexPage({ params }: Props) {
             {spex.previous ? (
               <Link href={`/spex/${spex.previous.slug}`} rel="prev"
                     className="group flex items-center gap-3 rounded-lg border border-border bg-card p-3 hover:border-primary/60">
-                <ArrowLeft className="size-4 shrink-0 text-muted-foreground group-hover:text-primary" aria-hidden />
+                <ArrowLeft className="size-4 shrink-0 text-muted-foreground group-hover:text-link" aria-hidden />
                 <span className="min-w-0">
                   <span className="block text-xs text-muted-foreground">{t("previousSpex")}</span>
-                  <span className="block truncate font-semibold group-hover:text-primary">{spex.previous.title} ({spex.previous.year})</span>
+                  <span className="block truncate font-semibold group-hover:text-link">{spex.previous.title} ({spex.previous.year})</span>
                 </span>
               </Link>
             ) : <span className="max-sm:hidden" />}
@@ -370,9 +370,9 @@ export default async function SpexPage({ params }: Props) {
                     className="group flex items-center justify-end gap-3 rounded-lg border border-border bg-card p-3 text-right hover:border-primary/60">
                 <span className="min-w-0">
                   <span className="block text-xs text-muted-foreground">{t("nextSpex")}</span>
-                  <span className="block truncate font-semibold group-hover:text-primary">{spex.next.title} ({spex.next.year})</span>
+                  <span className="block truncate font-semibold group-hover:text-link">{spex.next.title} ({spex.next.year})</span>
                 </span>
-                <ArrowRight className="size-4 shrink-0 text-muted-foreground group-hover:text-primary" aria-hidden />
+                <ArrowRight className="size-4 shrink-0 text-muted-foreground group-hover:text-link" aria-hidden />
               </Link>
             )}
           </nav>
@@ -450,7 +450,7 @@ function external(section: PageSection, member: boolean, t: (key: string, values
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={file.previewUrl!} alt={t("embeds.firstPage", { title: file.title })} loading="lazy"
                          className="aspect-[1/1.414] w-full rounded border border-border bg-white object-contain object-top group-hover:border-primary/60" />
-                    <span className="block truncate text-xs text-muted-foreground group-hover:text-primary">
+                    <span className="block truncate text-xs text-muted-foreground group-hover:text-link">
                       {file.title}{file.pages ? ` (${t("embeds.pages", { count: String(file.pages) })})` : ""}
                     </span>
                   </a>
@@ -472,7 +472,7 @@ function NoAccess({ text }: { text: string }) {
 }
 
 function OpenLink({ href, text }: { href: string; text: string }) {
-  return <a href={href} className="inline-flex items-center gap-1 text-sm text-primary hover:text-primary/80">{text} <ExternalLink className="size-3.5" aria-hidden /></a>;
+  return <a href={href} className="inline-flex items-center gap-1 text-sm text-link hover:text-link/80">{text} <ExternalLink className="size-3.5" aria-hidden /></a>;
 }
 
 /**

@@ -20,7 +20,7 @@ import { TrashView } from "@/components/wiki/manage/trash.client";
 import { ArticleActions } from "@/components/wiki/editor/article-actions.client";
 import { RevisionActions } from "@/components/wiki/editor/revision-actions.client";
 import { PhotoSet, type PhotoSetData } from "@/components/wiki/photo-set.client";
-import { DialogsProvider } from "@/components/dialogs.client";
+import { DialogsProvider } from "@bloomper/fgv-web-ui/shell/dialogs";
 import { router, toast } from "@/test/manage-mocks";
 
 const show = (node: React.ReactNode) => render(<DialogsProvider>{node}</DialogsProvider>);
@@ -94,7 +94,7 @@ describe("TrashView", () => {
     expect(screen.getByText("fond.png")).toBeInTheDocument();
 
     await userEvent.click(screen.getByRole("button", { name: "emptyTrash" }));
-    await userEvent.click(within(await screen.findByRole("dialog")).getByRole("button", { name: "emptyTrash" }));
+    await userEvent.click(within(await screen.findByRole("alertdialog")).getByRole("button", { name: "emptyTrash" }));
     await waitFor(() => expect(toast.success).toHaveBeenCalledWith("emptied"));
   });
 
@@ -117,7 +117,7 @@ describe("ArticleActions", () => {
     expect(actions.setPublishedAction).toHaveBeenCalledWith("a1", true);
 
     await userEvent.click(screen.getByRole("button", { name: "trash" }));
-    await userEvent.click(within(await screen.findByRole("dialog")).getByRole("button", { name: "trash" }));
+    await userEvent.click(within(await screen.findByRole("alertdialog")).getByRole("button", { name: "trash" }));
     await waitFor(() => expect(router.push).toHaveBeenCalledWith("/articles"));
   });
 
@@ -130,11 +130,11 @@ describe("ArticleActions", () => {
     await waitFor(() => expect(toast.error).toHaveBeenCalledWith("Du får inte."));
 
     await userEvent.click(screen.getByRole("button", { name: "trash" }));
-    await userEvent.click(within(await screen.findByRole("dialog")).getByRole("button", { name: "cancel" }));
-    await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
+    await userEvent.click(within(await screen.findByRole("alertdialog")).getByRole("button", { name: "cancel" }));
+    await waitFor(() => expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument());
     expect(actions.trashArticleAction).not.toHaveBeenCalled();
     await userEvent.click(screen.getByRole("button", { name: "trash" }));
-    await userEvent.click(within(await screen.findByRole("dialog")).getByRole("button", { name: "trash" }));
+    await userEvent.click(within(await screen.findByRole("alertdialog")).getByRole("button", { name: "trash" }));
     await waitFor(() => expect(toast.error).toHaveBeenCalledTimes(2));
   });
 });
@@ -145,7 +145,7 @@ describe("RevisionActions", () => {
     show(<RevisionActions articleId="a1" revisionId="r1" hidden={false} latest={false} author />);
 
     await userEvent.click(screen.getByRole("button", { name: "restore" }));
-    await userEvent.click(within(await screen.findByRole("dialog")).getByRole("button", { name: "restore" }));
+    await userEvent.click(within(await screen.findByRole("alertdialog")).getByRole("button", { name: "restore" }));
     await waitFor(() => expect(router.push).toHaveBeenCalledWith("/articles/traditioner"));
 
     await userEvent.click(screen.getByRole("button", { name: "hide" }));
@@ -165,7 +165,7 @@ describe("RevisionActions", () => {
     await userEvent.click(screen.getByRole("button", { name: "unhide" }));
     await waitFor(() => expect(toast.error).toHaveBeenCalledWith("Du får inte."));
     await userEvent.click(screen.getByRole("button", { name: "restore" }));
-    await userEvent.click(within(await screen.findByRole("dialog")).getByRole("button", { name: "restore" }));
+    await userEvent.click(within(await screen.findByRole("alertdialog")).getByRole("button", { name: "restore" }));
     await waitFor(() => expect(toast.error).toHaveBeenCalledTimes(2));
   });
 });

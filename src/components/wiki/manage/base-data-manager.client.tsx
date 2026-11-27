@@ -4,18 +4,18 @@ import { type ReactNode, useState } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { Archive, ArchiveRestore, GitMerge, Pencil, Plus, Save, X } from "lucide-react";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Badge } from "@/components/ui/badge";
-import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
-import { Textarea } from "@/components/ui/textarea";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button, buttonVariants } from "@bloomper/fgv-web-ui/ui/button";
+import { Input } from "@bloomper/fgv-web-ui/ui/input";
+import { Label } from "@bloomper/fgv-web-ui/ui/label";
+import { Checkbox } from "@bloomper/fgv-web-ui/ui/checkbox";
+import { Badge } from "@bloomper/fgv-web-ui/ui/badge";
+import { NativeSelect, NativeSelectOption } from "@bloomper/fgv-web-ui/ui/native-select";
+import { Textarea } from "@bloomper/fgv-web-ui/ui/textarea";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@bloomper/fgv-web-ui/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bloomper/fgv-web-ui/ui/tabs";
 import { ImageSlot } from "@/components/wiki/editor/image-slot.client";
 import { useSave } from "@/components/wiki/editor/use-save.client";
-import { useDialogs } from "@/components/dialogs.client";
+import { useDialogs } from "@bloomper/fgv-web-ui/shell/dialogs";
 import {
   mergeAction,
   retireAction,
@@ -278,7 +278,7 @@ export function BaseDataManager({ data, admin, highlight, initialTab }: { data: 
       setTab(value as Section);
       window.history.replaceState(null, "", `?tab=${value}`);
     }}>
-      <TabsList>
+      <TabsList variant="line">
         {SECTIONS.map(id => (
           <TabsTrigger key={id} value={id}>{t(`sections.${id}`)} <span className="text-xs tabular-nums text-muted-foreground">{counts[id]}</span></TabsTrigger>
         ))}
@@ -298,7 +298,7 @@ export function BaseDataManager({ data, admin, highlight, initialTab }: { data: 
                           <Badge variant="secondary">{t("revivals", { count: revivals.length })}</Badge>
                           {revivals.map(revival => (
                             <Link key={revival.id} href={`/manage/spex/${revival.id}`}
-                                  className={cn("text-primary hover:text-primary/80", revival.retired && "text-muted-foreground line-through")}>{revival.year}</Link>
+                                  className={cn("text-link hover:text-link/80", revival.retired && "text-muted-foreground line-through")}>{revival.year}</Link>
                           ))}
                         </span>
                       )}

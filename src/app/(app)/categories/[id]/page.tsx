@@ -7,6 +7,7 @@ import { HtmlContent } from "@/components/wiki/html-content";
 import { getCategory } from "@/lib/wiki/wiki.server";
 import { getViewer } from "@/lib/wiki/viewer.server";
 import { privateMetadata, publicMetadata } from "@/lib/wiki/metadata.server";
+import { Page } from "@bloomper/fgv-web-ui/shell/page-header";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -26,11 +27,11 @@ export default async function CategoryPage({ params }: Props) {
     notFound();
   }
   return (
-    <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-8 px-4 py-6 md:px-8">
+    <Page variant="content" className="mx-auto w-full max-w-7xl">
       <header className="flex flex-wrap items-center gap-6">
         {category.logo && <WikiImage image={category.logo} sizes="8rem" className="size-28 rounded-lg object-contain" />}
         <div className="space-y-1">
-          <p className="text-sm tracking-[0.25em] text-primary">{t("since", { year: category.firstYear })}</p>
+          <p className="text-sm tracking-[0.25em] text-link">{t("since", { year: category.firstYear })}</p>
           <h1 className="wiki-heading text-3xl font-semibold md:text-4xl">{category.name}</h1>
         </div>
       </header>
@@ -38,6 +39,6 @@ export default async function CategoryPage({ params }: Props) {
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6">
         {category.spex.filter(spex => spex.published || viewer.author).map(spex => <SpexCard key={spex.id} spex={spex} introduction={spex.page?.introduction} />)}
       </div>
-    </div>
+    </Page>
   );
 }

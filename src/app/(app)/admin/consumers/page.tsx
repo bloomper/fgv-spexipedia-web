@@ -2,7 +2,7 @@ import { getTranslations } from "next-intl/server";
 import { getSyncConsumers } from "@/lib/admin/admin.server";
 import { Policies } from "@/utils/policy.server";
 import { withPolicyPage } from "@/utils/route.server";
-import { PageHeader } from "@/components/page-header";
+import { Page, PageHeader } from "@bloomper/fgv-web-ui/shell/page-header";
 import { ConsumersEditor } from "@/components/wiki/manage/admin-lists.client";
 
 /**
@@ -13,10 +13,10 @@ export default async function ConsumersPage() {
     const [t, consumers] = await Promise.all([getTranslations("AdminConsumers"), getSyncConsumers()]);
 
     return (
-      <div className="flex flex-1 flex-col gap-6 p-4 md:p-8">
+      <Page variant="content">
         <PageHeader title={t("title")} description={t("description")} />
         <ConsumersEditor consumers={consumers} />
-      </div>
+      </Page>
     );
   });
 }

@@ -15,7 +15,7 @@ vi.mock("@/app/(app)/manage/actions.server", async () => (await import("@/test/m
 vi.mock("@/app/(app)/articles/actions.server", async () => (await import("@/test/manage-mocks")).actionsMock(articleActions));
 
 import { formatTime, parseTime, SpexSectionsEditor } from "@/components/wiki/manage/spex-sections-editor.client";
-import { DialogsProvider } from "@/components/dialogs.client";
+import { DialogsProvider } from "@bloomper/fgv-web-ui/shell/dialogs";
 import type { SectionKind, SpexEditData } from "@/lib/wiki/edit.server";
 
 const VIDEO = "0199a000-0000-7000-8000-000000000001";
@@ -101,7 +101,7 @@ describe("The sections editor", () => {
     show(spex("OWN"));
 
     await userEvent.click(screen.getByRole("button", { name: "sectionDefault" }));
-    await userEvent.click(within(await screen.findByRole("dialog")).getByRole("button", { name: "sectionDefault" }));
+    await userEvent.click(within(await screen.findByRole("alertdialog")).getByRole("button", { name: "sectionDefault" }));
     await waitFor(() => expect(actions.setSectionsAction).toHaveBeenCalledWith("s1", []));
   });
 });

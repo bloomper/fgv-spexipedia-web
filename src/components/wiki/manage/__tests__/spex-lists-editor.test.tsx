@@ -14,7 +14,7 @@ vi.mock("sonner", async () => ({ toast: (await import("@/test/manage-mocks")).to
 vi.mock("@/app/(app)/manage/actions.server", async () => (await import("@/test/manage-mocks")).actionsMock(actions));
 
 import { CharactersEditor, NumbersEditor, RevivalChangesEditor, ScenesEditor } from "@/components/wiki/manage/spex-lists-editor.client";
-import { DialogsProvider } from "@/components/dialogs.client";
+import { DialogsProvider } from "@bloomper/fgv-web-ui/shell/dialogs";
 import type { SpexEditData } from "@/lib/wiki/edit.server";
 
 const own = { id: "s1" };
@@ -86,7 +86,7 @@ describe("The spex list editors", () => {
     await waitFor(() => expect(actions.pasteCharactersAction).toHaveBeenCalledWith("s1", "Bonden – en bonde"));
 
     await userEvent.click(screen.getAllByRole("button", { name: "delete" })[0]);
-    await userEvent.click(within(await screen.findByRole("dialog")).getByRole("button", { name: "delete" }));
+    await userEvent.click(within(await screen.findByRole("alertdialog")).getByRole("button", { name: "delete" }));
     await waitFor(() => expect(actions.deleteCharacterAction).toHaveBeenCalledWith("c1"));
   });
 
@@ -95,7 +95,7 @@ describe("The spex list editors", () => {
     show(<CharactersEditor spex={spex()} imageKinds={imageKinds} editor />);
 
     await userEvent.click(screen.getAllByRole("button", { name: "delete" })[0]);
-    await userEvent.click(within(await screen.findByRole("dialog")).getByRole("button", { name: "delete" }));
+    await userEvent.click(within(await screen.findByRole("alertdialog")).getByRole("button", { name: "delete" }));
     await waitFor(() => expect(toast.error).toHaveBeenCalledWith("Karaktären används."));
     expect(router.refresh).not.toHaveBeenCalled();
   });
@@ -149,7 +149,7 @@ describe("The spex list editors", () => {
     })));
 
     await userEvent.click(screen.getAllByRole("button", { name: "delete" })[1]);
-    await userEvent.click(within(await screen.findByRole("dialog")).getByRole("button", { name: "delete" }));
+    await userEvent.click(within(await screen.findByRole("alertdialog")).getByRole("button", { name: "delete" }));
     await waitFor(() => expect(actions.deleteNumberAction).toHaveBeenCalledWith("n2"));
   });
 

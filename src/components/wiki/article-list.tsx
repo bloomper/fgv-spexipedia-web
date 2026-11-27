@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { Lock } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { DataEmpty } from "@/components/data-empty";
+import { Badge } from "@bloomper/fgv-web-ui/ui/badge";
+import { DataEmpty } from "@bloomper/fgv-web-ui/shell/data-empty";
 import { formatInstant } from "@/utils/format";
 
 type Row = {

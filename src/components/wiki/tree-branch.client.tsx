@@ -3,7 +3,7 @@
 import type { ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { ChevronRight } from "lucide-react";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@bloomper/fgv-web-ui/ui/collapsible";
 
 /**
  * A node of the article tree with children: a chevron in front of its row folds them away and back.

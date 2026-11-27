@@ -3,8 +3,8 @@
 import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { Check, Images, Lock, Save } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/spinner";
+import { Button } from "@bloomper/fgv-web-ui/ui/button";
+import { Spinner } from "@bloomper/fgv-web-ui/ui/spinner";
 import { spexgramAlbumsAction } from "@/app/(app)/manage/actions.server";
 import { cn } from "@/utils/utils";
 

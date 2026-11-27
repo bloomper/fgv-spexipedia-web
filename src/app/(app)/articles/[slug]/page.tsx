@@ -8,8 +8,8 @@ import { getViewer } from "@/lib/wiki/viewer.server";
 import { privateMetadata, publicMetadata } from "@/lib/wiki/metadata.server";
 import { HtmlContent } from "@/components/wiki/html-content";
 import { LoginPrompt } from "@/components/login-prompt.client";
-import { Badge } from "@/components/ui/badge";
-import { buttonVariants } from "@/components/ui/button";
+import { Badge } from "@bloomper/fgv-web-ui/ui/badge";
+import { buttonVariants } from "@bloomper/fgv-web-ui/ui/button";
 import { ArticleActions } from "@/components/wiki/editor/article-actions.client";
 import { ChildArticles, MoveArticleButton } from "@/components/wiki/editor/article-tree-actions.client";
 import { Breadcrumbs, TableOfContents, TreeAround } from "@/components/wiki/article-tree";
@@ -52,13 +52,13 @@ export default async function ArticlePage({ params }: Props) {
   );
 
   return (
-    <div className="mx-auto flex w-full max-w-7xl flex-1 gap-10 px-4 py-6 md:px-8">
+    <div className="mx-auto flex w-full max-w-7xl flex-1 gap-10 p-4 md:p-8">
       <article className="min-w-0 flex-1 space-y-6">
         <header className="space-y-3">
           {article.ancestors.length > 0 && <Breadcrumbs ancestors={article.ancestors} title={article.title} />}
           <div className="flex flex-wrap gap-2">
             {article.categories.map(category => (
-              <Link key={category.id} href={`/articles/categories/${category.slug}`} className="text-xs tracking-[0.2em] text-primary uppercase hover:text-primary/80">{category.name}</Link>
+              <Link key={category.id} href={`/articles/categories/${category.slug}`} className="text-xs tracking-[0.2em] text-link uppercase hover:text-link/80">{category.name}</Link>
             ))}
           </div>
           <h1 className="wiki-heading text-3xl font-semibold md:text-4xl">{article.title}</h1>
@@ -95,7 +95,7 @@ export default async function ArticlePage({ params }: Props) {
           <h2 id="backlinks-heading" className="text-sm font-semibold tracking-[0.15em] text-muted-foreground uppercase">{t("backlinks")}</h2>
           {article.backlinks.length > 0 ? (
             <ul className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
-              {article.backlinks.map(link => <li key={link.id}><Link href={`/articles/${link.slug}`} className="text-primary hover:text-primary/80">{link.title}</Link></li>)}
+              {article.backlinks.map(link => <li key={link.id}><Link href={`/articles/${link.slug}`} className="text-link hover:text-link/80">{link.title}</Link></li>)}
             </ul>
           ) : <p className="text-sm text-muted-foreground">{t("noBacklinks")}</p>}
         </section>

@@ -77,7 +77,7 @@ export async function SpexCompleteness({ completeness, sections, revival, folded
                         ? t("completeness.partly", { item: t(`completeness.items.${item.item}`), percent: percent(item.filled) })
                         : t(`completeness.items.${item.item}`)).join(", ")}
                     </p>
-                    {sections.includes(name) && <a href={`#edit-${name}`} className="text-primary hover:underline">{t("completeness.goTo", { section: title })}</a>}
+                    {sections.includes(name) && <a href={`#edit-${name}`} className="text-link hover:underline">{t("completeness.goTo", { section: title })}</a>}
                   </div>
                 )}
               </details>

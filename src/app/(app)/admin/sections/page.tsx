@@ -5,7 +5,7 @@ import { getKinds } from "@/lib/admin/admin.server";
 import { privateMetadata } from "@/lib/wiki/metadata.server";
 import { Policies } from "@/utils/policy.server";
 import { withPolicyPage } from "@/utils/route.server";
-import { PageHeader } from "@/components/page-header";
+import { Page, PageHeader } from "@bloomper/fgv-web-ui/shell/page-header";
 import { KindsEditor } from "@/components/wiki/manage/kinds-editor.client";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -22,7 +22,7 @@ export default async function SectionsPage() {
     const [t, kinds] = await Promise.all([getTranslations("AdminSections"), getKinds("SECTION")]);
 
     return (
-      <div className="flex flex-1 flex-col gap-6 p-4 md:p-8">
+      <Page variant="content">
         <PageHeader title={t("title")} description={t("description")} />
         <p className="max-w-3xl text-sm text-muted-foreground">
           {t("imageKinds")} <Link href="/admin/kinds?type=IMAGE" className="underline underline-offset-4 hover:text-foreground">{t("imageKindsLink")}</Link>.
@@ -30,7 +30,7 @@ export default async function SectionsPage() {
         <section className="max-w-4xl space-y-3" aria-label={t("title")}>
           <KindsEditor type="SECTION" use={null} kinds={kinds} />
         </section>
-      </div>
+      </Page>
     );
   });
 }

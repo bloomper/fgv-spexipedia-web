@@ -5,7 +5,7 @@ import { getTranslations } from "next-intl/server";
 import { FolderOpen } from "lucide-react";
 import { getArticleCategory, getArticles } from "@/lib/wiki/wiki.server";
 import { privateMetadata, publicMetadata } from "@/lib/wiki/metadata.server";
-import { PageHeader } from "@/components/page-header";
+import { Page, PageHeader } from "@bloomper/fgv-web-ui/shell/page-header";
 import { ArticleList } from "@/components/wiki/article-list";
 import { LinkSegments } from "@/components/link-tabs";
 import { ArticleCategoryDialog } from "@/components/wiki/editor/article-category-dialog.client";
@@ -36,7 +36,7 @@ export default async function ArticleCategoryPage({ params, searchParams }: Prop
   const categories = data?.articleCategories ?? [];
 
   return (
-    <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 px-4 py-6 md:px-8">
+    <Page variant="content" className="mx-auto w-full max-w-7xl">
       <PageHeader title={category.name} description={category.description} actions={viewer.member && (
         <>
           <ArticleCategoryDialog categories={categories} parentId={category.id} label={t("newSubcategory")} />
@@ -47,7 +47,7 @@ export default async function ArticleCategoryPage({ params, searchParams }: Prop
         <p className="text-sm text-muted-foreground">
           {t("inCategories")}{" "}
           {category.parents.map((parent, index) => (
-            <span key={parent.id}>{index > 0 && ", "}<Link href={`/articles/categories/${parent.slug}`} className="text-primary hover:text-primary/80">{parent.name}</Link></span>
+            <span key={parent.id}>{index > 0 && ", "}<Link href={`/articles/categories/${parent.slug}`} className="text-link hover:text-link/80">{parent.name}</Link></span>
           ))}
         </p>
       )}
@@ -57,7 +57,7 @@ export default async function ArticleCategoryPage({ params, searchParams }: Prop
           <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {category.subcategories.map(sub => (
               <li key={sub.id}>
-                <Link href={`/articles/categories/${sub.slug}`} className="flex items-center gap-2 rounded-md border border-border px-3 py-2 text-sm hover:border-primary hover:text-primary">
+                <Link href={`/articles/categories/${sub.slug}`} className="flex items-center gap-2 rounded-md border border-border px-3 py-2 text-sm hover:border-primary hover:text-link">
                   <FolderOpen className="size-4 shrink-0" aria-hidden /> <span className="min-w-0 truncate">{sub.name}</span>
                   <span className="ml-auto text-muted-foreground">{sub.articleCount}</span>
                 </Link>
@@ -78,6 +78,6 @@ export default async function ArticleCategoryPage({ params, searchParams }: Prop
         </div>
         <ArticleList articles={data?.articles ?? []} />
       </section>
-    </div>
+    </Page>
   );
 }
