@@ -17,7 +17,13 @@ import { cn } from "@/utils/utils";
  * Markdown with a preview: CommonMark with tables, `[[Title]]` links to articles, and links to material in the other
  * FGV applications, made from an address pasted from there. The preview is rendered by the server, as the page will be.
  */
-export function MarkdownEditor({ id, value, onChange, rows = 16, label }: {
+export function MarkdownEditor({
+  id,
+  value,
+  onChange,
+  rows = 16,
+  label,
+}: {
   id: string;
   value: string;
   onChange: (value: string) => void;
@@ -31,7 +37,12 @@ export function MarkdownEditor({ id, value, onChange, rows = 16, label }: {
   const { prompt } = useDialogs();
 
   const insertAppLink = async (textarea: HTMLTextAreaElement | null) => {
-    const address = await prompt({ title: t("appLink"), label: t("appLinkAddress"), confirmLabel: t("appLinkNext"), maxLength: 2000 });
+    const address = await prompt({
+      title: t("appLink"),
+      label: t("appLinkAddress"),
+      confirmLabel: t("appLinkNext"),
+      maxLength: 2000,
+    });
 
     if (!address) {
       return;
@@ -44,7 +55,12 @@ export function MarkdownEditor({ id, value, onChange, rows = 16, label }: {
       return;
     }
 
-    const text = await prompt({ title: t("appLink"), label: t("appLinkText"), confirmLabel: t("appLinkInsert"), maxLength: 200 });
+    const text = await prompt({
+      title: t("appLink"),
+      label: t("appLinkText"),
+      confirmLabel: t("appLinkInsert"),
+      maxLength: 200,
+    });
 
     if (text === null) {
       return;
@@ -56,16 +72,25 @@ export function MarkdownEditor({ id, value, onChange, rows = 16, label }: {
     onChange(value.slice(0, at) + link + value.slice(textarea?.selectionEnd ?? at));
   };
   const tab = (value_: "write" | "preview") => (
-    <button type="button" role="tab" aria-selected={mode === value_} onClick={() => {
-      setMode(value_);
-      if (value_ === "preview") {
-        startTransition(async () => {
-          const result = await previewAction(value);
+    <button
+      type="button"
+      role="tab"
+      aria-selected={mode === value_}
+      onClick={() => {
+        setMode(value_);
+        if (value_ === "preview") {
+          startTransition(async () => {
+            const result = await previewAction(value);
 
-          setHtml(result.ok ? result.data : `<p>${t("previewFailed")}</p>`);
-        });
-      }
-    }} className={cn("rounded px-2.5 py-1 text-xs", mode === value_ ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground")}>
+            setHtml(result.ok ? result.data : `<p>${t("previewFailed")}</p>`);
+          });
+        }
+      }}
+      className={cn(
+        "rounded px-2.5 py-1 text-xs",
+        mode === value_ ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+      )}
+    >
       {t(value_)}
     </button>
   );
@@ -73,22 +98,47 @@ export function MarkdownEditor({ id, value, onChange, rows = 16, label }: {
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between gap-2">
-        <label htmlFor={id} className="text-sm font-medium">{label}</label>
-        <div role="tablist" className="flex gap-1 rounded-md bg-muted p-0.5">{tab("write")}{tab("preview")}</div>
+        <label
+          htmlFor={id}
+          className="text-sm font-medium"
+        >
+          {label}
+        </label>
+        <div
+          role="tablist"
+          className="bg-muted flex gap-1 rounded-md p-0.5"
+        >
+          {tab("write")}
+          {tab("preview")}
+        </div>
       </div>
       {mode === "write" ? (
         <>
-          <Textarea id={id} rows={rows} value={value} onChange={event => onChange(event.target.value)} className="font-mono text-sm" />
+          <Textarea
+            id={id}
+            rows={rows}
+            value={value}
+            onChange={(event) => onChange(event.target.value)}
+            className="font-mono text-sm"
+          />
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <p className="text-xs text-muted-foreground">{t("help")}</p>
-            <Button type="button" variant="outline" size="sm"
-                    onClick={() => void insertAppLink(document.getElementById(id) as HTMLTextAreaElement | null)}>
-              <Link2 />{t("appLink")}
+            <p className="text-muted-foreground text-xs">{t("help")}</p>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => void insertAppLink(document.getElementById(id) as HTMLTextAreaElement | null)}
+            >
+              <Link2 />
+              {t("appLink")}
             </Button>
           </div>
         </>
       ) : (
-        <div role="tabpanel" className="min-h-40 rounded-md border border-border p-4">
+        <div
+          role="tabpanel"
+          className="border-border min-h-40 rounded-md border p-4"
+        >
           {pending ? <Spinner /> : <HtmlContent html={html} />}
         </div>
       )}

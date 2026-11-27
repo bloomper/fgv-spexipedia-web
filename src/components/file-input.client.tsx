@@ -13,7 +13,15 @@ import { cn } from "@/utils/utils";
  * The input keeps the `id`, so a `Label` with `htmlFor` still names it. `current` shows a file already there, until
  * another is chosen. The input is emptied after each choice, so choosing the same file again is reported again.
  */
-export function FileInput({ id, accept, disabled, className, current, chooseLabel, onChange }: {
+export function FileInput({
+  id,
+  accept,
+  disabled,
+  className,
+  current,
+  chooseLabel,
+  onChange,
+}: {
   id: string;
   accept?: string;
   disabled?: boolean;
@@ -28,20 +36,46 @@ export function FileInput({ id, accept, disabled, className, current, chooseLabe
   const [name, setName] = useState<string | null>(null);
 
   return (
-    <div className={cn("flex h-9 w-full min-w-0 items-center gap-3 rounded-md border border-input bg-transparent pl-1 pr-3 shadow-xs md:text-sm dark:bg-input/30",
-      disabled && "opacity-50", className)}>
-      <input ref={input} id={id} type="file" accept={accept} disabled={disabled} tabIndex={-1} className="sr-only" onChange={event => {
-        const chosen = event.target.files?.[0] ?? null;
+    <div
+      className={cn(
+        "border-input dark:bg-input/30 flex h-9 w-full min-w-0 items-center gap-3 rounded-md border bg-transparent pr-3 pl-1 shadow-xs md:text-sm",
+        disabled && "opacity-50",
+        className
+      )}
+    >
+      <input
+        ref={input}
+        id={id}
+        type="file"
+        accept={accept}
+        disabled={disabled}
+        tabIndex={-1}
+        className="sr-only"
+        onChange={(event) => {
+          const chosen = event.target.files?.[0] ?? null;
 
-        event.target.value = "";
-        setName(chosen?.name ?? null);
-        onChange(chosen);
-      }} />
-      <Button type="button" variant="secondary" size="sm" className="h-7" disabled={disabled} aria-describedby={nameId}
-              onClick={() => input.current?.click()}>
+          event.target.value = "";
+          setName(chosen?.name ?? null);
+          onChange(chosen);
+        }}
+      />
+      <Button
+        type="button"
+        variant="secondary"
+        size="sm"
+        className="h-7"
+        disabled={disabled}
+        aria-describedby={nameId}
+        onClick={() => input.current?.click()}
+      >
         <FileUp aria-hidden /> {chooseLabel ?? t("chooseFile")}
       </Button>
-      <span id={nameId} className={cn("truncate", !name && !current && "text-muted-foreground")}>{name ?? current ?? t("noFileChosen")}</span>
+      <span
+        id={nameId}
+        className={cn("truncate", !name && !current && "text-muted-foreground")}
+      >
+        {name ?? current ?? t("noFileChosen")}
+      </span>
     </div>
   );
 }

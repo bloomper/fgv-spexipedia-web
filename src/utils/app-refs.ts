@@ -10,13 +10,13 @@ const UUID = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
 
 /** The paths of each application's pages that articles may link to, and the reference each becomes. */
 const PATHS: { app: keyof AppWebs; path: RegExp; ref: (id: string) => string }[] = [
-  { app: "spexify", path: new RegExp(`^/albums/(${UUID})$`, "i"), ref: id => `spexify:album/${id}` },
-  { app: "spexflix", path: new RegExp(`^/videos/(${UUID})$`, "i"), ref: id => `spexflix:video/${id}` },
-  { app: "spexflix", path: new RegExp(`^/collections/(${UUID})$`, "i"), ref: id => `spexflix:collection/${id}` },
-  { app: "spexgram", path: new RegExp(`^/albums/(${UUID})$`, "i"), ref: id => `spexgram:album/${id}` },
-  { app: "spexgram", path: new RegExp(`^/items/(${UUID})$`, "i"), ref: id => `spexgram:item/${id}` },
-  { app: "archive", path: new RegExp(`^/manuscripts/(${UUID})$`, "i"), ref: id => `arkiv:document/${id}` },
-  { app: "archive", path: new RegExp(`^/arrangements/(${UUID})$`, "i"), ref: id => `arkiv:arrangement/${id}` },
+  { app: "spexify", path: new RegExp(`^/albums/(${UUID})$`, "i"), ref: (id) => `spexify:album/${id}` },
+  { app: "spexflix", path: new RegExp(`^/videos/(${UUID})$`, "i"), ref: (id) => `spexflix:video/${id}` },
+  { app: "spexflix", path: new RegExp(`^/collections/(${UUID})$`, "i"), ref: (id) => `spexflix:collection/${id}` },
+  { app: "spexgram", path: new RegExp(`^/albums/(${UUID})$`, "i"), ref: (id) => `spexgram:album/${id}` },
+  { app: "spexgram", path: new RegExp(`^/items/(${UUID})$`, "i"), ref: (id) => `spexgram:item/${id}` },
+  { app: "archive", path: new RegExp(`^/manuscripts/(${UUID})$`, "i"), ref: (id) => `arkiv:document/${id}` },
+  { app: "archive", path: new RegExp(`^/arrangements/(${UUID})$`, "i"), ref: (id) => `arkiv:arrangement/${id}` },
 ];
 
 /**

@@ -20,9 +20,19 @@ export default async function TrashPage() {
     const [t, trash, viewer] = await Promise.all([getTranslations("Trash"), getTrash(), getViewer()]);
 
     return (
-      <Page variant="content" className="mx-auto w-full max-w-7xl">
-        <PageHeader title={t("title")} description={t("description")} />
-        <TrashView articles={trash?.articles ?? []} images={trash?.images ?? []} admin={viewer.admin} />
+      <Page
+        variant="content"
+        className="mx-auto w-full max-w-7xl"
+      >
+        <PageHeader
+          title={t("title")}
+          description={t("description")}
+        />
+        <TrashView
+          articles={trash?.articles ?? []}
+          images={trash?.images ?? []}
+          admin={viewer.admin}
+        />
       </Page>
     );
   });

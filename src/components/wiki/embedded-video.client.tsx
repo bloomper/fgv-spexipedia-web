@@ -92,30 +92,65 @@ export function EmbeddedVideo({ video }: { video: EmbeddedVideoData }) {
 
   return (
     <figure className="space-y-3">
-      <div className="overflow-hidden rounded-lg border border-border bg-black">
+      <div className="border-border overflow-hidden rounded-lg border bg-black">
         {/* Subtitles come from Spexflix's media hostname, which allows Spexipedia's web (CORS) */}
-        <video ref={element} controls playsInline preload="metadata" crossOrigin="anonymous" poster={video.posterUrl ?? undefined}
-               className="aspect-video w-full" aria-label={video.title} controlsList="nodownload">
-          {video.playback?.subtitles.map(subtitle => (
-            <track key={subtitle.language} kind="subtitles" src={subtitle.url} srcLang={subtitle.language} label={subtitle.label} />
+        <video
+          ref={element}
+          controls
+          playsInline
+          preload="metadata"
+          crossOrigin="anonymous"
+          poster={video.posterUrl ?? undefined}
+          className="aspect-video w-full"
+          aria-label={video.title}
+          controlsList="nodownload"
+        >
+          {video.playback?.subtitles.map((subtitle) => (
+            <track
+              key={subtitle.language}
+              kind="subtitles"
+              src={subtitle.url}
+              srcLang={subtitle.language}
+              label={subtitle.label}
+            />
           ))}
         </video>
       </div>
       <figcaption className="flex flex-wrap items-baseline justify-between gap-2 text-sm">
         <span className="font-semibold">{video.title}</span>
         {video.url && (
-          <a href={video.url} className="inline-flex items-center gap-1 text-link hover:text-link/80">
-            {t("embeds.openVideo")} <ExternalLink className="size-3.5" aria-hidden />
+          <a
+            href={video.url}
+            className="text-link hover:text-link/80 inline-flex items-center gap-1"
+          >
+            {t("embeds.openVideo")}{" "}
+            <ExternalLink
+              className="size-3.5"
+              aria-hidden
+            />
           </a>
         )}
       </figcaption>
-      {failed && <p role="alert" className="text-sm text-destructive">{t("embeds.videoFailed")}</p>}
+      {failed && (
+        <p
+          role="alert"
+          className="text-destructive text-sm"
+        >
+          {t("embeds.videoFailed")}
+        </p>
+      )}
       {video.chapters.length > 0 && (
-        <ol className="flex flex-wrap gap-2 text-xs" aria-label={t("embeds.chapters")}>
-          {video.chapters.map(chapter => (
+        <ol
+          className="flex flex-wrap gap-2 text-xs"
+          aria-label={t("embeds.chapters")}
+        >
+          {video.chapters.map((chapter) => (
             <li key={`${chapter.startSeconds}-${chapter.title}`}>
-              <button type="button" onClick={() => jump(chapter.startSeconds)}
-                      className="rounded-full border border-border px-2.5 py-1 hover:border-primary/60 hover:text-link">
+              <button
+                type="button"
+                onClick={() => jump(chapter.startSeconds)}
+                className="border-border hover:border-primary/60 hover:text-link rounded-full border px-2.5 py-1"
+              >
                 <span className="text-muted-foreground tabular-nums">{time(chapter.startSeconds)}</span> {chapter.title}
               </button>
             </li>

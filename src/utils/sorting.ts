@@ -9,17 +9,21 @@ export type SortChoice<F extends string> = { field: F; dir: SortDirection };
 
 type Params = Record<string, string | string[] | undefined>;
 
-const first = (value: string | string[] | undefined) => Array.isArray(value) ? value[0] : value;
+const first = (value: string | string[] | undefined) => (Array.isArray(value) ? value[0] : value);
 
 /**
  * The order asked for in the address, falling back to the list's own for an unknown field or direction.
  */
-export function parseSort<F extends string>(params: Params, fields: readonly F[], fallback: SortChoice<F>): SortChoice<F> {
+export function parseSort<F extends string>(
+  params: Params,
+  fields: readonly F[],
+  fallback: SortChoice<F>
+): SortChoice<F> {
   const field = first(params.sort);
   const dir = first(params.dir);
 
   return {
-    field: fields.includes(field as F) ? field as F : fallback.field,
+    field: fields.includes(field as F) ? (field as F) : fallback.field,
     dir: dir === "asc" || dir === "desc" ? dir : fallback.dir,
   };
 }
@@ -28,7 +32,12 @@ export function parseSort<F extends string>(params: Params, fields: readonly F[]
  * The address of the page with another order, keeping what else is in it (e.g. the articles' view). The list's own
  * order leaves the address bare.
  */
-export function sortHref(path: string, params: Params, choice: SortChoice<string>, fallback: SortChoice<string>): string {
+export function sortHref(
+  path: string,
+  params: Params,
+  choice: SortChoice<string>,
+  fallback: SortChoice<string>
+): string {
   const query = new URLSearchParams();
 
   for (const [key, value] of Object.entries(params)) {

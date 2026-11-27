@@ -16,16 +16,35 @@ export async function generateMetadata(): Promise<Metadata> {
  * A new article, by any member, at the top of the tree or under a parent (`?parent=`); a red link gives the title
  * (`?title=`). It starts unpublished; an author publishes it.
  */
-export default async function NewArticlePage({ searchParams }: { searchParams: Promise<{ title?: string; parent?: string }> }) {
+export default async function NewArticlePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ title?: string; parent?: string }>;
+}) {
   return withPolicyPage(Policies.app.requireAccess, async () => {
-    const [t, data, { title, parent: parentId }] = await Promise.all([getTranslations("ArticleForm"), getArticles(), searchParams]);
+    const [t, data, { title, parent: parentId }] = await Promise.all([
+      getTranslations("ArticleForm"),
+      getArticles(),
+      searchParams,
+    ]);
     const parent = parentId && ID.test(parentId) ? await getArticle(parentId) : null;
 
     return (
-      <Page variant="content" className="mx-auto w-full max-w-7xl">
-        <PageHeader title={t("newTitle")} description={parent ? t("newChildDescription", { parent: parent.title }) : t("newDescription")} />
-        <ArticleForm id={null} revisionId={null} categories={data?.articleCategories ?? []} parentId={parent?.id ?? null}
-                     initial={{ title: title?.slice(0, 255) ?? "", body: "", visibility: "PUBLIC", categoryIds: [] }} />
+      <Page
+        variant="content"
+        className="mx-auto w-full max-w-7xl"
+      >
+        <PageHeader
+          title={t("newTitle")}
+          description={parent ? t("newChildDescription", { parent: parent.title }) : t("newDescription")}
+        />
+        <ArticleForm
+          id={null}
+          revisionId={null}
+          categories={data?.articleCategories ?? []}
+          parentId={parent?.id ?? null}
+          initial={{ title: title?.slice(0, 255) ?? "", body: "", visibility: "PUBLIC", categoryIds: [] }}
+        />
       </Page>
     );
   });

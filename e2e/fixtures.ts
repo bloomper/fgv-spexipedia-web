@@ -8,7 +8,7 @@ let logins = 0;
 
 /** A documentation address (RFC 5737) per login: 192.0.2.1, 192.0.2.2, … */
 function nextClientIp() {
-  logins = logins % 254 + 1;
+  logins = (logins % 254) + 1;
   return `192.0.2.${logins}`;
 }
 
@@ -31,7 +31,16 @@ type MockState = {
   jobs: { job: string; lastSucceeded: boolean | null }[];
   consumers: { id: string; name: string; clientId: string; notifyUrl: string | null; enabled: boolean }[];
   redirects: { id: string; oldTitle: string; target: string }[];
-  kinds: { id: string; type: string; use: string | null; nameSv: string; nameEn: string; aliases: string[]; retired: boolean; position: number }[];
+  kinds: {
+    id: string;
+    type: string;
+    use: string | null;
+    nameSv: string;
+    nameEn: string;
+    aliases: string[];
+    retired: boolean;
+    position: number;
+  }[];
   audit: { actorId: string; action: string; entityType: string; summary: string }[];
 };
 
@@ -48,21 +57,27 @@ export const test = base.extend<{
   loginAs: (persona: Persona) => Promise<void>;
   mock: Mock;
 }>({
-  resetBackend: [async ({ request }, provide) => {
-    await request.post(`${MOCK_URL}/__reset`);
-    await provide();
-  }, { auto: true }],
+  resetBackend: [
+    async ({ request }, provide) => {
+      await request.post(`${MOCK_URL}/__reset`);
+      await provide();
+    },
+    { auto: true },
+  ],
   // The application asks in its own dialogs; a native confirm or prompt fails the test
-  noNativeDialogs: [async ({ page }, provide) => {
-    const native: string[] = [];
+  noNativeDialogs: [
+    async ({ page }, provide) => {
+      const native: string[] = [];
 
-    page.on("dialog", dialog => {
-      native.push(`${dialog.type()}: ${dialog.message()}`);
-      void dialog.dismiss();
-    });
-    await provide();
-    expect(native, "native dialogs").toEqual([]);
-  }, { auto: true }],
+      page.on("dialog", (dialog) => {
+        native.push(`${dialog.type()}: ${dialog.message()}`);
+        void dialog.dismiss();
+      });
+      await provide();
+      expect(native, "native dialogs").toEqual([]);
+    },
+    { auto: true },
+  ],
   loginAs: async ({ page, request }, provide) => {
     await provide(async (persona: Persona) => {
       expect((await request.post(`${MOCK_URL}/__persona`, { data: { persona } })).status(), "persona set").toBe(204);
@@ -77,7 +92,7 @@ export const test = base.extend<{
       }
       await page.context().clearCookies();
       await page.goto("/api/auth/login");
-      await page.waitForURL(url => !url.pathname.startsWith("/api/auth"));
+      await page.waitForURL((url) => !url.pathname.startsWith("/api/auth"));
       await acceptCookies(page);
     });
   },
@@ -98,9 +113,16 @@ export const test = base.extend<{
 export async function acceptCookies(page: Page) {
   const button = page.getByRole("button", { name: "Jag förstår" });
 
-  if (await button.waitFor({ timeout: 5_000 }).then(() => true, () => false)) {
+  if (
+    await button.waitFor({ timeout: 5_000 }).then(
+      () => true,
+      () => false
+    )
+  ) {
     await button.click();
-    await expect.poll(async () => (await page.context().cookies()).some(cookie => cookie.name === "c15t-notice")).toBe(true);
+    await expect
+      .poll(async () => (await page.context().cookies()).some((cookie) => cookie.name === "c15t-notice"))
+      .toBe(true);
   }
 }
 
@@ -108,9 +130,11 @@ export async function acceptCookies(page: Page) {
  * The addresses of the links on the page whose path starts with the prefix, without duplicates.
  */
 export async function linksTo(page: Page, prefix: string): Promise<string[]> {
-  const hrefs = await page.locator(`a[href^="${prefix}"]`).evaluateAll(links => links.map(link => link.getAttribute("href") ?? ""));
+  const hrefs = await page
+    .locator(`a[href^="${prefix}"]`)
+    .evaluateAll((links) => links.map((link) => link.getAttribute("href") ?? ""));
 
-  return [...new Set(hrefs.map(href => href.split("#")[0]).filter(href => href.length > prefix.length))];
+  return [...new Set(hrefs.map((href) => href.split("#")[0]).filter((href) => href.length > prefix.length))];
 }
 
 /**
@@ -125,6 +149,6 @@ export async function answerDialog(page: Page, button: string) {
 }
 
 /** The sidebar as shown, on desktop. */
-export const sidebar = (page: Page) => page.locator("[data-slot=\"sidebar\"]:visible");
+export const sidebar = (page: Page) => page.locator('[data-slot="sidebar"]:visible');
 
 export { expect };

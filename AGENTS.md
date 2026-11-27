@@ -112,7 +112,7 @@ The theme, the shadcn components and the application shell come from `@bloomper/
   restore, hide (authors). `ArticleForm` tells the server who is editing every minute and, on CONFLICT, shows the
   differences to the newer revision to take or overwrite. The preview is rendered by the server (`markdownPreview`).
   Articles form a tree (`src/components/wiki/article-tree.tsx`: breadcrumbs, the tree around an article, its table of
-  contents; authors move and reorder them) and categories nest; *What links here*, wanted and orphaned articles come
+  contents; authors move and reorder them) and categories nest; _What links here_, wanted and orphaned articles come
   from the server. Links to missing articles point at `/articles/new?title=` and are shown red by that address.
 - **Records and books are not Spexipedia's** (`fgv-infra-deploy` `docs/data-ownership.md`): a spex page shows the
   spex' records from Spexify's discography (`Spex.records`, covers by links Spexify signs) and each number the books of

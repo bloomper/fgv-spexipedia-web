@@ -18,12 +18,24 @@ export function RebusReveal({ rebus, solution }: { rebus: WikiImageData; solutio
       <CompareSlider
         start={0}
         label={t("solutionSlider")}
-        valueText={percent => t("solutionShown", { percent })}
-        className="rounded-lg border border-border"
-        back={<WikiImage image={rebus} sizes={SIZES} className="block w-full" />}
-        front={<WikiImage image={solution} sizes={SIZES} className="object-contain" />}
+        valueText={(percent) => t("solutionShown", { percent })}
+        className="border-border rounded-lg border"
+        back={
+          <WikiImage
+            image={rebus}
+            sizes={SIZES}
+            className="block w-full"
+          />
+        }
+        front={
+          <WikiImage
+            image={solution}
+            sizes={SIZES}
+            className="object-contain"
+          />
+        }
       />
-      <p className="text-xs text-muted-foreground">{t("revealSolution")}</p>
+      <p className="text-muted-foreground text-xs">{t("revealSolution")}</p>
     </div>
   );
 }

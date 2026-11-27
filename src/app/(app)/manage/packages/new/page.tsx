@@ -19,9 +19,30 @@ export default async function NewPackagePage() {
     const t = await getTranslations("Packages");
 
     return (
-      <Page variant="content" className="mx-auto w-full max-w-7xl">
-        <PageHeader title={t("new")} description={t("newDescription")} />
-        <p className="text-sm"><a href="/api/packages/template" download className="text-link hover:text-link/80">{t("template")}</a> · <Link href="/manage/packages" className="text-link hover:text-link/80">{t("back")}</Link></p>
+      <Page
+        variant="content"
+        className="mx-auto w-full max-w-7xl"
+      >
+        <PageHeader
+          title={t("new")}
+          description={t("newDescription")}
+        />
+        <p className="text-sm">
+          <a
+            href="/api/packages/template"
+            download
+            className="text-link hover:text-link/80"
+          >
+            {t("template")}
+          </a>{" "}
+          ·{" "}
+          <Link
+            href="/manage/packages"
+            className="text-link hover:text-link/80"
+          >
+            {t("back")}
+          </Link>
+        </p>
         <NewPackageForm />
       </Page>
     );

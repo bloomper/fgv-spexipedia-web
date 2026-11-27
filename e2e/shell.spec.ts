@@ -75,14 +75,22 @@ test.describe("The application shell", () => {
 
   test("someone without access to Spexipedia reads as a visitor and is told why", async ({ page, loginAs }) => {
     await loginAs("noaccess");
-    await expect(page.getByText(/nils@example\.org/).filter({ visible: true }).first()).toBeVisible();
+    await expect(
+      page
+        .getByText(/nils@example\.org/)
+        .filter({ visible: true })
+        .first()
+    ).toBeVisible();
     await expect(sidebar(page).getByRole("button", { name: "Redigera", exact: true })).toHaveCount(0);
 
     await page.goto("/articles/new");
     await expect(page.getByRole("heading", { name: "Du har inte åtkomst till Spexipedia" })).toBeVisible();
   });
 
-  test("the tokens stay on the server: Better Auth's token routes answer 404, the session still works", async ({ page, loginAs }) => {
+  test("the tokens stay on the server: Better Auth's token routes answer 404, the session still works", async ({
+    page,
+    loginAs,
+  }) => {
     await loginAs("member");
     for (const path of ["/api/auth/get-access-token", "/api/auth/refresh-token"]) {
       expect((await page.request.post(path, { data: { providerId: "keycloak" } })).status(), path).toBe(404);

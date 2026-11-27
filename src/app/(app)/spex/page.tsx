@@ -27,47 +27,108 @@ export async function generateMetadata(): Promise<Metadata> {
  */
 export default async function BrowsePage({ searchParams }: Props) {
   const [t, ts, data, viewer, params] = await Promise.all([
-    getTranslations("Browse"), getTranslations("Sort"), getSpexBrowse(), getViewer(), searchParams,
+    getTranslations("Browse"),
+    getTranslations("Sort"),
+    getSpexBrowse(),
+    getViewer(),
+    searchParams,
   ]);
   const sort = parseSort(params, FIELDS, DEFAULT);
   // The server lists every spex, as base data; the pages of unpublished ones are for authors only
-  const visible = (data?.spexAll ?? []).filter(s => !s.retired && (s.published || viewer.author));
-  const spex = sort.field === "year"
-    ? sortItems(visible, sort.dir, s => s.year, s => s.title)
-    : sortItems(visible, sort.dir, s => s.title, s => s.year);
-  const decades = sort.field === "year" ? groupBy(spex, s => `${s.year.slice(0, 3)}0`) : [];
+  const visible = (data?.spexAll ?? []).filter((s) => !s.retired && (s.published || viewer.author));
+  const spex =
+    sort.field === "year"
+      ? sortItems(
+          visible,
+          sort.dir,
+          (s) => s.year,
+          (s) => s.title
+        )
+      : sortItems(
+          visible,
+          sort.dir,
+          (s) => s.title,
+          (s) => s.year
+        );
+  const decades = sort.field === "year" ? groupBy(spex, (s) => `${s.year.slice(0, 3)}0`) : [];
 
   return (
-    <Page variant="content" className="mx-auto w-full max-w-7xl">
-      <PageHeader title={t("title")} description={t("description")} />
+    <Page
+      variant="content"
+      className="mx-auto w-full max-w-7xl"
+    >
+      <PageHeader
+        title={t("title")}
+        description={t("description")}
+      />
       <div className="space-y-3">
         {(data?.spexCategories ?? []).length > 0 && (
-          <nav aria-label={t("categories")} className="flex flex-wrap gap-2">
-            {(data?.spexCategories ?? []).map(category => (
-              <Link key={category.id} href={`/categories/${category.id}`} className="rounded-full bg-secondary px-3 py-1 text-sm hover:text-link">{category.name}</Link>
+          <nav
+            aria-label={t("categories")}
+            className="flex flex-wrap gap-2"
+          >
+            {(data?.spexCategories ?? []).map((category) => (
+              <Link
+                key={category.id}
+                href={`/categories/${category.id}`}
+                className="bg-secondary hover:text-link rounded-full px-3 py-1 text-sm"
+              >
+                {category.name}
+              </Link>
             ))}
           </nav>
         )}
         {decades.length > 0 && (
-          <nav aria-label={t("decades")} className="flex flex-wrap gap-2">
+          <nav
+            aria-label={t("decades")}
+            className="flex flex-wrap gap-2"
+          >
             {decades.map(([decade]) => (
-              <a key={decade} href={`#decade-${decade}`} className="rounded-full border border-border px-3 py-1 text-sm hover:border-primary hover:text-link">{t("decade", { decade })}</a>
+              <a
+                key={decade}
+                href={`#decade-${decade}`}
+                className="border-border hover:border-primary hover:text-link rounded-full border px-3 py-1 text-sm"
+              >
+                {t("decade", { decade })}
+              </a>
             ))}
           </nav>
         )}
-        <SortControl path="/spex" params={params} current={sort} fallback={DEFAULT}
-                     fields={[{ field: "year", label: ts("year") }, { field: "title", label: ts("title") }]} />
+        <SortControl
+          path="/spex"
+          params={params}
+          current={sort}
+          fallback={DEFAULT}
+          fields={[
+            { field: "year", label: ts("year") },
+            { field: "title", label: ts("title") },
+          ]}
+        />
       </div>
       {sort.field === "title" && (
         <div className="grid grid-cols-3 gap-2 sm:gap-4 md:grid-cols-4 xl:grid-cols-6">
-          {spex.map(s => <SpexCard key={s.id} spex={s} />)}
+          {spex.map((s) => (
+            <SpexCard
+              key={s.id}
+              spex={s}
+            />
+          ))}
         </div>
       )}
       {decades.map(([decade, list]) => (
-        <section key={decade} id={`decade-${decade}`} className="scroll-mt-20 space-y-3">
+        <section
+          key={decade}
+          id={`decade-${decade}`}
+          className="scroll-mt-20 space-y-3"
+        >
           <h2 className="wiki-heading text-xl font-semibold">{t("decade", { decade })}</h2>
           <div className="grid grid-cols-3 gap-2 sm:gap-4 md:grid-cols-4 xl:grid-cols-6">
-            {list.map(s => <SpexCard key={s.id} spex={s} />)}
+            {list.map((s) => (
+              <SpexCard
+                key={s.id}
+                spex={s}
+              />
+            ))}
           </div>
         </section>
       ))}

@@ -2,7 +2,16 @@ import "server-only";
 
 import { graphql } from "@/gql";
 import { runMutation, runQuery } from "@/lib/graphql.server";
-import type { AuditFilter, KindInput, KindType, KindUse, MaintenanceJob, SettingsInput, SyncConsumerInput, RedirectInput } from "@/gql/graphql";
+import type {
+  AuditFilter,
+  KindInput,
+  KindType,
+  KindUse,
+  MaintenanceJob,
+  SettingsInput,
+  SyncConsumerInput,
+  RedirectInput,
+} from "@/gql/graphql";
 
 const AuditLogQuery = graphql(`
     query AuditLog($page: Int!, $size: Int!, $filter: AuditFilter) {

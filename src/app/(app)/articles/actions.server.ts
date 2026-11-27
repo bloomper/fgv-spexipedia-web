@@ -23,13 +23,14 @@ import { ID } from "@/utils/ids";
 import { appRef } from "@/utils/app-refs";
 
 function requireId(...ids: (string | null | undefined)[]) {
-  if (ids.some(id => id != null && !ID.test(id))) {
+  if (ids.some((id) => id != null && !ID.test(id))) {
     throw new Error("Invalid id");
   }
 }
 
-const member = <T, >(work: () => Promise<T>) => withPolicyAction(Policies.app.requireAccess, () => toActionResult(work));
-const author = <T, >(work: () => Promise<T>) => withPolicyAction(Policies.author.requireAuthor, () => toActionResult(work));
+const member = <T>(work: () => Promise<T>) => withPolicyAction(Policies.app.requireAccess, () => toActionResult(work));
+const author = <T>(work: () => Promise<T>) =>
+  withPolicyAction(Policies.author.requireAuthor, () => toActionResult(work));
 
 /**
  * The reference for an address pasted from another FGV application (spec 4.5), e.g. `spexify:album/<id>`; an error
@@ -38,8 +39,10 @@ const author = <T, >(work: () => Promise<T>) => withPolicyAction(Policies.author
 export async function appRefAction(address: string): Promise<ActionResult<string>> {
   return member(async () => {
     const ref = appRef(address.slice(0, 2000), {
-      spexify: process.env.SPEXIFY_WEB_URL, spexflix: process.env.SPEXFLIX_WEB_URL,
-      spexgram: process.env.SPEXGRAM_WEB_URL, archive: process.env.ARCHIVE_WEB_URL,
+      spexify: process.env.SPEXIFY_WEB_URL,
+      spexflix: process.env.SPEXFLIX_WEB_URL,
+      spexgram: process.env.SPEXGRAM_WEB_URL,
+      archive: process.env.ARCHIVE_WEB_URL,
     });
 
     if (!ref) {
@@ -58,7 +61,11 @@ export async function previewAction(markdown: string): Promise<ActionResult<stri
  * Saves the article: a new one, or a new revision of one. A revision based on an older one than the latest is refused
  * with CONFLICT, and the editor then gets the latest to merge with.
  */
-export async function saveArticleAction(id: string | null, input: ArticleInput, baseRevisionId: string | null): Promise<ActionResult<{ slug: string }>> {
+export async function saveArticleAction(
+  id: string | null,
+  input: ArticleInput,
+  baseRevisionId: string | null
+): Promise<ActionResult<{ slug: string }>> {
   requireId(id, baseRevisionId, input.parentId, ...(input.categoryIds ?? []));
   return member(async () => {
     const saved = id ? await articleUpdate(id, input, baseRevisionId) : await articleCreate(input);
@@ -73,7 +80,10 @@ export async function saveArticleAction(id: string | null, input: ArticleInput, 
  * Saves an article category: any member creates one, an author changes one. The parents replace the old ones; the
  * server refuses a category under itself or under one of its own subcategories.
  */
-export async function saveArticleCategoryAction(id: string | null, input: ArticleCategoryInput): Promise<ActionResult<{ slug: string }>> {
+export async function saveArticleCategoryAction(
+  id: string | null,
+  input: ArticleCategoryInput
+): Promise<ActionResult<{ slug: string }>> {
   requireId(id, ...(input.parentIds ?? []));
   const work = async () => {
     const saved = id ? await articleCategoryUpdate(id, input) : await articleCategoryCreate(input);
@@ -86,7 +96,9 @@ export async function saveArticleCategoryAction(id: string | null, input: Articl
 }
 
 /** The latest revision of the article, for merging after a conflict. */
-export async function latestArticleAction(id: string): Promise<ActionResult<{ body: string; revisionId: string | null }>> {
+export async function latestArticleAction(
+  id: string
+): Promise<ActionResult<{ body: string; revisionId: string | null }>> {
   requireId(id);
   return member(async () => {
     const article = await getArticle(id);

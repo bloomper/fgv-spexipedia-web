@@ -19,8 +19,14 @@ export default async function UnresolvedCreditsPage() {
     const [t, data] = await Promise.all([getTranslations("UnresolvedCredits"), getUnresolvedCredits()]);
 
     return (
-      <Page variant="content" className="mx-auto w-full max-w-7xl">
-        <PageHeader title={t("title")} description={t("description", { count: data?.total ?? 0 })} />
+      <Page
+        variant="content"
+        className="mx-auto w-full max-w-7xl"
+      >
+        <PageHeader
+          title={t("title")}
+          description={t("description", { count: data?.total ?? 0 })}
+        />
         <UnresolvedCredits data={data ?? { total: 0, credits: [] }} />
       </Page>
     );

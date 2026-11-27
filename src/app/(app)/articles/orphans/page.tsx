@@ -19,8 +19,14 @@ export default async function OrphanArticlesPage() {
     const [t, orphans] = await Promise.all([getTranslations("Articles"), getOrphanArticles()]);
 
     return (
-      <Page variant="content" className="mx-auto w-full max-w-7xl">
-        <PageHeader title={t("orphans")} description={t("orphansDescription")} />
+      <Page
+        variant="content"
+        className="mx-auto w-full max-w-7xl"
+      >
+        <PageHeader
+          title={t("orphans")}
+          description={t("orphansDescription")}
+        />
         <ArticleList articles={orphans} />
       </Page>
     );

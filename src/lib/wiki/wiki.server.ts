@@ -242,14 +242,17 @@ export const getArticles = async (categoryId?: string | null, includeSubcategori
 export const getArticleTree = async () => (await runQuery(ArticleTreeQuery, {}))?.articleRoots ?? [];
 export const getWantedArticles = async () => (await runQuery(WantedArticlesQuery, {}))?.wantedArticles ?? [];
 export const getOrphanArticles = async () => (await runQuery(OrphanArticlesQuery, {}))?.orphanArticles ?? [];
-export const getArticleCategory = cache(async (id: string) => (await runQuery(ArticleCategoryQuery, { id }))?.articleCategory ?? null);
+export const getArticleCategory = cache(
+  async (id: string) => (await runQuery(ArticleCategoryQuery, { id }))?.articleCategory ?? null
+);
 export const getArticle = cache(async (id: string) => (await runQuery(ArticleQuery, { id }))?.article ?? null);
 export const getArticleHistory = async (id: string) => (await runQuery(ArticleHistoryQuery, { id }))?.article ?? null;
 export const getRevision = async (id: string) => (await runQuery(RevisionQuery, { id }))?.revision ?? null;
 export const search = async (q: string) => (await runQuery(SearchQuery, { q }))?.search ?? [];
 export const getSitemap = async () => (await runQuery(SitemapQuery, {}))?.sitemap ?? [];
 export const getRedirect = async (title: string) => (await runQuery(RedirectQuery, { title }))?.redirect ?? null;
-export const markdownPreview = async (markdown: string) => (await runQuery(MarkdownPreviewQuery, { markdown }))?.markdownPreview ?? "";
+export const markdownPreview = async (markdown: string) =>
+  (await runQuery(MarkdownPreviewQuery, { markdown }))?.markdownPreview ?? "";
 export const spexareSearch = async (q: string) => (await runQuery(SpexareSearchQuery, { q }))?.spexareSearch ?? [];
 
 export type SpexPageData = NonNullable<Awaited<ReturnType<typeof getSpexPage>>>;

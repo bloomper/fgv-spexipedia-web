@@ -25,15 +25,24 @@ export function SortControl<F extends string>({ path, params, current, fallback,
 
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <LinkSegments label={t("by")} items={fields.map(({ field, label }) => ({
-        href: sortHref(path, params, { field, dir: current.dir }, fallback),
-        label,
-        active: field === current.field,
-      }))} />
-      <Link href={sortHref(path, params, flipped, fallback)} rel="nofollow"
-            className="inline-flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-sm text-muted-foreground hover:text-foreground"
-            aria-label={t(current.dir === "asc" ? "switchToDesc" : "switchToAsc")}>
-        <Icon className="size-4" aria-hidden />
+      <LinkSegments
+        label={t("by")}
+        items={fields.map(({ field, label }) => ({
+          href: sortHref(path, params, { field, dir: current.dir }, fallback),
+          label,
+          active: field === current.field,
+        }))}
+      />
+      <Link
+        href={sortHref(path, params, flipped, fallback)}
+        rel="nofollow"
+        className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-sm"
+        aria-label={t(current.dir === "asc" ? "switchToDesc" : "switchToAsc")}
+      >
+        <Icon
+          className="size-4"
+          aria-hidden
+        />
         {t(current.dir)}
       </Link>
     </div>

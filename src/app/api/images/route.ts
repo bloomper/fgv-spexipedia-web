@@ -31,5 +31,8 @@ export async function POST(request: NextRequest) {
     signal: request.signal,
   });
 
-  return new NextResponse(upstream.body, { status: upstream.status, headers: { "Content-Type": upstream.headers.get("content-type") ?? "application/json" } });
+  return new NextResponse(upstream.body, {
+    status: upstream.status,
+    headers: { "Content-Type": upstream.headers.get("content-type") ?? "application/json" },
+  });
 }

@@ -23,8 +23,7 @@ test.describe("On a phone", () => {
       await page.goto("/spex");
       await acceptCookies(page);
 
-      const pages = ["/", "/spex", "/articles", "/about", "/support",
-        ...(await linksTo(page, "/spex/")).slice(0, 3)];
+      const pages = ["/", "/spex", "/articles", "/about", "/support", ...(await linksTo(page, "/spex/")).slice(0, 3)];
 
       for (const path of pages) {
         await expectNoSidewaysScroll(page, path);
@@ -37,13 +36,15 @@ test.describe("On a phone", () => {
     await page.goto("/spex");
     await acceptCookies(page);
 
-    const outside = await page.evaluate(() => [...document.querySelectorAll("a[href^='/spex/']")].flatMap(tile => {
-      const box = tile.getBoundingClientRect();
+    const outside = await page.evaluate(() =>
+      [...document.querySelectorAll("a[href^='/spex/']")].flatMap((tile) => {
+        const box = tile.getBoundingClientRect();
 
-      return [...tile.querySelectorAll("[data-slot=badge]")]
-        .filter(badge => badge.getBoundingClientRect().right > box.right + 0.5)
-        .map(badge => badge.textContent);
-    }));
+        return [...tile.querySelectorAll("[data-slot=badge]")]
+          .filter((badge) => badge.getBoundingClientRect().right > box.right + 0.5)
+          .map((badge) => badge.textContent);
+      })
+    );
 
     expect(outside).toEqual([]);
   });

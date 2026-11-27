@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-const actions = vi.hoisted(() => ({} as Record<string, ReturnType<typeof vi.fn>>));
+const actions = vi.hoisted(() => ({}) as Record<string, ReturnType<typeof vi.fn>>);
 
 vi.mock("next/navigation", async () => {
   const mocks = await import("@/test/manage-mocks");
@@ -22,18 +22,51 @@ const data = {
     { id: "k2", name: "Gamla spexet", firstYear: "1930", description: "Före kriget", retired: true, logo: null },
   ],
   spexAll: [
-    { id: "s1", slug: "1984-lasse-maja", year: "1984", title: "Lasse-Maja", revival: false, retired: false, published: true, parent: null, category: { id: "k1", name: "Chalmersspexet" } },
-    { id: "s2", slug: "2010-lasse-maja", year: "2010", title: "Lasse-Maja", revival: true, retired: false, published: false, parent: { id: "s1" }, category: null },
+    {
+      id: "s1",
+      slug: "1984-lasse-maja",
+      year: "1984",
+      title: "Lasse-Maja",
+      revival: false,
+      retired: false,
+      published: true,
+      parent: null,
+      category: { id: "k1", name: "Chalmersspexet" },
+    },
+    {
+      id: "s2",
+      slug: "2010-lasse-maja",
+      year: "2010",
+      title: "Lasse-Maja",
+      revival: true,
+      retired: false,
+      published: false,
+      parent: { id: "s1" },
+      category: null,
+    },
   ],
-  taskCategories: [{ id: "t1", name: "Ensemble", actorPresent: true, instruments: false, retired: false },
-    { id: "t2", name: "Orkester", actorPresent: false, instruments: true, retired: false }],
-  tasks: [{ id: "u1", name: "Regissör", board: true, retired: false, category: { id: "t1", name: "Ensemble" } },
+  taskCategories: [
+    { id: "t1", name: "Ensemble", actorPresent: true, instruments: false, retired: false },
+    { id: "t2", name: "Orkester", actorPresent: false, instruments: true, retired: false },
+  ],
+  tasks: [
+    { id: "u1", name: "Regissör", board: true, retired: false, category: { id: "t1", name: "Ensemble" } },
     { id: "u2", name: "Sufflör", board: false, retired: false, category: { id: "t1", name: "Ensemble" } },
-    { id: "u3", name: "Fiol", board: false, retired: false, category: { id: "t2", name: "Orkester" } }],
+    { id: "u3", name: "Fiol", board: false, retired: false, category: { id: "t2", name: "Orkester" } },
+  ],
 } as unknown as BaseData;
 
 const show = (admin = true, highlight: string | null = null, tab: string | null = null) =>
-  render(<DialogsProvider><BaseDataManager data={data} admin={admin} highlight={highlight} initialTab={tab} /></DialogsProvider>);
+  render(
+    <DialogsProvider>
+      <BaseDataManager
+        data={data}
+        admin={admin}
+        highlight={highlight}
+        initialTab={tab}
+      />
+    </DialogsProvider>
+  );
 const tab = (name: string) => screen.getByRole("tab", { name: new RegExp(`^sections.${name} `) });
 const panel = (name: string) => screen.getByRole("tabpanel", { name: new RegExp(`^sections.${name} `) });
 /** Opens a section's tab and returns its panel. */
@@ -51,7 +84,7 @@ const add = async (name: string) => {
 
 describe("BaseDataManager", () => {
   beforeEach(() => {
-    Object.keys(actions).forEach(key => delete actions[key]);
+    Object.keys(actions).forEach((key) => delete actions[key]);
     vi.clearAllMocks();
   });
 
@@ -87,7 +120,13 @@ describe("BaseDataManager", () => {
     await userEvent.selectOptions(dialog.getByLabelText("year"), "2026");
     await userEvent.type(dialog.getByLabelText("spexTitle"), " Abraham Lincoln ");
     await userEvent.click(dialog.getByRole("button", { name: "save" }));
-    await waitFor(() => expect(actions.saveSpexAction).toHaveBeenCalledWith(null, { year: "2026", title: "Abraham Lincoln", categoryId: "k1" }));
+    await waitFor(() =>
+      expect(actions.saveSpexAction).toHaveBeenCalledWith(null, {
+        year: "2026",
+        title: "Abraham Lincoln",
+        categoryId: "k1",
+      })
+    );
   });
 
   it("hides retired records until asked, and edits a category", async () => {
@@ -104,8 +143,13 @@ describe("BaseDataManager", () => {
     await userEvent.type(categories.getByLabelText("name"), "Chalmersspexet Bob");
     await userEvent.type(categories.getByLabelText("description"), "Spexet");
     await userEvent.click(categories.getByRole("button", { name: "save" }));
-    await waitFor(() => expect(actions.saveSpexCategoryAction).toHaveBeenCalledWith("k1",
-      { name: "Chalmersspexet Bob", firstYear: "1948", description: "Spexet" }, undefined));
+    await waitFor(() =>
+      expect(actions.saveSpexCategoryAction).toHaveBeenCalledWith(
+        "k1",
+        { name: "Chalmersspexet Bob", firstYear: "1948", description: "Spexet" },
+        undefined
+      )
+    );
   });
 
   it("retires a record and merges one into another after confirming", async () => {
@@ -130,8 +174,13 @@ describe("BaseDataManager", () => {
     await userEvent.type(category.getByLabelText("name"), "Kommitté");
     await userEvent.click(category.getByRole("checkbox", { name: "actorPresent" }));
     await userEvent.click(category.getByRole("button", { name: "save" }));
-    await waitFor(() => expect(actions.saveTaskCategoryAction).toHaveBeenCalledWith(null,
-      { name: "Kommitté", actorPresent: true, instruments: false }));
+    await waitFor(() =>
+      expect(actions.saveTaskCategoryAction).toHaveBeenCalledWith(null, {
+        name: "Kommitté",
+        actorPresent: true,
+        instruments: false,
+      })
+    );
 
     await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
 
@@ -141,7 +190,9 @@ describe("BaseDataManager", () => {
     await userEvent.selectOptions(task.getByLabelText("category"), "t2");
     await userEvent.click(task.getByRole("checkbox", { name: "board" }));
     await userEvent.click(task.getByRole("button", { name: "save" }));
-    await waitFor(() => expect(actions.saveTaskAction).toHaveBeenCalledWith(null, { name: "Kostymör", categoryId: "t2", board: true }));
+    await waitFor(() =>
+      expect(actions.saveTaskAction).toHaveBeenCalledWith(null, { name: "Kostymör", categoryId: "t2", board: true })
+    );
   });
 
   it("marks the board's tasks and narrows tasks and spex to a category", async () => {
@@ -152,7 +203,11 @@ describe("BaseDataManager", () => {
     expect(within(tasks).getAllByRole("listitem")[0]).toHaveTextContent("board");
     expect(within(tasks).getAllByRole("listitem")).toHaveLength(3);
     await userEvent.selectOptions(within(tasks).getByRole("combobox", { name: "filterCategory" }), "t2");
-    expect(within(tasks).getAllByRole("listitem").map(row => row.textContent)).toEqual([expect.stringContaining("Fiol")]);
+    expect(
+      within(tasks)
+        .getAllByRole("listitem")
+        .map((row) => row.textContent)
+    ).toEqual([expect.stringContaining("Fiol")]);
 
     const spex = within(await section("spex")).getByRole("combobox", { name: "filterCategory" });
 
@@ -172,7 +227,10 @@ describe("BaseDataManager", () => {
   it("opens the tab in the address", () => {
     show(true, null, "task-categories");
 
-    expect(within(panel("task-categories")).getAllByRole("listitem").map(row => row.textContent)).toEqual([
-      expect.stringContaining("Ensemble"), expect.stringContaining("Orkester")]);
+    expect(
+      within(panel("task-categories"))
+        .getAllByRole("listitem")
+        .map((row) => row.textContent)
+    ).toEqual([expect.stringContaining("Ensemble"), expect.stringContaining("Orkester")]);
   });
 });

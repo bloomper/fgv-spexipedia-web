@@ -23,9 +23,9 @@ export async function uploadImage(file: File, kind: string): Promise<UploadedIma
   const response = await fetch(`/api/images?kind=${encodeURIComponent(kind)}`, { method: "POST", body });
 
   if (!response.ok) {
-    const error = await response.json().catch(() => null) as { message?: string; detail?: string } | null;
+    const error = (await response.json().catch(() => null)) as { message?: string; detail?: string } | null;
 
     throw new Error(error?.detail ?? error?.message ?? `HTTP ${response.status}`);
   }
-  return await response.json() as UploadedImage;
+  return (await response.json()) as UploadedImage;
 }

@@ -33,26 +33,40 @@ export function subtree(id: string, articles: Choice[]): Set<string> {
 /**
  * Moves an article under another article, or to the top of the tree; its children go with it and its address stays.
  */
-export function MoveArticleButton({ id, parentId, articles }: { id: string; parentId: string | null; articles: Choice[] }) {
+export function MoveArticleButton({
+  id,
+  parentId,
+  articles,
+}: {
+  id: string;
+  parentId: string | null;
+  articles: Choice[];
+}) {
   const t = useTranslations("Articles");
   const { choose } = useDialogs();
   const { save, pending } = useSave();
   const excluded = subtree(id, articles);
 
   return (
-    <Button variant="ghost" size="sm" disabled={pending} onClick={async () => {
-      const chosen = await choose({
-        title: t("moveTitle"),
-        items: articles.filter(article => !excluded.has(article.id) && article.id !== parentId)
-          .map(article => ({ id: article.id, label: article.title }))
-          .sort((a, b) => a.label.localeCompare(b.label, "sv")),
-        createLabel: parentId ? t("moveToTop") : undefined,
-      });
+    <Button
+      variant="ghost"
+      size="sm"
+      disabled={pending}
+      onClick={async () => {
+        const chosen = await choose({
+          title: t("moveTitle"),
+          items: articles
+            .filter((article) => !excluded.has(article.id) && article.id !== parentId)
+            .map((article) => ({ id: article.id, label: article.title }))
+            .sort((a, b) => a.label.localeCompare(b.label, "sv")),
+          createLabel: parentId ? t("moveToTop") : undefined,
+        });
 
-      if (chosen !== null) {
-        void save(() => moveArticleAction(id, chosen || null), { success: t("moved") });
-      }
-    }}>
+        if (chosen !== null) {
+          void save(() => moveArticleAction(id, chosen || null), { success: t("moved") });
+        }
+      }}
+    >
       <FolderTree aria-hidden /> {t("move")}
     </Button>
   );
@@ -63,12 +77,20 @@ type Child = { id: string; slug: string; title: string; visibility: string; publ
 /**
  * An article's children in their order, at the bottom of the article; authors move them up and down.
  */
-export function ChildArticles({ parentId, items, reorder }: { parentId: string | null; items: Child[]; reorder: boolean }) {
+export function ChildArticles({
+  parentId,
+  items,
+  reorder,
+}: {
+  parentId: string | null;
+  items: Child[];
+  reorder: boolean;
+}) {
   const t = useTranslations("Articles");
   const { save, pending } = useSave();
 
   const move = (from: number, to: number) => {
-    const ids = items.map(child => child.id);
+    const ids = items.map((child) => child.id);
     const [moved] = ids.splice(from, 1);
 
     ids.splice(to, 0, moved);
@@ -76,16 +98,46 @@ export function ChildArticles({ parentId, items, reorder }: { parentId: string |
   };
 
   return (
-    <ol className="divide-y divide-border rounded-lg border border-border bg-card">
+    <ol className="divide-border border-border bg-card divide-y rounded-lg border">
       {items.map((child, index) => (
-        <li key={child.id} className="flex flex-wrap items-center gap-2 px-3 py-2">
-          <Link href={`/articles/${child.slug}`} className="wiki-heading text-lg font-semibold hover:text-link">{child.title}</Link>
-          {child.visibility === "MEMBERS" && <Badge variant="secondary"><Lock aria-hidden /> {t("members")}</Badge>}
+        <li
+          key={child.id}
+          className="flex flex-wrap items-center gap-2 px-3 py-2"
+        >
+          <Link
+            href={`/articles/${child.slug}`}
+            className="wiki-heading hover:text-link text-lg font-semibold"
+          >
+            {child.title}
+          </Link>
+          {child.visibility === "MEMBERS" && (
+            <Badge variant="secondary">
+              <Lock aria-hidden /> {t("members")}
+            </Badge>
+          )}
           {!child.published && <Badge variant="outline">{t("unpublished")}</Badge>}
           {reorder && (
             <span className="ml-auto inline-flex">
-              <Button type="button" size="icon" variant="ghost" aria-label={t("moveUp", { title: child.title })} disabled={pending || index === 0} onClick={() => move(index, index - 1)}><ArrowUp /></Button>
-              <Button type="button" size="icon" variant="ghost" aria-label={t("moveDown", { title: child.title })} disabled={pending || index === items.length - 1} onClick={() => move(index, index + 1)}><ArrowDown /></Button>
+              <Button
+                type="button"
+                size="icon"
+                variant="ghost"
+                aria-label={t("moveUp", { title: child.title })}
+                disabled={pending || index === 0}
+                onClick={() => move(index, index - 1)}
+              >
+                <ArrowUp />
+              </Button>
+              <Button
+                type="button"
+                size="icon"
+                variant="ghost"
+                aria-label={t("moveDown", { title: child.title })}
+                disabled={pending || index === items.length - 1}
+                onClick={() => move(index, index + 1)}
+              >
+                <ArrowDown />
+              </Button>
             </span>
           )}
         </li>

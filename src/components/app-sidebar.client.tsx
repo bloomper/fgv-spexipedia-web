@@ -2,17 +2,7 @@
 
 import * as React from "react";
 import { useMemo } from "react";
-import {
-  BookOpen,
-  Drama,
-  House,
-  type LucideIcon,
-  Pencil,
-  Search,
-  Settings,
-  Theater,
-  Wrench,
-} from "lucide-react";
+import { BookOpen, Drama, House, type LucideIcon, Pencil, Search, Settings, Theater, Wrench } from "lucide-react";
 
 import { NavMain } from "@bloomper/fgv-web-ui/shell/nav-main";
 import { NavSecondary, SidebarBrand } from "@bloomper/fgv-web-ui/shell/sidebar-parts";
@@ -65,7 +55,12 @@ export function AppSidebar({ roles, accountUrl, user, ...props }: AppSidebarProp
     const mainItems: NavItem[] = [
       { title: t("Nav.home"), url: "/", icon: House, isActive: pathname === "/" },
       { title: t("Nav.search"), url: "/search", icon: Search, isActive: pathname.startsWith("/search") },
-      { title: t("Nav.spex"), url: "/spex", icon: Theater, isActive: pathname.startsWith("/spex") || pathname.startsWith("/categories") },
+      {
+        title: t("Nav.spex"),
+        url: "/spex",
+        icon: Theater,
+        isActive: pathname.startsWith("/spex") || pathname.startsWith("/categories"),
+      },
       { title: t("Nav.articles"), url: "/articles", icon: BookOpen, isActive: pathname.startsWith("/articles") },
     ];
 
@@ -76,7 +71,7 @@ export function AppSidebar({ roles, accountUrl, user, ...props }: AppSidebarProp
         items.push(
           { title: t("Nav.baseData"), url: "/manage/base-data" },
           { title: t("Nav.unresolvedCredits"), url: "/manage/credits" },
-          { title: t("Nav.packages"), url: "/manage/packages" },
+          { title: t("Nav.packages"), url: "/manage/packages" }
         );
       }
       items.push({ title: t("Nav.trash"), url: "/manage/trash" }, { title: t("Nav.auditLog"), url: "/manage/audit" });
@@ -122,33 +117,47 @@ export function AppSidebar({ roles, accountUrl, user, ...props }: AppSidebarProp
   }, [roles, pathname, t]);
 
   return (
-    <Sidebar collapsible="icon"
-             className="top-(--header-height) h-[calc(100svh-var(--header-height))]!"
-             {...props}
+    <Sidebar
+      collapsible="icon"
+      className="top-(--header-height) h-[calc(100svh-var(--header-height))]!"
+      {...props}
     >
       <SidebarBrand />
       <SidebarContent onClickCapture={closeOnNavigate}>
         {isClient ? (
           <>
             <NavMain items={navigation.main} />
-            <NavSecondary items={navigation.secondary} className="mt-auto" />
+            <NavSecondary
+              items={navigation.secondary}
+              className="mt-auto"
+            />
           </>
         ) : (
           <div className="flex flex-col gap-2 p-4">
             {Array.from({ length: 3 }).map((_, i) => (
-              <div key={i} className="flex items-center gap-3 px-2 py-1.5">
-                <div className="size-4 shrink-0 animate-pulse rounded bg-sidebar-accent/50" />
-                <div
-                  className="h-3 w-24 animate-pulse rounded bg-sidebar-accent/50 group-data-[collapsible=icon]:hidden" />
+              <div
+                key={i}
+                className="flex items-center gap-3 px-2 py-1.5"
+              >
+                <div className="bg-sidebar-accent/50 size-4 shrink-0 animate-pulse rounded" />
+                <div className="bg-sidebar-accent/50 h-3 w-24 animate-pulse rounded group-data-[collapsible=icon]:hidden" />
               </div>
             ))}
           </div>
         )}
       </SidebarContent>
       <SidebarFooter onClickCapture={closeOnNavigate}>
-        {isClient && (user ? <NavUser accountUrl={accountUrl} user={user} /> : (
-          <div className="p-2 group-data-[collapsible=icon]:hidden"><LoginButton /></div>
-        ))}
+        {isClient &&
+          (user ? (
+            <NavUser
+              accountUrl={accountUrl}
+              user={user}
+            />
+          ) : (
+            <div className="p-2 group-data-[collapsible=icon]:hidden">
+              <LoginButton />
+            </div>
+          ))}
       </SidebarFooter>
     </Sidebar>
   );

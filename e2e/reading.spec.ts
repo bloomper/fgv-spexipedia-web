@@ -14,8 +14,14 @@ test.describe("Reading", () => {
     await expect(page.getByRole("heading", { level: 1, name: "Spexipedia" })).toBeVisible();
     await expect(page.getByText(/FGV:s uppslagsverk om Chalmersspexet/).filter({ visible: true })).toBeVisible();
     await expect(page.getByText("Årets spex").filter({ visible: true })).toBeVisible();
-    await expect(page.getByRole("link", { name: "Premiär för Bojan (1948)" })).toHaveAttribute("href", "/spex/1948-bojan");
-    await expect(page.getByRole("link", { name: "Gamla Chalmersspexet" }).first()).toHaveAttribute("href", /^\/categories\//);
+    await expect(page.getByRole("link", { name: "Premiär för Bojan (1948)" })).toHaveAttribute(
+      "href",
+      "/spex/1948-bojan"
+    );
+    await expect(page.getByRole("link", { name: "Gamla Chalmersspexet" }).first()).toHaveAttribute(
+      "href",
+      /^\/categories\//
+    );
   });
 
   test("the spex list goes by decade, and a category page lists its spex", async ({ page }) => {
@@ -41,8 +47,15 @@ test.describe("Reading", () => {
     const roles = page.getByRole("region", { name: "Roller" });
 
     await expect(roles.getByText("Drottningen").filter({ visible: true }).first()).toBeVisible();
-    await expect(page.getByRole("region", { name: "Musik" }).getByText("Kärleksduett i månsken").filter({ visible: true }).first()).toBeVisible();
-    await expect(page.getByRole("region", { name: "Manus och program" }).getByText("Hovet samlas i tronsalen").filter({ visible: true })).toBeVisible();
+    await expect(
+      page.getByRole("region", { name: "Musik" }).getByText("Kärleksduett i månsken").filter({ visible: true }).first()
+    ).toBeVisible();
+    await expect(
+      page
+        .getByRole("region", { name: "Manus och program" })
+        .getByText("Hovet samlas i tronsalen")
+        .filter({ visible: true })
+    ).toBeVisible();
 
     const rail = page.getByRole("navigation", { name: "På sidan" });
 
@@ -63,7 +76,11 @@ test.describe("Reading", () => {
 
     await page.goto("/spex/1956-napoleon");
     await expect(page.getByRole("link", { name: "1985", exact: true })).toHaveAttribute("href", "/spex/1985-napoleon");
-    await expect(page.getByRole("navigation", { name: "Föregående och nästa spex" }).getByRole("link", { name: /Henrik 8 \(1954\)/ })).toBeVisible();
+    await expect(
+      page
+        .getByRole("navigation", { name: "Föregående och nästa spex" })
+        .getByRole("link", { name: /Henrik 8 \(1954\)/ })
+    ).toBeVisible();
   });
 
   test("the other applications' address by id leads to the spex page", async ({ page }) => {
@@ -82,7 +99,10 @@ test.describe("Reading", () => {
     await expect(page.getByRole("heading", { name: "Spex", exact: true }).last()).toBeVisible();
     await expect(page.getByRole("heading", { name: "Artiklar" })).toBeVisible();
     await expect(page.getByRole("link", { name: "Bojan (1948)" })).toHaveAttribute("href", "/spex/1948-bojan");
-    await expect(page.getByRole("link", { name: "Spexets traditioner" })).toHaveAttribute("href", "/articles/spexets-traditioner");
+    await expect(page.getByRole("link", { name: "Spexets traditioner" })).toHaveAttribute(
+      "href",
+      "/articles/spexets-traditioner"
+    );
   });
 
   test("search from the header, and an empty search says nothing was found", async ({ page }) => {
@@ -113,9 +133,15 @@ test.describe("Reading", () => {
   test("the about and support pages give the addresses to write to", async ({ page }) => {
     await page.goto("/about");
     await expect(page.getByRole("heading", { name: "Om Spexipedia" })).toBeVisible();
-    await expect(page.getByRole("link", { name: "Skicka ett e-postmeddelande" })).toHaveAttribute("href", /^mailto:feedback\.spexipedia@example\.org/);
+    await expect(page.getByRole("link", { name: "Skicka ett e-postmeddelande" })).toHaveAttribute(
+      "href",
+      /^mailto:feedback\.spexipedia@example\.org/
+    );
 
     await page.goto("/support");
-    await expect(page.getByRole("link", { name: "Skicka ett supportärende" })).toHaveAttribute("href", /^mailto:support\.spexipedia@example\.org/);
+    await expect(page.getByRole("link", { name: "Skicka ett supportärende" })).toHaveAttribute(
+      "href",
+      /^mailto:support\.spexipedia@example\.org/
+    );
   });
 });

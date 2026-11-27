@@ -23,12 +23,29 @@ export default async function SectionsPage() {
 
     return (
       <Page variant="content">
-        <PageHeader title={t("title")} description={t("description")} />
-        <p className="max-w-3xl text-sm text-muted-foreground">
-          {t("imageKinds")} <Link href="/admin/kinds?type=IMAGE" className="underline underline-offset-4 hover:text-foreground">{t("imageKindsLink")}</Link>.
+        <PageHeader
+          title={t("title")}
+          description={t("description")}
+        />
+        <p className="text-muted-foreground max-w-3xl text-sm">
+          {t("imageKinds")}{" "}
+          <Link
+            href="/admin/kinds?type=IMAGE"
+            className="hover:text-foreground underline underline-offset-4"
+          >
+            {t("imageKindsLink")}
+          </Link>
+          .
         </p>
-        <section className="max-w-4xl space-y-3" aria-label={t("title")}>
-          <KindsEditor type="SECTION" use={null} kinds={kinds} />
+        <section
+          className="max-w-4xl space-y-3"
+          aria-label={t("title")}
+        >
+          <KindsEditor
+            type="SECTION"
+            use={null}
+            kinds={kinds}
+          />
         </section>
       </Page>
     );

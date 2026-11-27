@@ -34,7 +34,15 @@ export function PhotoSet({ set, member, className }: { set: PhotoSetData; member
   const [index, setIndex] = useState(-1);
 
   if (!set.available) {
-    return <p className="text-sm text-muted-foreground"><ImageOff className="mr-1 inline size-4" aria-hidden />{t("unavailable")}</p>;
+    return (
+      <p className="text-muted-foreground text-sm">
+        <ImageOff
+          className="mr-1 inline size-4"
+          aria-hidden
+        />
+        {t("unavailable")}
+      </p>
+    );
   }
   if (set.photos.length === 0 && set.hiddenCount === 0) {
     return null;
@@ -43,21 +51,39 @@ export function PhotoSet({ set, member, className }: { set: PhotoSetData; member
     <div className={cn("space-y-2", className)}>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
         {set.photos.map((photo, i) => (
-          <button key={photo.itemId} type="button" onClick={() => setIndex(i)} aria-label={photo.caption ?? t("open")}
-                  className="relative block overflow-hidden rounded-md border border-border bg-muted focus-visible:ring-2 focus-visible:ring-ring">
+          <button
+            key={photo.itemId}
+            type="button"
+            onClick={() => setIndex(i)}
+            aria-label={photo.caption ?? t("open")}
+            className="border-border bg-muted focus-visible:ring-ring relative block overflow-hidden rounded-md border focus-visible:ring-2"
+          >
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={photo.thumbnailUrl} alt={photo.caption ?? ""} loading="lazy" className="aspect-[4/3] w-full object-cover" />
-            {photo.video && <Play className="absolute right-2 bottom-2 size-6 rounded-full bg-background/80 p-1" aria-hidden />}
+            <img
+              src={photo.thumbnailUrl}
+              alt={photo.caption ?? ""}
+              loading="lazy"
+              className="aspect-[4/3] w-full object-cover"
+            />
+            {photo.video && (
+              <Play
+                className="bg-background/80 absolute right-2 bottom-2 size-6 rounded-full p-1"
+                aria-hidden
+              />
+            )}
           </button>
         ))}
         {set.hiddenCount > 0 && (
-          <div className="flex aspect-[4/3] flex-col items-center justify-center gap-1 rounded-md border border-dashed border-border p-3 text-center text-xs text-muted-foreground">
-            <Lock className="size-5" aria-hidden />
+          <div className="border-border text-muted-foreground flex aspect-[4/3] flex-col items-center justify-center gap-1 rounded-md border border-dashed p-3 text-center text-xs">
+            <Lock
+              className="size-5"
+              aria-hidden
+            />
             {member ? t("hiddenMember", { count: set.hiddenCount }) : t("hiddenVisitor", { count: set.hiddenCount })}
           </div>
         )}
       </div>
-      <p className="text-xs text-muted-foreground">{t("from")}</p>
+      <p className="text-muted-foreground text-xs">{t("from")}</p>
       <Lightbox
         open={index >= 0}
         index={Math.max(index, 0)}
@@ -69,18 +95,38 @@ export function PhotoSet({ set, member, className }: { set: PhotoSetData; member
         }}
         toolbar={{
           buttons: [
-            <a key="spexgram" href={set.photos[Math.max(index, 0)]?.url} target="_blank" rel="noopener noreferrer"
-               className="yarl__button" aria-label={t("openInSpexgram")} title={t("openInSpexgram")}>
+            <a
+              key="spexgram"
+              href={set.photos[Math.max(index, 0)]?.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="yarl__button"
+              aria-label={t("openInSpexgram")}
+              title={t("openInSpexgram")}
+            >
               <ExternalLink className="size-6" />
             </a>,
             "close",
           ],
         }}
-        slides={set.photos.map(photo => photo.video && photo.videoUrl
-          ? { type: "video" as const, poster: photo.previewUrl, width: photo.width ?? 1280, height: photo.height ?? 720,
-            sources: [{ src: photo.videoUrl, type: "video/mp4" }], description: photo.caption ?? undefined }
-          : { src: photo.previewUrl, width: photo.width ?? undefined, height: photo.height ?? undefined,
-            alt: photo.caption ?? "", description: photo.caption ?? undefined })}
+        slides={set.photos.map((photo) =>
+          photo.video && photo.videoUrl
+            ? {
+                type: "video" as const,
+                poster: photo.previewUrl,
+                width: photo.width ?? 1280,
+                height: photo.height ?? 720,
+                sources: [{ src: photo.videoUrl, type: "video/mp4" }],
+                description: photo.caption ?? undefined,
+              }
+            : {
+                src: photo.previewUrl,
+                width: photo.width ?? undefined,
+                height: photo.height ?? undefined,
+                alt: photo.caption ?? "",
+                description: photo.caption ?? undefined,
+              }
+        )}
       />
     </div>
   );

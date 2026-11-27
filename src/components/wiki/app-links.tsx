@@ -36,19 +36,39 @@ export function AppLinks({ links, compact = false }: { links: AppLinkData[]; com
   }
   return (
     <ul className={cn("flex flex-wrap gap-2", compact && "gap-1")}>
-      {links.map(link => {
+      {links.map((link) => {
         const Icon = ICONS[link.kind] ?? ExternalLink;
         // A chapter is named with its video, a document with its kind
-        const title = link.detail ? (link.kind === "ARCHIVE_DOCUMENT" ? `${link.detail}: ${link.title}` : `${link.title} (${link.detail})`) : link.title;
+        const title = link.detail
+          ? link.kind === "ARCHIVE_DOCUMENT"
+            ? `${link.detail}: ${link.title}`
+            : `${link.title} (${link.detail})`
+          : link.title;
         const label = isSpexPageLink(link) ? t(link.kind) : `${t(link.kind)}: ${title}`;
 
         return (
           <li key={`${link.kind}-${link.url}`}>
-            <a href={link.url} target="_blank" rel="noopener noreferrer" title={label}
-               className={cn("inline-flex items-center gap-1.5 rounded-full border border-border bg-card text-xs hover:border-primary hover:text-link",
-                 compact ? "px-2 py-0.5" : "px-3 py-1.5 text-sm")}>
-              <Icon className="size-3.5" aria-hidden />
-              {compact || isSpexPageLink(link) ? t(link.kind) : <><span className="text-muted-foreground">{t(link.kind)}:</span> {title}</>}
+            <a
+              href={link.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              title={label}
+              className={cn(
+                "border-border bg-card hover:border-primary hover:text-link inline-flex items-center gap-1.5 rounded-full border text-xs",
+                compact ? "px-2 py-0.5" : "px-3 py-1.5 text-sm"
+              )}
+            >
+              <Icon
+                className="size-3.5"
+                aria-hidden
+              />
+              {compact || isSpexPageLink(link) ? (
+                t(link.kind)
+              ) : (
+                <>
+                  <span className="text-muted-foreground">{t(link.kind)}:</span> {title}
+                </>
+              )}
             </a>
           </li>
         );

@@ -23,7 +23,11 @@ export function revisionTargetHref(revision: Pick<RevisionRow, "target" | "targe
 /**
  * Revisions, newest first: what was changed, when and (for authors) by whom.
  */
-export function RevisionList({ revisions, showTarget = true, compare }: {
+export function RevisionList({
+  revisions,
+  showTarget = true,
+  compare,
+}: {
   revisions: RevisionRow[];
   showTarget?: boolean;
   /** Where to compare a revision with the one before, e.g. an article's history. */
@@ -32,21 +36,46 @@ export function RevisionList({ revisions, showTarget = true, compare }: {
   const t = useTranslations("Revisions");
 
   return (
-    <ul className="divide-y divide-border rounded-lg border border-border bg-card text-sm">
-      {revisions.map(revision => {
+    <ul className="divide-border border-border bg-card divide-y rounded-lg border text-sm">
+      {revisions.map((revision) => {
         const href = compare?.(revision);
 
         return (
-          <li key={revision.id} className="flex flex-wrap items-baseline gap-x-3 gap-y-1 px-3 py-2">
-            <span className="w-36 shrink-0 text-xs text-muted-foreground">{formatInstant(revision.createdAt)}</span>
+          <li
+            key={revision.id}
+            className="flex flex-wrap items-baseline gap-x-3 gap-y-1 px-3 py-2"
+          >
+            <span className="text-muted-foreground w-36 shrink-0 text-xs">{formatInstant(revision.createdAt)}</span>
             {showTarget && (
-              <Link href={revisionTargetHref(revision)} className="font-medium hover:text-link">{revision.targetTitle}</Link>
+              <Link
+                href={revisionTargetHref(revision)}
+                className="hover:text-link font-medium"
+              >
+                {revision.targetTitle}
+              </Link>
             )}
-            {revision.field && <span className="text-xs text-muted-foreground">{t(`fields.${revision.field}`)}</span>}
+            {revision.field && <span className="text-muted-foreground text-xs">{t(`fields.${revision.field}`)}</span>}
             {revision.comment && <span className="text-muted-foreground italic">{revision.comment}</span>}
-            {revision.hidden && <span className="inline-flex items-center gap-1 text-xs text-muted-foreground"><EyeOff className="size-3" aria-hidden />{t("hidden")}</span>}
-            {revision.authorName && <span className="ml-auto text-xs text-muted-foreground">{revision.authorName}</span>}
-            {href && <Link href={href} className="text-xs text-link hover:text-link/80">{t("compare")}</Link>}
+            {revision.hidden && (
+              <span className="text-muted-foreground inline-flex items-center gap-1 text-xs">
+                <EyeOff
+                  className="size-3"
+                  aria-hidden
+                />
+                {t("hidden")}
+              </span>
+            )}
+            {revision.authorName && (
+              <span className="text-muted-foreground ml-auto text-xs">{revision.authorName}</span>
+            )}
+            {href && (
+              <Link
+                href={href}
+                className="text-link hover:text-link/80 text-xs"
+              >
+                {t("compare")}
+              </Link>
+            )}
           </li>
         );
       })}

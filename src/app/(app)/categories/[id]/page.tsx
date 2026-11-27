@@ -21,23 +21,47 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
  * A spex category: its logo and description, and its spex, originals by year and then revivals.
  */
 export default async function CategoryPage({ params }: Props) {
-  const [category, t, viewer] = await Promise.all([getCategory((await params).id), getTranslations("Category"), getViewer()]);
+  const [category, t, viewer] = await Promise.all([
+    getCategory((await params).id),
+    getTranslations("Category"),
+    getViewer(),
+  ]);
 
   if (!category) {
     notFound();
   }
   return (
-    <Page variant="content" className="mx-auto w-full max-w-7xl">
+    <Page
+      variant="content"
+      className="mx-auto w-full max-w-7xl"
+    >
       <header className="flex flex-wrap items-center gap-6">
-        {category.logo && <WikiImage image={category.logo} sizes="8rem" className="size-28 rounded-lg object-contain" />}
+        {category.logo && (
+          <WikiImage
+            image={category.logo}
+            sizes="8rem"
+            className="size-28 rounded-lg object-contain"
+          />
+        )}
         <div className="space-y-1">
-          <p className="text-sm tracking-[0.25em] text-link">{t("since", { year: category.firstYear })}</p>
+          <p className="text-link text-sm tracking-[0.25em]">{t("since", { year: category.firstYear })}</p>
           <h1 className="wiki-heading text-3xl font-semibold md:text-4xl">{category.name}</h1>
         </div>
       </header>
-      <HtmlContent html={category.descriptionHtml} className="max-w-3xl" />
+      <HtmlContent
+        html={category.descriptionHtml}
+        className="max-w-3xl"
+      />
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6">
-        {category.spex.filter(spex => spex.published || viewer.author).map(spex => <SpexCard key={spex.id} spex={spex} introduction={spex.page?.introduction} />)}
+        {category.spex
+          .filter((spex) => spex.published || viewer.author)
+          .map((spex) => (
+            <SpexCard
+              key={spex.id}
+              spex={spex}
+              introduction={spex.page?.introduction}
+            />
+          ))}
       </div>
     </Page>
   );

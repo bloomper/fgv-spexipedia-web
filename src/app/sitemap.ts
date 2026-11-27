@@ -10,7 +10,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     { url: `${base}/` },
-    ...["/spex", "/articles"].map(path => ({ url: `${base}${path}` })),
-    ...entries.map(entry => ({ url: `${base}${entry.path}`, lastModified: entry.lastModifiedAt ?? undefined })),
+    ...["/spex", "/articles"].map((path) => ({ url: `${base}${path}` })),
+    ...entries.map((entry) => ({ url: `${base}${entry.path}`, lastModified: entry.lastModifiedAt ?? undefined })),
   ];
 }

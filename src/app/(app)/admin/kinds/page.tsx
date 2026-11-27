@@ -27,30 +27,63 @@ export default async function KindsPage({ searchParams }: Props) {
     const uses = KIND_TYPES[type].length > 0 ? KIND_TYPES[type] : [null];
     const [t, groups, imageSections] = await Promise.all([
       getTranslations("AdminKinds"),
-      Promise.all(uses.map(async use => ({ use, kinds: await getKinds(type, use) }))),
+      Promise.all(uses.map(async (use) => ({ use, kinds: await getKinds(type, use) }))),
       // Each image section keeps image kinds of its own
       type === "IMAGE"
-        ? getKinds("SECTION").then(sections => Promise.all(sections.filter(kind => kind.content === "IMAGES")
-          .map(async section => ({ section, kinds: await getKinds("IMAGE", "SECTION", section.id) }))))
+        ? getKinds("SECTION").then((sections) =>
+            Promise.all(
+              sections
+                .filter((kind) => kind.content === "IMAGES")
+                .map(async (section) => ({ section, kinds: await getKinds("IMAGE", "SECTION", section.id) }))
+            )
+          )
         : [],
     ]);
 
     return (
       <Page variant="content">
-        <PageHeader title={t("title")} description={t("description")} />
-        <LinkTabs label={t("types.label")} items={kindTabs().map(each => ({ href: `/admin/kinds?type=${each}`, label: t(`types.${each}`), active: each === type }))} />
-        <p className="max-w-3xl text-sm text-muted-foreground">{t(`typeHelp.${type}`)}</p>
+        <PageHeader
+          title={t("title")}
+          description={t("description")}
+        />
+        <LinkTabs
+          label={t("types.label")}
+          items={kindTabs().map((each) => ({
+            href: `/admin/kinds?type=${each}`,
+            label: t(`types.${each}`),
+            active: each === type,
+          }))}
+        />
+        <p className="text-muted-foreground max-w-3xl text-sm">{t(`typeHelp.${type}`)}</p>
         <div className="max-w-4xl space-y-8">
           {groups.map(({ use, kinds }) => (
-            <section key={use ?? "all"} className="space-y-3" aria-label={use ? t(`uses.${use}`) : t(`types.${type}`)}>
+            <section
+              key={use ?? "all"}
+              className="space-y-3"
+              aria-label={use ? t(`uses.${use}`) : t(`types.${type}`)}
+            >
               {use && <h2 className="wiki-heading text-xl font-semibold">{t(`uses.${use}`)}</h2>}
-              <KindsEditor type={type} use={use} kinds={kinds} />
+              <KindsEditor
+                type={type}
+                use={use}
+                kinds={kinds}
+              />
             </section>
           ))}
           {imageSections.map(({ section, kinds }) => (
-            <section key={section.id} id={`section-${section.id}`} className="space-y-3" aria-label={t("imageKindsOf", { section: section.name })}>
+            <section
+              key={section.id}
+              id={`section-${section.id}`}
+              className="space-y-3"
+              aria-label={t("imageKindsOf", { section: section.name })}
+            >
               <h2 className="wiki-heading text-xl font-semibold">{t("imageKindsOf", { section: section.name })}</h2>
-              <KindsEditor type="IMAGE" use="SECTION" sectionId={section.id} kinds={kinds} />
+              <KindsEditor
+                type="IMAGE"
+                use="SECTION"
+                sectionId={section.id}
+                kinds={kinds}
+              />
             </section>
           ))}
         </div>

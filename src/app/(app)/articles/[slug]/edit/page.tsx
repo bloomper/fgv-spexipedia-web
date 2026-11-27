@@ -22,16 +22,32 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function EditArticlePage({ params }: Props) {
   return withPolicyPage(Policies.app.requireAccess, async () => {
     const { slug } = await params;
-    const [t, article, data] = await Promise.all([getTranslations("ArticleForm"), getArticle(decodeURIComponent(slug)), getArticles()]);
+    const [t, article, data] = await Promise.all([
+      getTranslations("ArticleForm"),
+      getArticle(decodeURIComponent(slug)),
+      getArticles(),
+    ]);
 
     if (!article) {
       notFound();
     }
     return (
-      <Page variant="content" className="mx-auto w-full max-w-7xl">
+      <Page
+        variant="content"
+        className="mx-auto w-full max-w-7xl"
+      >
         <PageHeader title={t("editTitle", { title: article.title })} />
-        <ArticleForm id={article.id} revisionId={article.revision?.id ?? null} categories={data?.articleCategories ?? []}
-                     initial={{ title: article.title, body: article.body ?? "", visibility: article.visibility, categoryIds: article.categories.map(c => c.id) }} />
+        <ArticleForm
+          id={article.id}
+          revisionId={article.revision?.id ?? null}
+          categories={data?.articleCategories ?? []}
+          initial={{
+            title: article.title,
+            body: article.body ?? "",
+            visibility: article.visibility,
+            categoryIds: article.categories.map((c) => c.id),
+          }}
+        />
       </Page>
     );
   });

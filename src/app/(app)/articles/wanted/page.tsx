@@ -20,14 +20,30 @@ export default async function WantedArticlesPage() {
     const [t, wanted] = await Promise.all([getTranslations("Articles"), getWantedArticles()]);
 
     return (
-      <Page variant="content" className="mx-auto w-full max-w-7xl">
-        <PageHeader title={t("wanted")} description={t("wantedDescription")} />
-        {wanted.length === 0 ? <DataEmpty title={t("noWanted")} /> : (
-          <ul className="divide-y divide-border rounded-lg border border-border bg-card">
-            {wanted.map(item => (
-              <li key={item.title} className="flex flex-wrap items-center gap-2 px-4 py-2">
-                <Link href={`/articles/new?title=${encodeURIComponent(item.title)}`} className="wiki-missing font-medium">{item.title}</Link>
-                <span className="ml-auto text-xs text-muted-foreground">{t("linkCount", { count: item.links })}</span>
+      <Page
+        variant="content"
+        className="mx-auto w-full max-w-7xl"
+      >
+        <PageHeader
+          title={t("wanted")}
+          description={t("wantedDescription")}
+        />
+        {wanted.length === 0 ? (
+          <DataEmpty title={t("noWanted")} />
+        ) : (
+          <ul className="divide-border border-border bg-card divide-y rounded-lg border">
+            {wanted.map((item) => (
+              <li
+                key={item.title}
+                className="flex flex-wrap items-center gap-2 px-4 py-2"
+              >
+                <Link
+                  href={`/articles/new?title=${encodeURIComponent(item.title)}`}
+                  className="wiki-missing font-medium"
+                >
+                  {item.title}
+                </Link>
+                <span className="text-muted-foreground ml-auto text-xs">{t("linkCount", { count: item.links })}</span>
               </li>
             ))}
           </ul>

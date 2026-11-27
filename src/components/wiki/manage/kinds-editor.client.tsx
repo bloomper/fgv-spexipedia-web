@@ -12,7 +12,13 @@ import { Badge } from "@bloomper/fgv-web-ui/ui/badge";
 import { NativeSelect, NativeSelectOption } from "@bloomper/fgv-web-ui/ui/native-select";
 import { useSave } from "@/components/wiki/editor/use-save.client";
 import { useDialogs } from "@bloomper/fgv-web-ui/shell/dialogs";
-import { deleteKindAction, mergeKindAction, reorderKindsAction, retireKindAction, saveKindAction } from "@/app/(app)/admin/actions.server";
+import {
+  deleteKindAction,
+  mergeKindAction,
+  reorderKindsAction,
+  retireKindAction,
+  saveKindAction,
+} from "@/app/(app)/admin/actions.server";
 import type { FactValueType, KindType, KindUse, SectionContent } from "@/gql/graphql";
 import { creatableContents, factValueTypes, SECTION_CONTENTS } from "@/utils/kinds";
 
@@ -36,19 +42,31 @@ export type KindRow = {
  * is in use); merging moves what refers to it and keeps its names as aliases. Section kinds also have a content and a subtitle, and their order is the spex pages' default order;
  * those of a content with one kind (the vest, the music …) are never merged or deleted.
  */
-export function KindsEditor({ type, use, sectionId = null, kinds }: { type: KindType; use: KindUse | null; sectionId?: string | null; kinds: KindRow[] }) {
+export function KindsEditor({
+  type,
+  use,
+  sectionId = null,
+  kinds,
+}: {
+  type: KindType;
+  use: KindUse | null;
+  sectionId?: string | null;
+  kinds: KindRow[];
+}) {
   const t = useTranslations("AdminKinds");
   const { save, pending } = useSave();
   const { confirm, choose } = useDialogs();
   const [editing, setEditing] = useState<string | null>(null);
   // The last kind in use of a type is its default; sections may all be retired
-  const last = (kind: KindRow) => type !== "SECTION" && !kind.retired && kinds.filter(other => !other.retired).length === 1;
+  const last = (kind: KindRow) =>
+    type !== "SECTION" && !kind.retired && kinds.filter((other) => !other.retired).length === 1;
   // Sections say section where other kinds say kind
-  const say = (key: "add" | "none" | "retiredToast" | "reinstated" | "merged" | "deleted") => t(type === "SECTION" ? `sections.${key}` : key);
-  const label = (kind: KindRow) => kind.nameSv === kind.nameEn ? kind.nameSv : `${kind.nameSv} / ${kind.nameEn}`;
+  const say = (key: "add" | "none" | "retiredToast" | "reinstated" | "merged" | "deleted") =>
+    t(type === "SECTION" ? `sections.${key}` : key);
+  const label = (kind: KindRow) => (kind.nameSv === kind.nameEn ? kind.nameSv : `${kind.nameSv} / ${kind.nameEn}`);
 
   const move = (from: number, to: number) => {
-    const ids = kinds.map(kind => kind.id);
+    const ids = kinds.map((kind) => kind.id);
     const [id] = ids.splice(from, 1);
 
     ids.splice(to, 0, id);
@@ -57,49 +75,174 @@ export function KindsEditor({ type, use, sectionId = null, kinds }: { type: Kind
 
   return (
     <div className="space-y-3">
-      <Button type="button" size="sm" variant="outline" onClick={() => setEditing("new")}><Plus aria-hidden /> {say("add")}</Button>
-      {editing === "new" && <KindForm type={type} use={use} sectionId={sectionId} onDone={() => setEditing(null)} />}
-      {kinds.length === 0 && <p className="text-sm text-muted-foreground">{say("none")}</p>}
-      <ol className="divide-y divide-border rounded-lg border border-border bg-card text-sm">
+      <Button
+        type="button"
+        size="sm"
+        variant="outline"
+        onClick={() => setEditing("new")}
+      >
+        <Plus aria-hidden /> {say("add")}
+      </Button>
+      {editing === "new" && (
+        <KindForm
+          type={type}
+          use={use}
+          sectionId={sectionId}
+          onDone={() => setEditing(null)}
+        />
+      )}
+      {kinds.length === 0 && <p className="text-muted-foreground text-sm">{say("none")}</p>}
+      <ol className="divide-border border-border bg-card divide-y rounded-lg border text-sm">
         {kinds.map((kind, index) => (
-          <li key={kind.id} className="space-y-2 px-3 py-2">
+          <li
+            key={kind.id}
+            className="space-y-2 px-3 py-2"
+          >
             <div className="flex flex-wrap items-center gap-2">
-              <span className="w-6 text-muted-foreground">{index + 1}</span>
-              <span className={kind.retired ? "font-medium text-muted-foreground line-through" : "font-medium"}>{label(kind)}</span>
-              {type === "FACT" && kind.valueType && <Badge variant="secondary">{t(`valueTypes.${kind.valueType}`)}</Badge>}
+              <span className="text-muted-foreground w-6">{index + 1}</span>
+              <span className={kind.retired ? "text-muted-foreground font-medium line-through" : "font-medium"}>
+                {label(kind)}
+              </span>
+              {type === "FACT" && kind.valueType && (
+                <Badge variant="secondary">{t(`valueTypes.${kind.valueType}`)}</Badge>
+              )}
               {kind.content && <Badge variant="secondary">{t(`contents.${kind.content}`)}</Badge>}
               {kind.retired && <Badge variant="outline">{t("retired")}</Badge>}
-              {kind.content === "IMAGES" && <Link href={`/admin/kinds?type=IMAGE#section-${kind.id}`} className="text-xs text-muted-foreground underline underline-offset-4 hover:text-foreground">{t("imageKinds")}</Link>}
+              {kind.content === "IMAGES" && (
+                <Link
+                  href={`/admin/kinds?type=IMAGE#section-${kind.id}`}
+                  className="text-muted-foreground hover:text-foreground text-xs underline underline-offset-4"
+                >
+                  {t("imageKinds")}
+                </Link>
+              )}
               {kind.aliases.length > 0 && (
-                <span className="min-w-0 truncate text-xs text-muted-foreground" title={kind.aliases.join("\n")}>
+                <span
+                  className="text-muted-foreground min-w-0 truncate text-xs"
+                  title={kind.aliases.join("\n")}
+                >
                   {t("aliasesShort", { aliases: kind.aliases.join(", ") })}
                 </span>
               )}
               <span className="ml-auto inline-flex">
-                <Button type="button" size="icon" variant="ghost" aria-label={t("moveUp")} disabled={pending || index === 0} onClick={() => move(index, index - 1)}><ArrowUp /></Button>
-                <Button type="button" size="icon" variant="ghost" aria-label={t("moveDown")} disabled={pending || index === kinds.length - 1} onClick={() => move(index, index + 1)}><ArrowDown /></Button>
-                <Button type="button" size="icon" variant="ghost" aria-label={t("edit")} onClick={() => setEditing(editing === kind.id ? null : kind.id)}><Pencil /></Button>
-                <Button type="button" size="icon" variant="ghost" aria-label={kind.retired ? t("reinstate") : t("retire")} title={kind.retired ? t("reinstate") : t("retire")} disabled={pending}
-                        onClick={() => save(() => retireKindAction(kind.id, !kind.retired), { success: kind.retired ? say("reinstated") : say("retiredToast") })}>
+                <Button
+                  type="button"
+                  size="icon"
+                  variant="ghost"
+                  aria-label={t("moveUp")}
+                  disabled={pending || index === 0}
+                  onClick={() => move(index, index - 1)}
+                >
+                  <ArrowUp />
+                </Button>
+                <Button
+                  type="button"
+                  size="icon"
+                  variant="ghost"
+                  aria-label={t("moveDown")}
+                  disabled={pending || index === kinds.length - 1}
+                  onClick={() => move(index, index + 1)}
+                >
+                  <ArrowDown />
+                </Button>
+                <Button
+                  type="button"
+                  size="icon"
+                  variant="ghost"
+                  aria-label={t("edit")}
+                  onClick={() => setEditing(editing === kind.id ? null : kind.id)}
+                >
+                  <Pencil />
+                </Button>
+                <Button
+                  type="button"
+                  size="icon"
+                  variant="ghost"
+                  aria-label={kind.retired ? t("reinstate") : t("retire")}
+                  title={kind.retired ? t("reinstate") : t("retire")}
+                  disabled={pending}
+                  onClick={() =>
+                    save(() => retireKindAction(kind.id, !kind.retired), {
+                      success: kind.retired ? say("reinstated") : say("retiredToast"),
+                    })
+                  }
+                >
                   {kind.retired ? <ArchiveRestore /> : <Archive />}
                 </Button>
-                {mergeable(kind) && <Button type="button" size="icon" variant="ghost" aria-label={t("merge")} title={t("merge")} disabled={pending || kinds.filter(other => sameGroup(other, kind)).length < 2} onClick={async () => {
-                  const intoId = await choose({ title: t("mergeTitle", { name: kind.nameSv }), items: kinds.filter(other => other.id !== kind.id && sameGroup(other, kind)).map(other => ({ id: other.id, label: label(other) })) });
-                  const into = kinds.find(other => other.id === intoId);
+                {mergeable(kind) && (
+                  <Button
+                    type="button"
+                    size="icon"
+                    variant="ghost"
+                    aria-label={t("merge")}
+                    title={t("merge")}
+                    disabled={pending || kinds.filter((other) => sameGroup(other, kind)).length < 2}
+                    onClick={async () => {
+                      const intoId = await choose({
+                        title: t("mergeTitle", { name: kind.nameSv }),
+                        items: kinds
+                          .filter((other) => other.id !== kind.id && sameGroup(other, kind))
+                          .map((other) => ({ id: other.id, label: label(other) })),
+                      });
+                      const into = kinds.find((other) => other.id === intoId);
 
-                  if (into && await confirm({ title: t("mergeConfirm", { name: kind.nameSv, into: into.nameSv }), description: t("mergeText"), confirmLabel: t("merge"), destructive: true })) {
-                    void save(() => mergeKindAction(kind.id, into.id), { success: say("merged") });
-                  }
-                }}><Merge /></Button>}
-                {mergeable(kind) && <Button type="button" size="icon" variant="ghost" aria-label={t("delete")} title={t("delete")} disabled={pending || last(kind)} onClick={async () => {
-                  if (await confirm({ title: t("deleteConfirm", { name: label(kind) }), description: kind.content === "IMAGES" ? t("deleteSectionText") : t("deleteText"), confirmLabel: t("delete"), destructive: true })) {
-                    void save(() => deleteKindAction(kind.id), { success: say("deleted") });
-                  }
-                }}><Trash2 /></Button>}
+                      if (
+                        into &&
+                        (await confirm({
+                          title: t("mergeConfirm", { name: kind.nameSv, into: into.nameSv }),
+                          description: t("mergeText"),
+                          confirmLabel: t("merge"),
+                          destructive: true,
+                        }))
+                      ) {
+                        void save(() => mergeKindAction(kind.id, into.id), { success: say("merged") });
+                      }
+                    }}
+                  >
+                    <Merge />
+                  </Button>
+                )}
+                {mergeable(kind) && (
+                  <Button
+                    type="button"
+                    size="icon"
+                    variant="ghost"
+                    aria-label={t("delete")}
+                    title={t("delete")}
+                    disabled={pending || last(kind)}
+                    onClick={async () => {
+                      if (
+                        await confirm({
+                          title: t("deleteConfirm", { name: label(kind) }),
+                          description: kind.content === "IMAGES" ? t("deleteSectionText") : t("deleteText"),
+                          confirmLabel: t("delete"),
+                          destructive: true,
+                        })
+                      ) {
+                        void save(() => deleteKindAction(kind.id), { success: say("deleted") });
+                      }
+                    }}
+                  >
+                    <Trash2 />
+                  </Button>
+                )}
               </span>
             </div>
-            {kind.subtitleSv && <p className="pl-8 text-xs text-muted-foreground">{kind.subtitleSv}{kind.subtitleEn && kind.subtitleEn !== kind.subtitleSv && ` / ${kind.subtitleEn}`}</p>}
-            {editing === kind.id && <KindForm type={type} use={use} sectionId={sectionId} kind={kind} onDone={() => setEditing(null)} />}
+            {kind.subtitleSv && (
+              <p className="text-muted-foreground pl-8 text-xs">
+                {kind.subtitleSv}
+                {kind.subtitleEn && kind.subtitleEn !== kind.subtitleSv && ` / ${kind.subtitleEn}`}
+              </p>
+            )}
+            {editing === kind.id && (
+              <KindForm
+                type={type}
+                use={use}
+                sectionId={sectionId}
+                kind={kind}
+                onDone={() => setEditing(null)}
+              />
+            )}
           </li>
         ))}
       </ol>
@@ -111,7 +254,19 @@ export function KindsEditor({ type, use, sectionId = null, kinds }: { type: Kind
 const mergeable = (kind: KindRow) => !kind.content || !SECTION_CONTENTS[kind.content].single;
 const sameGroup = (a: KindRow, b: KindRow) => (a.content ?? null) === (b.content ?? null);
 
-function KindForm({ type, use, sectionId, kind, onDone }: { type: KindType; use: KindUse | null; sectionId: string | null; kind?: KindRow; onDone: () => void }) {
+function KindForm({
+  type,
+  use,
+  sectionId,
+  kind,
+  onDone,
+}: {
+  type: KindType;
+  use: KindUse | null;
+  sectionId: string | null;
+  kind?: KindRow;
+  onDone: () => void;
+}) {
   const t = useTranslations("AdminKinds");
   const { save, pending } = useSave();
   const id = kind?.id ?? `new-${type}-${use ?? ""}-${sectionId ?? ""}`;
@@ -127,59 +282,140 @@ function KindForm({ type, use, sectionId, kind, onDone }: { type: KindType; use:
   const section = type === "SECTION";
 
   return (
-    <form className="space-y-3 rounded-md border border-border p-3" onSubmit={async event => {
-      event.preventDefault();
-      const input = {
-        type, use, sectionId,
-        content: section && !kind ? values.content : null,
-        valueType: type === "FACT" ? values.valueType : null,
-        nameSv: values.nameSv,
-        nameEn: values.nameEn,
-        aliases: values.aliases.split("\n"),
-        ...(section ? { subtitleSv: values.subtitleSv, subtitleEn: values.subtitleEn } : {}),
-      };
+    <form
+      className="border-border space-y-3 rounded-md border p-3"
+      onSubmit={async (event) => {
+        event.preventDefault();
+        const input = {
+          type,
+          use,
+          sectionId,
+          content: section && !kind ? values.content : null,
+          valueType: type === "FACT" ? values.valueType : null,
+          nameSv: values.nameSv,
+          nameEn: values.nameEn,
+          aliases: values.aliases.split("\n"),
+          ...(section ? { subtitleSv: values.subtitleSv, subtitleEn: values.subtitleEn } : {}),
+        };
 
-      if (await save(() => saveKindAction(kind?.id ?? null, input))) {
-        onDone();
-      }
-    }}>
+        if (await save(() => saveKindAction(kind?.id ?? null, input))) {
+          onDone();
+        }
+      }}
+    >
       <div className="grid gap-3 sm:grid-cols-2">
-        <div className="space-y-1.5"><Label htmlFor={`sv-${id}`}>{t("nameSv")}</Label><Input id={`sv-${id}`} required maxLength={100} value={values.nameSv} onChange={event => setValues({ ...values, nameSv: event.target.value })} /></div>
-        <div className="space-y-1.5"><Label htmlFor={`en-${id}`}>{t("nameEn")}</Label><Input id={`en-${id}`} required maxLength={100} value={values.nameEn} onChange={event => setValues({ ...values, nameEn: event.target.value })} /></div>
+        <div className="space-y-1.5">
+          <Label htmlFor={`sv-${id}`}>{t("nameSv")}</Label>
+          <Input
+            id={`sv-${id}`}
+            required
+            maxLength={100}
+            value={values.nameSv}
+            onChange={(event) => setValues({ ...values, nameSv: event.target.value })}
+          />
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor={`en-${id}`}>{t("nameEn")}</Label>
+          <Input
+            id={`en-${id}`}
+            required
+            maxLength={100}
+            value={values.nameEn}
+            onChange={(event) => setValues({ ...values, nameEn: event.target.value })}
+          />
+        </div>
       </div>
       {section && (
         <>
           {!kind && (
             <div className="space-y-1.5 sm:max-w-xs">
               <Label htmlFor={`ct-${id}`}>{t("content")}</Label>
-              <NativeSelect id={`ct-${id}`} value={values.content} onChange={event => setValues({ ...values, content: event.target.value as SectionContent })}>
-                {creatableContents().map(content => <NativeSelectOption key={content} value={content}>{t(`contents.${content}`)}</NativeSelectOption>)}
+              <NativeSelect
+                id={`ct-${id}`}
+                value={values.content}
+                onChange={(event) => setValues({ ...values, content: event.target.value as SectionContent })}
+              >
+                {creatableContents().map((content) => (
+                  <NativeSelectOption
+                    key={content}
+                    value={content}
+                  >
+                    {t(`contents.${content}`)}
+                  </NativeSelectOption>
+                ))}
               </NativeSelect>
-              <p className="text-xs text-muted-foreground">{t("contentHelp")}</p>
+              <p className="text-muted-foreground text-xs">{t("contentHelp")}</p>
             </div>
           )}
           <div className="grid gap-3 sm:grid-cols-2">
-            <div className="space-y-1.5"><Label htmlFor={`ssv-${id}`}>{t("subtitleSv")}</Label><Input id={`ssv-${id}`} maxLength={200} value={values.subtitleSv} onChange={event => setValues({ ...values, subtitleSv: event.target.value })} /></div>
-            <div className="space-y-1.5"><Label htmlFor={`sen-${id}`}>{t("subtitleEn")}</Label><Input id={`sen-${id}`} maxLength={200} value={values.subtitleEn} onChange={event => setValues({ ...values, subtitleEn: event.target.value })} /></div>
+            <div className="space-y-1.5">
+              <Label htmlFor={`ssv-${id}`}>{t("subtitleSv")}</Label>
+              <Input
+                id={`ssv-${id}`}
+                maxLength={200}
+                value={values.subtitleSv}
+                onChange={(event) => setValues({ ...values, subtitleSv: event.target.value })}
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor={`sen-${id}`}>{t("subtitleEn")}</Label>
+              <Input
+                id={`sen-${id}`}
+                maxLength={200}
+                value={values.subtitleEn}
+                onChange={(event) => setValues({ ...values, subtitleEn: event.target.value })}
+              />
+            </div>
           </div>
         </>
       )}
       {type === "FACT" && (
         <div className="space-y-1.5 sm:max-w-xs">
           <Label htmlFor={`vt-${id}`}>{t("valueType")}</Label>
-          <NativeSelect id={`vt-${id}`} value={values.valueType} onChange={event => setValues({ ...values, valueType: event.target.value as FactValueType })}>
-            {factValueTypes().map(valueType => <NativeSelectOption key={valueType} value={valueType}>{t(`valueTypes.${valueType}`)}</NativeSelectOption>)}
+          <NativeSelect
+            id={`vt-${id}`}
+            value={values.valueType}
+            onChange={(event) => setValues({ ...values, valueType: event.target.value as FactValueType })}
+          >
+            {factValueTypes().map((valueType) => (
+              <NativeSelectOption
+                key={valueType}
+                value={valueType}
+              >
+                {t(`valueTypes.${valueType}`)}
+              </NativeSelectOption>
+            ))}
           </NativeSelect>
         </div>
       )}
       <div className="space-y-1.5">
         <Label htmlFor={`al-${id}`}>{t("aliases")}</Label>
-        <Textarea id={`al-${id}`} rows={4} maxLength={2000} value={values.aliases} onChange={event => setValues({ ...values, aliases: event.target.value })} className="font-mono text-sm" />
-        <p className="text-xs text-muted-foreground">{t("aliasesHelp")}</p>
+        <Textarea
+          id={`al-${id}`}
+          rows={4}
+          maxLength={2000}
+          value={values.aliases}
+          onChange={(event) => setValues({ ...values, aliases: event.target.value })}
+          className="font-mono text-sm"
+        />
+        <p className="text-muted-foreground text-xs">{t("aliasesHelp")}</p>
       </div>
       <div className="flex gap-2">
-        <Button type="submit" size="sm" disabled={pending}><Save aria-hidden /> {t("save")}</Button>
-        <Button type="button" size="sm" variant="ghost" onClick={onDone}><X aria-hidden /> {t("cancel")}</Button>
+        <Button
+          type="submit"
+          size="sm"
+          disabled={pending}
+        >
+          <Save aria-hidden /> {t("save")}
+        </Button>
+        <Button
+          type="button"
+          size="sm"
+          variant="ghost"
+          onClick={onDone}
+        >
+          <X aria-hidden /> {t("cancel")}
+        </Button>
       </div>
     </form>
   );

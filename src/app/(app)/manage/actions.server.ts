@@ -38,35 +38,40 @@ import { ID } from "@/utils/ids";
  */
 
 function requireIds(...ids: (string | null | undefined)[]) {
-  if (ids.some(id => id != null && !ID.test(id))) {
+  if (ids.some((id) => id != null && !ID.test(id))) {
     throw new Error("Invalid id");
   }
 }
 
-const run = <T, >(policy: () => Promise<AuthzResult>, work: () => Promise<T>) => withPolicyAction(policy, () => toActionResult(async () => {
-  const result = await work();
+const run = <T>(policy: () => Promise<AuthzResult>, work: () => Promise<T>) =>
+  withPolicyAction(policy, () =>
+    toActionResult(async () => {
+      const result = await work();
 
-  revalidatePath("/", "layout");
-  return result;
-}));
+      revalidatePath("/", "layout");
+      return result;
+    })
+  );
 
-const author = <T, >(work: () => Promise<T>): Promise<ActionResult<T>> => run(Policies.author.requireAuthor, work);
-const editor = <T, >(work: () => Promise<T>): Promise<ActionResult<T>> => run(Policies.editor.requireEditor, work);
-const admin = <T, >(work: () => Promise<T>): Promise<ActionResult<T>> => run(Policies.admin.requireAdmin, work);
+const author = <T>(work: () => Promise<T>): Promise<ActionResult<T>> => run(Policies.author.requireAuthor, work);
+const editor = <T>(work: () => Promise<T>): Promise<ActionResult<T>> => run(Policies.editor.requireEditor, work);
+const admin = <T>(work: () => Promise<T>): Promise<ActionResult<T>> => run(Policies.admin.requireAdmin, work);
 
 // Lookups for pickers ---------------------------------------------------------------------------------------------------
 
 /** Published spexare by name, for credits: names need USER, which every author has. */
 export async function searchSpexareAction(q: string): Promise<ActionResult<{ id: string | null; label: string }[]>> {
-  return withPolicyAction(Policies.author.requireAuthor, () => toActionResult(async () => {
-    if (q.trim().length < 2) {
-      return [];
-    }
-    return (await spexareSearch(q.trim().slice(0, 100))).map(person => ({
-      id: person.id ?? null,
-      label: [person.name, person.nickname && `”${person.nickname}”`].filter(Boolean).join(" "),
-    }));
-  }));
+  return withPolicyAction(Policies.author.requireAuthor, () =>
+    toActionResult(async () => {
+      if (q.trim().length < 2) {
+        return [];
+      }
+      return (await spexareSearch(q.trim().slice(0, 100))).map((person) => ({
+        id: person.id ?? null,
+        label: [person.name, person.nickname && `”${person.nickname}”`].filter(Boolean).join(" "),
+      }));
+    })
+  );
 }
 
 /** The spex's albums in Spexgram with their items, for picking photos. */
@@ -77,7 +82,11 @@ export async function spexgramAlbumsAction(spexId: string) {
 
 // Base data -------------------------------------------------------------------------------------------------------------
 
-export async function saveSpexCategoryAction(id: string | null, input: SpexCategoryInput, logoId: string | null | undefined) {
+export async function saveSpexCategoryAction(
+  id: string | null,
+  input: SpexCategoryInput,
+  logoId: string | null | undefined
+) {
   requireIds(id, logoId);
   return editor(async () => {
     const saved = id ? (await edit.spexCategoryUpdate(id, input), { id }) : await edit.spexCategoryCreate(input);
@@ -140,8 +149,13 @@ export async function savePageAction(spexId: string, input: SpexPageInput) {
 }
 
 /** The images of an image section's kind, or of the vest (kindId null), in order. */
-export async function setPageImagesAction(spexId: string, sectionId: string, kindId: string | null, images: ImageRefInput[]) {
-  requireIds(spexId, sectionId, kindId, ...images.map(image => image.imageId));
+export async function setPageImagesAction(
+  spexId: string,
+  sectionId: string,
+  kindId: string | null,
+  images: ImageRefInput[]
+) {
+  requireIds(spexId, sectionId, kindId, ...images.map((image) => image.imageId));
   return author(async () => (await edit.spexPageSetImages(spexId, sectionId, kindId, images), null));
 }
 
@@ -150,25 +164,52 @@ export async function setPageImagesAction(spexId: string, sectionId: string, kin
  * list goes back to the default order.
  */
 export async function setSectionsAction(spexId: string, sections: PageSectionInput[]) {
-  requireIds(spexId, ...sections.flatMap(section => [section.id, section.kindId, section.refId, ...(section.itemIds ?? [])]));
+  requireIds(
+    spexId,
+    ...sections.flatMap((section) => [section.id, section.kindId, section.refId, ...(section.itemIds ?? [])])
+  );
   if (sections.length > 100) {
     throw new Error("Too many sections");
   }
-  return author(async () => (await edit.spexSetSections(spexId, sections.map(section => ({
-    id: section.id ?? null, kindId: section.kindId, hidden: !!section.hidden,
-    title: section.title?.trim().slice(0, 200) || null, refId: section.refId ?? null,
-    itemIds: section.itemIds?.slice(0, 100) ?? null,
-    startSeconds: section.startSeconds == null ? null : Math.max(0, Math.round(section.startSeconds)),
-  }))), null));
+  return author(
+    async () => (
+      await edit.spexSetSections(
+        spexId,
+        sections.map((section) => ({
+          id: section.id ?? null,
+          kindId: section.kindId,
+          hidden: !!section.hidden,
+          title: section.title?.trim().slice(0, 200) || null,
+          refId: section.refId ?? null,
+          itemIds: section.itemIds?.slice(0, 100) ?? null,
+          startSeconds: section.startSeconds == null ? null : Math.max(0, Math.round(section.startSeconds)),
+        }))
+      ),
+      null
+    )
+  );
 }
 
 /** The facts of the spex (spec 4.2), at most one per fact kind; empty values are left out. */
 export async function setFactsAction(spexId: string, facts: FactInput[]) {
-  requireIds(spexId, ...facts.map(fact => fact.kindId));
-  return author(async () => (await edit.spexPageSetFacts(spexId, facts.map(fact => ({ kindId: fact.kindId, value: fact.value?.trim().slice(0, 1000) || null }))), null));
+  requireIds(spexId, ...facts.map((fact) => fact.kindId));
+  return author(
+    async () => (
+      await edit.spexPageSetFacts(
+        spexId,
+        facts.map((fact) => ({ kindId: fact.kindId, value: fact.value?.trim().slice(0, 1000) || null }))
+      ),
+      null
+    )
+  );
 }
 
-export async function setPagePhotosAction(spexId: string, section: PhotoSection, characterId: string | null, itemIds: string[]) {
+export async function setPagePhotosAction(
+  spexId: string,
+  section: PhotoSection,
+  characterId: string | null,
+  itemIds: string[]
+) {
   requireIds(spexId, characterId, ...itemIds);
   return author(async () => (await edit.spexPageSetPhotos(spexId, section, characterId, itemIds), null));
 }
@@ -204,7 +245,7 @@ export async function reorderCharactersAction(spexId: string, ids: string[]) {
 }
 
 export async function setCharacterImagesAction(id: string, images: ImageRefInput[]) {
-  requireIds(id, ...images.map(image => image.imageId));
+  requireIds(id, ...images.map((image) => image.imageId));
   return author(async () => (await edit.characterSetImages(id, images), null));
 }
 
@@ -224,12 +265,18 @@ export async function pasteScenesAction(spexId: string, text: string) {
 }
 
 export async function reorderScenesAction(spexId: string, items: OrderInput[]) {
-  requireIds(spexId, ...items.map(item => item.id));
+  requireIds(spexId, ...items.map((item) => item.id));
   return editor(async () => (await edit.scenesReorder(spexId, items), null));
 }
 
 export async function saveNumberAction(spexId: string, id: string | null, input: NumberInput) {
-  requireIds(spexId, id, input.kindId, ...(input.characterIds ?? []), ...(input.credits ?? []).flatMap(credit => [credit.kindId, credit.spexareId]));
+  requireIds(
+    spexId,
+    id,
+    input.kindId,
+    ...(input.characterIds ?? []),
+    ...(input.credits ?? []).flatMap((credit) => [credit.kindId, credit.spexareId])
+  );
   return editor(async () => (await (id ? edit.numberUpdate(id, input) : edit.numberCreate(spexId, input)), null));
 }
 
@@ -239,7 +286,17 @@ export async function resolveCreditAction(numberId: string, kindId: string, posi
   if (!Number.isInteger(position) || position < 0 || (!credit.spexareId && !credit.name?.trim())) {
     throw new Error("Invalid credit");
   }
-  return editor(async () => (await edit.creditResolve(numberId, kindId, position, credit.spexareId ? { spexareId: credit.spexareId } : { name: credit.name!.trim() }), null));
+  return editor(
+    async () => (
+      await edit.creditResolve(
+        numberId,
+        kindId,
+        position,
+        credit.spexareId ? { spexareId: credit.spexareId } : { name: credit.name!.trim() }
+      ),
+      null
+    )
+  );
 }
 
 export async function deleteNumberAction(id: string) {
@@ -253,12 +310,16 @@ export async function pasteNumbersAction(spexId: string, text: string) {
 }
 
 export async function reorderNumbersAction(spexId: string, items: OrderInput[]) {
-  requireIds(spexId, ...items.map(item => item.id));
+  requireIds(spexId, ...items.map((item) => item.id));
   return editor(async () => (await edit.numbersReorder(spexId, items), null));
 }
 
-export async function setRevivalChangesAction(revivalId: string, kind: RevivalChangeKind, changes: RevivalChangeInput[]) {
-  requireIds(revivalId, ...changes.map(change => change.recordId));
+export async function setRevivalChangesAction(
+  revivalId: string,
+  kind: RevivalChangeKind,
+  changes: RevivalChangeInput[]
+) {
+  requireIds(revivalId, ...changes.map((change) => change.recordId));
   return editor(async () => (await edit.revivalSetChanges(revivalId, kind, changes), null));
 }
 
@@ -287,4 +348,3 @@ export async function restoreArticleAction(id: string) {
 export async function emptyTrashAction() {
   return admin(() => edit.trashEmpty());
 }
-

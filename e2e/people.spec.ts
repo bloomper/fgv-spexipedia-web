@@ -1,7 +1,7 @@
 import { BASE_URL, PEOPLE } from "./constants";
 import { acceptCookies, expect, linksTo, test } from "./fixtures";
 
-const NAMES = PEOPLE.map(person => person.name);
+const NAMES = PEOPLE.map((person) => person.name);
 
 /**
  * The spec's rule for people on public pages (5.3): visitors see published spexare by nickname only, and nothing of
@@ -38,11 +38,14 @@ test.describe("People on public pages", () => {
     const pages = new Set<string>(["/", "/spex", "/articles", "/search?q=spex"]);
 
     await page.goto("/spex");
-    (await linksTo(page, "/spex/")).slice(0, 5).forEach(path => pages.add(path));
+    (await linksTo(page, "/spex/")).slice(0, 5).forEach((path) => pages.add(path));
     await page.goto((await linksTo(page, "/spex/"))[0]);
-    (await linksTo(page, "/categories/")).forEach(path => pages.add(path));
+    (await linksTo(page, "/categories/")).forEach((path) => pages.add(path));
     await page.goto("/articles");
-    (await linksTo(page, "/articles/")).filter(path => !path.startsWith("/articles/new")).slice(0, 3).forEach(path => pages.add(path));
+    (await linksTo(page, "/articles/"))
+      .filter((path) => !path.startsWith("/articles/new"))
+      .slice(0, 3)
+      .forEach((path) => pages.add(path));
 
     expect(pages.size, "pages read").toBeGreaterThan(8);
     for (const path of pages) {

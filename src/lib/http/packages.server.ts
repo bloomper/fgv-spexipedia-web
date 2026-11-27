@@ -45,19 +45,32 @@ export function streamed(request: NextRequest, headers: Record<string, string>):
 
 /** The server's answer as it came, with its offset when it gives one. */
 export function answer(upstream: Response): Response {
-  const headers = new Headers({ "Content-Type": upstream.headers.get("content-type") ?? "application/json", "Cache-Control": "no-store" });
+  const headers = new Headers({
+    "Content-Type": upstream.headers.get("content-type") ?? "application/json",
+    "Cache-Control": "no-store",
+  });
   const offset = upstream.headers.get(OFFSET);
 
   if (offset) {
     headers.set(OFFSET, offset);
   }
-  return new Response(upstream.status === 204 || upstream.status === 304 ? null : upstream.body, { status: upstream.status, headers });
+  return new Response(upstream.status === 204 || upstream.status === 304 ? null : upstream.body, {
+    status: upstream.status,
+    headers,
+  });
 }
 
 /** A new package: the multipart form (spreadsheet, zipFileName, zipSize) as it came. */
 export async function createPackage(request: NextRequest): Promise<Response> {
-  return (await refuse(request))
-    ?? answer(await apiFetch("/api/packages", streamed(request, { "Content-Type": request.headers.get("content-type") ?? "multipart/form-data" })));
+  return (
+    (await refuse(request)) ??
+    answer(
+      await apiFetch(
+        "/api/packages",
+        streamed(request, { "Content-Type": request.headers.get("content-type") ?? "multipart/form-data" })
+      )
+    )
+  );
 }
 
 /** How much of the package's zip the server has: Upload-Offset. */
@@ -69,7 +82,10 @@ export async function zipOffset(request: NextRequest, id: string): Promise<Respo
   }
   const upstream = await apiFetch(`/api/packages/${id}/zip`, { method: "HEAD", signal: request.signal });
 
-  return new Response(null, { status: upstream.status, headers: { [OFFSET]: upstream.headers.get(OFFSET) ?? "0", "Cache-Control": "no-store" } });
+  return new Response(null, {
+    status: upstream.status,
+    headers: { [OFFSET]: upstream.headers.get(OFFSET) ?? "0", "Cache-Control": "no-store" },
+  });
 }
 
 /** The next part of the zip, at the offset the browser says. */
@@ -83,5 +99,10 @@ export async function zipPart(request: NextRequest, id: string): Promise<Respons
   if (!offset || !/^\d{1,15}$/.test(offset)) {
     return invalid();
   }
-  return answer(await apiFetch(`/api/packages/${id}/zip`, streamed(request, { [OFFSET]: offset, "Content-Type": "application/offset+octet-stream" })));
+  return answer(
+    await apiFetch(
+      `/api/packages/${id}/zip`,
+      streamed(request, { [OFFSET]: offset, "Content-Type": "application/offset+octet-stream" })
+    )
+  );
 }
