@@ -5,7 +5,7 @@ import { Policies } from "@/utils/policy.server";
 import { getTrash } from "@/lib/wiki/edit.server";
 import { getViewer } from "@/lib/wiki/viewer.server";
 import { privateMetadata } from "@/lib/wiki/metadata.server";
-import { PageHeader } from "@/components/page-header";
+import { Page, PageHeader } from "@bloomper/fgv-web-ui/shell/page-header";
 import { TrashView } from "@/components/wiki/manage/trash.client";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -20,10 +20,10 @@ export default async function TrashPage() {
     const [t, trash, viewer] = await Promise.all([getTranslations("Trash"), getTrash(), getViewer()]);
 
     return (
-      <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 px-4 py-6 md:px-8">
+      <Page variant="content" className="mx-auto w-full max-w-7xl">
         <PageHeader title={t("title")} description={t("description")} />
         <TrashView articles={trash?.articles ?? []} images={trash?.images ?? []} admin={viewer.admin} />
-      </div>
+      </Page>
     );
   });
 }

@@ -54,7 +54,7 @@ export function CompareSlider({ back, front, start = 50, label, valueText, class
       <div className="pointer-events-none absolute inset-y-0 w-0.5 -translate-x-1/2 bg-primary shadow-[0_0_6px_rgba(0,0,0,0.5)]"
            style={{ left: `${shown}%` }} />
       {/* The handle stays within the frame at either end */}
-      <span className="pointer-events-none absolute top-1/2 flex size-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-primary bg-background text-primary shadow-md"
+      <span className="pointer-events-none absolute top-1/2 flex size-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-primary bg-background text-link shadow-md"
             style={{ left: `clamp(1.25rem, ${shown}%, calc(100% - 1.25rem))` }}>
         <ChevronsLeftRight className="size-5" aria-hidden />
       </span>

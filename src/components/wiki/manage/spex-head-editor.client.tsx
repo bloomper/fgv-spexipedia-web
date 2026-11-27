@@ -5,13 +5,13 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Archive, ArchiveRestore, Eye, EyeOff, Plus, Save } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@bloomper/fgv-web-ui/ui/button";
 import { cn } from "@/utils/utils";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@bloomper/fgv-web-ui/ui/input";
+import { Label } from "@bloomper/fgv-web-ui/ui/label";
+import { Textarea } from "@bloomper/fgv-web-ui/ui/textarea";
 import { DatePicker } from "@/components/date-picker.client";
-import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
+import { NativeSelect, NativeSelectOption } from "@bloomper/fgv-web-ui/ui/native-select";
 import { ImageSlot } from "@/components/wiki/editor/image-slot.client";
 import { MarkdownEditor } from "@/components/wiki/editor/markdown-editor.client";
 import { CreditPicker, toCreditInput, toCreditValue, type CreditValue } from "@/components/wiki/editor/credit-picker.client";
@@ -37,7 +37,7 @@ export function SpexProductions({ spex, editor, admin }: { spex: SpexEditData; e
   const current = revivals.find(revival => revival.id === spex.id);
   const pill = (active: boolean, retired = false) => cn(
     "rounded-full border px-3 py-1 text-sm",
-    active ? "border-primary bg-primary/10 font-medium text-primary" : "border-border hover:border-primary hover:text-primary",
+    active ? "border-primary bg-primary/10 font-medium text-link" : "border-border hover:border-primary hover:text-link",
     retired && "text-muted-foreground line-through",
   );
 

@@ -76,22 +76,22 @@ export function RecordCard({ record, large = false }: { record: RecordData; larg
                 {track.audioUrl && (
                   <button type="button" onClick={() => toggle(track)} aria-pressed={playing === track.id}
                           aria-label={playing === track.id ? t("records.pause", { title: track.title }) : t("records.play", { title: track.title })}
-                          className="inline-flex size-5 items-center justify-center rounded-full text-primary hover:bg-primary/10">
+                          className="inline-flex size-5 items-center justify-center rounded-full text-link hover:bg-primary/10">
                     {playing === track.id ? <Pause className="size-3" aria-hidden /> : <Play className="size-3" aria-hidden />}
                   </button>
                 )}
                 <span className="text-muted-foreground tabular-nums">{track.side ? `${track.side}${track.position}` : `${track.position}.`}</span>
                 {track.number
-                  ? <a href={`#number-${track.number.id}`} className="hover:text-primary">{track.title}</a>
+                  ? <a href={`#number-${track.number.id}`} className="hover:text-link">{track.title}</a>
                   : <span>{track.title}</span>}
                 {!track.audioUrl && (track.url
-                  ? <a href={track.url} className="text-primary hover:text-primary/80">{t("records.listen")}</a>
+                  ? <a href={track.url} className="text-link hover:text-link/80">{t("records.listen")}</a>
                   : !track.hasAudio && <span className="text-muted-foreground">({t("records.noAudio")})</span>)}
               </li>
             ))}
           </ol>
         )}
-        {record.url && <a href={record.url} className="inline-block text-xs text-primary hover:text-primary/80">{t("records.open")}</a>}
+        {record.url && <a href={record.url} className="inline-block text-xs text-link hover:text-link/80">{t("records.open")}</a>}
         {record.tracks.some(track => track.audioUrl) && (
           <audio ref={audio} preload="none" onEnded={() => setPlaying(null)} onPause={() => setPlaying(null)} className="hidden" />
         )}

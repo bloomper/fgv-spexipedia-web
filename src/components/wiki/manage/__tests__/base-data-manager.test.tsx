@@ -13,7 +13,7 @@ vi.mock("sonner", async () => ({ toast: (await import("@/test/manage-mocks")).to
 vi.mock("@/app/(app)/manage/actions.server", async () => (await import("@/test/manage-mocks")).actionsMock(actions));
 
 import { BaseDataManager } from "@/components/wiki/manage/base-data-manager.client";
-import { DialogsProvider } from "@/components/dialogs.client";
+import { DialogsProvider } from "@bloomper/fgv-web-ui/shell/dialogs";
 import type { BaseData } from "@/lib/wiki/edit.server";
 
 const data = {
@@ -118,7 +118,7 @@ describe("BaseDataManager", () => {
 
     await userEvent.click(within(tasks).getAllByRole("button", { name: "merge" })[1]);
     await userEvent.click(within(await screen.findByRole("dialog")).getByRole("button", { name: "Regissör" }));
-    await userEvent.click(within(await screen.findByRole("dialog")).getByRole("button", { name: "merge" }));
+    await userEvent.click(within(await screen.findByRole("alertdialog")).getByRole("button", { name: "merge" }));
     await waitFor(() => expect(actions.mergeAction).toHaveBeenCalledWith("TASK", "u2", "u1"));
   });
 

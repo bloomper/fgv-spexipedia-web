@@ -5,8 +5,8 @@ import { withPolicyPage } from "@/utils/route.server";
 import { Policies } from "@/utils/policy.server";
 import { getWantedArticles } from "@/lib/wiki/wiki.server";
 import { privateMetadata } from "@/lib/wiki/metadata.server";
-import { PageHeader } from "@/components/page-header";
-import { DataEmpty } from "@/components/data-empty";
+import { Page, PageHeader } from "@bloomper/fgv-web-ui/shell/page-header";
+import { DataEmpty } from "@bloomper/fgv-web-ui/shell/data-empty";
 
 export async function generateMetadata(): Promise<Metadata> {
   return privateMetadata((await getTranslations("Articles"))("wanted"));
@@ -20,7 +20,7 @@ export default async function WantedArticlesPage() {
     const [t, wanted] = await Promise.all([getTranslations("Articles"), getWantedArticles()]);
 
     return (
-      <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 px-4 py-6 md:px-8">
+      <Page variant="content" className="mx-auto w-full max-w-7xl">
         <PageHeader title={t("wanted")} description={t("wantedDescription")} />
         {wanted.length === 0 ? <DataEmpty title={t("noWanted")} /> : (
           <ul className="divide-y divide-border rounded-lg border border-border bg-card">
@@ -32,7 +32,7 @@ export default async function WantedArticlesPage() {
             ))}
           </ul>
         )}
-      </div>
+      </Page>
     );
   });
 }

@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { Search } from "lucide-react";
-import { PageHeader } from "@/components/page-header";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { DataEmpty } from "@/components/data-empty";
+import { Page, PageHeader } from "@bloomper/fgv-web-ui/shell/page-header";
+import { Input } from "@bloomper/fgv-web-ui/ui/input";
+import { Button } from "@bloomper/fgv-web-ui/ui/button";
+import { DataEmpty } from "@bloomper/fgv-web-ui/shell/data-empty";
 import { search } from "@/lib/wiki/wiki.server";
 import { getViewer } from "@/lib/wiki/viewer.server";
 import { privateMetadata } from "@/lib/wiki/metadata.server";
@@ -24,7 +24,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
   const [t, hits, viewer] = await Promise.all([getTranslations("Search"), q.length >= 2 ? search(q) : Promise.resolve([]), getViewer()]);
 
   return (
-    <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 px-4 py-6 md:px-8">
+    <Page variant="content" className="mx-auto w-full max-w-7xl">
       <PageHeader title={t("title")} />
       <form role="search" className="flex gap-2">
         <Input name="q" type="search" defaultValue={q} placeholder={t("placeholder")} aria-label={t("placeholder")} autoFocus />
@@ -33,7 +33,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
       {q.length >= 2 && hits.length === 0 && (
         <div className="space-y-2">
           <DataEmpty title={t("noHits", { q })} description={null} />
-          {viewer.member && <p className="text-center text-sm"><Link href={`/articles/new?title=${encodeURIComponent(q)}`} className="text-primary hover:text-primary/80">{t("writeArticle", { q })}</Link></p>}
+          {viewer.member && <p className="text-center text-sm"><Link href={`/articles/new?title=${encodeURIComponent(q)}`} className="text-link hover:text-link/80">{t("writeArticle", { q })}</Link></p>}
         </div>
       )}
       {groupBy(hits, hit => hit.kind).map(([kind, list]) => (
@@ -49,6 +49,6 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
           </ul>
         </section>
       ))}
-    </div>
+    </Page>
   );
 }

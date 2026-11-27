@@ -62,5 +62,10 @@ export default defineConfig([
       tolerant: true,
     },
     extends: ["css/recommended"],
+    rules: {
+      // The theme's variables (--primary, --link, …) are defined in @bloomper/fgv-web-ui/styles.css, which the linter
+      // does not follow into
+      "css/no-invalid-properties": ["error", { allowUnknownVariables: true }],
+    },
   },
 ]);

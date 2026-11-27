@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { withPolicyPage } from "@/utils/route.server";
 import { Policies } from "@/utils/policy.server";
-import { PageHeader } from "@/components/page-header";
+import { Page, PageHeader } from "@bloomper/fgv-web-ui/shell/page-header";
 import { ArticleForm } from "@/components/wiki/editor/article-form.client";
 import { getArticle, getArticles } from "@/lib/wiki/wiki.server";
 import { privateMetadata } from "@/lib/wiki/metadata.server";
@@ -28,11 +28,11 @@ export default async function EditArticlePage({ params }: Props) {
       notFound();
     }
     return (
-      <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 px-4 py-6 md:px-8">
+      <Page variant="content" className="mx-auto w-full max-w-7xl">
         <PageHeader title={t("editTitle", { title: article.title })} />
         <ArticleForm id={article.id} revisionId={article.revision?.id ?? null} categories={data?.articleCategories ?? []}
                      initial={{ title: article.title, body: article.body ?? "", visibility: article.visibility, categoryIds: article.categories.map(c => c.id) }} />
-      </div>
+      </Page>
     );
   });
 }

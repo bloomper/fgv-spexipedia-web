@@ -11,7 +11,7 @@ export function PersonName({ person }: { person: PersonLike | null | undefined }
     return null;
   }
   return person?.url
-    ? <a href={person.url} className="hover:text-primary" target="_blank" rel="noopener noreferrer">{label}</a>
+    ? <a href={person.url} className="hover:text-link" target="_blank" rel="noopener noreferrer">{label}</a>
     : <span>{label}</span>;
 }
 

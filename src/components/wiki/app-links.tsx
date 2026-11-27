@@ -45,7 +45,7 @@ export function AppLinks({ links, compact = false }: { links: AppLinkData[]; com
         return (
           <li key={`${link.kind}-${link.url}`}>
             <a href={link.url} target="_blank" rel="noopener noreferrer" title={label}
-               className={cn("inline-flex items-center gap-1.5 rounded-full border border-border bg-card text-xs hover:border-primary hover:text-primary",
+               className={cn("inline-flex items-center gap-1.5 rounded-full border border-border bg-card text-xs hover:border-primary hover:text-link",
                  compact ? "px-2 py-0.5" : "px-3 py-1.5 text-sm")}>
               <Icon className="size-3.5" aria-hidden />
               {compact || isSpexPageLink(link) ? t(link.kind) : <><span className="text-muted-foreground">{t(link.kind)}:</span> {title}</>}

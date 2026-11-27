@@ -2,12 +2,12 @@
 
 import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
-import { Textarea } from "@/components/ui/textarea";
-import { Spinner } from "@/components/ui/spinner";
+import { Textarea } from "@bloomper/fgv-web-ui/ui/textarea";
+import { Spinner } from "@bloomper/fgv-web-ui/ui/spinner";
 import { HtmlContent } from "@/components/wiki/html-content";
 import { appRefAction, previewAction } from "@/app/(app)/articles/actions.server";
-import { Button } from "@/components/ui/button";
-import { useDialogs } from "@/components/dialogs.client";
+import { Button } from "@bloomper/fgv-web-ui/ui/button";
+import { useDialogs } from "@bloomper/fgv-web-ui/shell/dialogs";
 import { appRefMarkdown } from "@/utils/app-refs";
 import { Link2 } from "lucide-react";
 import { toast } from "sonner";

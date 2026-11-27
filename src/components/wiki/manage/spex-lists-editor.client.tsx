@@ -3,18 +3,18 @@
 import { type ChangeEvent, useState } from "react";
 import { useTranslations } from "next-intl";
 import { ArrowDown, ArrowUp, ClipboardPaste, Pencil, Plus, Save, Trash2, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Badge } from "@/components/ui/badge";
-import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
+import { Button } from "@bloomper/fgv-web-ui/ui/button";
+import { Input } from "@bloomper/fgv-web-ui/ui/input";
+import { Label } from "@bloomper/fgv-web-ui/ui/label";
+import { Textarea } from "@bloomper/fgv-web-ui/ui/textarea";
+import { Checkbox } from "@bloomper/fgv-web-ui/ui/checkbox";
+import { Badge } from "@bloomper/fgv-web-ui/ui/badge";
+import { NativeSelect, NativeSelectOption } from "@bloomper/fgv-web-ui/ui/native-select";
 import { ImageListEditor } from "@/components/wiki/editor/image-list-editor.client";
 import { PhotoPicker } from "@/components/wiki/editor/photo-picker.client";
 import { CreditPicker, CreditResolver, toCreditInput, toCreditValue, type CreditValue } from "@/components/wiki/editor/credit-picker.client";
 import { useSave } from "@/components/wiki/editor/use-save.client";
-import { useDialogs } from "@/components/dialogs.client";
+import { useDialogs } from "@bloomper/fgv-web-ui/shell/dialogs";
 import {
   deleteCharacterAction,
   deleteNumberAction,
@@ -136,7 +136,7 @@ export function CharactersEditor({ spex, editor, imageKinds }: {
               </div>
               {editing === character.id && <CharacterForm spexId={spex.id} character={character} onDone={() => setEditing(null)} />}
               <details>
-                <summary className="cursor-pointer text-sm text-primary">{t("imagesAndPhotos")}</summary>
+                <summary className="cursor-pointer text-sm text-link">{t("imagesAndPhotos")}</summary>
                 <div className="mt-3 space-y-4">
                   <ImageListEditor title={t("characterImages")} uploadKind="CHARACTER" kinds={imageKinds}
                                    images={character.images}

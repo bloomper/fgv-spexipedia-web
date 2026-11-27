@@ -16,7 +16,7 @@ vi.mock("@/app/(app)/articles/actions.server", async () => (await import("@/test
 
 import { FactsEditor, SpexBaseDataEditor, SpexProductions, SpexTextsEditor } from "@/components/wiki/manage/spex-head-editor.client";
 import { ConsumersEditor, RedirectsEditor } from "@/components/wiki/manage/admin-lists.client";
-import { DialogsProvider } from "@/components/dialogs.client";
+import { DialogsProvider } from "@bloomper/fgv-web-ui/shell/dialogs";
 import { router } from "@/test/manage-mocks";
 import type { BaseData, SpexEditData } from "@/lib/wiki/edit.server";
 
@@ -200,7 +200,7 @@ describe("The admin lists", () => {
     await userEvent.click(screen.getAllByRole("button", { name: "edit" })[1]);
     expect(screen.getByLabelText("oldTitle")).toHaveValue("Huvudsida");
     await userEvent.click(screen.getAllByRole("button", { name: "delete" })[0]);
-    await userEvent.click(within(await screen.findByRole("dialog")).getByRole("button", { name: "delete" }));
+    await userEvent.click(within(await screen.findByRole("alertdialog")).getByRole("button", { name: "delete" }));
     await waitFor(() => expect(actions.deleteRedirectAction).toHaveBeenCalledWith("d1"));
   });
 
@@ -224,7 +224,7 @@ describe("The admin lists", () => {
 
     await userEvent.click(screen.getByRole("button", { name: "add" }));
     await userEvent.click(screen.getAllByRole("button", { name: "delete" })[0]);
-    await userEvent.click(within(await screen.findByRole("dialog")).getByRole("button", { name: "delete" }));
+    await userEvent.click(within(await screen.findByRole("alertdialog")).getByRole("button", { name: "delete" }));
     await waitFor(() => expect(actions.deleteConsumerAction).toHaveBeenCalledWith("c1"));
   });
 });

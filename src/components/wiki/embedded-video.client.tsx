@@ -104,7 +104,7 @@ export function EmbeddedVideo({ video }: { video: EmbeddedVideoData }) {
       <figcaption className="flex flex-wrap items-baseline justify-between gap-2 text-sm">
         <span className="font-semibold">{video.title}</span>
         {video.url && (
-          <a href={video.url} className="inline-flex items-center gap-1 text-primary hover:text-primary/80">
+          <a href={video.url} className="inline-flex items-center gap-1 text-link hover:text-link/80">
             {t("embeds.openVideo")} <ExternalLink className="size-3.5" aria-hidden />
           </a>
         )}
@@ -115,7 +115,7 @@ export function EmbeddedVideo({ video }: { video: EmbeddedVideoData }) {
           {video.chapters.map(chapter => (
             <li key={`${chapter.startSeconds}-${chapter.title}`}>
               <button type="button" onClick={() => jump(chapter.startSeconds)}
-                      className="rounded-full border border-border px-2.5 py-1 hover:border-primary/60 hover:text-primary">
+                      className="rounded-full border border-border px-2.5 py-1 hover:border-primary/60 hover:text-link">
                 <span className="text-muted-foreground tabular-nums">{time(chapter.startSeconds)}</span> {chapter.title}
               </button>
             </li>

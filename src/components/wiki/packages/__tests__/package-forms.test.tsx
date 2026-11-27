@@ -20,7 +20,7 @@ vi.mock("@/components/wiki/packages/package-upload.client", async importOriginal
 import { formatBytes, NewPackageForm, PackageActions, ProgressBar, ZipResume } from "@/components/wiki/packages/package-forms.client";
 import { PackageReport } from "@/components/wiki/packages/package-report";
 import { StateChip } from "@/components/wiki/packages/package-state";
-import { DialogsProvider } from "@/components/dialogs.client";
+import { DialogsProvider } from "@bloomper/fgv-web-ui/shell/dialogs";
 
 const ID = "01933f2a-7c3e-7b1a-9d2e-4f5a6b7c8d9e";
 const show = (node: React.ReactNode) => render(<DialogsProvider>{node}</DialogsProvider>);
@@ -113,7 +113,7 @@ describe("A package's actions", () => {
     const { unmount } = show(<PackageActions id={ID} state="PREVIEWED" zipComplete />);
 
     await userEvent.click(screen.getByRole("button", { name: "apply" }));
-    await userEvent.click(within(await screen.findByRole("dialog")).getByRole("button", { name: "apply" }));
+    await userEvent.click(within(await screen.findByRole("alertdialog")).getByRole("button", { name: "apply" }));
     await waitFor(() => expect(actions.applyPackageAction).toHaveBeenCalledWith(ID));
     unmount();
     show(<PackageActions id={ID} state="APPLIED" zipComplete />);
@@ -130,7 +130,7 @@ describe("A package's actions", () => {
     show(<PackageActions id={ID} state="FAILED" zipComplete />);
     expect(screen.getByRole("button", { name: "preview" })).toBeInTheDocument();
     await userEvent.click(screen.getByRole("button", { name: "delete" }));
-    await userEvent.click(within(await screen.findByRole("dialog")).getByRole("button", { name: "delete" }));
+    await userEvent.click(within(await screen.findByRole("alertdialog")).getByRole("button", { name: "delete" }));
     await waitFor(() => expect(router.push).toHaveBeenCalledWith("/manage/packages"));
     expect(actions.deletePackageAction).toHaveBeenCalledWith(ID);
   });

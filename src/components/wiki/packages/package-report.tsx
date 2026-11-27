@@ -1,6 +1,6 @@
 import { useTranslations } from "next-intl";
 import { ExternalLink } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@bloomper/fgv-web-ui/ui/badge";
 import type { SpexPackageReportData } from "@/lib/packages/packages.server";
 import { cn } from "@/utils/utils";
 
@@ -23,7 +23,7 @@ export function useLabel(namespace: "statuses" | "outcomes") {
 
 /** An application's name as the application switcher gives it, else as the server sent it. */
 function useAppName() {
-  const t = useTranslations("AppSwitcher");
+  const t = useTranslations("FgvUi.applications");
 
   return (app: string) => t.has(app.toLowerCase()) ? t(app.toLowerCase()) : app;
 }
@@ -76,7 +76,7 @@ function AppReport({ app }: { app: App }) {
         <h3 className="wiki-heading text-xl font-semibold">{name(app.app)}</h3>
         <StatusChip status={app.status} />
         {app.webUrl && (
-          <a href={app.webUrl} target="_blank" rel="noopener noreferrer" className="ml-auto inline-flex items-center gap-1 text-sm text-primary hover:text-primary/80">
+          <a href={app.webUrl} target="_blank" rel="noopener noreferrer" className="ml-auto inline-flex items-center gap-1 text-sm text-link hover:text-link/80">
             {t("open")} <ExternalLink className="size-3.5" aria-hidden />
           </a>
         )}

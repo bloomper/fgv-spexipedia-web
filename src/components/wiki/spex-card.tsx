@@ -2,7 +2,7 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { Drama } from "lucide-react";
 import { WikiImage, type WikiImageData } from "@/components/wiki/wiki-image";
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@bloomper/fgv-web-ui/ui/badge";
 
 export type SpexCardData = {
   id: string;
@@ -39,8 +39,8 @@ export function SpexCard({ spex, introduction }: { spex: SpexCardData; introduct
         {spex.completeness && <CompletenessBar share={spex.completeness.share} label={t("filledIn", { percent: Math.round(spex.completeness.share * 100) })} />}
       </div>
       <div className="space-y-1 p-2 sm:p-3">
-        <p className="text-xs tracking-[0.12em] text-primary sm:tracking-[0.18em]">{spex.year}</p>
-        <p className="wiki-heading text-base leading-tight font-semibold [overflow-wrap:anywhere] group-hover:text-primary sm:text-lg">{spex.title}</p>
+        <p className="text-xs tracking-[0.12em] text-link sm:tracking-[0.18em]">{spex.year}</p>
+        <p className="wiki-heading text-base leading-tight font-semibold [overflow-wrap:anywhere] group-hover:text-link sm:text-lg">{spex.title}</p>
         {introduction && <p className="line-clamp-2 text-xs text-muted-foreground">{introduction}</p>}
       </div>
     </Link>

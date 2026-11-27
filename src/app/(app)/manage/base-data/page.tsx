@@ -5,7 +5,7 @@ import { Policies } from "@/utils/policy.server";
 import { getBaseData } from "@/lib/wiki/edit.server";
 import { getViewer } from "@/lib/wiki/viewer.server";
 import { privateMetadata } from "@/lib/wiki/metadata.server";
-import { PageHeader } from "@/components/page-header";
+import { Page, PageHeader } from "@bloomper/fgv-web-ui/shell/page-header";
 import { BaseDataManager } from "@/components/wiki/manage/base-data-manager.client";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -21,10 +21,10 @@ export default async function BaseDataPage({ searchParams }: { searchParams: Pro
     const [t, data, viewer, { edit, tab }] = await Promise.all([getTranslations("BaseData"), getBaseData(), getViewer(), searchParams]);
 
     return (
-      <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 px-4 py-6 md:px-8">
+      <Page variant="content" className="mx-auto w-full max-w-7xl">
         <PageHeader title={t("title")} description={t("intro")} />
         {data && <BaseDataManager data={data} admin={viewer.admin} highlight={edit ?? null} initialTab={tab ?? null} />}
-      </div>
+      </Page>
     );
   });
 }

@@ -5,8 +5,8 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Eye, EyeOff, Trash2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useDialogs } from "@/components/dialogs.client";
+import { Button } from "@bloomper/fgv-web-ui/ui/button";
+import { useDialogs } from "@bloomper/fgv-web-ui/shell/dialogs";
 import { setPublishedAction, trashArticleAction } from "@/app/(app)/articles/actions.server";
 
 /**

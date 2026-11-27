@@ -13,7 +13,7 @@ export function SpexSection({ id, title, subtitle, children }: {
     <section id={id} aria-labelledby={`${id}-heading`} data-section className="scroll-mt-28 xl:scroll-mt-20 space-y-4 border-t border-border/60 pt-8">
       <header className="space-y-1">
         <h2 id={`${id}-heading`} className="wiki-heading text-2xl font-semibold text-foreground">{title}</h2>
-        {subtitle && <p className="text-sm uppercase tracking-[0.18em] text-primary">{subtitle}</p>}
+        {subtitle && <p className="text-sm uppercase tracking-[0.18em] text-link">{subtitle}</p>}
       </header>
       {children}
     </section>

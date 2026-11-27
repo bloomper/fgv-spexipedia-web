@@ -16,7 +16,7 @@ vi.mock("@/app/(app)/manage/actions.server", async () => (await import("@/test/m
 
 import { KindsEditor, type KindRow } from "@/components/wiki/manage/kinds-editor.client";
 import { UnresolvedCredits } from "@/components/wiki/manage/unresolved-credits.client";
-import { DialogsProvider } from "@/components/dialogs.client";
+import { DialogsProvider } from "@bloomper/fgv-web-ui/shell/dialogs";
 
 const show = (node: React.ReactNode) => render(<DialogsProvider>{node}</DialogsProvider>);
 const kind = (id: string, nameSv: string, nameEn: string, extra: Partial<KindRow> = {}): KindRow =>
@@ -105,7 +105,7 @@ describe("The kinds editor", () => {
 
     expect(within(chooser).queryByRole("button", { name: "Gammal / Old" })).not.toBeInTheDocument();
     await userEvent.click(within(chooser).getByRole("button", { name: "Sång / Song" }));
-    await userEvent.click(within(await screen.findByRole("dialog")).getByRole("button", { name: "merge" }));
+    await userEvent.click(within(await screen.findByRole("alertdialog")).getByRole("button", { name: "merge" }));
     await waitFor(() => expect(actions.mergeKindAction).toHaveBeenCalledWith("k3", "k1"));
     await waitFor(() => expect(toast.error).toHaveBeenCalledWith("Fel sort."));
   });
@@ -115,7 +115,7 @@ describe("The kinds editor", () => {
     show(<KindsEditor type="NUMBER" use={null} kinds={kinds} />);
 
     await userEvent.click(screen.getAllByRole("button", { name: "delete" })[1]);
-    const dialog = await screen.findByRole("dialog");
+    const dialog = await screen.findByRole("alertdialog");
 
     expect(within(dialog).getByText("deleteText")).toBeInTheDocument();
     await userEvent.click(within(dialog).getByRole("button", { name: "delete" }));

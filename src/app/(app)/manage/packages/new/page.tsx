@@ -4,7 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { withPolicyPage } from "@/utils/route.server";
 import { Policies } from "@/utils/policy.server";
 import { privateMetadata } from "@/lib/wiki/metadata.server";
-import { PageHeader } from "@/components/page-header";
+import { Page, PageHeader } from "@bloomper/fgv-web-ui/shell/page-header";
 import { NewPackageForm } from "@/components/wiki/packages/package-forms.client";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -19,11 +19,11 @@ export default async function NewPackagePage() {
     const t = await getTranslations("Packages");
 
     return (
-      <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 px-4 py-6 md:px-8">
+      <Page variant="content" className="mx-auto w-full max-w-7xl">
         <PageHeader title={t("new")} description={t("newDescription")} />
-        <p className="text-sm"><a href="/api/packages/template" download className="text-primary hover:text-primary/80">{t("template")}</a> · <Link href="/manage/packages" className="text-primary hover:text-primary/80">{t("back")}</Link></p>
+        <p className="text-sm"><a href="/api/packages/template" download className="text-link hover:text-link/80">{t("template")}</a> · <Link href="/manage/packages" className="text-link hover:text-link/80">{t("back")}</Link></p>
         <NewPackageForm />
-      </div>
+      </Page>
     );
   });
 }

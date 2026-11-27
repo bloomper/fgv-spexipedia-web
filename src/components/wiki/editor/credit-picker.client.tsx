@@ -3,8 +3,8 @@
 import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { CircleHelp, Plus, UserRound, UserRoundCheck, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button } from "@bloomper/fgv-web-ui/ui/button";
+import { Input } from "@bloomper/fgv-web-ui/ui/input";
 import { searchSpexareAction } from "@/app/(app)/manage/actions.server";
 import type { CreditInput } from "@/gql/graphql";
 

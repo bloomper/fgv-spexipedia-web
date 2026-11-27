@@ -1,7 +1,4 @@
-import { Skeleton } from "@/components/ui/skeleton";
-
-/** The container every content page uses, so that a skeleton is as wide as the page it stands in for. */
-export const PAGE_CONTAINER = "mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 px-4 py-6 md:px-8";
+import { Skeleton } from "@bloomper/fgv-web-ui/ui/skeleton";
 
 /** A page title with its description, as `PageHeader` draws them. */
 export function HeaderSkeleton() {

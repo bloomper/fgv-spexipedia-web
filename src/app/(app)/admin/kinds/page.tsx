@@ -4,7 +4,7 @@ import { getKinds } from "@/lib/admin/admin.server";
 import { privateMetadata } from "@/lib/wiki/metadata.server";
 import { Policies } from "@/utils/policy.server";
 import { withPolicyPage } from "@/utils/route.server";
-import { PageHeader } from "@/components/page-header";
+import { Page, PageHeader } from "@bloomper/fgv-web-ui/shell/page-header";
 import { LinkTabs } from "@/components/link-tabs";
 import { KindsEditor } from "@/components/wiki/manage/kinds-editor.client";
 import { isKindTab, KIND_TYPES, kindTabs } from "@/utils/kinds";
@@ -36,7 +36,7 @@ export default async function KindsPage({ searchParams }: Props) {
     ]);
 
     return (
-      <div className="flex flex-1 flex-col gap-6 p-4 md:p-8">
+      <Page variant="content">
         <PageHeader title={t("title")} description={t("description")} />
         <LinkTabs label={t("types.label")} items={kindTabs().map(each => ({ href: `/admin/kinds?type=${each}`, label: t(`types.${each}`), active: each === type }))} />
         <p className="max-w-3xl text-sm text-muted-foreground">{t(`typeHelp.${type}`)}</p>
@@ -54,7 +54,7 @@ export default async function KindsPage({ searchParams }: Props) {
             </section>
           ))}
         </div>
-      </div>
+      </Page>
     );
   });
 }
