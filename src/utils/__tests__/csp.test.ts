@@ -3,10 +3,17 @@ import { contentSecurityPolicy } from "@/utils/csp";
 
 describe("contentSecurityPolicy", () => {
   it("allows Spexipedia's and Spexgram's media origins for video, images and fetches", () => {
-    const policy = contentSecurityPolicy(["https://spexipedia.example.org", "https://media.spexgram.example.org"], false);
+    const policy = contentSecurityPolicy(
+      ["https://spexipedia.example.org", "https://media.spexgram.example.org"],
+      false
+    );
 
-    expect(policy).toContain("media-src 'self' blob: https://spexipedia.example.org https://media.spexgram.example.org");
-    expect(policy).toContain("img-src 'self' blob: data: https: https://spexipedia.example.org https://media.spexgram.example.org");
+    expect(policy).toContain(
+      "media-src 'self' blob: https://spexipedia.example.org https://media.spexgram.example.org"
+    );
+    expect(policy).toContain(
+      "img-src 'self' blob: data: https: https://spexipedia.example.org https://media.spexgram.example.org"
+    );
     expect(policy).toContain("connect-src 'self' https://spexipedia.example.org https://media.spexgram.example.org");
     expect(policy).not.toContain("unsafe-eval");
   });

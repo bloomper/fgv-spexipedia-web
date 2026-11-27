@@ -33,20 +33,25 @@ const PEOPLE = [
 ];
 
 const PERSONAS = {
-  admin: { sub: "p-admin", name: "Sara Admin", email: "sara.admin@example.org", roles: ["USER", "AUTHOR", "EDITOR", "ADMIN"] },
+  admin: {
+    sub: "p-admin",
+    name: "Sara Admin",
+    email: "sara.admin@example.org",
+    roles: ["USER", "AUTHOR", "EDITOR", "ADMIN"],
+  },
   editor: { sub: "p-editor", name: "Erik Redaktör", email: "erik@example.org", roles: ["USER", "EDITOR"] },
   author: { sub: "p-author", name: "Anna Författare", email: "anna@example.org", roles: ["USER", "AUTHOR"] },
   member: { sub: "p-member", name: "Tina Tittare", email: "tina@example.org", roles: ["USER"] },
   noaccess: { sub: "p-noaccess", name: "Nils Nekad", email: "nils@example.org", roles: [] },
 };
-const bySub = Object.fromEntries(Object.values(PERSONAS).map(persona => [persona.sub, persona]));
+const bySub = Object.fromEntries(Object.values(PERSONAS).map((persona) => [persona.sub, persona]));
 let currentPersona = "member";
 
 const recorded = existsSync(RECORDED) ? JSON.parse(readFileSync(RECORDED, "utf8")) : {};
 
 seedFrom(recorded);
 
-const isMember = persona => Boolean(persona?.roles.includes("USER"));
+const isMember = (persona) => Boolean(persona?.roles.includes("USER"));
 
 function personaOf(req) {
   const token = (req.headers.authorization ?? "").replace(/^Bearer\s+/i, "");
@@ -58,7 +63,7 @@ function personaOf(req) {
   }
 }
 
-const operationNameOf = query => /\b(?:query|mutation)\s+([A-Za-z0-9_]+)/.exec(query)?.[1] ?? null;
+const operationNameOf = (query) => /\b(?:query|mutation)\s+([A-Za-z0-9_]+)/.exec(query)?.[1] ?? null;
 
 /** A stable key for an operation and its variables. */
 function keyOf(op, variables) {
@@ -69,14 +74,16 @@ function keyOf(op, variables) {
 
 // --- People, as the server shows them --------------------------------------------------------------------------------
 
-const personFor = (persona, person, index) => isMember(persona)
-  ? { id: `spexare-${index + 1}`, nickname: person.nickname, name: person.name, url: null }
-  : { id: null, nickname: person.nickname, name: null, url: null };
+const personFor = (persona, person, index) =>
+  isMember(persona)
+    ? { id: `spexare-${index + 1}`, nickname: person.nickname, name: person.name, url: null }
+    : { id: null, nickname: person.nickname, name: null, url: null };
 
 /** The sample spexare the viewer may see: visitors only those with a nickname. */
-const visiblePeople = persona => PEOPLE.map((person, index) => ({ person, index }))
-  .filter(({ person }) => isMember(persona) || person.nickname)
-  .map(({ person, index }) => personFor(persona, person, index));
+const visiblePeople = (persona) =>
+  PEOPLE.map((person, index) => ({ person, index }))
+    .filter(({ person }) => isMember(persona) || person.nickname)
+    .map(({ person, index }) => personFor(persona, person, index));
 
 function withPeople(persona, spex) {
   const production = { id: spex.id, year: spex.year, revival: spex.revival ?? false };
@@ -87,11 +94,17 @@ function withPeople(persona, spex) {
       ...spex.people,
       available: true,
       board: [{ spex: production, task: { id: "task-chair", name: "Ordförande" }, people: people.slice(0, 1) }],
-      tasks: [{ spex: production, task: { id: "task-kapellmastare", name: "Kapellmästare", category: { id: "cat-orkester", name: "Orkester" } }, people: people.slice(1) }],
+      tasks: [
+        {
+          spex: production,
+          task: { id: "task-kapellmastare", name: "Kapellmästare", category: { id: "cat-orkester", name: "Orkester" } },
+          people: people.slice(1),
+        },
+      ],
     };
   }
   if (spex.characters?.length) {
-    spex.characters[0] = { ...spex.characters[0], playedBy: people.map(person => ({ person, spex: production })) };
+    spex.characters[0] = { ...spex.characters[0], playedBy: people.map((person) => ({ person, spex: production })) };
   }
   if (spex.numbers?.length) {
     // The number's lyrics credits, by spexare in Spexregister
@@ -99,7 +112,11 @@ function withPeople(persona, spex) {
 
     spex.numbers[0] = {
       ...spex.numbers[0],
-      credits: people.map((person, position) => ({ kind: lyrics, position, credit: { person, name: null, unresolved: false } })),
+      credits: people.map((person, position) => ({
+        kind: lyrics,
+        position,
+        credit: { person, name: null, unresolved: false },
+      })),
     };
   }
   return spex;
@@ -120,13 +137,20 @@ async function answer(op, payload) {
 
     if (!/^\s*mutation\b/.test(payload.query) && recorded[key] === undefined) {
       recorded[key] = json;
-      writeFileSync(RECORDED, JSON.stringify(Object.fromEntries(Object.entries(recorded).sort(([a], [b]) => a.localeCompare(b))), null, 1) + "\n");
+      writeFileSync(
+        RECORDED,
+        JSON.stringify(Object.fromEntries(Object.entries(recorded).sort(([a], [b]) => a.localeCompare(b))), null, 1) +
+          "\n"
+      );
     }
     return structuredClone(json);
   }
   if (recorded[key] === undefined) {
     console.warn(`[mock-backend] not recorded: ${key}`);
-    return { data: null, errors: [{ message: `Not recorded: ${key}`, extensions: { classification: "INTERNAL_ERROR" } }] };
+    return {
+      data: null,
+      errors: [{ message: `Not recorded: ${key}`, extensions: { classification: "INTERNAL_ERROR" } }],
+    };
   }
   return structuredClone(recorded[key]);
 }
@@ -136,8 +160,9 @@ async function handleGraphql(req, body, res) {
   const op = operationNameOf(payload.query || "");
   const persona = personaOf(req);
   // While recording, everything goes to the real server; otherwise the live state answers first
-  const json = (!RECORD_FROM && answerLive(op, payload.variables, persona, recorded[keyOf(op, payload.variables)]))
-    || await answer(op, payload);
+  const json =
+    (!RECORD_FROM && answerLive(op, payload.variables, persona, recorded[keyOf(op, payload.variables)])) ||
+    (await answer(op, payload));
 
   if (op === "StartPage") {
     patchStartPage(json, persona, req.headers["accept-language"]);
@@ -168,7 +193,7 @@ const { privateKey, publicKey } = await generateKeyPair("RS256", { extractable: 
 const publicJwk = { ...(await exportJWK(publicKey)), kid: KID, alg: "RS256", use: "sig" };
 const pendingCodes = new Map();
 
-const userClaims = persona => ({
+const userClaims = (persona) => ({
   sub: persona.sub,
   name: persona.name,
   email: persona.email,
@@ -222,19 +247,25 @@ async function handleToken(body, res) {
 
   const { persona, nonce } = pending;
 
-  res.writeHead(200, { "content-type": "application/json" }).end(JSON.stringify({
-    access_token: await signJwt(persona, {
-      ...userClaims(persona),
-      typ: "Bearer",
-      azp: CLIENT_ID,
-      resource_access: { [CLIENT_ID]: { roles: persona.roles } },
-    }, "account"),
-    id_token: await signJwt(persona, { ...userClaims(persona), ...(nonce ? { nonce } : {}) }, CLIENT_ID),
-    refresh_token: `refresh-${randomUUID()}`,
-    token_type: "Bearer",
-    expires_in: TOKEN_TTL,
-    scope: "openid profile email",
-  }));
+  res.writeHead(200, { "content-type": "application/json" }).end(
+    JSON.stringify({
+      access_token: await signJwt(
+        persona,
+        {
+          ...userClaims(persona),
+          typ: "Bearer",
+          azp: CLIENT_ID,
+          resource_access: { [CLIENT_ID]: { roles: persona.roles } },
+        },
+        "account"
+      ),
+      id_token: await signJwt(persona, { ...userClaims(persona), ...(nonce ? { nonce } : {}) }, CLIENT_ID),
+      refresh_token: `refresh-${randomUUID()}`,
+      token_type: "Bearer",
+      expires_in: TOKEN_TTL,
+      scope: "openid profile email",
+    })
+  );
 }
 
 // --- Server ----------------------------------------------------------------------------------------------------------
@@ -242,13 +273,15 @@ async function handleToken(body, res) {
 const server = createServer((req, res) => {
   const chunks = [];
 
-  req.on("data", chunk => chunks.push(chunk));
-  req.on("end", () => handle(req, res, Buffer.concat(chunks).toString("utf8")).catch(error => {
-    console.error(error);
-    if (!res.headersSent) {
-      res.writeHead(500).end();
-    }
-  }));
+  req.on("data", (chunk) => chunks.push(chunk));
+  req.on("end", () =>
+    handle(req, res, Buffer.concat(chunks).toString("utf8")).catch((error) => {
+      console.error(error);
+      if (!res.headersSent) {
+        res.writeHead(500).end();
+      }
+    })
+  );
 });
 
 async function handle(req, res, body) {
@@ -264,9 +297,13 @@ async function handle(req, res, body) {
   } else if (path.endsWith("/protocol/openid-connect/token")) {
     await handleToken(body, res);
   } else if (path.endsWith("/protocol/openid-connect/userinfo")) {
-    res.writeHead(200, { "content-type": "application/json" }).end(JSON.stringify(userClaims(personaOf(req) ?? PERSONAS[currentPersona])));
+    res
+      .writeHead(200, { "content-type": "application/json" })
+      .end(JSON.stringify(userClaims(personaOf(req) ?? PERSONAS[currentPersona])));
   } else if (path.endsWith("/protocol/openid-connect/logout")) {
-    res.writeHead(302, { location: url.searchParams.get("post_logout_redirect_uri") || `http://localhost:${PORT}/` }).end();
+    res
+      .writeHead(302, { location: url.searchParams.get("post_logout_redirect_uri") || `http://localhost:${PORT}/` })
+      .end();
   } else if (req.method === "POST" && path === "/__reset") {
     currentPersona = "member";
     reset();
@@ -296,5 +333,7 @@ async function handle(req, res, body) {
 }
 
 server.listen(PORT, () => {
-  console.log(`[mock-backend] listening on http://localhost:${PORT}${RECORD_FROM ? `, recording from ${RECORD_FROM}` : ""}`);
+  console.log(
+    `[mock-backend] listening on http://localhost:${PORT}${RECORD_FROM ? `, recording from ${RECORD_FROM}` : ""}`
+  );
 });

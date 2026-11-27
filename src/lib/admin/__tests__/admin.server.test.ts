@@ -31,7 +31,9 @@ describe("the admin client", () => {
   it("sends the mutations", async () => {
     runMutation.mockResolvedValue({});
     await admin.redirectSave({ oldTitle: "Lasse-Maja", target: "/spex/1984-lasse-maja" });
-    expect(runMutation.mock.calls.at(-1)?.[1]).toEqual({ input: { oldTitle: "Lasse-Maja", target: "/spex/1984-lasse-maja" } });
+    expect(runMutation.mock.calls.at(-1)?.[1]).toEqual({
+      input: { oldTitle: "Lasse-Maja", target: "/spex/1984-lasse-maja" },
+    });
     await admin.syncConsumerDelete("c1");
     expect(runMutation.mock.calls.at(-1)?.[1]).toEqual({ id: "c1" });
     await admin.settingsUpdate({ welcomeSv: "Hej" } as never);

@@ -15,13 +15,16 @@ export const SPREADSHEET_TYPES = ".xlsx,application/vnd.openxmlformats-officedoc
 export const ZIP_TYPES = ".zip,application/zip,application/x-zip-compressed";
 
 export class UploadError extends Error {
-  constructor(message: string, readonly status?: number) {
+  constructor(
+    message: string,
+    readonly status?: number
+  ) {
     super(message);
   }
 }
 
 async function failure(response: Response): Promise<UploadError> {
-  const body = await response.json().catch(() => null) as { message?: string; detail?: string } | null;
+  const body = (await response.json().catch(() => null)) as { message?: string; detail?: string } | null;
 
   return new UploadError(body?.detail ?? body?.message ?? `HTTP ${response.status}`, response.status);
 }
@@ -41,7 +44,7 @@ export async function createPackage(spreadsheet: File, zip: File | null): Promis
   if (!response.ok) {
     throw await failure(response);
   }
-  return (await response.json() as { id: string }).id;
+  return ((await response.json()) as { id: string }).id;
 }
 
 /** How many bytes of the package's zip the server has. */
@@ -54,14 +57,20 @@ export async function zipOffset(id: string, signal?: AbortSignal): Promise<numbe
   return Number(response.headers.get(OFFSET) ?? 0);
 }
 
-const pause = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+const pause = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 /**
  * Sends the zip from where the server is, part by part, telling `onProgress` the bytes it has. A part that fails is
  * tried again a few times after asking the server where it is (a part may have arrived though its answer did not);
  * a refusal the server means (403, 404, 409, 413) ends the upload at once. Aborting `signal` stops it.
  */
-export async function uploadZip(id: string, zip: File, onProgress: (received: number) => void, signal?: AbortSignal, wait = pause): Promise<void> {
+export async function uploadZip(
+  id: string,
+  zip: File,
+  onProgress: (received: number) => void,
+  signal?: AbortSignal,
+  wait = pause
+): Promise<void> {
   let offset = await zipOffset(id, signal);
   let failures = 0;
 
@@ -83,7 +92,11 @@ export async function uploadZip(id: string, zip: File, onProgress: (received: nu
       failures = 0;
       onProgress(offset);
     } catch (error) {
-      if (signal?.aborted || (error instanceof UploadError && [401, 403, 404, 409, 413].includes(error.status ?? 0)) || ++failures > RETRIES) {
+      if (
+        signal?.aborted ||
+        (error instanceof UploadError && [401, 403, 404, 409, 413].includes(error.status ?? 0)) ||
+        ++failures > RETRIES
+      ) {
         throw error;
       }
       await wait(1000 * 2 ** failures);

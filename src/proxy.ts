@@ -27,7 +27,8 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(url, 307);
   }
 
-  const spexAddress = request.method === "GET" ? await spexAddressById(request.nextUrl.pathname, process.env.API_GRAPHQL_ENDPOINT) : null;
+  const spexAddress =
+    request.method === "GET" ? await spexAddressById(request.nextUrl.pathname, process.env.API_GRAPHQL_ENDPOINT) : null;
 
   if (spexAddress) {
     const url = request.nextUrl.clone();
@@ -39,9 +40,19 @@ export async function proxy(request: NextRequest) {
   const result = await refresh(request);
 
   if (!request.nextUrl.pathname.startsWith("/api/")) {
-    result.headers.set("Content-Security-Policy",
-      contentSecurityPolicy([process.env.MEDIA_ORIGIN, process.env.SPEXGRAM_MEDIA_ORIGIN, process.env.SPEXFLIX_MEDIA_ORIGIN,
-        process.env.SPEXIFY_MEDIA_ORIGIN, process.env.ARCHIVE_MEDIA_ORIGIN], process.env.NODE_ENV === "development"));
+    result.headers.set(
+      "Content-Security-Policy",
+      contentSecurityPolicy(
+        [
+          process.env.MEDIA_ORIGIN,
+          process.env.SPEXGRAM_MEDIA_ORIGIN,
+          process.env.SPEXFLIX_MEDIA_ORIGIN,
+          process.env.SPEXIFY_MEDIA_ORIGIN,
+          process.env.ARCHIVE_MEDIA_ORIGIN,
+        ],
+        process.env.NODE_ENV === "development"
+      )
+    );
   }
   return result;
 }
@@ -59,9 +70,7 @@ async function refresh(request: NextRequest): Promise<NextResponse> {
     return response;
   }
 
-  const hasAccountCookie = request.cookies
-    .getAll()
-    .some(({ name }) => name.includes(ACCOUNT_COOKIE));
+  const hasAccountCookie = request.cookies.getAll().some(({ name }) => name.includes(ACCOUNT_COOKIE));
 
   if (!hasAccountCookie) {
     return response;
@@ -90,23 +99,26 @@ async function refresh(request: NextRequest): Promise<NextResponse> {
     }
 
     return refreshed;
-  } catch {
-  }
+  } catch {}
 
   return response;
 }
 
 function applySetCookie(request: NextRequest, setCookie: string) {
-  const [pair, ...attributes] = setCookie.split(";").map(part => part.trim());
+  const [pair, ...attributes] = setCookie.split(";").map((part) => part.trim());
   const separator = pair.indexOf("=");
   const name = pair.slice(0, separator);
   const value = pair.slice(separator + 1);
-  const expired = value === "" || attributes.some(attribute => {
-    const [key, attributeValue = ""] = attribute.split("=");
+  const expired =
+    value === "" ||
+    attributes.some((attribute) => {
+      const [key, attributeValue = ""] = attribute.split("=");
 
-    return (key.toLowerCase() === "max-age" && Number(attributeValue) <= 0)
-      || (key.toLowerCase() === "expires" && Date.parse(attributeValue) <= Date.now());
-  });
+      return (
+        (key.toLowerCase() === "max-age" && Number(attributeValue) <= 0) ||
+        (key.toLowerCase() === "expires" && Date.parse(attributeValue) <= Date.now())
+      );
+    });
 
   if (expired) {
     request.cookies.delete(name);

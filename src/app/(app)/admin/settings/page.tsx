@@ -12,8 +12,18 @@ export default async function SettingsPage() {
 
     return (
       <Page variant="content">
-        <PageHeader title={t("title")}/>
-        {settings && <SettingsForm initial={{ welcomeSv: settings.welcomeSv, welcomeEn: settings.welcomeEn, publicWelcomeSv: settings.publicWelcomeSv, publicWelcomeEn: settings.publicWelcomeEn, contactEmail: settings.contactEmail }} />}
+        <PageHeader title={t("title")} />
+        {settings && (
+          <SettingsForm
+            initial={{
+              welcomeSv: settings.welcomeSv,
+              welcomeEn: settings.welcomeEn,
+              publicWelcomeSv: settings.publicWelcomeSv,
+              publicWelcomeEn: settings.publicWelcomeEn,
+              contactEmail: settings.contactEmail,
+            }}
+          />
+        )}
       </Page>
     );
   });

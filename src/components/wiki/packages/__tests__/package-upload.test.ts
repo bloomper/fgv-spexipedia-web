@@ -1,12 +1,20 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { createPackage, PART_BYTES, uploadZip, UploadError, zipOffset } from "@/components/wiki/packages/package-upload.client";
+import {
+  createPackage,
+  PART_BYTES,
+  uploadZip,
+  UploadError,
+  zipOffset,
+} from "@/components/wiki/packages/package-upload.client";
 
 const ID = "01933f2a-7c3e-7b1a-9d2e-4f5a6b7c8d9e";
 const fetchMock = vi.fn();
-const offset = (value: number, status = 200) => new Response(null, { status, headers: { "Upload-Offset": String(value) } });
+const offset = (value: number, status = 200) =>
+  new Response(null, { status, headers: { "Upload-Offset": String(value) } });
 const noWait = () => Promise.resolve();
 /** A file of the given size without allocating it. */
-const bigFile = (size: number) => ({ name: "spex.zip", size, slice: (start: number, end: number) => new Blob([`${start}-${end}`]) }) as unknown as File;
+const bigFile = (size: number) =>
+  ({ name: "spex.zip", size, slice: (start: number, end: number) => new Blob([`${start}-${end}`]) }) as unknown as File;
 
 beforeEach(() => {
   fetchMock.mockReset();
@@ -51,7 +59,7 @@ describe("Uploading a spex package", () => {
       .mockResolvedValueOnce(offset(PART_BYTES * 2, 204))
       .mockResolvedValueOnce(offset(size, 204));
 
-    await uploadZip(ID, bigFile(size), received => progress.push(received), undefined, noWait);
+    await uploadZip(ID, bigFile(size), (received) => progress.push(received), undefined, noWait);
 
     expect(progress).toEqual([PART_BYTES, PART_BYTES * 2, size]);
     expect(fetchMock.mock.calls[1][1].headers["Upload-Offset"]).toBe(String(PART_BYTES));
@@ -72,11 +80,15 @@ describe("Uploading a spex package", () => {
   });
 
   it("stops at once when the server refuses, and after too many failures", async () => {
-    fetchMock.mockResolvedValueOnce(offset(0)).mockResolvedValueOnce(new Response(JSON.stringify({ message: "Inte din" }), { status: 403 }));
+    fetchMock
+      .mockResolvedValueOnce(offset(0))
+      .mockResolvedValueOnce(new Response(JSON.stringify({ message: "Inte din" }), { status: 403 }));
     await expect(uploadZip(ID, bigFile(10), () => undefined, undefined, noWait)).rejects.toThrow("Inte din");
 
     fetchMock.mockReset();
-    fetchMock.mockImplementation((_url, init) => Promise.resolve(init?.method === "HEAD" ? offset(0) : new Response(null, { status: 500 })));
+    fetchMock.mockImplementation((_url, init) =>
+      Promise.resolve(init?.method === "HEAD" ? offset(0) : new Response(null, { status: 500 }))
+    );
     await expect(uploadZip(ID, bigFile(10), () => undefined, undefined, noWait)).rejects.toThrow("HTTP 500");
   });
 

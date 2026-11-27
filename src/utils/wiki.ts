@@ -20,7 +20,7 @@ export function personLabel(person: PersonLike | null | undefined): string | nul
 }
 
 export function creditLabel(credit: CreditLike | null | undefined): string | null {
-  return credit ? personLabel(credit.person) ?? credit.name ?? null : null;
+  return credit ? (personLabel(credit.person) ?? credit.name ?? null) : null;
 }
 
 /** "1984" for an original, "1984 (nyuppsättning)" style is left to the pages: here the year and title. */
@@ -33,8 +33,19 @@ export const spexHref = (spex: { slug: string }) => `/spex/${spex.slug}`;
 
 /** Ids of headings and sections on a spex page, for the rail and for links from search. */
 export const SECTION_IDS = [
-  "overview", "group", "characters", "scenography", "manuscript", "music", "recordings", "rebus", "vest", "board",
-  "tasks", "images", "links",
+  "overview",
+  "group",
+  "characters",
+  "scenography",
+  "manuscript",
+  "music",
+  "recordings",
+  "rebus",
+  "vest",
+  "board",
+  "tasks",
+  "images",
+  "links",
 ] as const;
 
 export type SectionId = (typeof SECTION_IDS)[number];

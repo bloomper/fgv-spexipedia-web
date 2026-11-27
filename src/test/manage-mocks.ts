@@ -6,7 +6,7 @@ import { vi } from "vitest";
  */
 export const router = { refresh: vi.fn(), push: vi.fn(), replace: vi.fn(), back: vi.fn() };
 export const toast = { success: vi.fn(), error: vi.fn() };
-export const ok = <T, >(data?: T) => Promise.resolve({ ok: true as const, data: data as T });
+export const ok = <T>(data?: T) => Promise.resolve({ ok: true as const, data: data as T });
 
 export function actionsMock(overrides: Record<string, unknown> = {}) {
   return new Proxy(overrides, {

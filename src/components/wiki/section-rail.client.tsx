@@ -15,16 +15,22 @@ function useActiveSection(sections: Section[]): [string | undefined, (id: string
   const pickedAt = useRef(0);
 
   useEffect(() => {
-    const elements = sections.map(section => document.getElementById(section.id)).filter((e): e is HTMLElement => !!e);
+    const elements = sections
+      .map((section) => document.getElementById(section.id))
+      .filter((e): e is HTMLElement => !!e);
     const picking = () => Date.now() - pickedAt.current < 1000;
-    const observer = new IntersectionObserver(entries => {
-      const visible = entries.filter(entry => entry.isIntersecting)
-        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
 
-      if (visible[0] && !picking()) {
-        setActive(visible[0].target.id);
-      }
-    }, { rootMargin: "-112px 0px -60% 0px" });
+        if (visible[0] && !picking()) {
+          setActive(visible[0].target.id);
+        }
+      },
+      { rootMargin: "-112px 0px -60% 0px" }
+    );
     const onScroll = () => {
       const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
       const last = elements.at(-1);
@@ -34,7 +40,7 @@ function useActiveSection(sections: Section[]): [string | undefined, (id: string
       }
     };
 
-    elements.forEach(element => observer.observe(element));
+    elements.forEach((element) => observer.observe(element));
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
       observer.disconnect();
@@ -58,14 +64,25 @@ export function SectionRail({ sections, label }: { sections: Section[]; label: s
   const [active, pick] = useActiveSection(sections);
 
   return (
-    <nav aria-label={label} className="sticky top-20 hidden max-h-[calc(100svh-6rem)] overflow-y-auto xl:block">
-      <p className="mb-3 text-xs uppercase tracking-[0.18em] text-muted-foreground">{label}</p>
-      <ul className="space-y-1 border-l border-border">
-        {sections.map(section => (
+    <nav
+      aria-label={label}
+      className="sticky top-20 hidden max-h-[calc(100svh-6rem)] overflow-y-auto xl:block"
+    >
+      <p className="text-muted-foreground mb-3 text-xs tracking-[0.18em] uppercase">{label}</p>
+      <ul className="border-border space-y-1 border-l">
+        {sections.map((section) => (
           <li key={section.id}>
-            <a href={`#${section.id}`} onClick={() => pick(section.id)} aria-current={active === section.id ? "location" : undefined}
-               className={cn("-ml-px block border-l-2 py-1 pl-3 text-sm transition-colors",
-                 active === section.id ? "border-primary text-link" : "border-transparent text-muted-foreground hover:text-foreground")}>
+            <a
+              href={`#${section.id}`}
+              onClick={() => pick(section.id)}
+              aria-current={active === section.id ? "location" : undefined}
+              className={cn(
+                "-ml-px block border-l-2 py-1 pl-3 text-sm transition-colors",
+                active === section.id
+                  ? "border-primary text-link"
+                  : "text-muted-foreground hover:text-foreground border-transparent"
+              )}
+            >
               {section.title}
             </a>
           </li>
@@ -89,7 +106,10 @@ export function SectionBar({ sections, label }: { sections: Section[]; label: st
 
     if (container && link) {
       // Scrolls the bar only, never the page
-      container.scrollTo({ left: link.offsetLeft - (container.clientWidth - link.offsetWidth) / 2, behavior: "smooth" });
+      container.scrollTo({
+        left: link.offsetLeft - (container.clientWidth - link.offsetWidth) / 2,
+        behavior: "smooth",
+      });
     }
   }, [active]);
 
@@ -97,14 +117,31 @@ export function SectionBar({ sections, label }: { sections: Section[]; label: st
     return null;
   }
   return (
-    <nav aria-label={label}
-         className="sticky top-(--header-height) z-40 -mx-4 border-b border-border/60 bg-background/95 backdrop-blur md:-mx-8 xl:hidden print:hidden">
-      <ul ref={list} className="flex gap-1 overflow-x-auto px-4 py-2 [scrollbar-width:none] md:px-8">
-        {sections.map(section => (
-          <li key={section.id} className="shrink-0">
-            <a href={`#${section.id}`} onClick={() => pick(section.id)} data-section-link={section.id} aria-current={active === section.id ? "location" : undefined}
-               className={cn("flex min-h-9 items-center rounded-full border px-3 text-sm whitespace-nowrap transition-colors",
-                 active === section.id ? "border-primary text-link" : "border-border text-muted-foreground hover:text-foreground")}>
+    <nav
+      aria-label={label}
+      className="border-border/60 bg-background/95 sticky top-(--header-height) z-40 -mx-4 border-b backdrop-blur md:-mx-8 xl:hidden print:hidden"
+    >
+      <ul
+        ref={list}
+        className="flex [scrollbar-width:none] gap-1 overflow-x-auto px-4 py-2 md:px-8"
+      >
+        {sections.map((section) => (
+          <li
+            key={section.id}
+            className="shrink-0"
+          >
+            <a
+              href={`#${section.id}`}
+              onClick={() => pick(section.id)}
+              data-section-link={section.id}
+              aria-current={active === section.id ? "location" : undefined}
+              className={cn(
+                "flex min-h-9 items-center rounded-full border px-3 text-sm whitespace-nowrap transition-colors",
+                active === section.id
+                  ? "border-primary text-link"
+                  : "border-border text-muted-foreground hover:text-foreground"
+              )}
+            >
               {section.title}
             </a>
           </li>

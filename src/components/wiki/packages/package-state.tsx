@@ -16,5 +16,12 @@ const TONES: Record<SpexPackageState, string> = {
 export function StateChip({ state }: { state: SpexPackageState }) {
   const t = useTranslations("Packages.states");
 
-  return <Badge variant="outline" className={cn(TONES[state])}>{t(state)}</Badge>;
+  return (
+    <Badge
+      variant="outline"
+      className={cn(TONES[state])}
+    >
+      {t(state)}
+    </Badge>
+  );
 }

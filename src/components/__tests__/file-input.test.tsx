@@ -7,7 +7,16 @@ describe("FileInput", () => {
   it("says no file is chosen, then names the chosen file and reports it", async () => {
     const onChange = vi.fn();
 
-    render(<><label htmlFor="sheet">Kalkylark</label><FileInput id="sheet" accept=".xlsx" onChange={onChange} /></>);
+    render(
+      <>
+        <label htmlFor="sheet">Kalkylark</label>
+        <FileInput
+          id="sheet"
+          accept=".xlsx"
+          onChange={onChange}
+        />
+      </>
+    );
 
     expect(screen.getByText("noFileChosen")).toBeInTheDocument();
     await userEvent.upload(screen.getByLabelText("Kalkylark"), new File(["x"], "spex.xlsx"));
@@ -20,7 +29,15 @@ describe("FileInput", () => {
     const onChange = vi.fn();
     const file = new File(["x"], "spex.zip");
 
-    render(<><label htmlFor="zip">Zip</label><FileInput id="zip" onChange={onChange} /></>);
+    render(
+      <>
+        <label htmlFor="zip">Zip</label>
+        <FileInput
+          id="zip"
+          onChange={onChange}
+        />
+      </>
+    );
     await userEvent.upload(screen.getByLabelText("Zip"), file);
     await userEvent.upload(screen.getByLabelText("Zip"), file);
 
@@ -28,7 +45,14 @@ describe("FileInput", () => {
   });
 
   it("shows a file already there and a custom label, and opens the picker from its button", async () => {
-    render(<FileInput id="f" current="gammal.zip" chooseLabel="Byt fil" onChange={vi.fn()} />);
+    render(
+      <FileInput
+        id="f"
+        current="gammal.zip"
+        chooseLabel="Byt fil"
+        onChange={vi.fn()}
+      />
+    );
     const click = vi.spyOn(HTMLInputElement.prototype, "click").mockImplementation(() => undefined);
 
     expect(screen.getByText("gammal.zip")).toBeInTheDocument();
@@ -39,7 +63,13 @@ describe("FileInput", () => {
   });
 
   it("can be disabled", () => {
-    render(<FileInput id="f" disabled onChange={vi.fn()} />);
+    render(
+      <FileInput
+        id="f"
+        disabled
+        onChange={vi.fn()}
+      />
+    );
 
     expect(screen.getByRole("button", { name: "chooseFile" })).toBeDisabled();
   });

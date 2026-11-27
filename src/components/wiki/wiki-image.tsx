@@ -14,7 +14,12 @@ export type WikiImageData = {
   fullUrl: string;
 };
 
-export function WikiImage({ image, sizes = "(min-width: 1024px) 50vw, 100vw", className, eager = false }: {
+export function WikiImage({
+  image,
+  sizes = "(min-width: 1024px) 50vw, 100vw",
+  className,
+  eager = false,
+}: {
   image: WikiImageData;
   sizes?: string;
   className?: string;

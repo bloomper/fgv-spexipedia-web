@@ -22,22 +22,49 @@ export function UnresolvedCredits({ data }: { data: UnresolvedCreditsData }) {
   }
   return (
     <div className="space-y-6">
-      {data.total > data.credits.length && <p className="text-sm text-muted-foreground">{t("showing", { shown: data.credits.length, total: data.total })}</p>}
-      {groupBy(data.credits, credit => credit.number.spex.id).map(([spexId, credits]) => (
-        <section key={spexId} className="space-y-2">
+      {data.total > data.credits.length && (
+        <p className="text-muted-foreground text-sm">
+          {t("showing", { shown: data.credits.length, total: data.total })}
+        </p>
+      )}
+      {groupBy(data.credits, (credit) => credit.number.spex.id).map(([spexId, credits]) => (
+        <section
+          key={spexId}
+          className="space-y-2"
+        >
           <h2 className="wiki-heading text-xl font-semibold">
-            <Link href={`/manage/spex/${spexId}#edit-numbers`} className="hover:text-link">{credits[0].number.spex.title} ({credits[0].number.spex.year})</Link>
+            <Link
+              href={`/manage/spex/${spexId}#edit-numbers`}
+              className="hover:text-link"
+            >
+              {credits[0].number.spex.title} ({credits[0].number.spex.year})
+            </Link>
           </h2>
-          <ul className="divide-y divide-border rounded-lg border border-border bg-card text-sm">
-            {credits.map(credit => (
-              <li key={`${credit.number.id}-${credit.kind?.id}-${credit.position}`} className="flex flex-wrap items-center gap-2 px-3 py-2">
-                <Link href={`/manage/spex/${spexId}#number-${credit.number.id}`} className="font-medium hover:text-link">{credit.number.title}</Link>
+          <ul className="divide-border border-border bg-card divide-y rounded-lg border text-sm">
+            {credits.map((credit) => (
+              <li
+                key={`${credit.number.id}-${credit.kind?.id}-${credit.position}`}
+                className="flex flex-wrap items-center gap-2 px-3 py-2"
+              >
+                <Link
+                  href={`/manage/spex/${spexId}#number-${credit.number.id}`}
+                  className="hover:text-link font-medium"
+                >
+                  {credit.number.title}
+                </Link>
                 {credit.kind && <span className="text-muted-foreground">· {credit.kind.name}</span>}
                 <span className="font-semibold">”{credit.name}”</span>
                 <span className="ml-auto">
                   {credit.kind && (
-                    <CreditResolver name={credit.name} disabled={pending}
-                                    onResolve={value => save(() => resolveCreditAction(credit.number.id, credit.kind!.id, credit.position, value), { success: t("resolved") })} />
+                    <CreditResolver
+                      name={credit.name}
+                      disabled={pending}
+                      onResolve={(value) =>
+                        save(() => resolveCreditAction(credit.number.id, credit.kind!.id, credit.position, value), {
+                          success: t("resolved"),
+                        })
+                      }
+                    />
                   )}
                 </span>
               </li>

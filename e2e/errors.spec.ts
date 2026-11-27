@@ -16,7 +16,10 @@ test.describe("Errors", () => {
     await expect(page.getByRole("heading", { level: 1, name: "Spexikon" })).toBeVisible();
   });
 
-  test("a member gets not found for an article that is not there; a visitor is asked to log in", async ({ page, loginAs }) => {
+  test("a member gets not found for an article that is not there; a visitor is asked to log in", async ({
+    page,
+    loginAs,
+  }) => {
     await page.goto("/articles/finns-inte");
     await acceptCookies(page);
     await expect(page.getByRole("heading", { name: "Logga in för att se det här" })).toBeVisible();
@@ -37,7 +40,9 @@ test.describe("Errors", () => {
     await mock.failNext("ArticleSetPublished", "FORBIDDEN");
     await page.getByRole("button", { name: "Publicera" }).click();
     await expect(page.getByText("Fel: FORBIDDEN").filter({ visible: true })).toBeVisible();
-    await expect(page.getByRole("article").locator("header").getByText("Opublicerad").filter({ visible: true })).toBeVisible();
-    expect((await mock.state()).articles.find(article => article.slug === "repetitionerna")?.published).toBe(false);
+    await expect(
+      page.getByRole("article").locator("header").getByText("Opublicerad").filter({ visible: true })
+    ).toBeVisible();
+    expect((await mock.state()).articles.find((article) => article.slug === "repetitionerna")?.published).toBe(false);
   });
 });

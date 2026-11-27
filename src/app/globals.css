@@ -3,68 +3,144 @@
 
 /* Headings on content pages: the same sans as everywhere in FGV's webs, set a little tighter */
 .wiki-heading {
-    letter-spacing: -0.02em;
+  letter-spacing: -0.02em;
 }
 
 /* The article tree's branches: an elbow from the line down the left to each node, the line stopping at the last one.
    Rows are 2rem high, so the elbow meets the middle of a row's first line. */
 .article-tree {
-    margin-left: 0.625rem;
-    & > li { position: relative; padding-left: 0.875rem; }
-    & > li::before {
-        content: "";
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 0.75rem;
-        height: 1rem;
-        border-left: 1px solid var(--border);
-        border-bottom: 1px solid var(--border);
-        border-bottom-left-radius: 0.375rem;
-    }
-    & > li:not(:last-child)::after {
-        content: "";
-        position: absolute;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        border-left: 1px solid var(--border);
-    }
+  margin-left: 0.625rem;
+  & > li {
+    position: relative;
+    padding-left: 0.875rem;
+  }
+  & > li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0.75rem;
+    height: 1rem;
+    border-left: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    border-bottom-left-radius: 0.375rem;
+  }
+  & > li:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    border-left: 1px solid var(--border);
+  }
 }
 
 /* A link to an article that does not exist yet, e.g. on the list of wanted articles */
 .wiki-missing {
-    color: var(--destructive);
-    &:hover { color: color-mix(in oklab, var(--destructive) 80%, transparent); }
+  color: var(--destructive);
+  &:hover {
+    color: color-mix(in oklab, var(--destructive) 80%, transparent);
+  }
 }
 
 /* Rendered Markdown (descriptions, synopses, articles): the server escapes HTML and makes the links safe */
 .prose-wiki {
-    line-height: 1.7;
-    /* Pages are wide; running text keeps a readable line length */
-    max-width: 75ch;
-    /* Long words and addresses wrap instead of widening the page on phones */
-    overflow-wrap: anywhere;
-    & > * + * { margin-top: 0.9em; }
-    & h1, & h2, & h3, & h4 { font-weight: 600; letter-spacing: -0.02em; line-height: 1.25; margin-top: 1.4em; }
-    & > :first-child { margin-top: 0; }
-    & h1 { font-size: 1.75rem; }
-    & h2 { font-size: 1.45rem; }
-    & h3 { font-size: 1.2rem; }
-    /* Links are told by their colour, never underlined, as in the rest of FGV's webs */
-    & a { color: var(--link); text-decoration: none; &:hover { color: color-mix(in oklab, var(--link) 80%, transparent); } }
-    /* Red links (spec 4.5): the server sends links to articles that do not exist to the new article page */
-    & a.wiki-missing, & a[href^="/articles/new?title="] { color: var(--destructive); }
-    & ul { list-style: disc; padding-left: 1.5em; }
-    & ol { list-style: decimal; padding-left: 1.5em; }
-    & blockquote { border-left: 3px solid var(--link); padding-left: 1em; color: var(--muted-foreground); font-style: italic; }
-    /* A wide table scrolls sideways by itself rather than the page */
-    & table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; font-size: 0.9em; }
-    & th, & td { overflow-wrap: normal; }
-    & th, & td { border: 1px solid var(--border); padding: 0.35em 0.6em; text-align: left; }
-    & th { background: var(--muted); }
-    & code { font-family: monospace; font-size: 0.9em; background: var(--muted); padding: 0.1em 0.3em; border-radius: 4px; }
-    & pre { background: var(--muted); padding: 0.8em; border-radius: 6px; overflow-x: auto; }
-    & img { max-width: 100%; height: auto; border-radius: 6px; }
-    & hr { border-color: var(--border); }
+  line-height: 1.7;
+  /* Pages are wide; running text keeps a readable line length */
+  max-width: 75ch;
+  /* Long words and addresses wrap instead of widening the page on phones */
+  overflow-wrap: anywhere;
+  & > * + * {
+    margin-top: 0.9em;
+  }
+  & h1,
+  & h2,
+  & h3,
+  & h4 {
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    margin-top: 1.4em;
+  }
+  & > :first-child {
+    margin-top: 0;
+  }
+  & h1 {
+    font-size: 1.75rem;
+  }
+  & h2 {
+    font-size: 1.45rem;
+  }
+  & h3 {
+    font-size: 1.2rem;
+  }
+  /* Links are told by their colour, never underlined, as in the rest of FGV's webs */
+  & a {
+    color: var(--link);
+    text-decoration: none;
+    &:hover {
+      color: color-mix(in oklab, var(--link) 80%, transparent);
+    }
+  }
+  /* Red links (spec 4.5): the server sends links to articles that do not exist to the new article page */
+  & a.wiki-missing,
+  & a[href^="/articles/new?title="] {
+    color: var(--destructive);
+  }
+  & ul {
+    list-style: disc;
+    padding-left: 1.5em;
+  }
+  & ol {
+    list-style: decimal;
+    padding-left: 1.5em;
+  }
+  & blockquote {
+    border-left: 3px solid var(--link);
+    padding-left: 1em;
+    color: var(--muted-foreground);
+    font-style: italic;
+  }
+  /* A wide table scrolls sideways by itself rather than the page */
+  & table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    border-collapse: collapse;
+    font-size: 0.9em;
+  }
+  & th,
+  & td {
+    overflow-wrap: normal;
+  }
+  & th,
+  & td {
+    border: 1px solid var(--border);
+    padding: 0.35em 0.6em;
+    text-align: left;
+  }
+  & th {
+    background: var(--muted);
+  }
+  & code {
+    font-family: monospace;
+    font-size: 0.9em;
+    background: var(--muted);
+    padding: 0.1em 0.3em;
+    border-radius: 4px;
+  }
+  & pre {
+    background: var(--muted);
+    padding: 0.8em;
+    border-radius: 6px;
+    overflow-x: auto;
+  }
+  & img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 6px;
+  }
+  & hr {
+    border-color: var(--border);
+  }
 }

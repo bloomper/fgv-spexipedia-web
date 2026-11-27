@@ -15,27 +15,32 @@ export function useSave() {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
 
-  const save = <T, >(action: () => Promise<ActionResult<T>>, options: { success?: string | false; then?: (data: T) => void } = {}) =>
-    new Promise<boolean>(resolve => startTransition(async () => {
-      try {
-        const result = await action();
+  const save = <T>(
+    action: () => Promise<ActionResult<T>>,
+    options: { success?: string | false; then?: (data: T) => void } = {}
+  ) =>
+    new Promise<boolean>((resolve) =>
+      startTransition(async () => {
+        try {
+          const result = await action();
 
-        if (result.ok) {
-          if (options.success !== false) {
-            toast.success(options.success ?? t("saved"));
+          if (result.ok) {
+            if (options.success !== false) {
+              toast.success(options.success ?? t("saved"));
+            }
+            options.then?.(result.data);
+            router.refresh();
+            resolve(true);
+          } else {
+            toast.error(result.message);
+            resolve(false);
           }
-          options.then?.(result.data);
-          router.refresh();
-          resolve(true);
-        } else {
-          toast.error(result.message);
+        } catch {
+          toast.error(t("failed"));
           resolve(false);
         }
-      } catch {
-        toast.error(t("failed"));
-        resolve(false);
-      }
-    }));
+      })
+    );
 
   return { save, pending };
 }

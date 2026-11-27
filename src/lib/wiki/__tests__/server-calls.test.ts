@@ -11,9 +11,10 @@ import * as wiki from "@/lib/wiki/wiki.server";
 /**
  * An answer that has every field, so each call can pick what it needs from it.
  */
-const anything = (): unknown => new Proxy(() => undefined, {
-  get: (_, key) => (key === "then" ? undefined : key === Symbol.toPrimitive ? () => "x" : anything()),
-});
+const anything = (): unknown =>
+  new Proxy(() => undefined, {
+    get: (_, key) => (key === "then" ? undefined : key === Symbol.toPrimitive ? () => "x" : anything()),
+  });
 
 const operation = (mock: typeof runQuery) => {
   const document = mock.mock.calls.at(-1)?.[0];
@@ -45,7 +46,9 @@ describe("The editing calls", () => {
     await edit.articleUpdate("a1", { title: "T", body: "B", visibility: "PUBLIC" } as never, "r1");
 
     expect(runMutation).toHaveBeenCalledWith(expect.anything(), {
-      id: "a1", input: { title: "T", body: "B", visibility: "PUBLIC" }, baseRevisionId: "r1",
+      id: "a1",
+      input: { title: "T", body: "B", visibility: "PUBLIC" },
+      baseRevisionId: "r1",
     });
   });
 

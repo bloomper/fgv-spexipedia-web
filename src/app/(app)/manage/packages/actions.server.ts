@@ -19,12 +19,15 @@ function requireId(id: string) {
   }
 }
 
-const editor = <T, >(work: () => Promise<T>): Promise<ActionResult<T>> => withPolicyAction(Policies.editor.requireEditor, () => toActionResult(async () => {
-  const result = await work();
+const editor = <T>(work: () => Promise<T>): Promise<ActionResult<T>> =>
+  withPolicyAction(Policies.editor.requireEditor, () =>
+    toActionResult(async () => {
+      const result = await work();
 
-  revalidatePath("/", "layout");
-  return result;
-}));
+      revalidatePath("/", "layout");
+      return result;
+    })
+  );
 
 export async function previewPackageAction(id: string) {
   requireId(id);

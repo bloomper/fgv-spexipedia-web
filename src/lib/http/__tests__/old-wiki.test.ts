@@ -51,7 +51,9 @@ describe("spex by id", () => {
     const fetch = vi.fn().mockResolvedValue({ json: async () => ({ data: { spex: { slug: "1984-lasse-maja" } } }) });
 
     vi.stubGlobal("fetch", fetch);
-    expect(await spexAddressById("/spex/00000000-0000-7000-a000-000000000001", "http://api/graphql")).toBe("/spex/1984-lasse-maja");
+    expect(await spexAddressById("/spex/00000000-0000-7000-a000-000000000001", "http://api/graphql")).toBe(
+      "/spex/1984-lasse-maja"
+    );
     expect(await spexAddressById("/spex/1984-lasse-maja", "http://api/graphql")).toBeNull();
     expect(fetch).toHaveBeenCalledTimes(1);
     fetch.mockResolvedValue({ json: async () => ({ data: { spex: null } }) });

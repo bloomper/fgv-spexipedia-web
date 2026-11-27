@@ -14,7 +14,12 @@ export function HeaderSkeleton() {
 export function TextSkeleton({ lines = 5 }: { lines?: number }) {
   return (
     <div className="max-w-[75ch] space-y-2">
-      {Array.from({ length: lines }, (_, i) => <Skeleton key={i} className={i === lines - 1 ? "h-4 w-2/3" : "h-4 w-full"} />)}
+      {Array.from({ length: lines }, (_, i) => (
+        <Skeleton
+          key={i}
+          className={i === lines - 1 ? "h-4 w-2/3" : "h-4 w-full"}
+        />
+      ))}
     </div>
   );
 }
@@ -25,7 +30,12 @@ export function RailSkeleton({ className }: { className: string }) {
     <aside className={className}>
       <div className="space-y-3">
         <Skeleton className="h-3 w-24" />
-        {Array.from({ length: 6 }, (_, i) => <Skeleton key={i} className="h-4 w-full" />)}
+        {Array.from({ length: 6 }, (_, i) => (
+          <Skeleton
+            key={i}
+            className="h-4 w-full"
+          />
+        ))}
       </div>
     </aside>
   );

@@ -11,7 +11,7 @@ const ORIGIN = /^https?:\/\/[A-Za-z0-9.-]+(:\d+)?$/;
  */
 export function contentSecurityPolicy(mediaOrigins: (string | undefined)[], development: boolean): string {
   const media = [...new Set(mediaOrigins.filter((origin): origin is string => !!origin && ORIGIN.test(origin)))]
-    .map(origin => ` ${origin}`)
+    .map((origin) => ` ${origin}`)
     .join("");
 
   return [

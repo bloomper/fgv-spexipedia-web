@@ -29,7 +29,16 @@ describe("categoryYears", () => {
 
 describe("revivalYears", () => {
   it("offers the years after the original, up to two years ahead, but not its siblings'", () => {
-    expect(revivalYears("2020", [{ id: "a", year: "2022" }, { id: "b", year: "2024" }], "b", 2026))
-      .toEqual(["2028", "2027", "2026", "2025", "2024", "2023", "2021"]);
+    expect(
+      revivalYears(
+        "2020",
+        [
+          { id: "a", year: "2022" },
+          { id: "b", year: "2024" },
+        ],
+        "b",
+        2026
+      )
+    ).toEqual(["2028", "2027", "2026", "2025", "2024", "2023", "2021"]);
   });
 });

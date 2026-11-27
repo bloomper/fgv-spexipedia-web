@@ -8,7 +8,13 @@ export default function robots(): MetadataRoute.Robots {
   const base = (process.env.BETTER_AUTH_URL ?? "").replace(/\/$/, "");
 
   return {
-    rules: [{ userAgent: "*", allow: "/", disallow: ["/api/", "/manage/", "/admin/", "/stats/", "/articles/new", "/*/edit", "/*/history"] }],
+    rules: [
+      {
+        userAgent: "*",
+        allow: "/",
+        disallow: ["/api/", "/manage/", "/admin/", "/stats/", "/articles/new", "/*/edit", "/*/history"],
+      },
+    ],
     sitemap: base ? `${base}/sitemap.xml` : undefined,
   };
 }

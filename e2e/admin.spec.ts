@@ -17,7 +17,10 @@ test.describe("Administration", () => {
     await page.getByLabel("Kontaktadress som visas för besökare").fill("info@example.org");
     await page.getByRole("button", { name: "Spara" }).click();
     await expect(page.getByText("Inställningarna är sparade").filter({ visible: true })).toBeVisible();
-    expect((await mock.state()).settings).toMatchObject({ welcomeSv: "Välkommen, spexare!", contactEmail: "info@example.org" });
+    expect((await mock.state()).settings).toMatchObject({
+      welcomeSv: "Välkommen, spexare!",
+      contactEmail: "info@example.org",
+    });
 
     await page.goto("/");
     await expect(page.getByRole("main").getByText("Välkommen, spexare!").filter({ visible: true })).toBeVisible();
@@ -53,7 +56,9 @@ test.describe("Administration", () => {
     await expect(search.getByText("Inte sedan servern startade").filter({ visible: true })).toBeVisible();
 
     await search.getByRole("button", { name: "Kör nu" }).click();
-    await expect(page.getByText("Sökindex har startat. Det körs i bakgrunden.").filter({ visible: true })).toBeVisible();
+    await expect(
+      page.getByText("Sökindex har startat. Det körs i bakgrunden.").filter({ visible: true })
+    ).toBeVisible();
     await expect(search.getByText(/^Lyckades/).filter({ visible: true })).toBeVisible();
   });
 
@@ -80,7 +85,10 @@ test.describe("Administration", () => {
     await page.getByRole("main").getByRole("listitem").getByRole("button", { name: "Ta bort" }).click();
     await answerDialog(page, "Ta bort");
     await expect(page.getByText("Bojan 1948")).toHaveCount(0);
-    expect((await mock.state()).redirects.map(redirect => redirect.oldTitle)).toEqual(["Traditioner", "Napoleon (spex)"]);
+    expect((await mock.state()).redirects.map((redirect) => redirect.oldTitle)).toEqual([
+      "Traditioner",
+      "Napoleon (spex)",
+    ]);
   });
 
   test("shows how far each recipient has read the change feed, and adds one", async ({ page, mock }) => {
@@ -91,7 +99,13 @@ test.describe("Administration", () => {
     await expect(spexify.getByText("14 olästa ändringar").filter({ visible: true })).toBeVisible();
     await expect(spexify.getByText("Connection refused").filter({ visible: true })).toBeVisible();
     await expect(spexify.getByText("Hämtar själv").filter({ visible: true })).toBeVisible();
-    await expect(page.getByRole("listitem").filter({ hasText: "fgv-spexregister-service" }).getByText("I fas").filter({ visible: true })).toBeVisible();
+    await expect(
+      page
+        .getByRole("listitem")
+        .filter({ hasText: "fgv-spexregister-service" })
+        .getByText("I fas")
+        .filter({ visible: true })
+    ).toBeVisible();
 
     await page.getByRole("button", { name: "Ny mottagare" }).click();
     await page.getByLabel("Namn").fill("Spexflix");
@@ -99,7 +113,11 @@ test.describe("Administration", () => {
     await page.getByLabel("Meddelas på").fill("http://spexflix-api:8080/api/sync/notify");
     await page.getByRole("button", { name: "Spara" }).click();
     await expect(page.getByRole("listitem").filter({ hasText: "fgv-spexflix-service" })).toBeVisible();
-    expect((await mock.state()).consumers.at(-1)).toMatchObject({ name: "Spexflix", enabled: true, notifyUrl: "http://spexflix-api:8080/api/sync/notify" });
+    expect((await mock.state()).consumers.at(-1)).toMatchObject({
+      name: "Spexflix",
+      enabled: true,
+      notifyUrl: "http://spexflix-api:8080/api/sync/notify",
+    });
 
     // One service account has one recipient
     await page.getByRole("button", { name: "Ny mottagare" }).click();
@@ -126,16 +144,28 @@ test.describe("Administration", () => {
     await expect(duet).toContainText("4");
 
     for (let i = 0; i < 3; i++) {
-      await page.getByRole("listitem").filter({ hasText: "Duett / Duet" }).getByRole("button", { name: "Flytta upp" }).click();
+      await page
+        .getByRole("listitem")
+        .filter({ hasText: "Duett / Duet" })
+        .getByRole("button", { name: "Flytta upp" })
+        .click();
       await expect(page.getByRole("listitem").filter({ hasText: "Duett / Duet" })).toContainText(String(3 - i));
     }
-    await page.getByRole("listitem").filter({ hasText: "Final / Finale" }).getByRole("button", { name: "Deaktivera" }).click();
-    await expect(page.getByRole("listitem").filter({ hasText: "Final / Finale" }).getByText("Inaktiv").filter({ visible: true })).toBeVisible();
+    await page
+      .getByRole("listitem")
+      .filter({ hasText: "Final / Finale" })
+      .getByRole("button", { name: "Deaktivera" })
+      .click();
+    await expect(
+      page.getByRole("listitem").filter({ hasText: "Final / Finale" }).getByText("Inaktiv").filter({ visible: true })
+    ).toBeVisible();
 
-    const numbers = (await mock.state()).kinds.filter(kind => kind.type === "NUMBER").sort((a, b) => a.position - b.position);
+    const numbers = (await mock.state()).kinds
+      .filter((kind) => kind.type === "NUMBER")
+      .sort((a, b) => a.position - b.position);
 
-    expect(numbers.map(kind => kind.nameSv)).toEqual(["Duett", "Sång", "Ouvertyr", "Final"]);
-    expect(numbers.find(kind => kind.nameSv === "Final")?.retired).toBe(true);
+    expect(numbers.map((kind) => kind.nameSv)).toEqual(["Duett", "Sång", "Ouvertyr", "Final"]);
+    expect(numbers.find((kind) => kind.nameSv === "Final")?.retired).toBe(true);
   });
 
   test("image kinds are kept together: those of characters and each image section's own", async ({ page }) => {
@@ -149,7 +179,9 @@ test.describe("Administration", () => {
     await scenography.getByLabel("Namn på engelska").fill("Lighting");
     await scenography.getByRole("button", { name: "Spara" }).click();
     await expect(scenography.getByText("Ljus / Lighting").filter({ visible: true })).toBeVisible();
-    await expect(page.getByRole("region", { name: "Bildsektionen Övriga bilder" }).getByText("Ljus / Lighting")).toHaveCount(0);
+    await expect(
+      page.getByRole("region", { name: "Bildsektionen Övriga bilder" }).getByText("Ljus / Lighting")
+    ).toHaveCount(0);
   });
 
   test("sections have a page of their own, where an image section is added and deleted", async ({ page, mock }) => {
@@ -165,20 +197,32 @@ test.describe("Administration", () => {
     const costumes = sections.getByRole("listitem").filter({ hasText: "Kostymer / Costumes" });
 
     await expect(costumes).toBeVisible();
-    expect((await mock.state()).kinds.find(kind => kind.nameSv === "Kostymer" && kind.type === "SECTION")).toMatchObject({ content: "IMAGES", subtitleSv: "Kläderna" });
+    expect(
+      (await mock.state()).kinds.find((kind) => kind.nameSv === "Kostymer" && kind.type === "SECTION")
+    ).toMatchObject({ content: "IMAGES", subtitleSv: "Kläderna" });
     await costumes.getByRole("link", { name: "Bildsorter" }).click();
-    await expect(page.getByRole("region", { name: "Bildsektionen Kostymer" }).getByText("Kostymer / Costumes").filter({ visible: true })).toBeVisible();
+    await expect(
+      page
+        .getByRole("region", { name: "Bildsektionen Kostymer" })
+        .getByText("Kostymer / Costumes")
+        .filter({ visible: true })
+    ).toBeVisible();
 
     await page.goto("/admin/sections");
-    await expect(sections.getByRole("listitem").filter({ hasText: "Spexvästen" }).getByRole("button", { name: "Ta bort" })).toHaveCount(0);
+    await expect(
+      sections.getByRole("listitem").filter({ hasText: "Spexvästen" }).getByRole("button", { name: "Ta bort" })
+    ).toHaveCount(0);
     await costumes.getByRole("button", { name: "Ta bort" }).click();
     await page.getByRole("alertdialog").getByRole("button", { name: "Ta bort" }).click();
     await expect(page.getByText("Sektionen är borttagen").filter({ visible: true })).toBeVisible();
     await expect(costumes).toHaveCount(0);
-    expect((await mock.state()).kinds.filter(kind => kind.nameSv === "Kostymer")).toEqual([]);
+    expect((await mock.state()).kinds.filter((kind) => kind.nameSv === "Kostymer")).toEqual([]);
   });
 
-  test("the change log lists everyone's changes for an admin, and only the author's own for an author", async ({ page, loginAs }) => {
+  test("the change log lists everyone's changes for an admin, and only the author's own for an author", async ({
+    page,
+    loginAs,
+  }) => {
     await page.goto("/admin/settings");
     await page.getByRole("button", { name: "Spara" }).click();
     await expect(page.getByText("Inställningarna är sparade").filter({ visible: true })).toBeVisible();
@@ -194,7 +238,9 @@ test.describe("Administration", () => {
 
     await loginAs("admin");
     await page.goto("/manage/audit");
-    await expect(page.getByText("Alla ändringar av sidor, basdata och inställningar.").filter({ visible: true })).toBeVisible();
+    await expect(
+      page.getByText("Alla ändringar av sidor, basdata och inställningar.").filter({ visible: true })
+    ).toBeVisible();
     await expect(page.getByText("Publicerade artikeln Repetitionerna").filter({ visible: true }).first()).toBeVisible();
     await expect(page.getByText("Ändrade inställningarna").filter({ visible: true }).first()).toBeVisible();
   });
@@ -210,7 +256,14 @@ test.describe("Administration for others", () => {
 
   test("an editor is refused the admin pages", async ({ page, loginAs }) => {
     await loginAs("editor");
-    for (const path of ["/admin/settings", "/admin/kinds", "/admin/sections", "/admin/redirects", "/admin/consumers", "/admin/maintenance"]) {
+    for (const path of [
+      "/admin/settings",
+      "/admin/kinds",
+      "/admin/sections",
+      "/admin/redirects",
+      "/admin/consumers",
+      "/admin/maintenance",
+    ]) {
       await page.goto(path);
       await expect(page.getByRole("heading", { name: "Du har inte behörighet" }), path).toBeVisible();
     }

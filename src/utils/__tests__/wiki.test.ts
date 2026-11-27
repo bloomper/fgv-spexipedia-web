@@ -15,7 +15,10 @@ describe("people on pages", () => {
   });
 
   it("groups in the order first seen", () => {
-    expect(groupBy([1, 2, 3, 4], n => n % 2)).toEqual([[1, [1, 3]], [0, [2, 4]]]);
+    expect(groupBy([1, 2, 3, 4], (n) => n % 2)).toEqual([
+      [1, [1, 3]],
+      [0, [2, 4]],
+    ]);
   });
 });
 
@@ -28,7 +31,10 @@ describe("differences", () => {
       { kind: "same", text: "c" },
       { kind: "added", text: "d" },
     ]);
-    expect(diffLines("", "a")).toEqual([{ kind: "removed", text: "" }, { kind: "added", text: "a" }]);
+    expect(diffLines("", "a")).toEqual([
+      { kind: "removed", text: "" },
+      { kind: "added", text: "a" },
+    ]);
   });
 });
 

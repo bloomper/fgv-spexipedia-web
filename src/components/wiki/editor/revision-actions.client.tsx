@@ -12,7 +12,13 @@ import { restoreRevisionAction, setRevisionHiddenAction } from "@/app/(app)/arti
 /**
  * Restoring a revision (as a new one), and for authors hiding its text, e.g. one that named someone in a public article.
  */
-export function RevisionActions({ articleId, revisionId, hidden, latest, author }: {
+export function RevisionActions({
+  articleId,
+  revisionId,
+  hidden,
+  latest,
+  author,
+}: {
   articleId: string;
   revisionId: string;
   hidden: boolean;
@@ -27,32 +33,50 @@ export function RevisionActions({ articleId, revisionId, hidden, latest, author 
   return (
     <div className="flex flex-wrap gap-2">
       {!latest && (
-        <Button variant="outline" size="sm" disabled={pending} onClick={async () => {
-          if (!await confirm({ title: t("restoreTitle"), description: t("restoreText"), confirmLabel: t("restore") })) {
-            return;
-          }
-          startTransition(async () => {
-            const result = await restoreRevisionAction(articleId, revisionId);
-
-            if (result.ok) {
-              toast.success(t("restored"));
-              router.push(`/articles/${result.data.slug}`);
-            } else {
-              toast.error(result.message);
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={pending}
+          onClick={async () => {
+            if (
+              !(await confirm({ title: t("restoreTitle"), description: t("restoreText"), confirmLabel: t("restore") }))
+            ) {
+              return;
             }
-          });
-        }}><RotateCcw aria-hidden /> {t("restore")}</Button>
+            startTransition(async () => {
+              const result = await restoreRevisionAction(articleId, revisionId);
+
+              if (result.ok) {
+                toast.success(t("restored"));
+                router.push(`/articles/${result.data.slug}`);
+              } else {
+                toast.error(result.message);
+              }
+            });
+          }}
+        >
+          <RotateCcw aria-hidden /> {t("restore")}
+        </Button>
       )}
       {author && (
-        <Button variant="ghost" size="sm" disabled={pending} onClick={() => startTransition(async () => {
-          const result = await setRevisionHiddenAction(revisionId, !hidden);
+        <Button
+          variant="ghost"
+          size="sm"
+          disabled={pending}
+          onClick={() =>
+            startTransition(async () => {
+              const result = await setRevisionHiddenAction(revisionId, !hidden);
 
-          if (result.ok) {
-            router.refresh();
-          } else {
-            toast.error(result.message);
+              if (result.ok) {
+                router.refresh();
+              } else {
+                toast.error(result.message);
+              }
+            })
           }
-        })}>{hidden ? <Eye aria-hidden /> : <EyeOff aria-hidden />} {hidden ? t("unhide") : t("hide")}</Button>
+        >
+          {hidden ? <Eye aria-hidden /> : <EyeOff aria-hidden />} {hidden ? t("unhide") : t("hide")}
+        </Button>
       )}
     </div>
   );

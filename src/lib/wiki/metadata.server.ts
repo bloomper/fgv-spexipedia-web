@@ -15,7 +15,13 @@ export function publicMetadata(title: string, description?: string | null, image
     title: fullTitle,
     description: text,
     robots: { index: true, follow: true },
-    openGraph: { title: fullTitle, description: text, siteName: SITE, type: "article", images: image ? [image] : undefined },
+    openGraph: {
+      title: fullTitle,
+      description: text,
+      siteName: SITE,
+      type: "article",
+      images: image ? [image] : undefined,
+    },
     twitter: { card: image ? "summary_large_image" : "summary" },
   };
 }

@@ -4,7 +4,8 @@ export const CLIENT_ID = "fgv-spexipedia";
 
 export const hasAccess = (roles: Role[]) => roles.includes("USER");
 /** Authors write the texts and images of spex pages and publish articles; editors and admins can too. */
-export const isAuthor = (roles: Role[]) => hasAccess(roles) && (roles.includes("AUTHOR") || roles.includes("EDITOR") || roles.includes("ADMIN"));
+export const isAuthor = (roles: Role[]) =>
+  hasAccess(roles) && (roles.includes("AUTHOR") || roles.includes("EDITOR") || roles.includes("ADMIN"));
 /** Editors keep base data and the structured parts of spex pages; admins can do everything editors can. */
 export const isEditor = (roles: Role[]) => hasAccess(roles) && (roles.includes("EDITOR") || roles.includes("ADMIN"));
 export const isAdmin = (roles: Role[]) => hasAccess(roles) && roles.includes("ADMIN");
@@ -23,18 +24,12 @@ function normalizeRole(value: string): Role | null {
  */
 export function extractRolesFromClaims(claims: AccessTokenClaims): Role[] {
   const rawRoles = claims.resource_access?.[CLIENT_ID]?.roles ?? [];
-  const roles = rawRoles
-    .map(normalizeRole)
-    .filter((r): r is Role => r !== null);
+  const roles = rawRoles.map(normalizeRole).filter((r): r is Role => r !== null);
 
   return Array.from(new Set(roles));
 }
 
-export const appendLogoutParams = (
-  logoutUrl: string,
-  locale?: string,
-  theme?: "light" | "dark" | "system",
-): string => {
+export const appendLogoutParams = (logoutUrl: string, locale?: string, theme?: "light" | "dark" | "system"): string => {
   if (!locale && !theme) {
     return logoutUrl;
   }

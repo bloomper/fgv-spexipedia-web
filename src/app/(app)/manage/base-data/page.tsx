@@ -16,14 +16,36 @@ export async function generateMetadata(): Promise<Metadata> {
  * Base data, which every other FGV application copies: spex categories, spex, task categories and tasks. Editors
  * create and change them; admins disable and merge.
  */
-export default async function BaseDataPage({ searchParams }: { searchParams: Promise<{ edit?: string; tab?: string }> }) {
+export default async function BaseDataPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ edit?: string; tab?: string }>;
+}) {
   return withPolicyPage(Policies.editor.requireEditor, async () => {
-    const [t, data, viewer, { edit, tab }] = await Promise.all([getTranslations("BaseData"), getBaseData(), getViewer(), searchParams]);
+    const [t, data, viewer, { edit, tab }] = await Promise.all([
+      getTranslations("BaseData"),
+      getBaseData(),
+      getViewer(),
+      searchParams,
+    ]);
 
     return (
-      <Page variant="content" className="mx-auto w-full max-w-7xl">
-        <PageHeader title={t("title")} description={t("intro")} />
-        {data && <BaseDataManager data={data} admin={viewer.admin} highlight={edit ?? null} initialTab={tab ?? null} />}
+      <Page
+        variant="content"
+        className="mx-auto w-full max-w-7xl"
+      >
+        <PageHeader
+          title={t("title")}
+          description={t("intro")}
+        />
+        {data && (
+          <BaseDataManager
+            data={data}
+            admin={viewer.admin}
+            highlight={edit ?? null}
+            initialTab={tab ?? null}
+          />
+        )}
       </Page>
     );
   });

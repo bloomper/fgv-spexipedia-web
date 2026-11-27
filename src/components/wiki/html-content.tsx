@@ -7,5 +7,10 @@ export function HtmlContent({ html, className }: { html: string | null | undefin
   if (!html) {
     return null;
   }
-  return <div className={cn("prose-wiki", className)} dangerouslySetInnerHTML={{ __html: html }} />;
+  return (
+    <div
+      className={cn("prose-wiki", className)}
+      dangerouslySetInnerHTML={{ __html: html }}
+    />
+  );
 }

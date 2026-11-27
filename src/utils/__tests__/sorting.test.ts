@@ -30,24 +30,35 @@ describe("sortItems", () => {
   ];
 
   it("sorts text the Swedish way, either direction", () => {
-    expect(sortItems(items, "asc", i => i.title).map(i => i.title)).toEqual(["Anna", "Ärlig", "Örnen"]);
-    expect(sortItems(items, "desc", i => i.title).map(i => i.title)).toEqual(["Örnen", "Ärlig", "Anna"]);
+    expect(sortItems(items, "asc", (i) => i.title).map((i) => i.title)).toEqual(["Anna", "Ärlig", "Örnen"]);
+    expect(sortItems(items, "desc", (i) => i.title).map((i) => i.title)).toEqual(["Örnen", "Ärlig", "Anna"]);
   });
 
   it("sorts numbers as numbers and puts missing keys last both ways", () => {
-    expect(sortItems(items, "asc", i => i.volume).map(i => i.volume)).toEqual([2, 10, null]);
-    expect(sortItems(items, "desc", i => i.volume).map(i => i.volume)).toEqual([10, 2, null]);
+    expect(sortItems(items, "asc", (i) => i.volume).map((i) => i.volume)).toEqual([2, 10, null]);
+    expect(sortItems(items, "desc", (i) => i.volume).map((i) => i.volume)).toEqual([10, 2, null]);
   });
 
   it("breaks ties ascending by the next key", () => {
-    const tied = [{ year: "1980", title: "B" }, { year: "1980", title: "A" }, { year: "1990", title: "C" }];
+    const tied = [
+      { year: "1980", title: "B" },
+      { year: "1980", title: "A" },
+      { year: "1990", title: "C" },
+    ];
 
-    expect(sortItems(tied, "desc", i => i.year, i => i.title).map(i => i.title)).toEqual(["C", "A", "B"]);
+    expect(
+      sortItems(
+        tied,
+        "desc",
+        (i) => i.year,
+        (i) => i.title
+      ).map((i) => i.title)
+    ).toEqual(["C", "A", "B"]);
   });
 
   it("compares numbers inside text as numbers, e.g. catalogue numbers", () => {
     const records = [{ c: "FGV 10" }, { c: "FGV 9" }];
 
-    expect(sortItems(records, "asc", r => r.c).map(r => r.c)).toEqual(["FGV 9", "FGV 10"]);
+    expect(sortItems(records, "asc", (r) => r.c).map((r) => r.c)).toEqual(["FGV 9", "FGV 10"]);
   });
 });

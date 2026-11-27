@@ -35,51 +35,118 @@ export default async function ArticlesPage({ searchParams }: Props) {
   const tree = params.view === "tree";
   const sort = parseSort(params, FIELDS, DEFAULT);
   const [t, ts, data, roots, viewer] = await Promise.all([
-    getTranslations("Articles"), getTranslations("Sort"), getArticles(), tree ? getArticleTree() : Promise.resolve([]), getViewer(),
+    getTranslations("Articles"),
+    getTranslations("Sort"),
+    getArticles(),
+    tree ? getArticleTree() : Promise.resolve([]),
+    getViewer(),
   ]);
-  const articles = sort.field === "title"
-    ? sortItems(data?.articles ?? [], sort.dir, a => a.title)
-    : sortItems(data?.articles ?? [], sort.dir, a => a.lastModifiedAt, a => a.title);
+  const articles =
+    sort.field === "title"
+      ? sortItems(data?.articles ?? [], sort.dir, (a) => a.title)
+      : sortItems(
+          data?.articles ?? [],
+          sort.dir,
+          (a) => a.lastModifiedAt,
+          (a) => a.title
+        );
   // Categories that belong to no other are the ways in; the rest are found on their parents' pages
-  const categories = (data?.articleCategories ?? []).filter(category => category.parents.length === 0);
+  const categories = (data?.articleCategories ?? []).filter((category) => category.parents.length === 0);
 
   return (
-    <Page variant="content" className="mx-auto w-full max-w-7xl">
-      <PageHeader title={t("title")} description={t("description")}
-                  actions={viewer.member && (
-                    <>
-                      <ArticleCategoryDialog categories={data?.articleCategories ?? []} label={t("newCategory")} />
-                      <Link href="/articles/new" className={buttonVariants()}><Plus aria-hidden /> {t("new")}</Link>
-                    </>
-                  )} />
+    <Page
+      variant="content"
+      className="mx-auto w-full max-w-7xl"
+    >
+      <PageHeader
+        title={t("title")}
+        description={t("description")}
+        actions={
+          viewer.member && (
+            <>
+              <ArticleCategoryDialog
+                categories={data?.articleCategories ?? []}
+                label={t("newCategory")}
+              />
+              <Link
+                href="/articles/new"
+                className={buttonVariants()}
+              >
+                <Plus aria-hidden /> {t("new")}
+              </Link>
+            </>
+          )
+        }
+      />
       {categories.length > 0 && (
-        <nav aria-label={t("categories")} className="flex flex-wrap gap-2">
-          {categories.map(category => (
-            <Link key={category.id} href={`/articles/categories/${category.slug}`} className="rounded-full border border-border px-3 py-1 text-sm hover:border-primary hover:text-link">
+        <nav
+          aria-label={t("categories")}
+          className="flex flex-wrap gap-2"
+        >
+          {categories.map((category) => (
+            <Link
+              key={category.id}
+              href={`/articles/categories/${category.slug}`}
+              className="border-border hover:border-primary hover:text-link rounded-full border px-3 py-1 text-sm"
+            >
               {category.name} <span className="text-muted-foreground">({category.articleCount})</span>
             </Link>
           ))}
         </nav>
       )}
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <LinkSegments label={t("view")} items={[
-          { href: "/articles", label: t("alphabetical"), active: !tree },
-          { href: "/articles?view=tree", label: t("treeView"), active: tree },
-        ]} />
+        <LinkSegments
+          label={t("view")}
+          items={[
+            { href: "/articles", label: t("alphabetical"), active: !tree },
+            { href: "/articles?view=tree", label: t("treeView"), active: tree },
+          ]}
+        />
         {!tree && (
-          <SortControl path="/articles" params={params} current={sort} fallback={DEFAULT}
-                       fields={[{ field: "title", label: ts("title") }, { field: "changed", label: ts("changed") }]} />
+          <SortControl
+            path="/articles"
+            params={params}
+            current={sort}
+            fallback={DEFAULT}
+            fields={[
+              { field: "title", label: ts("title") },
+              { field: "changed", label: ts("changed") },
+            ]}
+          />
         )}
         {viewer.member && (
-          <nav aria-label={t("lists")} className="flex gap-4 text-sm">
-            <Link href="/articles/wanted" className="text-link hover:text-link/80">{t("wanted")}</Link>
-            <Link href="/articles/orphans" className="text-link hover:text-link/80">{t("orphans")}</Link>
+          <nav
+            aria-label={t("lists")}
+            className="flex gap-4 text-sm"
+          >
+            <Link
+              href="/articles/wanted"
+              className="text-link hover:text-link/80"
+            >
+              {t("wanted")}
+            </Link>
+            <Link
+              href="/articles/orphans"
+              className="text-link hover:text-link/80"
+            >
+              {t("orphans")}
+            </Link>
           </nav>
         )}
       </div>
-      {tree
-        ? roots.length > 0 ? <ArticleTree nodes={roots} /> : <DataEmpty title={t("empty")} />
-        : <ArticleList articles={articles} ordered changed={sort.field === "changed"} />}
+      {tree ? (
+        roots.length > 0 ? (
+          <ArticleTree nodes={roots} />
+        ) : (
+          <DataEmpty title={t("empty")} />
+        )
+      ) : (
+        <ArticleList
+          articles={articles}
+          ordered
+          changed={sort.field === "changed"}
+        />
+      )}
     </Page>
   );
 }

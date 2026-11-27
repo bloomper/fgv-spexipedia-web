@@ -14,7 +14,10 @@ export default async function ConsumersPage() {
 
     return (
       <Page variant="content">
-        <PageHeader title={t("title")} description={t("description")} />
+        <PageHeader
+          title={t("title")}
+          description={t("description")}
+        />
         <ConsumersEditor consumers={consumers} />
       </Page>
     );
