@@ -172,7 +172,7 @@ test.describe("Administration", () => {
     await page.goto("/admin/sections");
     await expect(sections.getByRole("listitem").filter({ hasText: "Spexvästen" }).getByRole("button", { name: "Ta bort" })).toHaveCount(0);
     await costumes.getByRole("button", { name: "Ta bort" }).click();
-    await page.getByRole("dialog").getByRole("button", { name: "Ta bort" }).click();
+    await page.getByRole("alertdialog").getByRole("button", { name: "Ta bort" }).click();
     await expect(page.getByText("Sektionen är borttagen").filter({ visible: true })).toBeVisible();
     await expect(costumes).toHaveCount(0);
     expect((await mock.state()).kinds.filter(kind => kind.nameSv === "Kostymer")).toEqual([]);

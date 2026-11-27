@@ -167,7 +167,7 @@ test.describe("Articles", () => {
     await page.goto("/articles/turneer");
     await expect(page.getByRole("region", { name: "Underartiklar" }).getByRole("link", { name: "Turnén till Stockholm 1985" })).toBeVisible();
     await page.getByRole("button", { name: "Lägg i papperskorgen" }).click();
-    await expect(page.getByRole("dialog")).toContainText("2");
+    await expect(page.getByRole("alertdialog")).toContainText("2");
     await answerDialog(page, "Lägg i papperskorgen");
     await expect(page).toHaveURL(/\/articles$/);
     await expect(page.getByRole("link", { name: "Turnéer", exact: true })).toHaveCount(0);
